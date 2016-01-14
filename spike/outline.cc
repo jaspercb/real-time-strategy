@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <set>
 #include <iostream>
 
 //forward declarations of everything
@@ -151,11 +152,14 @@ public:
 			int _maxHP,
 			int _speed,
 			int _radius,
-			std::vector<WeaponTemplate*> _weaponTemplates) :
+			EnvironmentSpec _canTravelOn,
+			std::vector<WeaponTemplate*> _weaponTemplates
+			) :
 		name_(_name),
 		maxHP_(_maxHP),
 		speed_(_speed),
 		radius_(_radius),
+		canTravelOn_(_canTravelOn),
 		weaponTemplates_(_weaponTemplates) {std::cout<<"creating unit"<<std::endl;}
 	std::string name();
 	int maxHP();
@@ -167,10 +171,7 @@ private:
 	int maxHP_;
 	int speed_;
 	int radius_;
-	int groundCapable_;
-	int seaCapable_;
-	int submergedCapable_;
-	int airCapable_;
+	EnvironmentSpec canTravelOn_;
 	std::vector<WeaponTemplate*> weaponTemplates_;
 };
 
@@ -342,6 +343,36 @@ void Unit::handleCommand(Command command, QueueSetting qSetting)
 	}
 }
 
+class InhabitedGrid{
+public:
+	InhabitedGrid();
+	~InhabitedGrid();
+
+private:
+	std::map<std::pair<int, int>, std::set<UnitID> > grid; 
+};
+
+class Game
+{
+public:
+	Game():
+		smallestUnusedUnitID(1)
+		{};
+	~Game();
+	Unit* getUnit(UnitID i)
+	{
+		return units[i];
+	}
+	UnitID getUnitID(){
+		return smallestUnusedUnitID++;
+	}
+private:
+	std::vector<Unit*> units;
+	std::map<UnitID, Unit*> units;
+	UnitID smallestUnusedUnitID;
+	InhabitedGrid inhabited;
+};
+
 const EnvironmentSpec GROUND_ONLY(1, 0, 0, 0);
 const EnvironmentSpec AIR_ONLY(0, 0, 0, 1);
 const EnvironmentSpec SEA_ONLY(0, 1, 0, 0);
@@ -355,7 +386,7 @@ int main(){
 	v.push_back(testwpn);
 	v.push_back(testwpn);
 	Team* testteam = new Team();
-	UnitTemplate* testunittemplate = new UnitTemplate("testUnit", 100, 20, 20, v);
+	UnitTemplate* testunittemplate = new UnitTemplate("testUnit", 100, 20, 20, GROUND_ONLY, v);
 	Unit* testunit = new Unit(testteam, testunittemplate);
 	//std::cout<<testunit->weaponTemplates().size()<<std::endl;
 	delete testunit;
