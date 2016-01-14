@@ -1,0 +1,13 @@
+UNIT {
+	name : TestUnit
+	maxHP : 100
+	speed : 20
+	radius : 10
+	weaponTemplates : WEAPONTEMPLATE {
+		name : lmao
+		damage : 50
+		firerate: 3
+		range : 50
+		weaponVelocity : 10
+	}
+}
