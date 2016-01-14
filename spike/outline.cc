@@ -14,6 +14,8 @@ class UnitTemplate;
 class Unit;
 class UnitState;
 class WeaponTemplate;
+class Team;
+class Game;
 
 typedef int TeamID;
 typedef int UnitID;
@@ -66,9 +68,9 @@ public:
 class Weapon
 {
 public:
-	Weapon(WeaponTemplate* weaponTemplate, Unit* owner): 
+	Weapon(WeaponTemplate* weaponTemplate, Unit* _owner): 
 		weaponTemplate_(weaponTemplate),
-		owner_(owner) {
+		owner(_owner) {
 		}
 
 	void fire();
@@ -76,10 +78,11 @@ public:
 	virtual void update(){
 		ticksSinceFired_++;
 	}
+	const WeaponTemplate* weaponTemplate_;
+	const Unit* owner;
+
 private:
 	int ticksSinceFired_;
-	WeaponTemplate* weaponTemplate_;
-	Unit* owner_;
 };
 
 enum DamageType{
@@ -195,24 +198,18 @@ std::vector<WeaponTemplate*> UnitTemplate::weaponTemplates(){
 class Team
 {
 public:
-	Team();
-	TeamID id();
+	Team(Game* _game):
+		game(_game),
+		id(1)
+		//id(_game->getTeamID())
+		{};
+
+	const Game* game;
+	const TeamID id;
+
 private:
-	TeamID id_;
 	std::map<TemplateID, UnitTemplate*> templates_;
 };
-
-Team::Team()
-{
-	id_ = rand()%500000; // fix to be allocated at game start... eventually
-	templates_ = std::map<TemplateID, UnitTemplate*>();
-}
-
-TeamID Team::id()
-{
-	return id_;
-}
-
 
 class UnitState
 {
@@ -270,14 +267,16 @@ enum QueueSetting{
 class Unit
 {
 public:
-	Team* team;
-	UnitID id;
-	
 	Unit(Team* team_, UnitTemplate*);
 	int update(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command command, QueueSetting qSetting);
+	void move(int x, int y, int z);
+
+	const Team* team;
+	const UnitID id;
+	int x, y, z;
+
 private:
-	int x_, y_, z_;
 	int hp;
 	UnitTemplate* unitTemplate_;
 	std::deque<UnitState*> StateQueue_;
@@ -285,7 +284,8 @@ private:
 };
 
 Unit::Unit(Team* team_, UnitTemplate* unitTemplate):
-unitTemplate_(unitTemplate)
+unitTemplate_(unitTemplate),
+id(1) //FIX THIS SHIT YO
 {
 	hp = unitTemplate->maxHP();
 
@@ -345,20 +345,56 @@ void Unit::handleCommand(Command command, QueueSetting qSetting)
 
 class InhabitedGrid{
 public:
-	InhabitedGrid();
-	~InhabitedGrid();
-
+	InhabitedGrid(int w, int h, int dw, int dh):
+		cellsX(dw),
+		cellsY(dh),
+		cellWidth(w),
+		cellHeight(h)
+		{}
+	void move(Unit* unit, int x, int y, int z);
+	std::pair<int, int> getCellCoord(int x, int y);
+	std::set<UnitID> getCell(int x, int y);
 private:
-	std::map<std::pair<int, int>, std::set<UnitID> > grid; 
+	const int cellsX;
+	const int cellsY;
+	const int cellWidth;
+	const int cellHeight;
+	std::map<std::pair<int, int>, std::set<UnitID> > grid;
 };
+
+std::pair<int, int> InhabitedGrid::getCellCoord(int x, int y){
+	return std::pair<int, int>(x/cellWidth, y/cellWidth);
+}
+
+void Unit::move(int nx, int ny, int nz){
+	//game->grid->move(this, nx, ny, nz);
+}
+
+void InhabitedGrid::move(Unit* unit, int x, int y, int z){
+	std::pair<int, int> oldpos, newpos;
+	oldpos = getCellCoord(unit->x, unit->y);
+	newpos = getCellCoord(x, y);
+	unit->x = x;
+	unit->y = y;
+	unit->z = z;
+	if (oldpos==newpos){
+		return;
+	}
+	else{
+		grid[oldpos].erase(unit->id);
+		grid[oldpos].erase(unit->id);
+	}
+
+}
+
 
 class Game
 {
 public:
 	Game():
-		smallestUnusedUnitID(1)
+		smallestUnusedUnitID(1),
+		inhabited(InhabitedGrid(10, 10, 1, 1))
 		{};
-	~Game();
 	Unit* getUnit(UnitID i)
 	{
 		return units[i];
@@ -368,7 +404,7 @@ public:
 	}
 private:
 	std::vector<Unit*> units;
-	std::map<UnitID, Unit*> units;
+	std::map<UnitID, Unit*> unitsByID;
 	UnitID smallestUnusedUnitID;
 	InhabitedGrid inhabited;
 };
@@ -385,7 +421,8 @@ int main(){
 	v.push_back(testwpn);
 	v.push_back(testwpn);
 	v.push_back(testwpn);
-	Team* testteam = new Team();
+	Game* testgame = new Game();
+	Team* testteam = new Team(testgame);
 	UnitTemplate* testunittemplate = new UnitTemplate("testUnit", 100, 20, 20, GROUND_ONLY, v);
 	Unit* testunit = new Unit(testteam, testunittemplate);
 	//std::cout<<testunit->weaponTemplates().size()<<std::endl;
@@ -393,6 +430,7 @@ int main(){
 	delete testunittemplate;
 	delete testwpn;
 	delete testteam;
+	delete testgame;
 	return 0;
 }
 
