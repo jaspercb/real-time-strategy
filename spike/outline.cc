@@ -7,6 +7,7 @@
 #include <string>
 #include <set>
 #include <iostream>
+#include <cmath>
 
 //forward declarations of everything
 class Command;
@@ -27,6 +28,7 @@ enum CommandType{
 	CMD_AMOVE,
 	CMD_TARGET,
 };
+
 
 class Command
 {
@@ -68,22 +70,26 @@ public:
 class Weapon
 {
 public:
-	Weapon(WeaponTemplate* weaponTemplate, Unit* _owner): 
-		weaponTemplate_(weaponTemplate),
+	Weapon(WeaponTemplate* _weaponTemplate, Unit* _owner): 
+		weaponTemplate(_weaponTemplate),
 		owner(_owner) {
 		}
 
-	void fire();
+	void fire(Unit& target);
 	int ticksSinceFired(){return ticksSinceFired_;};
 	virtual void update(){
 		ticksSinceFired_++;
 	}
-	const WeaponTemplate* weaponTemplate_;
+	const WeaponTemplate* weaponTemplate;
 	const Unit* owner;
 
 private:
 	int ticksSinceFired_;
 };
+
+void Weapon::fire(Unit& target){
+	weaponTemplate->fire(*this, target);
+}
 
 enum DamageType{
 	DMG_ELECTRO,	// good against shields, shit against armor
@@ -278,7 +284,7 @@ public:
 
 private:
 	int hp;
-	UnitTemplate* unitTemplate_;
+	const UnitTemplate* unitTemplate_;
 	std::deque<UnitState*> StateQueue_;
 	std::vector<Weapon> weapons_;
 };
@@ -343,6 +349,19 @@ void Unit::handleCommand(Command command, QueueSetting qSetting)
 	}
 }
 
+int distance(Coordinate& one, Coordinate& two){
+	return (int) pow( pow(one.first-two.first, 2.0) + pow(one.second-two.second, 2.0), 0.5);
+}
+
+int coordinate(Unit& unit, Coordinate& coord){
+	return (int) pow( pow(unit.y-coord.second, 2.0) + pow(unit.x-coord.first, 2.0), 0.5);
+}
+
+int distance(Unit& unit1, Unit& unit2){
+	return (int) pow( pow(unit1.y-unit2.y, 2.0) + pow(unit1.x-unit2.x, 2.0), 0.5);
+}
+
+
 class InhabitedGrid{
 public:
 	InhabitedGrid(int w, int h, int dw, int dh):
@@ -352,7 +371,7 @@ public:
 		cellHeight(h)
 		{}
 	void move(Unit* unit, int x, int y, int z);
-	std::pair<int, int> getCellCoord(int x, int y);
+	std::pair<int, int> getCellCoords(int x, int y);
 	std::set<UnitID> getCell(int x, int y);
 private:
 	const int cellsX;
@@ -362,7 +381,7 @@ private:
 	std::map<std::pair<int, int>, std::set<UnitID> > grid;
 };
 
-std::pair<int, int> InhabitedGrid::getCellCoord(int x, int y){
+std::pair<int, int> InhabitedGrid::getCellCoords(int x, int y){
 	return std::pair<int, int>(x/cellWidth, y/cellWidth);
 }
 
@@ -372,8 +391,8 @@ void Unit::move(int nx, int ny, int nz){
 
 void InhabitedGrid::move(Unit* unit, int x, int y, int z){
 	std::pair<int, int> oldpos, newpos;
-	oldpos = getCellCoord(unit->x, unit->y);
-	newpos = getCellCoord(x, y);
+	oldpos = getCellCoords(unit->x, unit->y);
+	newpos = getCellCoords(x, y);
 	unit->x = x;
 	unit->y = y;
 	unit->z = z;
@@ -392,21 +411,23 @@ class Game
 {
 public:
 	Game():
-		smallestUnusedUnitID(1),
+		smallestUnusedUnitID_(1),
 		inhabited(InhabitedGrid(10, 10, 1, 1))
 		{};
 	Unit* getUnit(UnitID i)
 	{
 		return units[i];
 	}
-	UnitID getUnitID(){
-		return smallestUnusedUnitID++;
+	UnitID smallestUnusedUnitID(){
+		return smallestUnusedUnitID_++;
 	}
+
+	const InhabitedGrid inhabited;
+	const std::vector<Unit*> units;
+	const std::map<UnitID, Unit*> unitsByID;
+
 private:
-	std::vector<Unit*> units;
-	std::map<UnitID, Unit*> unitsByID;
-	UnitID smallestUnusedUnitID;
-	InhabitedGrid inhabited;
+	UnitID smallestUnusedUnitID_;
 };
 
 const EnvironmentSpec GROUND_ONLY(1, 0, 0, 0);
