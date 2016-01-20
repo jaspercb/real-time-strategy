@@ -1,4 +1,4 @@
-#include "command.hpp"
+#include "Command.hpp"
 
 #include "Unit.hpp"
 #include "UnitID.hpp"
