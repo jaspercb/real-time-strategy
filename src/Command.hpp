@@ -1,6 +1,7 @@
 #pragma once
 
-#include "typedefs.hpp"
+#include "UnitID.hpp"
+
 #include <vector>
 
 class Unit;
