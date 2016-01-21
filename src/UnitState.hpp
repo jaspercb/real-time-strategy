@@ -1,7 +1,7 @@
 #pragma once
 
 #include <deque>
-#include "Coordinate.hpp"
+#include "typedefs.hpp"
 
 class Unit; //forward declarations
 class Command;

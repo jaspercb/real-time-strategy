@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "Coordinate.hpp"
+#include "typedefs.hpp"
 
 class Team;
 class UnitTemplate;

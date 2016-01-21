@@ -7,7 +7,7 @@
 #include "Command.hpp"
 #include "Weapon.hpp"
 #include "UnitState.hpp"
-#include "Coordinate.hpp"
+#include "typedefs.hpp"
 
 Unit::Unit(std::shared_ptr<Team> team_, std::shared_ptr<UnitTemplate> unitTemplate):
 unitTemplate_(unitTemplate),

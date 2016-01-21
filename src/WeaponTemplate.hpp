@@ -3,7 +3,7 @@
 #include <string>
 
 #include "EnvironmentSpec.hpp"
-#include "Coordinate.hpp"
+#include "typedefs.hpp"
 
 class EnvironmentSpec;
 class Weapon;
