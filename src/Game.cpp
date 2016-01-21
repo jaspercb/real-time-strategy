@@ -4,7 +4,7 @@
 #include "InhabitedGrid.hpp"
 
 Game::Game():
-	smallestUnusedUnitID_(1),
+	smallestUnusedUnitID_(0),
 	inhabitedGrid(new InhabitedGrid(10, 10, 1, 1))
 	{};
 

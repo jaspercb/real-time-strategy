@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "EnvironmentSpec.hpp"
 
@@ -15,13 +16,13 @@ public:
 			int _speed,
 			int _radius,
 			EnvironmentSpec _canTravelOn,
-			std::vector<WeaponTemplate*> _weaponTemplates);
+			std::vector<std::shared_ptr<WeaponTemplate> > _weaponTemplates);
 	std::string name();
 	int maxHP();
 	int speed();
 	int radius();
 	int buildtime();
-	std::vector<WeaponTemplate*> weaponTemplates();
+	std::vector<std::shared_ptr<WeaponTemplate> > weaponTemplates();
 private:
 	std::string name_;
 	int maxHP_;
@@ -29,5 +30,5 @@ private:
 	int radius_;
 	int buildtime_;
 	EnvironmentSpec canTravelOn_;
-	std::vector<WeaponTemplate*> weaponTemplates_;
+	std::vector<std::shared_ptr<WeaponTemplate> > weaponTemplates_;
 };

@@ -7,6 +7,8 @@
 #include "typedefs.hpp"
 #include "InhabitedGrid.hpp"
 
+class Team; // forward declaration
+
 class Unit;
 class InhabitedGrid;
 
@@ -18,8 +20,10 @@ public:
 	UnitID smallestUnusedUnitID();
 
 	std::shared_ptr<InhabitedGrid> inhabitedGrid;
-	const std::vector<std::shared_ptr<Unit> > units;
-	const std::map<UnitID, std::shared_ptr<Unit> > unitsByID;
+	std::vector<std::shared_ptr<Unit> > units; // keeps track of all active units
+	std::map<UnitID, std::shared_ptr<Unit> > unitsByID;
+
+	std::vector<std::shared_ptr<Team> > teams;
 
 private:
 	UnitID smallestUnusedUnitID_;
