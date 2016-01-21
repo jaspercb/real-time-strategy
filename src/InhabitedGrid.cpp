@@ -17,7 +17,7 @@ bool coordInRect(Coordinate a, Coordinate b, Coordinate c){
 	return (bx<=a.first) && (a.first<=cx) && (by<=a.second) && (a.second>=cy);
 }
 
-bool coordIncircle(Coordinate a, Coordinate c, int r){
+bool coordInCircle(Coordinate a, Coordinate c, int r){
 	// returns whether a is in the circle with center c and radius r
 	return pythagoreanDistance(a, c)<=r;
 }
@@ -103,10 +103,25 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b)
 	return ret;
 }
 
-std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int range)
+std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius)
 {
 	std::vector<UnitID> ret;
-	Coordinate gCoordCenter = getCellCoords(c);
 
+	Coordinate gc = getCellCoords(c);
+	int startX = gc.first - 1 - cellWidth;
+	int endX = gc.first + 1 + cellWidth;
+	int startY = gc.second - 1 - cellHeight;
+	int endY = gc.second + 1 + cellHeight;
+
+	for (int x=startX; x<=endX; x++){
+		for (int y=startY; y<=endY; y++){
+			const std::unordered_set<UnitID> unitSubset = get(std::pair<int,int>(x,y));
+			for (std::unordered_set<UnitID>::const_iterator it = unitSubset.begin(); it!=unitSubset.end(); it++){
+				if (coordInCircle(game->getUnit(*it)->xy, c, radius)){
+					ret.push_back(*it);
+				}
+			}
+		}
+	}
 	return ret;
 }

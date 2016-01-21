@@ -10,6 +10,8 @@ class Unit; //forward declaration
 class Game;
 
 int pythagoreanDistance(Coordinate a, Coordinate b);
+bool coordInRect(Coordinate a, Coordinate b, Coordinate c);
+bool coordInCircle(Coordinate a, Coordinate c, int r);
 
 class InhabitedGrid{
 public:
