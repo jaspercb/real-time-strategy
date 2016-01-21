@@ -9,8 +9,15 @@ public:
 		submerged(_submerged),
 		air(_air)
 		{}
+
 	bool ground, sea, submerged, air;
+
+	bool overlaps(EnvironmentSpec other){
+		return (ground && other.ground) || (sea && other.sea) || (submerged && other.submerged) || (air && other.air);
+	}
+
 };
+
 
 const EnvironmentSpec GROUND_ONLY(1, 0, 0, 0);
 const EnvironmentSpec AIR_ONLY(0, 0, 0, 1);
