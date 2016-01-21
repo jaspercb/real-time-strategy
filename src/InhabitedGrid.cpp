@@ -2,7 +2,8 @@
 #include "Unit.hpp"
 #include <cmath>
 
-int pythagoreanDistance(Coordinate a, Coordinate b){
+int pythagoreanDistance(Coordinate a, Coordinate b)
+{
 	return pow(pow(a.first-b.first, 2) + pow(a.second-b.second, 2), 0.5);
 }
 
@@ -13,11 +14,13 @@ InhabitedGrid::InhabitedGrid(int w, int h, int dw, int dh):
 		cellHeight(h)
 		{}
 
-Coordinate InhabitedGrid::getCellCoords(Coordinate p){
+Coordinate InhabitedGrid::getCellCoords(Coordinate p)
+{
 	return std::pair<int, int>(p.first/cellWidth, p.second/cellWidth);
 }
 
-void InhabitedGrid::move(Unit* unit, Coordinate c){
+void InhabitedGrid::move(Unit* unit, Coordinate c)
+{
 	std::pair<int, int> oldpos, newpos;
 	oldpos = getCellCoords(unit->xy);
 	newpos = getCellCoords(c);
@@ -27,8 +30,25 @@ void InhabitedGrid::move(Unit* unit, Coordinate c){
 	}
 	else{
 		grid[oldpos].erase(unit->id);
-		grid[oldpos].erase(unit->id);
+		grid[newpos].emplace(unit->id);
 	}
 
 }
 
+std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b)
+{
+	std::vector<UnitID> ret;
+
+	Coordinate ga = getCellCoords(a);
+	Coordinate gb = getCellCoords(b);
+
+	return ret;
+}
+
+std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int range)
+{
+	std::vector<UnitID> ret;
+	Coordinate gCoordCenter = getCellCoords(c);
+
+	return ret;
+}

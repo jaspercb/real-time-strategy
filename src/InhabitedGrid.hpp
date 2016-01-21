@@ -14,9 +14,11 @@ class InhabitedGrid{
 public:
 	InhabitedGrid(int w, int h, int dw, int dh);
 	void move(Unit* unit, Coordinate c);
-	Coordinate getCellCoords(Coordinate c);
-	std::vector<UnitID> getCell(Coordinate c);
 private:
+	std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
+	std::vector<UnitID> unitsInCircle(Coordinate c, int range);
+	std::vector<UnitID> getCell(Coordinate c);
+	Coordinate getCellCoords(Coordinate c);
 	const int cellsX;
 	const int cellsY;
 	const int cellWidth;
