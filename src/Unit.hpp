@@ -2,6 +2,7 @@
 
 #include <deque>
 #include <vector>
+#include <memory>
 
 #include "Coordinate.hpp"
 
@@ -25,9 +26,9 @@ public:
 	Unit(Team* team_, UnitTemplate*);
 	int update(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command command, QueueSetting qSetting);
-	void move(int x, int y, int z);
+	void move(Coordinate c);
 
-	const Team* team;
+	const std::shared_ptr<Team> team;
 	const UnitID id;
 	Coordinate xy;
 	int z;

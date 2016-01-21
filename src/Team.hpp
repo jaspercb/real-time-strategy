@@ -1,6 +1,9 @@
 #pragma once
 
 #include <map>
+#include <memory>
+
+#include "Game.hpp"
 
 typedef int TeamID;
 typedef int UnitTemplateID;
@@ -12,13 +15,13 @@ class UnitTemplate;
 class Team
 {
 public:
-	Team(Game* _game):
+	Team(std::shared_ptr<Game> _game):
 		game(_game),
 		id(1)
 		//id(_game->getTeamID())
 		{};
 
-	const Game* game;
+	const std::shared_ptr<Game> game;
 	const TeamID id;
 
 private:

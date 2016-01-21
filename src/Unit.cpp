@@ -38,8 +38,6 @@ int Unit::update()
 			StateQueue_.pop_front();
 		}
 	}
-
-
 	return 0;
 }
 
@@ -69,6 +67,6 @@ void Unit::handleCommand(Command command, QueueSetting qSetting)
 	}
 }
 
-void Unit::move(int nx, int ny, int nz){
-	//game->grid->move(this, nx, ny, nz);
+void Unit::move(Coordinate c){
+	team->game->inhabitedGrid->move(this, c);
 }
