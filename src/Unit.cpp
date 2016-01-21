@@ -70,3 +70,7 @@ void Unit::handleCommand(Command command, QueueSetting qSetting)
 void Unit::move(Coordinate c){
 	team->game->inhabitedGrid->move(this, c);
 }
+
+void Unit::damage(int quant){
+	this->hp -= quant;
+}

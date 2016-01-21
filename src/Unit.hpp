@@ -25,8 +25,9 @@ class Unit
 public:
 	Unit(std::shared_ptr<Team> team_, std::shared_ptr<UnitTemplate>);
 	int update(); //returns 1 if should be destroyed, 0 otherwise
-	void handleCommand(Command command, QueueSetting qSetting);
-	void move(Coordinate c);
+	void handleCommand(Command, QueueSetting);
+	void move(Coordinate);
+	void damage(int);
 
 	const std::shared_ptr<Team> team;
 	const UnitID id;

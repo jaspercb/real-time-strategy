@@ -1,6 +1,8 @@
 #include "WeaponTemplate.hpp"
 #include "EnvironmentSpec.hpp"
 #include "Weapon.hpp"
+#include "InhabitedGrid.hpp"
+#include "Unit.hpp"
 
 WeaponTemplate::WeaponTemplate(std::string _name,
 		DamageType _damageType,
@@ -22,12 +24,16 @@ WeaponTemplate::WeaponTemplate(std::string _name,
 
 bool WeaponTemplate::canFire(Weapon &weapon)
 {
-	return weapon.ticksSinceFired() >= reloadTime();
+	return weapon.ticksUntilCanFire == 0;
 }
 
 void WeaponTemplate::fire(Weapon& weapon, Unit& target) const
 {
-	// if target in range
+	if (pythagoreanDistance(weapon.owner->xy, target.xy)<range_)
+	{
+		target.damage(damage_);
+		weapon.ticksUntilCanFire = reloadTime_;
+	}
 }
 
 void WeaponTemplate::fire(Weapon& weapon, Coordinate& target)

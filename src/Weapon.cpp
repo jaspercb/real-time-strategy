@@ -12,10 +12,9 @@ void Weapon::fire(Unit& target){
 	weaponTemplate->fire(*this, target);
 }
 
-int Weapon::ticksSinceFired(){
-	return ticksSinceFired_;
-}
-
 void Weapon::update(){
-	ticksSinceFired_++;
+	if (ticksUntilCanFire>0)
+	{
+		ticksUntilCanFire--;
+	}
 }
