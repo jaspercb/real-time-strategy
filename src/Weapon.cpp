@@ -3,7 +3,7 @@
 #include "WeaponTemplate.hpp"
 #include "Unit.hpp"
 
-Weapon::Weapon(WeaponTemplate* _weaponTemplate, Unit* _owner): 
+Weapon::Weapon(std::shared_ptr<WeaponTemplate> _weaponTemplate, Unit* _owner): 
 	weaponTemplate(_weaponTemplate),
 	owner(_owner)
 	{}

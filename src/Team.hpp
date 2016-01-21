@@ -24,6 +24,5 @@ public:
 	const TeamID id;
 
 private:
-	std::map<UnitTemplateID, UnitTemplate*> templates_;
-	std::map<UnitTemplateID, std::shared_ptr<UnitTemplate> > unitTemplates;
+	std::map<UnitTemplateID, std::shared_ptr<UnitTemplate> > unitTemplates_;
 };

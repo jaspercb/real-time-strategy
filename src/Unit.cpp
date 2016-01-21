@@ -9,7 +9,7 @@
 #include "UnitState.hpp"
 #include "Coordinate.hpp"
 
-Unit::Unit(Team* team_, UnitTemplate* unitTemplate):
+Unit::Unit(std::shared_ptr<Team> team_, std::shared_ptr<UnitTemplate> unitTemplate):
 unitTemplate_(unitTemplate),
 id(1) //FIX THIS SHIT YO
 {
@@ -17,7 +17,7 @@ id(1) //FIX THIS SHIT YO
 
 	weapons_ = std::vector<Weapon>();
 
-	for (std::vector<WeaponTemplate*>::iterator it = unitTemplate->weaponTemplates().begin(); it!=unitTemplate->weaponTemplates().end(); it++){
+	for (std::vector<std::shared_ptr<WeaponTemplate> >::iterator it = unitTemplate->weaponTemplates().begin(); it!=unitTemplate->weaponTemplates().end(); it++){
 		weapons_.push_back(Weapon(*it, this));
 	}
 }
