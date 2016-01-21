@@ -68,7 +68,9 @@ void Unit::handleCommand(Command command, QueueSetting qSetting)
 }
 
 void Unit::move(Coordinate c){
-	team->game->inhabitedGrid->move(this, c);
+	team->game->inhabitedGrid->erase(*this);
+	xy = c;
+	team->game->inhabitedGrid->emplace(*this);
 }
 
 void Unit::damage(int quant){

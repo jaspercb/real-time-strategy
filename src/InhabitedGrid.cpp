@@ -25,20 +25,35 @@ Coordinate InhabitedGrid::getCellCoords(Coordinate p)
 	return std::pair<int, int>(p.first/cellWidth, p.second/cellWidth);
 }
 
-void InhabitedGrid::move(Unit* unit, Coordinate c)
+void InhabitedGrid::emplace(const Unit &unit)
 {
-	std::pair<int, int> oldpos, newpos;
-	oldpos = getCellCoords(unit->xy);
-	newpos = getCellCoords(c);
-	unit->xy = c;
+	Coordinate pos = getCellCoords(unit.xy);
+	if (grid.count(pos)){
+	}
+	else{
+		grid.emplace(pos, std::unordered_set<UnitID>());
+	}
+	grid[pos].emplace(unit.id);
+}
+
+void InhabitedGrid::erase(const Unit &unit)
+{
+	Coordinate pos = getCellCoords(unit.xy);
+	grid[pos].erase(unit.id);
+}
+
+void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord)
+{
+	Coordinate oldpos, newpos;
+	oldpos = getCellCoords(oldcoord);
+	newpos = getCellCoords(unit.xy);
 	if (oldpos==newpos){
 		return;
 	}
 	else{
-		grid[oldpos].erase(unit->id);
-		grid[newpos].emplace(unit->id);
+		erase(unit);
+		emplace(unit);
 	}
-
 }
 
 std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b)
