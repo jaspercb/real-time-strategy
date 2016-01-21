@@ -1,5 +1,6 @@
 #include "InhabitedGrid.hpp"
 #include "Unit.hpp"
+#include "Game.hpp"
 #include <cmath>
 
 int pythagoreanDistance(Coordinate a, Coordinate b)
@@ -7,7 +8,22 @@ int pythagoreanDistance(Coordinate a, Coordinate b)
 	return pow(pow(a.first-b.first, 2) + pow(a.second-b.second, 2), 0.5);
 }
 
-InhabitedGrid::InhabitedGrid(int w, int h, int dw, int dh):
+bool coordInRect(Coordinate a, Coordinate b, Coordinate c){
+	// returns whether a is in the rectangle formed by b and c
+	int bx = std::min(a.first, b.first);
+	int by = std::min(a.second, b.second);
+	int cx = std::max(a.first, b.first);
+	int cy = std::max(a.second, b.second);
+	return (bx<=a.first) && (a.first<=cx) && (by<=a.second) && (a.second>=cy);
+}
+
+bool coordIncircle(Coordinate a, Coordinate c, int r){
+	// returns whether a is in the circle with center c and radius r
+	return pythagoreanDistance(a, c)<=r;
+}
+
+InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int dw, int dh):
+		game(game),
 		cellsX(dw),
 		cellsY(dh),
 		cellWidth(w),
@@ -23,6 +39,13 @@ InhabitedGrid::InhabitedGrid(int w, int h, int dw, int dh):
 Coordinate InhabitedGrid::getCellCoords(Coordinate p)
 {
 	return std::pair<int, int>(p.first/cellWidth, p.second/cellWidth);
+}
+
+const std::unordered_set<UnitID> InhabitedGrid::get(Coordinate c){
+	if (grid.count(c)){
+		return grid[c];
+	}
+	return std::unordered_set<UnitID>();
 }
 
 void InhabitedGrid::emplace(const Unit &unit)
@@ -62,7 +85,21 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b)
 
 	Coordinate ga = getCellCoords(a);
 	Coordinate gb = getCellCoords(b);
+	int startX = std::min(ga.first, gb.first);
+	int endX = std::max(ga.first, gb.first);
+	int startY = std::min(ga.second, gb.second);
+	int endY = std::max(ga.second, gb.second);
 
+	for (int x=startX; x<=endX; x++){
+		for (int y=startY; y<=endY; y++){
+			const std::unordered_set<UnitID> unitSubset = get(std::pair<int,int>(x,y));
+			for (std::unordered_set<UnitID>::const_iterator it = unitSubset.begin(); it!=unitSubset.end(); it++){
+				if (coordInRect(game->getUnit(*it)->xy, a, b)){
+					ret.push_back(*it);
+				}
+			}
+		}
+	}
 	return ret;
 }
 

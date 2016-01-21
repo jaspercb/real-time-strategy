@@ -36,9 +36,9 @@ public:
 	virtual int reloadTime(){return reloadTime_;}; //
 	virtual int range(){return range_;};
 	virtual int weaponVelocity(){return weaponVelocity_;};
-	virtual bool canFire(Weapon &weapon);
+	virtual bool canFire(Weapon &weapon) const;
 	virtual void fire(Weapon& weapon, Unit& target) const;
-	virtual void fire(Weapon& weapon, Coordinate& target);
+	virtual void fire(Weapon& weapon, Coordinate& target) const;
 private:
 	std::string name_;
 	DamageType damageType_;

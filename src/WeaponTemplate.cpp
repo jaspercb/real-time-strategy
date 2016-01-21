@@ -22,7 +22,7 @@ WeaponTemplate::WeaponTemplate(std::string _name,
 	dimensions_(dimensions)
 	{};
 
-bool WeaponTemplate::canFire(Weapon &weapon)
+bool WeaponTemplate::canFire(Weapon &weapon) const
 {
 	return weapon.ticksUntilCanFire == 0;
 }
@@ -36,7 +36,7 @@ void WeaponTemplate::fire(Weapon& weapon, Unit& target) const
 	}
 }
 
-void WeaponTemplate::fire(Weapon& weapon, Coordinate& target)
+void WeaponTemplate::fire(Weapon& weapon, Coordinate& target) const
 {
 	// if target in range
 }
