@@ -12,7 +12,13 @@ InhabitedGrid::InhabitedGrid(int w, int h, int dw, int dh):
 		cellsY(dh),
 		cellWidth(w),
 		cellHeight(h)
-		{}
+		{
+			for (int x=0; x<w; x++){
+				for (int y=0; y<h; y++){
+
+				}
+			}
+		}
 
 Coordinate InhabitedGrid::getCellCoords(Coordinate p)
 {

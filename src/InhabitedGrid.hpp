@@ -13,6 +13,7 @@ int pythagoreanDistance(Coordinate a, Coordinate b);
 class InhabitedGrid{
 public:
 	InhabitedGrid(int w, int h, int dw, int dh);
+	
 	void move(Unit* unit, Coordinate c);
 private:
 	std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
