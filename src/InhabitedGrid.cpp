@@ -1,6 +1,10 @@
 #include "InhabitedGrid.hpp"
-
 #include "Unit.hpp"
+#include <cmath>
+
+int pythagoreanDistance(Coordinate a, Coordinate b){
+	return pow(pow(a.first-b.first, 2) + pow(a.second-b.second, 2), 0.5);
+}
 
 InhabitedGrid::InhabitedGrid(int w, int h, int dw, int dh):
 		cellsX(dw),
@@ -9,17 +13,15 @@ InhabitedGrid::InhabitedGrid(int w, int h, int dw, int dh):
 		cellHeight(h)
 		{}
 
-std::pair<int, int> InhabitedGrid::getCellCoords(int x, int y){
-	return std::pair<int, int>(x/cellWidth, y/cellWidth);
+Coordinate InhabitedGrid::getCellCoords(Coordinate p){
+	return std::pair<int, int>(p.first/cellWidth, p.second/cellWidth);
 }
 
-void InhabitedGrid::move(Unit* unit, int x, int y, int z){
+void InhabitedGrid::move(Unit* unit, Coordinate c){
 	std::pair<int, int> oldpos, newpos;
-	oldpos = getCellCoords(unit->x, unit->y);
-	newpos = getCellCoords(x, y);
-	unit->x = x;
-	unit->y = y;
-	unit->z = z;
+	oldpos = getCellCoords(unit->xy);
+	newpos = getCellCoords(c);
+	unit->xy = c;
 	if (oldpos==newpos){
 		return;
 	}

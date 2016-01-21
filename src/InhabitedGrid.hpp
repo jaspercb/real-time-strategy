@@ -8,12 +8,14 @@
 
 class Unit; //forward declaration
 
+int pythagoreanDistance(Coordinate a, Coordinate b);
+
 class InhabitedGrid{
 public:
 	InhabitedGrid(int w, int h, int dw, int dh);
-	void move(Unit* unit, int x, int y, int z);
-	std::pair<int, int> getCellCoords(int x, int y);
-	std::vector<UnitID> getCell(int x, int y);
+	void move(Unit* unit, Coordinate c);
+	Coordinate getCellCoords(Coordinate c);
+	std::vector<UnitID> getCell(Coordinate c);
 private:
 	const int cellsX;
 	const int cellsY;

@@ -1,5 +1,4 @@
 #include "WeaponTemplate.hpp"
-
 #include "EnvironmentSpec.hpp"
 #include "Weapon.hpp"
 

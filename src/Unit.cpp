@@ -72,16 +72,3 @@ void Unit::handleCommand(Command command, QueueSetting qSetting)
 void Unit::move(int nx, int ny, int nz){
 	//game->grid->move(this, nx, ny, nz);
 }
-
-
-int distance(Coordinate& one, Coordinate& two){
-	return (int) pow( pow(one.first-two.first, 2.0) + pow(one.second-two.second, 2.0), 0.5);
-}
-
-int coordinate(Unit& unit, Coordinate& coord){
-	return (int) pow( pow(unit.y-coord.second, 2.0) + pow(unit.x-coord.first, 2.0), 0.5);
-}
-
-int distance(Unit& unit1, Unit& unit2){
-	return (int) pow( pow(unit1.y-unit2.y, 2.0) + pow(unit1.x-unit2.x, 2.0), 0.5);
-}

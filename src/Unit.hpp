@@ -1,4 +1,5 @@
 #pragma once
+
 #include <deque>
 #include <vector>
 
@@ -28,7 +29,8 @@ public:
 
 	const Team* team;
 	const UnitID id;
-	int x, y, z;
+	Coordinate xy;
+	int z;
 	int hp;
 	
 private:
@@ -36,7 +38,3 @@ private:
 	std::deque<UnitState*> StateQueue_;
 	std::vector<Weapon> weapons_;
 };
-
-int distance(Coordinate& one, Coordinate& two);
-int distance(Unit& one, Coordinate& two);
-int distance(Unit& one, Unit& two);
