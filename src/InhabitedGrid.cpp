@@ -65,6 +65,12 @@ void InhabitedGrid::erase(const Unit &unit)
 	grid[pos].erase(unit.id);
 }
 
+void InhabitedGrid::eraseWithHint(const Unit &unit, const Coordinate oldcoord)
+{
+	Coordinate oldpos = getCellCoords(oldcoord);
+	grid[oldpos].erase(unit.id);
+}
+
 void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord)
 {
 	Coordinate oldpos, newpos;
@@ -74,7 +80,7 @@ void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord)
 		return;
 	}
 	else{
-		erase(unit);
+		eraseWithHint(unit, oldcoord);
 		emplace(unit);
 	}
 }

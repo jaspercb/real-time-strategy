@@ -1,18 +1,20 @@
 SOURCES=$(wildcard *.cpp)
-OBJECTS=$(patsubst %.cpp, bin/%.o, $(SOURCES))
+OBJECTS=$(patsubst %.cpp, ../bin/%.o, $(SOURCES))
 
 FLAGS=-std=c++0x -g -O3
 
-.PHONY: all rts
+.PHONY: rts clean
 
-rts: bin $(OBJECTS)
+rts: ../bin/rts
+
+../bin/rts: bin $(OBJECTS)
 	g++ -o $@ $(filter-out $(word 1, $^), $^) $(FLAGS) -flto
 
-bin/%.o: %.cpp
+../bin/%.o: %.cpp
 	g++ -c  $< -o $@ $(FLAGS)
 
 bin:
-	@mkdir bin
+	@mkdir ../bin
 
 clean:
-	rm -rf bin/
+	rm -rf ../bin/

@@ -21,6 +21,7 @@ public:
 
 	void emplace(const Unit &unit);
 	void erase(const Unit &unit);
+	void eraseWithHint(const Unit &unit, const Coordinate oldcoord);
 	void updatePos(const Unit &unit, Coordinate oldcoord);
 
 	Game* game;
