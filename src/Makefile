@@ -14,7 +14,7 @@ rts: ../bin/rts
 	g++ -c  $< -o $@ $(FLAGS)
 
 bin:
-	@mkdir ../bin
+	@mkdir -p ../bin
 
 clean:
-	rm -rf ../bin/
+	rm -rf ../bin
