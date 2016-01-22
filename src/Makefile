@@ -3,7 +3,7 @@ OBJECTS=$(patsubst %.cpp, bin/%.o, $(SOURCES))
 
 FLAGS=-std=c++0x -g -O3
 
-.PHONY: all flightsim
+.PHONY: all rts
 
 rts: bin $(OBJECTS)
 	g++ -o $@ $(filter-out $(word 1, $^), $^) $(FLAGS) -flto
