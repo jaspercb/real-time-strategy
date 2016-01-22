@@ -76,3 +76,12 @@ void Unit::move(Coordinate c){
 void Unit::damage(int quant){
 	this->hp -= quant;
 }
+
+
+void Unit::move_towards(const Coordinate c){
+	int dx = c.first - xy.first;
+	int dy = c.second - xy.second;
+	int dr = std::pow(dx*dx + dy*dy, 0.5);
+	int spd = unitTemplate_->speed();
+	move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) ); 
+}

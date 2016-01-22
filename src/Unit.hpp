@@ -36,6 +36,9 @@ public:
 	int hp;
 	
 private:
+	void move_towards(const Coordinate c);
+
+
 	const std::shared_ptr<UnitTemplate> unitTemplate_;
 	std::deque<UnitState*> StateQueue_;
 	std::vector<Weapon> weapons_;
