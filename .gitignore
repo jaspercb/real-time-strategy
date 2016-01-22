@@ -52,3 +52,6 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# /bin/ folders
+bin/
