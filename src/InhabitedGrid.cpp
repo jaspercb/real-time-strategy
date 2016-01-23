@@ -22,6 +22,8 @@ bool coordInCircle(Coordinate a, Coordinate c, int r){
 	return pythagoreanDistance(a, c)<=r;
 }
 
+
+
 InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int dw, int dh):
 		game(game),
 		cellsX(dw),
@@ -41,11 +43,11 @@ Coordinate InhabitedGrid::getCellCoords(Coordinate p)
 	return std::pair<int, int>(p.first/cellWidth, p.second/cellWidth);
 }
 
-const std::unordered_set<UnitID> InhabitedGrid::get(Coordinate c){
+const std::unordered_set<UnitID> &InhabitedGrid::unitsInCell(Coordinate c){
 	if (grid.count(c)){
 		return grid[c];
 	}
-	return std::unordered_set<UnitID>();
+	return emptyUnitIDvector;
 }
 
 void InhabitedGrid::emplace(const Unit &unit)
@@ -56,19 +58,19 @@ void InhabitedGrid::emplace(const Unit &unit)
 	else{
 		grid.emplace(pos, std::unordered_set<UnitID>());
 	}
-	grid[pos].emplace(unit.id);
+	grid[pos].emplace(unit.unitID);
 }
 
 void InhabitedGrid::erase(const Unit &unit)
 {
 	Coordinate pos = getCellCoords(unit.xy);
-	grid[pos].erase(unit.id);
+	grid[pos].erase(unit.unitID);
 }
 
 void InhabitedGrid::eraseWithHint(const Unit &unit, const Coordinate oldcoord)
 {
 	Coordinate oldpos = getCellCoords(oldcoord);
-	grid[oldpos].erase(unit.id);
+	grid[oldpos].erase(unit.unitID);
 }
 
 void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord)
@@ -98,9 +100,9 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b)
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
-			const std::unordered_set<UnitID> unitSubset = get(std::pair<int,int>(x,y));
+			const std::unordered_set<UnitID> unitSubset = unitsInCell(std::pair<int,int>(x,y));
 			for (std::unordered_set<UnitID>::const_iterator it = unitSubset.begin(); it!=unitSubset.end(); it++){
-				if (coordInRect(game->getUnit(*it)->xy, a, b)){
+				if (coordInRect(game->getUnit(*it).xy, a, b)){
 					ret.push_back(*it);
 				}
 			}
@@ -121,9 +123,9 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius)
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
-			const std::unordered_set<UnitID> unitSubset = get(std::pair<int,int>(x,y));
+			const std::unordered_set<UnitID> unitSubset = unitsInCell(std::pair<int,int>(x,y));
 			for (std::unordered_set<UnitID>::const_iterator it = unitSubset.begin(); it!=unitSubset.end(); it++){
-				if (coordInCircle(game->getUnit(*it)->xy, c, radius)){
+				if (coordInCircle(game->getUnit(*it).xy, c, radius)){
 					ret.push_back(*it);
 				}
 			}

@@ -5,12 +5,13 @@
 #include <memory>
 
 #include "typedefs.hpp"
+#include "Weapon.hpp"
 
 class Team;
 class UnitTemplate;
-class Weapon;
 class Command;
 class UnitState;
+class Game;
 
 typedef int UnitID;
 
@@ -23,14 +24,18 @@ enum QueueSetting{
 class Unit
 {
 public:
-	Unit(std::shared_ptr<Team> team_, std::shared_ptr<UnitTemplate>);
+	//Unit();
+	Unit(Game&, UnitID, TeamID, UnitTemplateID);
+	UnitTemplate& getUnitTemplate();
 	int update(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command, QueueSetting);
 	void move(Coordinate);
 	void damage(int);
 
-	const std::shared_ptr<Team> team;
-	const UnitID id;
+	const TeamID teamID;
+	const UnitID unitID;
+	const UnitTemplateID unitTemplateID;
+
 	Coordinate xy;
 	int z;
 	int hp;
@@ -38,8 +43,8 @@ public:
 private:
 	void move_towards(const Coordinate c);
 
+	Game& game;
 
-	const std::shared_ptr<UnitTemplate> unitTemplate_;
 	std::deque<UnitState*> StateQueue_;
 	std::vector<Weapon> weapons_;
 };

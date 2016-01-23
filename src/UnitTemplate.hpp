@@ -5,30 +5,29 @@
 #include <memory>
 
 #include "EnvironmentSpec.hpp"
-
-class WeaponTemplate;
+#include "WeaponTemplate.hpp"
 
 class UnitTemplate
 {
 public:
+	UnitTemplate();
 	UnitTemplate(std::string _name,
 			int _maxHP,
 			int _speed,
 			int _radius,
 			EnvironmentSpec _canTravelOn,
-			std::vector<std::shared_ptr<WeaponTemplate> > _weaponTemplates);
-	std::string name();
+			std::vector<WeaponTemplate> _weaponTemplates);
 	int maxHP();
 	int speed();
 	int radius();
 	int buildtime();
-	std::vector<std::shared_ptr<WeaponTemplate> > weaponTemplates();
+
+	std::string name;
+	std::vector<WeaponTemplate> weaponTemplates;
 private:
-	std::string name_;
 	int maxHP_;
 	int speed_;
 	int radius_;
 	int buildtime_;
 	EnvironmentSpec canTravelOn_;
-	std::vector<std::shared_ptr<WeaponTemplate> > weaponTemplates_;
 };

@@ -2,27 +2,22 @@
 
 #include <map>
 #include <memory>
-
-#include "Game.hpp"
-
-typedef int TeamID;
-typedef int UnitTemplateID;
+#include "UnitTemplate.hpp"
+#include "typedefs.hpp"
 
 class Game;
-class UnitTemplate;
-
 
 class Team
 {
 public:
-	Team(std::shared_ptr<Game> _game);
+	//Team();
+	Team(Game& _game);
 
-	std::shared_ptr<Unit> createUnit(UnitTemplateID templateID);
+	Unit& createUnit(UnitTemplateID templateID);
 	// Creates and sets up a new unit, linked to the templateID from 
 
-	const std::shared_ptr<Game> game;
+	Game& game;
 	const TeamID id;
 
-private:
-	std::map<UnitTemplateID, std::shared_ptr<UnitTemplate> > unitTemplates_;
+	std::map<UnitTemplateID, UnitTemplate> unitTemplates;
 };

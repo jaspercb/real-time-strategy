@@ -5,14 +5,16 @@
 
 Game::Game():
 	smallestUnusedUnitID_(0),
-	inhabitedGrid(new InhabitedGrid(this, 10, 10, 1, 1))
-	{};
+	inhabitedGrid(InhabitedGrid(this, 100, 100, 10, 10))
+	{
+		//inhabitedGrid = InhabitedGrid(this, 100, 100, 10, 10);
+	};
 
-std::shared_ptr<Unit> Game::getUnit(UnitID i)
+Unit& Game::getUnit(UnitID i)
 {
-	return units[i];
+	return unitsByID.at(i);
 }
 
-UnitID Game::smallestUnusedUnitID(){
+UnitID Game::smallestUnusedUnitID() {
 	return smallestUnusedUnitID_++;
 }

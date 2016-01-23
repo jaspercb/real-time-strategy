@@ -22,14 +22,14 @@ WeaponTemplate::WeaponTemplate(std::string _name,
 	dimensions_(dimensions)
 	{};
 
-bool WeaponTemplate::canFire(Weapon &weapon) const
+bool WeaponTemplate::canFire(Weapon& weapon) const
 {
 	return weapon.ticksUntilCanFire == 0;
 }
 
 void WeaponTemplate::fire(Weapon& weapon, Unit& target) const
 {
-	if (pythagoreanDistance(weapon.owner->xy, target.xy)<range_)
+	if (pythagoreanDistance(weapon.owner.xy, target.xy)<range_)
 	{
 		target.damage(damage_);
 		weapon.ticksUntilCanFire = reloadTime_;

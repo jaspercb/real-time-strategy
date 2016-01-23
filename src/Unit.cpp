@@ -8,18 +8,27 @@
 #include "Weapon.hpp"
 #include "UnitState.hpp"
 #include "typedefs.hpp"
+#include "Game.hpp"
 
-Unit::Unit(std::shared_ptr<Team> team_, std::shared_ptr<UnitTemplate> unitTemplate):
-unitTemplate_(unitTemplate),
-id(1) //FIX THIS SHIT YO
+Unit::Unit(Game &g, UnitID uID, TeamID tID, UnitTemplateID utID):
+game(g),
+unitID(uID),
+teamID(tID),
+unitTemplateID(utID)
 {
-	hp = unitTemplate->maxHP();
+	UnitTemplate& unitTemplate = getUnitTemplate();
+	
+	hp = unitTemplate.maxHP();
 
 	weapons_ = std::vector<Weapon>();
 
-	for (std::vector<std::shared_ptr<WeaponTemplate> >::iterator it = unitTemplate->weaponTemplates().begin(); it!=unitTemplate->weaponTemplates().end(); it++){
-		weapons_.push_back(Weapon(*it, this));
+	for (auto it = unitTemplate.weaponTemplates.begin(); it!=unitTemplate.weaponTemplates.end(); it++){
+		weapons_.push_back(Weapon(*it, *this));
 	}
+}
+
+UnitTemplate& Unit::getUnitTemplate(){
+	return game.teams.at(teamID).unitTemplates.at(unitTemplateID);
 }
 
 int Unit::update()
@@ -70,11 +79,11 @@ void Unit::handleCommand(Command command, QueueSetting qSetting)
 void Unit::move(Coordinate c){
 	const Coordinate oldcoord = xy;
 	xy = c;
-	team->game->inhabitedGrid->updatePos(*this, oldcoord);
+	game.inhabitedGrid.updatePos(*this, oldcoord);
 }
 
 void Unit::damage(int quant){
-	this->hp -= quant;
+	hp -= quant;
 }
 
 
@@ -82,6 +91,6 @@ void Unit::move_towards(const Coordinate c){
 	int dx = c.first - xy.first;
 	int dy = c.second - xy.second;
 	int dr = std::pow(dx*dx + dy*dy, 0.5);
-	int spd = unitTemplate_->speed();
+	int spd = getUnitTemplate().speed();
 	move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) ); 
 }

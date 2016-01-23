@@ -17,7 +17,9 @@ class InhabitedGrid{
 public:
 	InhabitedGrid(Game* game, int w, int h, int dw, int dh);
 
-	const std::unordered_set<UnitID> get(Coordinate c);
+	const std::unordered_set<UnitID> &unitsInCell(Coordinate c);
+	std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
+	std::vector<UnitID> unitsInCircle(Coordinate c, int range);
 
 	void emplace(const Unit &unit);
 	void erase(const Unit &unit);
@@ -26,13 +28,11 @@ public:
 
 	Game* game;
 private:
-	std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
-	std::vector<UnitID> unitsInCircle(Coordinate c, int range);
-	std::unordered_set<UnitID> getCell(Coordinate c);
 	Coordinate getCellCoords(Coordinate c);
 	const int cellsX;
 	const int cellsY;
 	const int cellWidth;
 	const int cellHeight;
+	std::unordered_set<UnitID> emptyUnitIDvector;
 	std::map<std::pair<int, int>, std::unordered_set<UnitID> > grid;
 };

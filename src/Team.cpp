@@ -3,7 +3,7 @@
 #include "UnitTemplate.hpp"
 #include "Game.hpp"
 
-Team::Team(std::shared_ptr<Game> _game):
+Team::Team(Game& _game):
 game(_game), id(1)
 //id(_game->getTeamID())
 {
