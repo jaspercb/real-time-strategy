@@ -23,7 +23,6 @@ enum QueueSetting{
 
 class Unit
 {
-
 public:
 
 	//Unit();
@@ -44,9 +43,9 @@ public:
 	int z;
 	int hp;
 	
+	Game& game;
 private:
 
-	Game& game;
 
 	std::deque<UnitState*> StateQueue_;
 	std::vector<Weapon> weapons_;
