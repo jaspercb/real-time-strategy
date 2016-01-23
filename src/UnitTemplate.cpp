@@ -3,7 +3,7 @@
 #include "WeaponTemplate.hpp"
 #include "EnvironmentSpec.hpp"
 
-#include <iostream>
+#include "Logging.hpp"
 
 UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _speed, int _radius,
 	EnvironmentSpec _canTravelOn, std::vector<WeaponTemplate> _weaponTemplates ) :
@@ -12,7 +12,7 @@ UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _speed, int _radiu
 		speed_(_speed),
 		radius_(_radius),
 		canTravelOn_(_canTravelOn),
-		weaponTemplates(_weaponTemplates) {std::cout<<"creating unit "<<_name<<std::endl;}
+		weaponTemplates(_weaponTemplates) {debugLog("Creating UnitTemplate, name="+_name);}
 
 int UnitTemplate::maxHP(){
 	return maxHP_;

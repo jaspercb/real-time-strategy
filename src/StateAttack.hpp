@@ -1,3 +1,5 @@
+#pragma once
+
 #include "UnitState.hpp"
 #include "typedefs.hpp"
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "UnitState.hpp"
 
 class StateGotoCoordinate : public UnitState
