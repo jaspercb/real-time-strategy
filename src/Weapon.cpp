@@ -8,6 +8,10 @@ Weapon::Weapon(WeaponTemplate &_weaponTemplate, Unit &_owner):
 	owner(_owner)
 	{}
 
+bool Weapon::canFire(){
+	return weaponTemplate.canFire(*this);
+}
+
 void Weapon::fire(Unit& target){
 	weaponTemplate.fire(*this, target);
 }

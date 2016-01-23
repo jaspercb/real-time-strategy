@@ -15,6 +15,11 @@ class Game;
 
 typedef int UnitID;
 
+enum UpdateStatus{
+	STATUS_OK,
+	STATUS_DEAD
+};
+
 enum QueueSetting{
 	QUEUE_OVERWRITE,
 	QUEUE_FRONT,
@@ -34,6 +39,7 @@ public:
 	void damage(const int);
 	int getAttackRange(); // returns the range of the 
 	void move_towards(const Coordinate c);
+	void attack(Unit& target);
 
 	const TeamID teamID;
 	const UnitID unitID;

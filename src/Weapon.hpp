@@ -9,6 +9,7 @@ class Weapon
 public:
 	Weapon(WeaponTemplate &_weaponTemplate, Unit &_owner);
 
+	bool canFire();
 	void fire(Unit& target);
 	virtual void update();
 	WeaponTemplate& weaponTemplate;

@@ -33,7 +33,7 @@ UnitTemplate& Unit::getUnitTemplate(){
 
 int Unit::update()
 {
-	for (std::vector<Weapon>::iterator i = weapons_.begin(); i!=weapons_.end(); i++)
+	for (auto i = weapons_.begin(); i!=weapons_.end(); i++)
 	{
 		i->update();
 	}
@@ -100,4 +100,15 @@ void Unit::move_towards(const Coordinate c){
 	int dr = std::pow(dx*dx + dy*dy, 0.5);
 	int spd = getUnitTemplate().speed();
 	move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) ); 
+}
+
+void Unit::attack(Unit& target){
+	// Fires all weapons that are
+	// a) off cooldown
+	// b) in range
+	// c) capable of hitting the target's dimension
+
+	for (auto it = weapons_.begin(); it!=weapons_.end(); it++){
+		it->fire(target);
+	}
 }
