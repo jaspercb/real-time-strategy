@@ -21,7 +21,6 @@ int StateIdle::update(Unit& unit){
 	return 0;
 }
 
-
 int StateTargeting::update(Unit& unit){
 	// if we've lose sight of the target, return 1
 	// otherwise path to the target

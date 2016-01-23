@@ -86,6 +86,13 @@ void Unit::damage(const int quant){
 	hp -= quant;
 }
 
+int Unit::getAttackRange(){
+	int r = 0;
+	for (auto it = weapons_.begin(); it!=weapons_.end(); it++){
+		r = std::max(r, it->weaponTemplate.range());
+	}
+	return r;
+}
 
 void Unit::move_towards(const Coordinate c){
 	int dx = c.first - xy.first;

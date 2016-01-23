@@ -7,6 +7,13 @@ class Unit; //forward declarations
 class Command;
 class Event;
 
+
+enum{
+	STATE_EXIT_INCOMPLETE,
+	STATE_EXIT_COMPLETE
+};
+
+
 class UnitState
 {
 public:
@@ -22,15 +29,6 @@ class StateIdle : public UnitState
 {
 public:
 	int update(Unit& unit); // returns 1 if should be removed, 0 otherwise
-};
-
-class StateGoto : public UnitState
-{
-public:
-	int update(Unit& unit);
-private:
-	Coordinate target;
-	std::deque<Coordinate> path;
 };
 
 class StateTargeting : public UnitState

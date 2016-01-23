@@ -23,7 +23,9 @@ enum QueueSetting{
 
 class Unit
 {
+
 public:
+
 	//Unit();
 	Unit(Game&, UnitID, TeamID, UnitTemplateID);
 	UnitTemplate& getUnitTemplate();
@@ -31,6 +33,8 @@ public:
 	void handleCommand(Command, QueueSetting);
 	void move(const Coordinate);
 	void damage(const int);
+	int getAttackRange(); // returns the range of the 
+	void move_towards(const Coordinate c);
 
 	const TeamID teamID;
 	const UnitID unitID;
@@ -41,7 +45,6 @@ public:
 	int hp;
 	
 private:
-	void move_towards(const Coordinate c);
 
 	Game& game;
 
