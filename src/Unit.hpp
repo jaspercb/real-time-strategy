@@ -29,8 +29,8 @@ public:
 	UnitTemplate& getUnitTemplate();
 	int update(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command, QueueSetting);
-	void move(Coordinate);
-	void damage(int);
+	void move(const Coordinate);
+	void damage(const int);
 
 	const TeamID teamID;
 	const UnitID unitID;

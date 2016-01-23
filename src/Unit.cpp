@@ -76,13 +76,13 @@ void Unit::handleCommand(Command command, QueueSetting qSetting)
 	}
 }
 
-void Unit::move(Coordinate c){
+void Unit::move(const Coordinate c){
 	const Coordinate oldcoord = xy;
 	xy = c;
 	game.inhabitedGrid.updatePos(*this, oldcoord);
 }
 
-void Unit::damage(int quant){
+void Unit::damage(const int quant){
 	hp -= quant;
 }
 
