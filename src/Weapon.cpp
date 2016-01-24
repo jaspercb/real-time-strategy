@@ -9,6 +9,8 @@ Weapon::Weapon(WeaponTemplate &_weaponTemplate, Unit &_owner):
 	owner(_owner),
 	ticksUntilCanFire(0)
 	{
+		//debugLog("from inside Weapon::Weapon():");
+		//debugLog(owner);
 	}
 
 bool Weapon::canFire(){

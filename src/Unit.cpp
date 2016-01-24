@@ -9,6 +9,7 @@
 #include "UnitState.hpp"
 #include "typedefs.hpp"
 #include "Game.hpp"
+#include "Logging.hpp"
 
 Unit::Unit(Game &g, UnitID uID, TeamID tID, UnitTemplateID utID, Coordinate pos):
 game(g),
@@ -21,11 +22,12 @@ xy(pos)
 	
 	hp = unitTemplate.maxHP();
 
-	weapons_ = std::vector<Weapon>();
-
 	for (auto it = unitTemplate.weaponTemplates.begin(); it!=unitTemplate.weaponTemplates.end(); it++){
 		weapons_.push_back(Weapon(*it, *this));
 	}
+	
+	debugLog("this should work");
+	debugLog(weapons_[0]);
 }
 
 UnitTemplate& Unit::getUnitTemplate(){

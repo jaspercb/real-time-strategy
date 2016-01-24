@@ -31,12 +31,8 @@ bool WeaponTemplate::canFire(Weapon& weapon) const
 
 void WeaponTemplate::fire(Weapon& weapon, Unit& target) const
 {
-	debugLog("xy:");
-	debugLog(weapon.owner.xy.first);
-	debugLog(weapon.owner.xy.second);
-	
-	debugLog("pythDistance:");
-	debugLog(pythagoreanDistance(weapon.owner.xy, target.xy));
+	debugLog("why is this broken?");
+	debugLog(weapon);
 	
 	if (pythagoreanDistance(weapon.owner.xy, target.xy)<=range_)
 	{

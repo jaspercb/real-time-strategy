@@ -50,9 +50,9 @@ public:
 	int hp;
 	
 	Game& game;
+	std::vector<Weapon> weapons_;
 private:
 
 
 	std::deque<UnitState*> StateQueue_;
-	std::vector<Weapon> weapons_;
 };

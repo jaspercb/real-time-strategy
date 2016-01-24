@@ -17,14 +17,18 @@ int main(){
 	t.unitTemplates.emplace((UnitTemplateID)3, p);
 
 	g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0));
-	g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0));
+	//g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0));
 	
 	Unit& a = g.getUnit(0);
-	Unit& b = g.getUnit(1);
+	//Unit& b = g.getUnit(1);
 
-	debugLog(a.hp);
-	a.attack(a);
-	debugLog(a.hp);
+	//debugLog(a);
+	//debugLog("a attacking a");
+	//a.attack(a);
+	//debugLog(a);
+	
+	debugLog(a);
+	debugLog(a.weapons_.at(0));
 	
 
 	debugLog(" Done testing.");
