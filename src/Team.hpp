@@ -13,11 +13,10 @@ public:
 	//Team();
 	Team(Game& _game);
 
-	Unit& createUnit(UnitTemplateID templateID);
 	// Creates and sets up a new unit, linked to the templateID from 
 
 	Game& game;
-	const TeamID id;
+	const TeamID teamID;
 
 	std::map<UnitTemplateID, UnitTemplate> unitTemplates;
 };

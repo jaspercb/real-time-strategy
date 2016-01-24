@@ -10,11 +10,12 @@
 #include "typedefs.hpp"
 #include "Game.hpp"
 
-Unit::Unit(Game &g, UnitID uID, TeamID tID, UnitTemplateID utID):
+Unit::Unit(Game &g, UnitID uID, TeamID tID, UnitTemplateID utID, Coordinate pos):
 game(g),
 unitID(uID),
 teamID(tID),
-unitTemplateID(utID)
+unitTemplateID(utID),
+xy(pos)
 {
 	UnitTemplate& unitTemplate = getUnitTemplate();
 	

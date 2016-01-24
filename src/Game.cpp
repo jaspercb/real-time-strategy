@@ -10,6 +10,13 @@ Game::Game():
 		//inhabitedGrid = InhabitedGrid(this, 100, 100, 10, 10);
 	};
 
+UnitID Game::createUnit(TeamID teamID, UnitTemplateID unitTemplateID, Coordinate pos){
+	Unit u = Unit(*this, smallestUnusedUnitID(), teamID, unitTemplateID, pos);
+	inhabitedGrid.emplace(u);
+
+	return u.unitID;
+}
+
 Unit& Game::getUnit(UnitID i)
 {
 	return unitsByID.at(i);

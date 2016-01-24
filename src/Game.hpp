@@ -15,6 +15,7 @@ class Game
 {
 public:
 	Game();
+	UnitID createUnit(TeamID team, UnitTemplateID unitTemplateID, Coordinate pos);
 	Unit& getUnit(UnitID i);
 	UnitID smallestUnusedUnitID();
 

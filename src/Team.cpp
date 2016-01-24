@@ -2,9 +2,10 @@
 
 #include "UnitTemplate.hpp"
 #include "Game.hpp"
+#include "Unit.hpp"
 
 Team::Team(Game& _game):
-game(_game), id(1)
+game(_game), teamID(1)
 //id(_game->getTeamID())
 {
 	//for testing
