@@ -9,8 +9,8 @@ class Event;
 
 
 enum StateExitCode{
-	STATE_EXIT_INCOMPLETE,
-	STATE_EXIT_COMPLETE
+	STATE_EXIT_INCOMPLETE, // signals that the state is incomplete, and should be continued
+	STATE_EXIT_COMPLETE // signals that the state is complete, and the unit should switch to the next queued state
 };
 
 
@@ -22,18 +22,4 @@ public:
 	virtual UnitState* handleCommand(Unit& unit, Command command);
 	virtual UnitState* handleEvent(Unit& unit, Event event);
 	virtual StateExitCode update(Unit& unit) {} // returns 1 if should be removed, 0 otherwise
-};
-
-
-class StateIdle : public UnitState
-{
-public:
-	StateExitCode update(Unit& unit); // returns 1 if should be removed, 0 otherwise
-};
-
-class StateTargeting : public UnitState
-{
-public:
-	Unit* target;
-	StateExitCode update(Unit& unit);
 };
