@@ -34,5 +34,5 @@ private:
 	const int cellWidth;
 	const int cellHeight;
 	std::unordered_set<UnitID> emptyUnitIDvector;
-	std::map<std::pair<int, int>, std::unordered_set<UnitID> > grid;
+	std::map<Coordinate, std::unordered_set<UnitID> > grid;
 };

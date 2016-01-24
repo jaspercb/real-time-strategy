@@ -4,6 +4,8 @@
 #include "InhabitedGrid.hpp"
 #include "Unit.hpp"
 
+#include "Logging.hpp"
+
 WeaponTemplate::WeaponTemplate(std::string _name,
 		DamageType _damageType,
 		int _damage,
@@ -24,13 +26,21 @@ WeaponTemplate::WeaponTemplate(std::string _name,
 
 bool WeaponTemplate::canFire(Weapon& weapon) const
 {
-	return weapon.ticksUntilCanFire == 0;
+	return weapon.ticksUntilCanFire <= 0;
 }
 
 void WeaponTemplate::fire(Weapon& weapon, Unit& target) const
 {
-	if (pythagoreanDistance(weapon.owner.xy, target.xy)<range_)
+	debugLog("xy:");
+	debugLog(weapon.owner.xy.first);
+	debugLog(weapon.owner.xy.second);
+	
+	debugLog("pythDistance:");
+	debugLog(pythagoreanDistance(weapon.owner.xy, target.xy));
+	
+	if (pythagoreanDistance(weapon.owner.xy, target.xy)<=range_)
 	{
+		debugLog("hi");
 		target.damage(damage_);
 		weapon.ticksUntilCanFire = reloadTime_;
 	}

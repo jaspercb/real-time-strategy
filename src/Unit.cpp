@@ -29,7 +29,7 @@ xy(pos)
 }
 
 UnitTemplate& Unit::getUnitTemplate(){
-	return game.teams.at(teamID).unitTemplates.at(unitTemplateID);
+	return game.getTeam(teamID).unitTemplates.at(unitTemplateID);
 }
 
 int Unit::update()

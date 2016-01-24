@@ -5,7 +5,7 @@
 
 int pythagoreanDistance(Coordinate a, Coordinate b)
 {
-	return pow(pow(a.first-b.first, 2) + pow(a.second-b.second, 2), 0.5);
+	return (int)pow(pow(a.first-b.first, 2) + pow(a.second-b.second, 2), 0.5);
 }
 
 bool coordInRect(Coordinate a, Coordinate b, Coordinate c){
@@ -40,7 +40,7 @@ InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int dw, int dh):
 
 Coordinate InhabitedGrid::getCellCoords(Coordinate p)
 {
-	return std::pair<int, int>(p.first/cellWidth, p.second/cellWidth);
+	return Coordinate(p.first/cellWidth, p.second/cellWidth);
 }
 
 const std::unordered_set<UnitID> &InhabitedGrid::unitsInCell(Coordinate c){
@@ -100,7 +100,7 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b)
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
-			const std::unordered_set<UnitID> unitSubset = unitsInCell(std::pair<int,int>(x,y));
+			const std::unordered_set<UnitID> unitSubset = unitsInCell(Coordinate(x,y));
 			for (std::unordered_set<UnitID>::const_iterator it = unitSubset.begin(); it!=unitSubset.end(); it++){
 				if (coordInRect(game->getUnit(*it).xy, a, b)){
 					ret.push_back(*it);
@@ -123,7 +123,7 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius)
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
-			const std::unordered_set<UnitID> unitSubset = unitsInCell(std::pair<int,int>(x,y));
+			const std::unordered_set<UnitID> unitSubset = unitsInCell(Coordinate(x,y));
 			for (std::unordered_set<UnitID>::const_iterator it = unitSubset.begin(); it!=unitSubset.end(); it++){
 				if (coordInCircle(game->getUnit(*it).xy, c, radius)){
 					ret.push_back(*it);

@@ -11,7 +11,7 @@ class Team
 {
 public:
 	//Team();
-	Team(Game& _game);
+	Team(Game& _game, TeamID id);
 
 	// Creates and sets up a new unit, linked to the templateID from 
 

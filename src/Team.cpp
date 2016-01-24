@@ -4,8 +4,8 @@
 #include "Game.hpp"
 #include "Unit.hpp"
 
-Team::Team(Game& _game):
-game(_game), teamID(1)
+Team::Team(Game& _game, TeamID tID):
+game(_game), teamID(tID)
 //id(_game->getTeamID())
 {
 	//for testing
