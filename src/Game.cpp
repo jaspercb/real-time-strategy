@@ -49,7 +49,7 @@ Team& Game::getTeam(TeamID i)
 		return teamsByID.at(i);
 	}
 	catch (std::out_of_range e){
-		debugLog("Game::getUnit(TeamID) called with invalid TeamID: ");
+		debugLog("Game::getTeam(TeamID) called with invalid TeamID: ");
 		debugLog(i);
 		debugLog(e.what());
 	}
