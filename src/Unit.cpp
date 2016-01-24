@@ -40,8 +40,8 @@ int Unit::update()
 
 	if (StateQueue_.size())
 	{
-		int stateComplete = StateQueue_.front()->update(*this);
-		if (stateComplete)
+		StateExitCode stateComplete = StateQueue_.front()->update(*this);
+		if (stateComplete == STATE_EXIT_COMPLETE)
 		{
 			delete StateQueue_.front();
 			StateQueue_.pop_front();

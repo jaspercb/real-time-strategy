@@ -8,7 +8,7 @@ class Command;
 class Event;
 
 
-enum{
+enum StateExitCode{
 	STATE_EXIT_INCOMPLETE,
 	STATE_EXIT_COMPLETE
 };
@@ -21,19 +21,19 @@ public:
 	virtual void enter(Unit& unit) {}
 	virtual UnitState* handleCommand(Unit& unit, Command command);
 	virtual UnitState* handleEvent(Unit& unit, Event event);
-	virtual int update(Unit& unit) {} // returns 1 if should be removed, 0 otherwise
+	virtual StateExitCode update(Unit& unit) {} // returns 1 if should be removed, 0 otherwise
 };
 
 
 class StateIdle : public UnitState
 {
 public:
-	int update(Unit& unit); // returns 1 if should be removed, 0 otherwise
+	StateExitCode update(Unit& unit); // returns 1 if should be removed, 0 otherwise
 };
 
 class StateTargeting : public UnitState
 {
 public:
 	Unit* target;
-	int update(Unit& unit);
+	StateExitCode update(Unit& unit);
 };

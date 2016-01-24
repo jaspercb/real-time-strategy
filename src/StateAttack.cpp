@@ -7,7 +7,7 @@ StateAttack::StateAttack(UnitID targ):
 	targetID(targ)
 	{}
 
-int StateAttack::update(Unit& unit){
+StateExitCode StateAttack::update(Unit& unit){
 	// if we're not in attacking range of the target, move towards the target
 	// otherwise do nothing
 

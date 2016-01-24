@@ -7,7 +7,7 @@ class StateAttack : public UnitState
 {
 public:
 	StateAttack(UnitID);
-	int update(Unit& unit);
+	StateExitCode update(Unit& unit);
 private:
 	UnitID targetID;
 	//std::deque<Coordinate> path;
