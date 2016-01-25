@@ -32,6 +32,7 @@ public:
 
 	//Unit();
 	Unit(Game&, UnitID, TeamID, UnitTemplateID, Coordinate);
+	Unit(Unit &&u);
 	UnitTemplate& getUnitTemplate();
 	int update(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command, QueueSetting);

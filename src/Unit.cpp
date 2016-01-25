@@ -30,6 +30,21 @@ xy(pos)
 	debugLog(weapons_[0]);
 }
 
+Unit::Unit(Unit &&u) : 
+teamID(u.teamID),
+unitID(u.unitID),
+unitTemplateID(u.unitTemplateID),
+xy(u.xy),
+z(u.z),
+hp(u.hp),
+game(u.game)
+{
+	for(Weapon &w : u.weapons_) {
+		weapons_.push_back(Weapon(w.weaponTemplate, *this));
+	}
+	u.weapons_.clear();
+}
+
 UnitTemplate& Unit::getUnitTemplate(){
 	return game.getTeam(teamID).unitTemplates.at(unitTemplateID);
 }
