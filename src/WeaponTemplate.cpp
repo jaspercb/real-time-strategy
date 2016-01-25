@@ -24,6 +24,51 @@ WeaponTemplate::WeaponTemplate(std::string _name,
 	dimensions_(dimensions)
 	{};
 
+WeaponTemplate::WeaponTemplate(std::ifstream is)
+{
+	std::string s;
+	while (is>>s){
+		if (s=="name"){
+			getline(is, name_);
+			debugLog("yo");
+		}
+		else if (s=="damageType"){
+			is>>s;
+			if (s=="DMG_ELECTRO")
+				damageType_ = DMG_ELECTRO;
+			else if (s=="DMG_THERMAL")
+				damageType_ = DMG_THERMAL;
+			else if (s=="DMG_KINETIC")
+				damageType_ = DMG_KINETIC;
+			else if (s=="DMG_EXPLOSIVE")
+				damageType_ = DMG_EXPLOSIVE;
+			else{
+				throw "Error: WeaponTemplate created with invalid damage type: "+s;
+			}
+		}
+		else if (s=="damage")
+			is>>damage_;
+		else if (s=="reloadTime")
+			is>>reloadTime_;
+		else if (s=="range")
+			is>>range_;
+		else if (s=="weaponVelocity")
+			is>>weaponVelocity_;
+		else if (s=="aoeRadius")
+			is>>aoeRadius_;
+		else if (s=="dimensions"){
+			bool a, b, c, d;
+			is>>a>>b>>c>>d;
+			dimensions_ = EnvironmentSpec(a, b, c, d);
+		}
+	}
+}
+
+WeaponTemplate::WeaponTemplate(std::string s):
+	WeaponTemplate(std::ifstream("../conf/weapons/"+s))
+	{debugLog("swag");}
+
+
 bool WeaponTemplate::canFire(Weapon& weapon) const
 {
 	return weapon.ticksUntilCanFire <= 0;

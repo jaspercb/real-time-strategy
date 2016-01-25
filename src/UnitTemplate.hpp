@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
 #include <vector>
-#include <memory>
+#include <fstream>
+#include <string>
 
 #include "EnvironmentSpec.hpp"
 #include "WeaponTemplate.hpp"
@@ -17,6 +17,8 @@ public:
 			int _radius,
 			EnvironmentSpec _canTravelOn,
 			std::vector<WeaponTemplate> _weaponTemplates);
+	UnitTemplate(std::ifstream);
+	UnitTemplate(std::string);
 	int maxHP();
 	int speed();
 	int radius();

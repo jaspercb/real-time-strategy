@@ -7,11 +7,12 @@ int main(){
 	Game g = Game();
 	TeamID tID = g.createTeam();
 
-	WeaponTemplate wpntmpl = WeaponTemplate("TestWeapon", DMG_KINETIC, 10, 2, 5, 1, 1, GROUND_ONLY);
-	std::vector<WeaponTemplate> tmplv;
-	tmplv.push_back(wpntmpl);
-	UnitTemplate p = UnitTemplate("TestUnit", 50, 1, 1, GROUND_ONLY, tmplv);
-	
+	//WeaponTemplate wpntmpl = WeaponTemplate("TestWeapon", DMG_KINETIC, 10, 2, 5, 1, 1, GROUND_ONLY);
+	//std::vector<WeaponTemplate> tmplv;
+	//tmplv.push_back(wpntmpl);
+	//UnitTemplate p = UnitTemplate("TestUnit", 50, 1, 1, GROUND_ONLY, tmplv);
+	UnitTemplate p = UnitTemplate(std::ifstream("../conf/units/testu"));
+
 	Team& t = g.getTeam(tID);
 
 	t.unitTemplates.emplace((UnitTemplateID)3, p);
@@ -22,9 +23,6 @@ int main(){
 	Unit& a = g.getUnit(0);
 	//Unit& b = g.getUnit(1);
 
-	a.attack(a);
-	debugLog(a);
-	a.attack(a);
 	debugLog(a);
 	a.attack(a);
 	debugLog(a);

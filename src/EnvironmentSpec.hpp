@@ -3,6 +3,12 @@
 class EnvironmentSpec
 {
 public:
+	EnvironmentSpec():
+		ground(false),
+		sea(false),
+		submerged(false),
+		air(false)
+		{}
 	EnvironmentSpec(bool _ground, bool _sea, bool _submerged, bool _air):
 		ground(_ground),
 		sea(_sea),
