@@ -29,7 +29,7 @@ bool WeaponTemplate::canFire(Weapon& weapon) const
 	return weapon.ticksUntilCanFire <= 0;
 }
 
-void WeaponTemplate::fire(Weapon& weapon, Unit& target) const
+void WeaponTemplate::fire(Weapon& weapon, Unit& target)
 {
 	debugLog("why is this broken?");
 	debugLog(weapon);
@@ -42,7 +42,7 @@ void WeaponTemplate::fire(Weapon& weapon, Unit& target) const
 	}
 }
 
-void WeaponTemplate::fire(Weapon& weapon, Coordinate& target) const
+void WeaponTemplate::fire(Weapon& weapon, Coordinate& target)
 {
 	// if target in range
 }

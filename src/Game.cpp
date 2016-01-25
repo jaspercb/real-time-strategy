@@ -23,7 +23,6 @@ TeamID Game::createTeam(){
 
 UnitID Game::createUnit(TeamID teamID, UnitTemplateID unitTemplateID, Coordinate pos){
 	UnitID id = smallestUnusedUnitID();
-	debugLog(id);
 	unitsByID.emplace(id, Unit(*this, id, teamID, unitTemplateID, pos));
 	inhabitedGrid.emplace(getUnit(id));
 

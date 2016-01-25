@@ -25,9 +25,6 @@ xy(pos)
 	for (auto it = unitTemplate.weaponTemplates.begin(); it!=unitTemplate.weaponTemplates.end(); it++){
 		weapons_.push_back(Weapon(*it, *this));
 	}
-	
-	debugLog("this should work");
-	debugLog(weapons_[0]);
 }
 
 Unit::Unit(Unit &&u) : 
@@ -40,8 +37,9 @@ hp(u.hp),
 game(u.game)
 {
 	for(Weapon &w : u.weapons_) {
-		weapons_.push_back(Weapon(w.weaponTemplate, *this));
+		weapons_.push_back(Weapon(w, *this));
 	}
+
 	u.weapons_.clear();
 }
 

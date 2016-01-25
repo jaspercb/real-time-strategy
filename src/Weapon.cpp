@@ -13,6 +13,13 @@ Weapon::Weapon(WeaponTemplate &_weaponTemplate, Unit &_owner):
 		//debugLog(owner);
 	}
 
+Weapon::Weapon(Weapon &w, Unit &u):
+	owner(u),
+	weaponTemplate(w.weaponTemplate),
+	ticksUntilCanFire(w.ticksUntilCanFire)
+	{}
+
+
 bool Weapon::canFire(){
 	return weaponTemplate.canFire(*this);
 }

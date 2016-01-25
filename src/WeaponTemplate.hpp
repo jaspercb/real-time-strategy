@@ -37,8 +37,8 @@ public:
 	virtual int range(){return range_;};
 	virtual int weaponVelocity(){return weaponVelocity_;};
 	virtual bool canFire(Weapon& weapon) const;
-	virtual void fire(Weapon& weapon, Unit& target) const;
-	virtual void fire(Weapon& weapon, Coordinate& target) const;
+	virtual void fire(Weapon& weapon, Unit& target);
+	virtual void fire(Weapon& weapon, Coordinate& target);
 private:
 	std::string name_;
 	DamageType damageType_;

@@ -22,13 +22,8 @@ int main(){
 	Unit& a = g.getUnit(0);
 	//Unit& b = g.getUnit(1);
 
+	a.attack(a);
 	//debugLog(a);
-	//debugLog("a attacking a");
-	//a.attack(a);
-	//debugLog(a);
-	
-	debugLog(a);
-	debugLog(a.weapons_.at(0));
 	
 
 	debugLog(" Done testing.");
