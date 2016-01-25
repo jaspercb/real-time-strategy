@@ -23,8 +23,11 @@ int main(){
 	//Unit& b = g.getUnit(1);
 
 	a.attack(a);
-	//debugLog(a);
-	
+	debugLog(a);
+	a.attack(a);
+	debugLog(a);
+	a.attack(a);
+	debugLog(a);
 
 	debugLog(" Done testing.");
 }

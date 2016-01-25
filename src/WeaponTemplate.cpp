@@ -31,12 +31,8 @@ bool WeaponTemplate::canFire(Weapon& weapon) const
 
 void WeaponTemplate::fire(Weapon& weapon, Unit& target)
 {
-	debugLog("why is this broken?");
-	debugLog(weapon);
-	
-	if (pythagoreanDistance(weapon.owner.xy, target.xy)<=range_)
+	if (canFire(weapon) && (pythagoreanDistance(weapon.owner.xy, target.xy)<=range_))
 	{
-		debugLog("hi");
 		target.damage(damage_);
 		weapon.ticksUntilCanFire = reloadTime_;
 	}
