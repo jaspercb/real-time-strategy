@@ -3,6 +3,7 @@
 #include "Weapon.hpp"
 #include "InhabitedGrid.hpp"
 #include "Unit.hpp"
+#include "Game.hpp"
 
 #include "Logging.hpp"
 
@@ -78,7 +79,16 @@ void WeaponTemplate::fire(Weapon& weapon, Unit& target)
 {
 	if (canFire(weapon) && (pythagoreanDistance(weapon.owner.xy, target.xy)<=range_))
 	{
-		target.damage(damage_, damageType_);
+		if (aoeRadius_){
+			std::vector<UnitID> p = target.game.inhabitedGrid.unitsInCircle(target.xy, aoeRadius_);
+			for (UnitID &targetID : p){
+				Unit& potentialTarget = target.game.getUnit(targetID);
+				if (!target.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID)){
+					potentialTarget.damage(damage_, damageType_);
+				}
+			}
+		}
+		
 		weapon.ticksUntilCanFire = reloadTime_;
 	}
 }
