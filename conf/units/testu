@@ -1,5 +1,6 @@
 name Test Unit
 maxHP 40
+maxES 10
 speed 5
 radius 5
 canTravelOn 1 0 0 0

@@ -22,6 +22,8 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 			getline(is, name);
 		else if (s=="maxHP")
 			is>>maxHP_;
+		else if (s=="maxES")
+			is>>maxES_;
 		else if (s=="speed")
 			is>>speed_;
 		else if (s=="radius")
