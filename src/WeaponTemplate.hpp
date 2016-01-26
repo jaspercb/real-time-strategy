@@ -37,11 +37,12 @@ public:
 	virtual int damage(){return damage_;};
 	virtual int reloadTime(){return reloadTime_;}; //
 	virtual int range(){return range_;};
+	virtual int aoeRadius(){return aoeRadius_;}
 	virtual int weaponVelocity(){return weaponVelocity_;};
 	virtual bool canFire(Weapon& weapon) const;
 	virtual void fire(Weapon& weapon, Unit& target);
 	virtual void fire(Weapon& weapon, Coordinate& target);
-private:
+protected:
 	std::string name_;
 	DamageType damageType_;
 	bool targetGround_;

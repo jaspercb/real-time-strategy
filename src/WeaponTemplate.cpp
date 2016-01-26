@@ -78,38 +78,41 @@ bool WeaponTemplate::canFire(Weapon& weapon) const
 void WeaponTemplate::fire(Weapon& weapon, Unit& target)
 {
 	if (canFire(weapon) &&
-	(pythagoreanDistance(weapon.owner.xy, target.xy)<=range_))
+	(pythagoreanDistance(weapon.owner.xy, target.xy)<=range()))
 	{
-		if (aoeRadius_){
-			std::vector<UnitID> p = target.game.inhabitedGrid.unitsInCircle(target.xy, aoeRadius_);
+		if (aoeRadius()){
+			std::vector<UnitID> p = target.game.inhabitedGrid.unitsInCircle(target.xy, aoeRadius());
 			for (UnitID &targetID : p){
 				Unit& potentialTarget = target.game.getUnit(targetID);
 				if (!target.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID)){
-					potentialTarget.damage(damage_, damageType_);
+					potentialTarget.damage(damage(), damageType_);
 				}
 			}
 		}
+		else{
+			target.damage(damage(), damageType_);
+		}
 		
-		weapon.ticksUntilCanFire = reloadTime_;
+		weapon.ticksUntilCanFire = reloadTime();
 	}
 }
 
 void WeaponTemplate::fire(Weapon& weapon, Coordinate& target)
 {
 	if (canFire(weapon) &&
-	(pythagoreanDistance(weapon.owner.xy, target)<=range_) &&
-	(aoeRadius_ > 0) ) //only works for AOE weapons
+	(pythagoreanDistance(weapon.owner.xy, target)<=range()) &&
+	(aoeRadius() > 0) ) //only works for AOE weapons
 	{
-		if (aoeRadius_){
-			std::vector<UnitID> p = weapon.owner.game.inhabitedGrid.unitsInCircle(target, aoeRadius_);
+		if (aoeRadius()){
+			std::vector<UnitID> p = weapon.owner.game.inhabitedGrid.unitsInCircle(target, aoeRadius());
 			for (UnitID &targetID : p){
 				Unit& potentialTarget = weapon.owner.game.getUnit(targetID);
 				if (!weapon.owner.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID)){
-					potentialTarget.damage(damage_, damageType_);
+					potentialTarget.damage(damage(), damageType_);
 				}
 			}
 		}
 		
-		weapon.ticksUntilCanFire = reloadTime_;
+		weapon.ticksUntilCanFire = reloadTime();
 	}
 }
