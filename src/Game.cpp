@@ -60,3 +60,7 @@ UnitID Game::smallestUnusedUnitID() {
 TeamID Game::smallestUnusedTeamID() {
 	return smallestUnusedTeamID_++;
 }
+
+bool Game::teamsAreFriendly(TeamID a, TeamID b){
+	return false;
+}

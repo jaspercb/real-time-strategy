@@ -24,6 +24,8 @@ public:
 	UnitID smallestUnusedUnitID();
 	TeamID smallestUnusedTeamID();
 
+	bool teamsAreFriendly(TeamID, TeamID);
+
 	InhabitedGrid inhabitedGrid;
 	std::map<UnitID, Unit> unitsByID;
 	std::map<TeamID, Team> teamsByID;
