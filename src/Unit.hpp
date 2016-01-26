@@ -6,6 +6,7 @@
 
 #include "typedefs.hpp"
 #include "Weapon.hpp"
+#include "WeaponTemplate.hpp"
 
 class Team;
 class UnitTemplate;
@@ -37,7 +38,7 @@ public:
 	int update(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command, QueueSetting);
 	void move(const Coordinate);
-	void damage(const int);
+	void damage(const int, const DamageType);
 	int getAttackRange(); // returns the range of the 
 	void move_towards(const Coordinate c);
 	void attack(Unit& target);
@@ -49,6 +50,7 @@ public:
 	Coordinate xy;
 	int z;
 	int hp;
+	int es;
 	
 	Game& game;
 	std::vector<Weapon> weapons_;

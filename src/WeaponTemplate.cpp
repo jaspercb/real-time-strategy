@@ -78,7 +78,7 @@ void WeaponTemplate::fire(Weapon& weapon, Unit& target)
 {
 	if (canFire(weapon) && (pythagoreanDistance(weapon.owner.xy, target.xy)<=range_))
 	{
-		target.damage(damage_);
+		target.damage(damage_, damageType_);
 		weapon.ticksUntilCanFire = reloadTime_;
 	}
 }

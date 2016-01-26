@@ -21,6 +21,7 @@ xy(pos)
 	UnitTemplate& unitTemplate = getUnitTemplate();
 	
 	hp = unitTemplate.maxHP();
+	es = unitTemplate.maxES();
 
 	for (auto it = unitTemplate.weaponTemplates.begin(); it!=unitTemplate.weaponTemplates.end(); it++){
 		weapons_.push_back(Weapon(*it, *this));
@@ -34,6 +35,7 @@ unitTemplateID(u.unitTemplateID),
 xy(u.xy),
 z(u.z),
 hp(u.hp),
+es(u.es),
 game(u.game)
 {
 	for(Weapon &w : u.weapons_) {
@@ -98,8 +100,11 @@ void Unit::move(const Coordinate c){
 	game.inhabitedGrid.updatePos(*this, oldcoord);
 }
 
-void Unit::damage(const int quant){
-	hp -= quant;
+void Unit::damage(const int quant, const DamageType dmgtype){
+	UnitTemplate& utmpl = getUnitTemplate();
+	if (es>0)
+		es -= quant*utmpl.getDamageEffectivenessVsES(dmgtype);
+	hp -= quant*utmpl.getDamageEffectivenessVsHP(dmgtype);
 }
 
 int Unit::getAttackRange(){

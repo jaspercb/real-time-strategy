@@ -25,6 +25,8 @@ public:
 	int speed();
 	int radius();
 	int buildtime();
+	float getDamageEffectivenessVsHP(DamageType);
+	float getDamageEffectivenessVsES(DamageType);
 
 	std::string name;
 	std::vector<WeaponTemplate> weaponTemplates;

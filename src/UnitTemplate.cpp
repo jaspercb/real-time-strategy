@@ -65,3 +65,29 @@ int UnitTemplate::radius(){
 int UnitTemplate::buildtime(){
 	return buildtime_;
 }
+
+float UnitTemplate::getDamageEffectivenessVsHP(DamageType dmgtype){
+	switch (dmgtype){
+		case DMG_ELECTRO:
+			return 0.5;
+		case DMG_THERMAL:
+			return 0.75;
+		case DMG_KINETIC:
+			return 1.25;
+		case DMG_EXPLOSIVE:
+			return 1.5;
+	}
+}
+
+float UnitTemplate::getDamageEffectivenessVsES(DamageType dmgtype){
+	switch (dmgtype){
+		case DMG_ELECTRO:
+			return 1.5;
+		case DMG_THERMAL:
+			return 1.25;
+		case DMG_KINETIC:
+			return 0.75;
+		case DMG_EXPLOSIVE:
+			return 0.5;
+	}
+}
