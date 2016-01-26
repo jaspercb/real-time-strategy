@@ -22,6 +22,7 @@ xy(pos)
 	
 	hp = unitTemplate.maxHP();
 	es = unitTemplate.maxES();
+	dimension = unitTemplate.canTravelOn;
 
 	for (auto it = unitTemplate.weaponTemplates.begin(); it!=unitTemplate.weaponTemplates.end(); it++){
 		weapons_.push_back(Weapon(*it, *this));
@@ -33,7 +34,7 @@ teamID(u.teamID),
 unitID(u.unitID),
 unitTemplateID(u.unitTemplateID),
 xy(u.xy),
-z(u.z),
+dimension(u.dimension),
 hp(u.hp),
 es(u.es),
 game(u.game)

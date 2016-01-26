@@ -30,11 +30,11 @@ public:
 
 	std::string name;
 	std::vector<WeaponTemplate> weaponTemplates;
+	EnvironmentSpec canTravelOn;
 private:
 	int maxHP_;
 	int maxES_;
 	int speed_;
 	int radius_;
 	int buildtime_;
-	EnvironmentSpec canTravelOn_;
 };

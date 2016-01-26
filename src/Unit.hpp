@@ -7,6 +7,7 @@
 #include "typedefs.hpp"
 #include "Weapon.hpp"
 #include "WeaponTemplate.hpp"
+#include "EnvironmentSpec.hpp"
 
 class Team;
 class UnitTemplate;
@@ -48,9 +49,10 @@ public:
 	const UnitTemplateID unitTemplateID;
 
 	Coordinate xy;
-	int z;
+	EnvironmentSpec dimension;
 	int hp;
 	int es;
+	int dim; // 
 	
 	Game& game;
 	std::vector<Weapon> weapons_;

@@ -2,6 +2,8 @@
 
 #include <map>
 #include <memory>
+#include <vector>
+
 #include "UnitTemplate.hpp"
 #include "typedefs.hpp"
 
@@ -19,4 +21,7 @@ public:
 	const TeamID teamID;
 
 	std::map<UnitTemplateID, UnitTemplate> unitTemplates;
+
+protected:
+	std::vector<int> resources;
 };

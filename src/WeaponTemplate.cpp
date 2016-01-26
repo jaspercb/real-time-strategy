@@ -78,13 +78,16 @@ bool WeaponTemplate::canFire(Weapon& weapon) const
 void WeaponTemplate::fire(Weapon& weapon, Unit& target)
 {
 	if (canFire(weapon) &&
-	(pythagoreanDistance(weapon.owner.xy, target.xy)<=range()))
+	pythagoreanDistance(weapon.owner.xy, target.xy)<=range() &&
+	dimensions_.overlaps(target.dimension) )
 	{
 		if (aoeRadius()){
 			std::vector<UnitID> p = target.game.inhabitedGrid.unitsInCircle(target.xy, aoeRadius());
 			for (UnitID &targetID : p){
 				Unit& potentialTarget = target.game.getUnit(targetID);
-				if (!target.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID)){
+				if (!target.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID) &&
+				dimensions_.overlaps(potentialTarget.dimension) )
+				{
 					potentialTarget.damage(damage(), damageType_);
 				}
 			}
@@ -107,7 +110,9 @@ void WeaponTemplate::fire(Weapon& weapon, Coordinate& target)
 			std::vector<UnitID> p = weapon.owner.game.inhabitedGrid.unitsInCircle(target, aoeRadius());
 			for (UnitID &targetID : p){
 				Unit& potentialTarget = weapon.owner.game.getUnit(targetID);
-				if (!weapon.owner.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID)){
+				if (!weapon.owner.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID) &&
+				dimensions_.overlaps(potentialTarget.dimension) )
+				{
 					potentialTarget.damage(damage(), damageType_);
 				}
 			}

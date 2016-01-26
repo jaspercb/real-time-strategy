@@ -13,10 +13,17 @@ void debugLog(int s){
 
 void debugLog(Unit& u){
 	std::cout<<"Unit Log:"<<std::endl;
-	std::cout<<"  unitID: "<<u.unitID<<std::endl;
+	std::cout<<"  unitID: "<<u.unitID;
 	std::cout<<"  teamID: "<<u.teamID<<std::endl;
-	std::cout<<"  xy: "<<u.xy.first<<","<<u.xy.second<<std::endl;
-	std::cout<<"  hp: "<<u.hp<<std::endl;
+	
+	std::cout<<"  xy: "<<u.xy.first<<","<<u.xy.second;
+	std::cout<<"  dim: "<<u.dimension.ground
+	<<u.dimension.sea
+	<<u.dimension.submerged
+	<<u.dimension.air <<std::endl;
+
+	std::cout<<"  hp: "<<u.hp<<"/"<<u.getUnitTemplate().maxHP();
+	std::cout<<"  es: "<<u.es<<"/"<<u.getUnitTemplate().maxES()<<std::endl;
 }
 
 void debugLog(Weapon& w){

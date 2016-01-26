@@ -17,6 +17,12 @@ enum DamageType{
 	DMG_EXPLOSIVE	// shit against shields, great against armor
 };
 
+enum ResourceType{
+	RESOURCE_METAL,
+	RESOURCE_CRYSTAL,
+	RESOURCE_SUPPLY, // You get supply back when a unit is destroyed
+	RESOURCE_NUM
+};
 
 class WeaponTemplate
 {

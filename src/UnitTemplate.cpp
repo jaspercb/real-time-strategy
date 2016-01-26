@@ -12,7 +12,7 @@ UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _maxES, int _speed
 		maxES_(_maxES),
 		speed_(_speed),
 		radius_(_radius),
-		canTravelOn_(_canTravelOn),
+		canTravelOn(_canTravelOn),
 		weaponTemplates(_weaponTemplates) {debugLog("Creating UnitTemplate, name="+_name);}
 
 UnitTemplate::UnitTemplate(std::ifstream is){
@@ -31,7 +31,7 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 		else if (s=="canTravelOn"){
 			int a, b, c, d;
 			is>>a>>b>>c>>d;
-			canTravelOn_ = EnvironmentSpec(a, b, c, d);
+			canTravelOn = EnvironmentSpec(a, b, c, d);
 		}
 		else if (s=="weapon"){
 			std::string wepname;
