@@ -5,10 +5,11 @@
 
 #include "Logging.hpp"
 
-UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _speed, int _radius,
+UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _maxES, int _speed, int _radius,
 	EnvironmentSpec _canTravelOn, std::vector<WeaponTemplate> _weaponTemplates ) :
 		name(_name),
 		maxHP_(_maxHP),
+		maxES_(_maxES),
 		speed_(_speed),
 		radius_(_radius),
 		canTravelOn_(_canTravelOn),
@@ -45,6 +46,10 @@ UnitTemplate::UnitTemplate(std::string s):
 
 int UnitTemplate::maxHP(){
 	return maxHP_;
+}
+
+int UnitTemplate::maxES(){
+	return maxES_;
 }
 
 int UnitTemplate::speed(){
