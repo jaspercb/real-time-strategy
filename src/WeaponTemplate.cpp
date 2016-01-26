@@ -77,7 +77,8 @@ bool WeaponTemplate::canFire(Weapon& weapon) const
 
 void WeaponTemplate::fire(Weapon& weapon, Unit& target)
 {
-	if (canFire(weapon) && (pythagoreanDistance(weapon.owner.xy, target.xy)<=range_))
+	if (canFire(weapon)
+		&& (pythagoreanDistance(weapon.owner.xy, target.xy)<=range_))
 	{
 		if (aoeRadius_){
 			std::vector<UnitID> p = target.game.inhabitedGrid.unitsInCircle(target.xy, aoeRadius_);
@@ -95,5 +96,20 @@ void WeaponTemplate::fire(Weapon& weapon, Unit& target)
 
 void WeaponTemplate::fire(Weapon& weapon, Coordinate& target)
 {
-	// if target in range
+	if (canFire(weapon)
+		&& (pythagoreanDistance(weapon.owner.xy, target)<=range_)
+		&& (aoeRadius_ > 0) ) //only works for AOE weapons
+	{
+		if (aoeRadius_){
+			std::vector<UnitID> p = weapon.owner.game.inhabitedGrid.unitsInCircle(target, aoeRadius_);
+			for (UnitID &targetID : p){
+				Unit& potentialTarget = weapon.owner.game.getUnit(targetID);
+				if (!weapon.owner.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID)){
+					potentialTarget.damage(damage_, damageType_);
+				}
+			}
+		}
+		
+		weapon.ticksUntilCanFire = reloadTime_;
+	}
 }
