@@ -41,9 +41,14 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 			dimension = EnvironmentSpec(a, b, c, d);
 		}
 		else if (s=="weapon"){
-			std::string wepname;
-			is>>wepname;
-			weaponTemplates.push_back(WeaponTemplate(wepname));
+			is>>s; // to get rid of the trailing {
+			weaponTemplates.push_back(WeaponTemplate(is));
+		}
+		else if (s=="weapon{"){
+			weaponTemplates.push_back(WeaponTemplate(is));
+		}
+		else if (s=="}"){
+			return;
 		}
 	}
 }

@@ -36,8 +36,8 @@ public:
 			int _weaponVelocity,
 			int _aoeRadius,
 			EnvironmentSpec dimensions);
-	WeaponTemplate(std::ifstream);
-	WeaponTemplate(std::string);
+	WeaponTemplate(std::ifstream&);
+	//WeaponTemplate(std::string);
 	virtual std::string name(){return name_;};
 	virtual DamageType damageType(){return damageType_;};
 	virtual int damage(){return damage_;};

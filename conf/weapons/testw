@@ -1,8 +1,0 @@
-name Test Weapon
-damageType DMG_KINETIC
-damage 10
-reloadTime 3
-range 5
-weaponVelocity 5
-aoeRadius 1
-dimensions 1 0 0 0

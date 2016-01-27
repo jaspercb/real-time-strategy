@@ -25,7 +25,7 @@ WeaponTemplate::WeaponTemplate(std::string _name,
 	dimensions_(dimensions)
 	{};
 
-WeaponTemplate::WeaponTemplate(std::ifstream is)
+WeaponTemplate::WeaponTemplate(std::ifstream &is)
 {
 	damage_ = 0;
 	reloadTime_ = 0;
@@ -69,13 +69,17 @@ WeaponTemplate::WeaponTemplate(std::ifstream is)
 			is>>a>>b>>c>>d;
 			dimensions_ = EnvironmentSpec(a, b, c, d);
 		}
+		else if (s=="}"){
+			return;
+		}
 	}
 }
 
+/*
 WeaponTemplate::WeaponTemplate(std::string s):
 	WeaponTemplate(std::ifstream("../conf/weapons/"+s))
 	{debugLog("swag");}
-
+*/
 
 bool WeaponTemplate::canFire(Weapon& weapon) const
 {
