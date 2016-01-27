@@ -22,7 +22,7 @@ xy(pos)
 	
 	hp = unitTemplate.maxHP();
 	es = unitTemplate.maxES();
-	dimension = unitTemplate.canTravelOn;
+	dimension = unitTemplate.dimension;
 
 	for (auto it = unitTemplate.weaponTemplates.begin(); it!=unitTemplate.weaponTemplates.end(); it++){
 		weapons_.push_back(Weapon(*it, *this));

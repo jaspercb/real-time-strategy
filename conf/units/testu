@@ -1,7 +1,7 @@
 name Test Unit
-maxHP 40
+maxHP 100
 maxES 10
 speed 5
 radius 5
-canTravelOn 1 0 0 0
+dimension 1 0 0 0
 weapon testw

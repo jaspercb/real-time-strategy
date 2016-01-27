@@ -6,17 +6,24 @@
 #include "Logging.hpp"
 
 UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _maxES, int _speed, int _radius,
-	EnvironmentSpec _canTravelOn, std::vector<WeaponTemplate> _weaponTemplates ) :
+	EnvironmentSpec _dimension, std::vector<WeaponTemplate> _weaponTemplates ) :
 		name(_name),
 		maxHP_(_maxHP),
 		maxES_(_maxES),
 		speed_(_speed),
 		radius_(_radius),
-		canTravelOn(_canTravelOn),
+		dimension(_dimension),
 		weaponTemplates(_weaponTemplates) {debugLog("Creating UnitTemplate, name="+_name);}
 
 UnitTemplate::UnitTemplate(std::ifstream is){
+	maxHP_ = 0;
+	maxES_ = 0;
+	speed_ = 0;
+	radius_ = 0;
+	dimension = EnvironmentSpec(0, 0, 0, 0);
+
 	std::string s;
+
 	while (is>>s){
 		if (s=="name")
 			getline(is, name);
@@ -28,10 +35,10 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 			is>>speed_;
 		else if (s=="radius")
 			is>>radius_;
-		else if (s=="canTravelOn"){
+		else if (s=="dimension"){
 			int a, b, c, d;
 			is>>a>>b>>c>>d;
-			canTravelOn = EnvironmentSpec(a, b, c, d);
+			dimension = EnvironmentSpec(a, b, c, d);
 		}
 		else if (s=="weapon"){
 			std::string wepname;

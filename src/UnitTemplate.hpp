@@ -16,7 +16,7 @@ public:
 			int _maxES,
 			int _speed,
 			int _radius,
-			EnvironmentSpec _canTravelOn,
+			EnvironmentSpec _dimension,
 			std::vector<WeaponTemplate> _weaponTemplates);
 	UnitTemplate(std::ifstream);
 	UnitTemplate(std::string);
@@ -30,7 +30,7 @@ public:
 
 	std::string name;
 	std::vector<WeaponTemplate> weaponTemplates;
-	EnvironmentSpec canTravelOn;
+	EnvironmentSpec dimension;
 private:
 	int maxHP_;
 	int maxES_;
