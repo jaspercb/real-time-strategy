@@ -27,6 +27,13 @@ WeaponTemplate::WeaponTemplate(std::string _name,
 
 WeaponTemplate::WeaponTemplate(std::ifstream is)
 {
+	damage_ = 0;
+	reloadTime_ = 0;
+	range_ = 0;
+	weaponVelocity_ = 0;
+	aoeRadius_ = 0;
+	dimensions_ = EnvironmentSpec(0, 0, 0, 0);
+
 	std::string s;
 	while (is>>s){
 		if (s=="name"){
