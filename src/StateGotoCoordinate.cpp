@@ -7,9 +7,9 @@ StateGotoCoordinate::StateGotoCoordinate(Coordinate targ):
 	{}
 
 StateExitCode StateGotoCoordinate::update(Unit& unit){
-	// if we're not in attacking range of the target, move towards the target
-	// otherwise do nothing
-	if (pythagoreanDistance(unit.xy, target) > unit.getAttackRange()){
+	// if we're not at the target, move towards the target
+	// otherwise we're done
+	if (pythagoreanDistance(unit.xy, target) > 0){
 		unit.move_towards(target);
 		return STATE_EXIT_INCOMPLETE;
 	}
