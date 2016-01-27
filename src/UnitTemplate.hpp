@@ -22,6 +22,7 @@ public:
 	UnitTemplate(std::string);
 	int maxHP();
 	int maxES();
+	int armor();
 	int speed();
 	int radius();
 	int buildtime();
@@ -34,6 +35,7 @@ public:
 private:
 	int maxHP_;
 	int maxES_;
+	int armor_;
 	int speed_;
 	int radius_;
 	int buildtime_;

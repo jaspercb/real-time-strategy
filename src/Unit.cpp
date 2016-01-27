@@ -105,8 +105,11 @@ void Unit::damage(const int quant, const DamageType dmgtype) {
 	UnitTemplate& utmpl = getUnitTemplate();
 	if (es>0)
 		es -= quant*utmpl.getDamageEffectivenessVsES(dmgtype);
-	else
-		hp -= quant*utmpl.getDamageEffectivenessVsHP(dmgtype);
+	else{
+		int dmg = quant*utmpl.getDamageEffectivenessVsHP(dmgtype);
+		dmg = std::max(1, dmg-utmpl.armor());
+		hp -= dmg;
+	}
 }
 
 int Unit::getAttackRange(){

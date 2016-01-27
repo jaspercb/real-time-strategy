@@ -18,6 +18,7 @@ UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _maxES, int _speed
 UnitTemplate::UnitTemplate(std::ifstream is){
 	maxHP_ = 0;
 	maxES_ = 0;
+	armor_ = 0;
 	speed_ = 0;
 	radius_ = 0;
 	dimension = EnvironmentSpec(0, 0, 0, 0);
@@ -31,6 +32,8 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 			is>>maxHP_;
 		else if (s=="maxES")
 			is>>maxES_;
+		else if (s=="armor")
+			is>>armor_;
 		else if (s=="speed")
 			is>>speed_;
 		else if (s=="radius")
@@ -64,6 +67,10 @@ int UnitTemplate::maxHP(){
 
 int UnitTemplate::maxES(){
 	return maxES_;
+}
+
+int UnitTemplate::armor(){
+	return armor_;
 }
 
 int UnitTemplate::speed(){

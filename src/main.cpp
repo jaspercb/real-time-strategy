@@ -25,6 +25,15 @@ int main(){
 
 	debugLog(a);
 	a.attack(a);
+	for (int i=0; i<10; i++){
+		a.update();
+	}
+	a.attack(a);
+	for (int i=0; i<10; i++){
+		a.update();
+	}
+	a.attack(a);
+	
 	debugLog(a);
 
 	debugLog(" Done testing.");
