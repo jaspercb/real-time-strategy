@@ -105,7 +105,8 @@ void Unit::damage(const int quant, const DamageType dmgtype){
 	UnitTemplate& utmpl = getUnitTemplate();
 	if (es>0)
 		es -= quant*utmpl.getDamageEffectivenessVsES(dmgtype);
-	hp -= quant*utmpl.getDamageEffectivenessVsHP(dmgtype);
+	else
+		hp -= quant*utmpl.getDamageEffectivenessVsHP(dmgtype);
 }
 
 int Unit::getAttackRange(){
