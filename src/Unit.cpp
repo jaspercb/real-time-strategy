@@ -101,7 +101,7 @@ void Unit::move(const Coordinate c){
 	game.inhabitedGrid.updatePos(*this, oldcoord);
 }
 
-void Unit::damage(const int quant, const DamageType dmgtype){
+void Unit::damage(const int quant, const DamageType dmgtype) {
 	UnitTemplate& utmpl = getUnitTemplate();
 	if (es>0)
 		es -= quant*utmpl.getDamageEffectivenessVsES(dmgtype);
@@ -111,7 +111,7 @@ void Unit::damage(const int quant, const DamageType dmgtype){
 
 int Unit::getAttackRange(){
 	int r = 0;
-	for (auto it = weapons_.begin(); it!=weapons_.end(); it++){
+	for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
 		r = std::max(r, it->weaponTemplate.range());
 	}
 	return r;
@@ -122,7 +122,12 @@ void Unit::move_towards(const Coordinate c){
 	int dy = c.second - xy.second;
 	int dr = std::pow(dx*dx + dy*dy, 0.5);
 	int spd = getUnitTemplate().speed();
-	move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) ); 
+	if (pythagoreanDistance(xy, c)<=spd) {
+		move(c);
+	}
+	else {
+		move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) ); 
+	}
 }
 
 void Unit::attack(Unit& target){
@@ -131,7 +136,7 @@ void Unit::attack(Unit& target){
 	// b) in range
 	// c) capable of hitting the target's dimension
 
-	for (auto it = weapons_.begin(); it!=weapons_.end(); it++){
+	for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
 		it->fire(target);
 	}
 }
