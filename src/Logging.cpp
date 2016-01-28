@@ -12,7 +12,7 @@ void debugLog(int s){
 }
 
 void debugLog(Unit& u){
-	std::cout<<"Unit Log:"<<std::endl;
+	std::cout<<"LOGGING UNIT>> unitname:"<<u.getUnitTemplate().name<<std::endl;
 	std::cout<<"  unitID: "<<u.unitID;
 	std::cout<<"  teamID: "<<u.teamID<<std::endl;
 	
