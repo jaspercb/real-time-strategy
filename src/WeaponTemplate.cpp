@@ -37,8 +37,12 @@ WeaponTemplate::WeaponTemplate(std::ifstream &is)
 	std::string s;
 	while (is>>s){
 		if (s=="name"){
+			char c;
+			is.get(c); //to strip out space
 			getline(is, name_);
-			debugLog("yo");
+		}
+		else if (s=="#"){
+			getline(is, s); // this is a comment. we ignore comments.
 		}
 		else if (s=="damageType"){
 			is>>s;
