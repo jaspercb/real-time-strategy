@@ -1,0 +1,15 @@
+name Marine Tier 1
+maxHP 100
+speed 10
+radius 1
+dimension 1 0 0 0
+weapon{
+	name M-LWAR Model I
+	damageType DMG_KINETIC
+	damage 10
+	reloadTime 3
+	range 10
+	weaponVelocity 5
+	aoeRadius 0
+	dimensions 1 0 0 0
+}
