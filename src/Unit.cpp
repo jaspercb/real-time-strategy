@@ -52,6 +52,14 @@ UnitTemplate& Unit::getUnitTemplate(){
 
 int Unit::update()
 {
+	UnitTemplate &unitTemplate = getUnitTemplate();
+
+	//'if unit is dead' logic should probably go here
+
+	hp = std::min(unitTemplate.maxHP(), hp+unitTemplate.regHP());
+	es = std::min(unitTemplate.maxES(), es+unitTemplate.regES());
+
+
 	for (auto i = weapons_.begin(); i!=weapons_.end(); i++)
 	{
 		i->update();

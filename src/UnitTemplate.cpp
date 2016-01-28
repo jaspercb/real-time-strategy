@@ -17,7 +17,9 @@ UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _maxES, int _speed
 
 UnitTemplate::UnitTemplate(std::ifstream is){
 	maxHP_ = 0;
+	regHP_ = 0;
 	maxES_ = 0;
+	regES_ = 0;
 	armor_ = 0;
 	speed_ = 0;
 	radius_ = 0;
@@ -30,8 +32,12 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 			getline(is, name);
 		else if (s=="maxHP")
 			is>>maxHP_;
+		else if (s=="regHP")
+			is>>regHP_;
 		else if (s=="maxES")
 			is>>maxES_;
+		else if (s=="regES")
+			is>>regES_;
 		else if (s=="armor")
 			is>>armor_;
 		else if (s=="speed")

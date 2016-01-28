@@ -21,7 +21,9 @@ public:
 	UnitTemplate(std::ifstream);
 	UnitTemplate(std::string);
 	int maxHP();
+	int regHP(){return regHP_;}
 	int maxES();
+	int regES(){return regES_;}
 	int armor();
 	int speed();
 	int radius();
@@ -34,7 +36,10 @@ public:
 	EnvironmentSpec dimension;
 private:
 	int maxHP_;
+	int regHP_;
 	int maxES_;
+	int regES_;
+
 	int armor_;
 	int speed_;
 	int radius_;
