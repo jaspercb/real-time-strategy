@@ -62,5 +62,5 @@ TeamID Game::smallestUnusedTeamID() {
 }
 
 bool Game::teamsAreFriendly(TeamID a, TeamID b){
-	return false;
+	return a==b;
 }
