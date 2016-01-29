@@ -147,7 +147,9 @@ void Unit::attack(Unit& target){
 	// b) in range
 	// c) capable of hitting the target's dimension
 
-	for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
-		it->fire(target);
+	if (!game.teamsAreFriendly(teamID, target.teamID)) {
+		for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
+			it->fire(target);
+		}
 	}
 }
