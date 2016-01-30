@@ -13,9 +13,9 @@ UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _maxES, int _speed
 		speed_(_speed),
 		radius_(_radius),
 		dimension(_dimension),
-		weaponTemplates(_weaponTemplates) {debugLog("Creating UnitTemplate, name="+_name);}
+		weaponTemplates(_weaponTemplates) {debugLog("you probably shouldn't be using this constructor for UnitTemplate, but making:"+_name);}
 
-UnitTemplate::UnitTemplate(std::ifstream is){
+UnitTemplate::UnitTemplate(std::ifstream is, SDL_Renderer* renderer){
 	maxHP_ = 0;
 	regHP_ = 0;
 	maxES_ = 0;
@@ -57,8 +57,7 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 		}
 		else if (s=="spritesheet"){
 			is>>s;
-			SDL_Surface* surface = SDL_LoadBMP(s.c_str());
-			Spritesheet* spritesheet = new Spritesheet(surface, 40, 36, 2, 2, 3, 3);
+			Spritesheet* spritesheet = new Spritesheet(renderer, s.c_str(), 40, 36, 2, 2, 3, 3);
 			drawer = new Drawer(spritesheet);
 		}
 		else if (s=="spritesize"){
@@ -77,8 +76,8 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 	}
 }
 
-UnitTemplate::UnitTemplate(std::string s):
-	UnitTemplate(std::ifstream("../conf/units/"+s))
+UnitTemplate::UnitTemplate(std::string s, SDL_Renderer* renderer):
+	UnitTemplate(std::ifstream("../conf/units/"+s), renderer)
 	{}
 
 

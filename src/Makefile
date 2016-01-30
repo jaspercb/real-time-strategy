@@ -1,7 +1,7 @@
 SOURCES=$(wildcard *.cpp)
 OBJECTS=$(patsubst %.cpp, ../bin/%.o, $(SOURCES))
 
-FLAGS=-std=c++0x -g -O3 -lSDL2
+FLAGS=-std=c++0x -g -O3 -lSDL2 -lSDL2_image
 
 .PHONY: rts clean
 

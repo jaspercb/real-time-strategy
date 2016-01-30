@@ -6,7 +6,7 @@ Drawer::Drawer(Spritesheet* sp):
 {
 }
 
-void Drawer::draw(SDL_Surface* screen, Unit& unit /*, Coordinate cameraposition */){
+void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate cameraposition */){
 	// Draws the unit to the given surface.
-	spritesheet->render(screen, unit.drawFacingAngle, unit.drawWalkStep, unit.xy.first, unit.xy.second);
+	spritesheet->render(renderer, unit.drawFacingAngle, unit.drawWalkStep, unit.xy.first, unit.xy.second);
 }

@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include "Game.hpp"
 #include "Unit.hpp"
@@ -10,15 +11,14 @@ const int SCREEN_HEIGHT = 480;
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
-	
+
 //The surface contained by the window
-SDL_Surface* gScreen = NULL;
+SDL_Renderer* gRenderer = NULL;
 
 //The image we will load and show on the screen
 SDL_Surface* gHelloWorld = NULL;
 
-bool init()
-{
+bool init() {
 	//Initialization flag
 	bool success = true;
 
@@ -40,7 +40,7 @@ bool init()
 		else
 		{
 			//Get window surface
-			gScreen = SDL_GetWindowSurface( gWindow );
+			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
 		}
 	}
 
@@ -56,43 +56,41 @@ void cleanup_SDL()
 
 int main(){
 	debugLog(" Testing...");
-	Game g = Game();
-	TeamID tID = g.createTeam();
 
-	//WeaponTemplate wpntmpl = WeaponTemplate("TestWeapon", DMG_KINETIC, 10, 2, 5, 1, 1, GROUND_ONLY);
-	//std::vector<WeaponTemplate> tmplv;
-	//tmplv.push_back(wpntmpl);
-	//UnitTemplate p = UnitTemplate("TestUnit", 50, 1, 1, GROUND_ONLY, tmplv);
-	UnitTemplate p = UnitTemplate(std::ifstream("../conf/units/marine1"));
-
-	Team& t = g.getTeam(tID);
-
-	t.unitTemplates.emplace((UnitTemplateID)3, p);
-
-	g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0));
-	
-	Unit& a = g.getUnit(0);
-
-	debugLog(a);
-	a.attack(a);
-	debugLog(a);
-
-
-	debugLog(" Done testing.");
-	
-	//Spritesheet a = Spritesheet(sdl_suface, 40, 36, 2, 2, 3, 3);
-	
 	//Start up SDL and create window
 	if( !init() ) {
 		printf( "Failed to initialize!\n" );
 	}
 	else {
+		Game g = Game();
+		TeamID tID = g.createTeam();
+		UnitTemplate p = UnitTemplate(std::ifstream("../conf/units/marine1"), gRenderer);
+
+		Team& t = g.getTeam(tID);
+
+		t.unitTemplates.emplace((UnitTemplateID)3, p);
+
+		g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0));
+		
+		Unit& a = g.getUnit(0);
+
+		debugLog(a);
+		a.attack(a);
+		debugLog(a);
+
+
+		debugLog(" Done testing.");
+		
+		//Spritesheet a = Spritesheet(sdl_suface, 40, 36, 2, 2, 3, 3);
+		
+
+
 		for (int i=0; i<32; i++){
-			SDL_FillRect(gScreen, NULL, 0x000000);
-			a.draw(gScreen);
+			SDL_RenderClear(gRenderer);
+			a.draw(gRenderer);
 			a.move_towards(std::pair<int, int>(500, 500));
 			//Update the surface
-			SDL_UpdateWindowSurface( gWindow );
+			SDL_RenderPresent( gRenderer );
 
 			//Wait two seconds
 			SDL_Delay( 80 );

@@ -1,7 +1,35 @@
 #include <cassert>
+#include <string>
+
 #include "Spritesheet.hpp"
 
-Spritesheet::Spritesheet(SDL_Surface* src, int w, int h, int offX, int offY, int gX, int gY):
+SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path ) {
+	//The final texture
+	SDL_Texture* newTexture = NULL;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
+	if( loadedSurface == NULL )
+	{
+		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+	}
+	else
+	{
+		//Create texture from surface pixels
+		newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
+		if( newTexture == NULL )
+		{
+			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+		}
+
+		//Get rid of old loaded surface
+		SDL_FreeSurface( loadedSurface );
+	}
+
+	return newTexture;
+}
+
+Spritesheet::Spritesheet(SDL_Texture* src, int w, int h, int offX, int offY, int gX, int gY):
 	sheet(src),
 	spriteW(w),
 	spriteH(h),
@@ -18,8 +46,8 @@ Spritesheet::Spritesheet(SDL_Surface* src, int w, int h, int offX, int offY, int
 		tclip.h = spriteH;
 	}
 
-Spritesheet::Spritesheet(const char* src, int w, int h, int offX, int offY, int gX, int gY):
-	sheet(SDL_LoadBMP(src)),
+Spritesheet::Spritesheet(SDL_Renderer* renderer, const char* src, int w, int h, int offX, int offY, int gX, int gY):
+	sheet(loadTexture(renderer, (std::string)src)),
 	spriteW(w),
 	spriteH(h),
 	offsetX(offX),
@@ -35,7 +63,7 @@ Spritesheet::Spritesheet(const char* src, int w, int h, int offX, int offY, int 
 		tclip.h = spriteH;
 	}
 
-void Spritesheet::render(SDL_Surface* screen, int spriteX, int spriteY, int renderX, int renderY){
+void Spritesheet::render(SDL_Renderer* renderer, int spriteX, int spriteY, int renderX, int renderY){
 	assert(spriteX>=0);
 	assert(spriteY>=0);
 
@@ -45,5 +73,6 @@ void Spritesheet::render(SDL_Surface* screen, int spriteX, int spriteY, int rend
 	tclip.x = renderX;
 	tclip.y = renderY;
 
-	SDL_BlitSurface(sheet, &clip, screen, &tclip);
+	SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_NONE /*flip parameter*/ );
+	//SDL_BlitSurface(sheet, &clip, screen, &tclip);
 }
