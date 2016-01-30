@@ -91,7 +91,7 @@ int main(){
 		
 		//Spritesheet a = Spritesheet(sdl_suface, 40, 36, 2, 2, 3, 3);
 		
-		for (int i=0; i<100; i++){
+		for (int i=0; i<30; i++){
 			d.drawFacingAngle +=1;
 			d.drawFacingAngle %= 18;
 			draw_all(g);

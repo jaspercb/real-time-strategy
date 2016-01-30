@@ -13,4 +13,10 @@ weapon{
 	aoeRadius 0
 	dimensions 1 0 0 0
 }
-spritesheet ../resources/terran-ghost.bmp
+
+drawer {
+	filename ../resources/terran-ghost.png
+	size 30 36
+	offset 2 2
+	gap 13 3
+}

@@ -55,10 +55,9 @@ UnitTemplate::UnitTemplate(std::ifstream is, SDL_Renderer* renderer){
 			is>>a>>b>>c>>d;
 			dimension = EnvironmentSpec(a, b, c, d);
 		}
-		else if (s=="spritesheet"){
-			is>>s;
-			Spritesheet* spritesheet = new Spritesheet(renderer, s.c_str(), 40, 36, 2, 2, 3, 3);
-			drawer = new Drawer(spritesheet);
+		else if (s=="drawer"){
+			is>>s; // to clean out the brace
+			drawer = new Drawer(is, renderer);
 		}
 		else if (s=="spritesize"){
 
