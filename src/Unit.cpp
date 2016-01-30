@@ -10,6 +10,7 @@
 #include "typedefs.hpp"
 #include "Game.hpp"
 #include "Logging.hpp"
+#include "Command.hpp"
 
 Unit::Unit(Game &g, UnitID uID, TeamID tID, UnitTemplateID utID, Coordinate pos):
 game(g),
@@ -81,11 +82,11 @@ int Unit::update()
 	return 0;
 }
 
-void Unit::handleCommand(Command command, QueueSetting qSetting)
+void Unit::handleCommand(Command command)
 {
 	UnitState* state = StateQueue_.front()->handleCommand(*this, command);
 	if (state != NULL) {
-		switch (qSetting){
+		switch (command.queueSetting){
 			case QUEUE_OVERWRITE: // delete state queue and replace with just this command
 			{
 				for (std::deque<UnitState*>::const_iterator it = StateQueue_.begin(); it != StateQueue_.end(); it++)

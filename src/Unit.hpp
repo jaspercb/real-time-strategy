@@ -10,6 +10,7 @@
 #include "WeaponTemplate.hpp"
 #include "EnvironmentSpec.hpp"
 #include "Drawer.hpp"
+#include "Command.hpp"
 
 class Team;
 class UnitTemplate;
@@ -24,12 +25,6 @@ enum UpdateStatus{
 	STATUS_DEAD
 };
 
-enum QueueSetting{
-	QUEUE_OVERWRITE,
-	QUEUE_FRONT,
-	QUEUE_BACK
-};
-
 class Unit
 {
 public:
@@ -39,7 +34,7 @@ public:
 	Unit(Unit &&u);
 	UnitTemplate& getUnitTemplate();
 	int update(); //returns 1 if should be destroyed, 0 otherwise
-	void handleCommand(Command, QueueSetting);
+	void handleCommand(Command);
 	void move(const Coordinate);
 	void damage(const int, const DamageType);
 	int getAttackRange(); // returns the range of the 
