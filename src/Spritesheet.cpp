@@ -1,6 +1,7 @@
 #include <cassert>
 #include <string>
 
+#include "Logging.hpp"
 #include "Spritesheet.hpp"
 
 SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path ) {
@@ -72,12 +73,14 @@ void Spritesheet::render(SDL_Renderer* renderer, int spriteX, int spriteY, int r
 
 	clip.y = offsetY + spriteY*(spriteH+gapY);
 
-	
+	if (spriteX>17){
+		debugLog(spriteX);
+	}
 	if (spriteX<9){
 		clip.x = offsetX + spriteX*(spriteW+gapX);
 		SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_NONE /*flip parameter*/ );
 	} else {
-		clip.x = offsetX + (16-spriteX)*(spriteW+gapX);
+		clip.x = offsetX + (8-(spriteX%9))*(spriteW+gapX);
 		SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_HORIZONTAL /*flip parameter*/ );
 	}
 }

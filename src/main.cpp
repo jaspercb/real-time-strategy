@@ -77,10 +77,10 @@ int main(){
 
 		t.unitTemplates.emplace((UnitTemplateID)3, p);
 
-		Unit& a = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));
-		Unit& b = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 300)));
-		Unit& c = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(300, 300)));
-		Unit& d = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(300, 0)));
+		//Unit& a = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));
+		//Unit& b = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 300)));
+		//Unit& c = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(300, 300)));
+		Unit& d = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));
 
 //		debugLog(a);
 //		a.attack(a);
@@ -91,17 +91,25 @@ int main(){
 		
 		//Spritesheet a = Spritesheet(sdl_suface, 40, 36, 2, 2, 3, 3);
 		
-
-
-		for (int i=0; i<32; i++){
-			a.move_towards(std::pair<int, int>(0, 300));
-			b.move_towards(std::pair<int, int>(300, 300));
-			c.move_towards(std::pair<int, int>(300, 0));
-			d.move_towards(std::pair<int, int>(0, 0));
+		for (int i=0; i<100; i++){
+			d.drawFacingAngle +=1;
+			d.drawFacingAngle %= 18;
 			draw_all(g);
-			//Wait two seconds
 			SDL_Delay( 70 );
+		}
 
+		std::pair<int, int> target(0, 0);
+		for (int i=0; i<5; i++){
+			target = std::pair<int,int>((target.first+233) % 50, (target.second + 66) % 50);
+			for (int j=0; j<16; j++) {
+				//a.move_towards(std::pair<int, int>(0, 300));
+				//b.move_towards(std::pair<int, int>(300, 300));
+				//c.move_towards(std::pair<int, int>(0, 0));
+				d.move_towards(target);
+				draw_all(g);
+				//Wait a few seconds
+				SDL_Delay( 70 );
+			}
 		}
 	}
 

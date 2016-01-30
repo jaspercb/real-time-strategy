@@ -16,7 +16,9 @@ game(g),
 unitID(uID),
 teamID(tID),
 unitTemplateID(utID),
-xy(pos)
+xy(pos),
+drawWalkStep(0),
+drawFacingAngle(0)
 {
 	UnitTemplate& unitTemplate = getUnitTemplate();
 	
@@ -37,7 +39,9 @@ xy(u.xy),
 dimension(u.dimension),
 hp(u.hp),
 es(u.es),
-game(u.game)
+game(u.game),
+drawWalkStep(u.drawWalkStep),
+drawFacingAngle(u.drawFacingAngle)
 {
 	for(Weapon &w : u.weapons_) {
 		weapons_.push_back(Weapon(w, *this));
@@ -140,8 +144,9 @@ void Unit::move_towards(const Coordinate c){
 	else {
 		move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) );
 		drawWalkStep = (drawWalkStep+1)%9;
-		//drawFacingAngle = (drawFacingAngle+1)%18;
-		drawFacingAngle = ((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 )%18;
+		drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
+		debugLog("setting drawFacingAngle to:");
+		debugLog((int)drawFacingAngle);
 	}
 }
 
