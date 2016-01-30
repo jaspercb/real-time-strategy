@@ -77,7 +77,7 @@ void Spritesheet::render(SDL_Renderer* renderer, int spriteX, int spriteY, int r
 		clip.x = offsetX + spriteX*(spriteW+gapX);
 		SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_NONE /*flip parameter*/ );
 	} else {
-		clip.x = offsetX + (17-spriteX)*(spriteW+gapX);
+		clip.x = offsetX + (16-spriteX)*(spriteW+gapX);
 		SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_HORIZONTAL /*flip parameter*/ );
 	}
 }

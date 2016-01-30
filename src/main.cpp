@@ -53,6 +53,13 @@ void cleanup_SDL()
 	SDL_Quit();
 }
 
+void draw_all(Game &g){
+	SDL_RenderClear(gRenderer);
+	for (auto &u : g.unitsByID){
+		u.second.draw(gRenderer);
+	}
+	SDL_RenderPresent( gRenderer );
+}
 
 int main(){
 	debugLog(" Testing...");
@@ -70,13 +77,14 @@ int main(){
 
 		t.unitTemplates.emplace((UnitTemplateID)3, p);
 
-		g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0));
-		
-		Unit& a = g.getUnit(0);
+		Unit& a = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));
+		Unit& b = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 300)));
+		Unit& c = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(300, 300)));
+		Unit& d = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(300, 0)));
 
-		debugLog(a);
-		a.attack(a);
-		debugLog(a);
+//		debugLog(a);
+//		a.attack(a);
+//		debugLog(a);
 
 
 		debugLog(" Done testing.");
@@ -86,12 +94,11 @@ int main(){
 
 
 		for (int i=0; i<32; i++){
-			SDL_RenderClear(gRenderer);
-			a.draw(gRenderer);
-			a.move_towards(std::pair<int, int>(500, 10));
-			//Update the surface
-			SDL_RenderPresent( gRenderer );
-
+			a.move_towards(std::pair<int, int>(0, 300));
+			b.move_towards(std::pair<int, int>(300, 300));
+			c.move_towards(std::pair<int, int>(300, 0));
+			d.move_towards(std::pair<int, int>(0, 0));
+			draw_all(g);
 			//Wait two seconds
 			SDL_Delay( 70 );
 
