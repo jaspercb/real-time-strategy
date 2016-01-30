@@ -55,6 +55,15 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 			is>>a>>b>>c>>d;
 			dimension = EnvironmentSpec(a, b, c, d);
 		}
+		else if (s=="spritesheet"){
+			is>>s;
+			SDL_Surface* surface = SDL_LoadBMP(s.c_str());
+			Spritesheet* spritesheet = new Spritesheet(surface, 40, 36, 2, 2, 3, 3);
+			drawer = new Drawer(spritesheet);
+		}
+		else if (s=="spritesize"){
+
+		}
 		else if (s=="weapon"){
 			is>>s; // to get rid of the trailing {
 			weaponTemplates.push_back(WeaponTemplate(is));

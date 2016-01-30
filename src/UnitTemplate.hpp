@@ -6,6 +6,7 @@
 
 #include "EnvironmentSpec.hpp"
 #include "WeaponTemplate.hpp"
+#include "Spritesheet.hpp"
 
 class UnitTemplate
 {
@@ -34,6 +35,8 @@ public:
 	std::string name;
 	std::vector<WeaponTemplate> weaponTemplates;
 	EnvironmentSpec dimension;
+	Drawer* drawer;
+
 private:
 	int maxHP_;
 	int regHP_;

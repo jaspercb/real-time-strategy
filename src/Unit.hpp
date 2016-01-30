@@ -8,6 +8,7 @@
 #include "Weapon.hpp"
 #include "WeaponTemplate.hpp"
 #include "EnvironmentSpec.hpp"
+#include "Drawer.hpp"
 
 class Team;
 class UnitTemplate;
