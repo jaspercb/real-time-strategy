@@ -13,3 +13,4 @@ weapon{
 	aoeRadius 0
 	dimensions 1 0 0 0
 }
+spritesheet ../resources/terran-ghost.bmp

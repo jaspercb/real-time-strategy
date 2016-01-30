@@ -153,3 +153,7 @@ void Unit::attack(Unit& target){
 		}
 	}
 }
+
+void Unit::draw(SDL_Surface* screen){
+	getUnitTemplate().drawer->draw(screen, *this);
+}

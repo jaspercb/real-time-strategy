@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL2/SDL.h>
 #include <deque>
 #include <vector>
 #include <memory>
@@ -45,6 +46,8 @@ public:
 	void move_towards(const Coordinate c);
 	void attack(Unit& target);
 
+	void draw(SDL_Surface*);
+
 	const TeamID teamID;
 	const UnitID unitID;
 	const UnitTemplateID unitTemplateID;
@@ -53,7 +56,7 @@ public:
 	EnvironmentSpec dimension;
 	int hp;
 	int es;
-	int dim; // 
+	int dim;
 	
 	Game& game;
 	std::vector<Weapon> weapons_;

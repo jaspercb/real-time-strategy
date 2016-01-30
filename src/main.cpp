@@ -77,6 +77,7 @@ int main(){
 	a.attack(a);
 	debugLog(a);
 
+
 	debugLog(" Done testing.");
 	
 		//Spritesheet a = Spritesheet(sdl_suface, 40, 36, 2, 2, 3, 3);
@@ -86,12 +87,10 @@ int main(){
 		printf( "Failed to initialize!\n" );
 	}
 	else {
-		Spritesheet k = Spritesheet("../resources/terran-ghost.bmp", 40, 36, 2, 2, 3, 3);
-		Drawer b = Drawer(&k);
 		for (int i=0; i<32; i++){
 			SDL_FillRect(gScreen, NULL, 0x000000);
-			b.draw(gScreen, a);
-			
+			a.draw(gScreen);
+			a.xy.first+=5;
 			//Update the surface
 			SDL_UpdateWindowSurface( gWindow );
 
