@@ -1,6 +1,6 @@
 name Marine Tier 1
 maxHP 100
-speed 10
+speed 5
 radius 1
 dimension 1 0 0 0
 weapon{

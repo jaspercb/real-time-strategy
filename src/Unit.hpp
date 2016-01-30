@@ -57,6 +57,8 @@ public:
 	int hp;
 	int es;
 	int dim;
+
+	unsigned char drawWalkStep, drawFacingAngle;
 	
 	Game& game;
 	std::vector<Weapon> weapons_;

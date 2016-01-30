@@ -135,9 +135,12 @@ void Unit::move_towards(const Coordinate c){
 	int spd = getUnitTemplate().speed();
 	if (pythagoreanDistance(xy, c)<=spd) {
 		move(c);
+		drawWalkStep = 0;
 	}
 	else {
-		move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) ); 
+		move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) );
+		drawWalkStep = (drawWalkStep+1)%9;
+		drawFacingAngle = 8;
 	}
 }
 

@@ -80,7 +80,7 @@ int main(){
 
 	debugLog(" Done testing.");
 	
-		//Spritesheet a = Spritesheet(sdl_suface, 40, 36, 2, 2, 3, 3);
+	//Spritesheet a = Spritesheet(sdl_suface, 40, 36, 2, 2, 3, 3);
 	
 	//Start up SDL and create window
 	if( !init() ) {
@@ -90,7 +90,7 @@ int main(){
 		for (int i=0; i<32; i++){
 			SDL_FillRect(gScreen, NULL, 0x000000);
 			a.draw(gScreen);
-			a.xy.first+=5;
+			a.move_towards(std::pair<int, int>(500, 500));
 			//Update the surface
 			SDL_UpdateWindowSurface( gWindow );
 
