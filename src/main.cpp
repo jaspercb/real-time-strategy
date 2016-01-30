@@ -88,12 +88,12 @@ int main(){
 		for (int i=0; i<32; i++){
 			SDL_RenderClear(gRenderer);
 			a.draw(gRenderer);
-			a.move_towards(std::pair<int, int>(500, 500));
+			a.move_towards(std::pair<int, int>(500, 10));
 			//Update the surface
 			SDL_RenderPresent( gRenderer );
 
 			//Wait two seconds
-			SDL_Delay( 80 );
+			SDL_Delay( 70 );
 
 		}
 	}
