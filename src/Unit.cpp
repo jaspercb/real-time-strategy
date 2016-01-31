@@ -144,8 +144,9 @@ void Unit::move_towards(const Coordinate c){
 	}
 	else {
 		move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) );
-		drawWalkStep = (drawWalkStep+1)%9;
-		drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
+		drawWalkStep++;
+		drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
+		//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
 		//debugLog("setting drawFacingAngle to:");
 		//debugLog((int)drawFacingAngle);
 	}

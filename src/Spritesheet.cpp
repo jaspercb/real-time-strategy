@@ -30,10 +30,12 @@ SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path ) {
 	return newTexture;
 }
 
-Spritesheet::Spritesheet(SDL_Texture* src, int w, int h, int offX, int offY, int gX, int gY):
+Spritesheet::Spritesheet(SDL_Texture* src, int w, int h, int sX, int sY, int offX, int offY, int gX, int gY):
 	sheet(src),
 	spriteW(w),
 	spriteH(h),
+	spritesX(sX),
+	spritesY(sY),
 	offsetX(offX),
 	offsetY(offY),
 	gapX(gX),
@@ -47,10 +49,12 @@ Spritesheet::Spritesheet(SDL_Texture* src, int w, int h, int offX, int offY, int
 		tclip.h = spriteH;
 	}
 
-Spritesheet::Spritesheet(SDL_Renderer* renderer, const char* src, int w, int h, int offX, int offY, int gX, int gY):
+Spritesheet::Spritesheet(SDL_Renderer* renderer, const char* src, int w, int h, int sX, int sY, int offX, int offY, int gX, int gY):
 	sheet(loadTexture(renderer, (std::string)src)),
 	spriteW(w),
 	spriteH(h),
+	spritesX(sX),
+	spritesY(sY),
 	offsetX(offX),
 	offsetY(offY),
 	gapX(gX),
@@ -73,14 +77,15 @@ void Spritesheet::render(SDL_Renderer* renderer, int spriteX, int spriteY, int r
 
 	clip.y = offsetY + spriteY*(spriteH+gapY);
 
-	if (spriteX>17){
+	if (spriteX>=2*spritesX){
 		debugLog(spriteX);
+		return;
 	}
-	if (spriteX<9){
+	if (spriteX<spritesX){
 		clip.x = offsetX + spriteX*(spriteW+gapX);
 		SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_NONE /*flip parameter*/ );
 	} else {
-		clip.x = offsetX + (8-(spriteX%9))*(spriteW+gapX);
+		clip.x = offsetX + (spritesX-(spriteX%spritesX))*(spriteW+gapX);
 		SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_HORIZONTAL /*flip parameter*/ );
 	}
 }

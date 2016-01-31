@@ -14,6 +14,10 @@ class Drawer{
 		Drawer(std::ifstream&, SDL_Renderer*);
 		void draw(SDL_Renderer* renderer, Unit& unit/*, Coordinate cameraposition */);
 
+		int walkCycleLength;
+		int attackCycleLength;
+		int numFacingDirections;
+
 	private:
 		Spritesheet* spritesheet;
 };

@@ -91,12 +91,12 @@ int main(){
 		
 		//Spritesheet a = Spritesheet(sdl_suface, 40, 36, 2, 2, 3, 3);
 		
-		for (int i=0; i<30; i++){
+		/*for (int i=0; i<30; i++){
 			d.drawFacingAngle +=1;
 			d.drawFacingAngle %= 18;
 			draw_all(g);
 			SDL_Delay( 70 );
-		}
+		}*/
 
 		std::pair<int, int> target(0, 0);
 		for (int i=0; i<5; i++){

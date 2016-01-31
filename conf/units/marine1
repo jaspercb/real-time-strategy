@@ -17,6 +17,10 @@ weapon{
 drawer {
 	filename ../resources/terran-ghost.png
 	size 30 36
+	sheetsize 9 13
 	offset 2 2
 	gap 13 3
+	numFacingDirections 9
+	walkCycleLength 9
+	attackCycleLength 4
 }

@@ -9,7 +9,7 @@ Drawer::Drawer(Spritesheet* sp):
 }
 
 Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer){
-	int sw=0, sh=0, ox=0, oy=0, gx=0, gy=0;
+	int sw=0, sh=0, ox=0, oy=0, gx=0, gy=0, sx=0, sy=0;
 	std::string filename;
 
 	std::string s;
@@ -21,9 +21,27 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer){
 		else if (s=="filename"){
 			is>>filename;
 		}
+		
+		else if (s=="numFacingDirections"){
+			is>>numFacingDirections;
+		}
+
+		else if (s=="walkCycleLength"){
+			is>>walkCycleLength;
+		}
+
+		else if (s=="attackCycleLength"){
+			is>>attackCycleLength;
+		}
+
 		else if (s=="size"){
 			is>>sw;
 			is>>sh;
+		}
+
+		else if (s=="sheetsize"){
+			is>>sx;
+			is>>sy;
 		}
 
 		else if (s=="offset"){
@@ -37,7 +55,7 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer){
 		}
 
 		else if (s=="}"){
-			spritesheet = new Spritesheet(renderer, filename.c_str(), sw, sh, ox, oy, gx, gy);
+			spritesheet = new Spritesheet(renderer, filename.c_str(), sw, sh, sx, sy, ox, oy, gx, gy);
 			return;
 		}
 	}
@@ -45,5 +63,6 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer){
 
 void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate cameraposition */){
 	// Draws the unit to the given surface.
-	spritesheet->render(renderer, unit.drawFacingAngle, unit.drawWalkStep, unit.xy.first, unit.xy.second);
+	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);
+	spritesheet->render(renderer, (unit.drawFacingAngle+90+360)*2*numFacingDirections/360 % (2*numFacingDirections), unit.drawWalkStep%walkCycleLength, unit.xy.first, unit.xy.second);
 }

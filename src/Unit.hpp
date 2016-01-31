@@ -53,7 +53,7 @@ public:
 	int es;
 	int dim;
 
-	char drawWalkStep, drawFacingAngle;
+	int drawWalkStep, drawFacingAngle;
 	
 	Game& game;
 	std::vector<Weapon> weapons_;
