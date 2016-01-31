@@ -56,3 +56,5 @@ Thumbs.db
 # /bin/ folders
 bin/
 spike/
+
+*.png
