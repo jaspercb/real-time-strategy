@@ -44,6 +44,8 @@ bool init() {
 		}
 	}
 
+	SDL_SetRenderDrawColor(gRenderer, 128, 128, 128, 255);
+
 	return success;
 }
 
@@ -55,6 +57,7 @@ void cleanup_SDL()
 
 void draw_all(Game &g){
 	SDL_RenderClear(gRenderer);
+
 	for (auto &u : g.unitsByID){
 		u.second.draw(gRenderer);
 	}
@@ -100,7 +103,7 @@ int main(){
 
 		std::pair<int, int> target(0, 0);
 		for (int i=0; i<5; i++){
-			target = std::pair<int,int>((target.first+233) % 50, (target.second + 66) % 50);
+			target = std::pair<int,int>((target.first+233) % 150, (target.second + 66) % 150);
 			for (int j=0; j<16; j++) {
 				//a.move_towards(std::pair<int, int>(0, 300));
 				//b.move_towards(std::pair<int, int>(300, 300));
@@ -108,7 +111,7 @@ int main(){
 				d.move_towards(target);
 				draw_all(g);
 				//Wait a few seconds
-				SDL_Delay( 70 );
+				SDL_Delay( 50 );
 			}
 		}
 	}

@@ -1,0 +1,28 @@
+name Ultralisk
+maxHP 100
+speed 6
+radius 1
+dimension 1 0 0 0
+weapon{
+	name Ultralisk Claws
+	damageType DMG_KINETIC
+	damage 50
+	reloadTime 3
+	range 10
+	weaponVelocity 0
+	aoeRadius 0
+	dimensions 1 0 0 0
+}
+
+drawer {
+	filename ../resources/graphics/zerg/units/ultralisk.png
+	size 128 128
+	sheetsize 17 16
+	offset 0 0
+	gap 0 0
+	numFacingDirections 17
+	walkCycleStart 0
+	walkCycleLength 9
+	attackCycleStart 9
+	attackCycleLength 6
+}

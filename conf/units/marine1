@@ -15,12 +15,15 @@ weapon{
 }
 
 drawer {
-	filename ../resources/terran-ghost.png
-	size 30 36
-	sheetsize 9 13
-	offset 2 2
-	gap 13 3
-	numFacingDirections 9
-	walkCycleLength 9
+	filename ../resources/graphics/terran/units/marine.png
+	size 64 64
+	sheetsize 17 14
+	offset 0 0
+	gap 0 0
+	numFacingDirections 17
+	attackCycleStart 0
 	attackCycleLength 4
+	walkCycleStart 4
+	walkCycleLength 9
+	deathCycleLength 8
 }
