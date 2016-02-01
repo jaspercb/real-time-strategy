@@ -18,8 +18,6 @@ drawer {
 	filename ../resources/graphics/terran/units/marine.png
 	size 64 64
 	sheetsize 17 14
-	offset 0 0
-	gap 0 0
 	numFacingDirections 17
 	attackCycleStart 0
 	attackCycleLength 4
