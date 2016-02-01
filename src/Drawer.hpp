@@ -14,8 +14,10 @@ class Drawer{
 		Drawer(std::ifstream&, SDL_Renderer*);
 		void draw(SDL_Renderer* renderer, Unit& unit/*, Coordinate cameraposition */);
 
+		int walkCycleStart;
 		int walkCycleLength;
 		int attackCycleLength;
+		int attackCycleStart;
 		int numFacingDirections;
 
 	private:

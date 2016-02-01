@@ -23,5 +23,4 @@ drawer {
 	attackCycleLength 4
 	walkCycleStart 4
 	walkCycleLength 9
-	deathCycleLength 8
 }

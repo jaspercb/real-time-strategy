@@ -15,8 +15,6 @@ class Spritesheet{
 		Spritesheet(SDL_Renderer* renderer, const char* src, int w, int h, int sX, int sY, int offX = 0, int offY = 0, int gX = 0, int gY = 0);
 
 		void render(SDL_Renderer* renderer, int spriteX, int spriteY, int renderX, int renderY);
-
-		int walkCycleStart, attackCycleStart;
 	private:
 		SDL_Texture* sheet;
 		SDL_Rect clip, tclip;
