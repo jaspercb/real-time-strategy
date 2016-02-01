@@ -91,8 +91,6 @@ int main(){
 //		debugLog(a);
 
 
-		debugLog(" Done testing.");
-		
 		//Spritesheet a = Spritesheet(sdl_suface, 40, 36, 2, 2, 3, 3);
 		
 		/*for (int i=0; i<30; i++){
@@ -122,5 +120,7 @@ int main(){
 	//Free resources and close SDL
 	cleanup_SDL();
 
+	debugLog(" Done testing.");
+	
 	return 0;
 }

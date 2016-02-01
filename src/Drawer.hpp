@@ -19,7 +19,8 @@ class Drawer{
 		int attackCycleLength;
 		int attackCycleStart;
 		int numFacingDirections;
+		bool hasSpritesheet, hasShadowsheet;
 
 	private:
-		Spritesheet* spritesheet;
+		Spritesheet* spritesheet, *shadowsheet;
 };

@@ -15,7 +15,7 @@ weapon{
 }
 
 drawer {
-	filename ../resources/graphics/zerg/units/ultralisk.png
+	spritesheet ../resources/graphics/zerg/units/ultralisk.png
 	size 128 128
 	sheetsize 17 16
 	numFacingDirections 17

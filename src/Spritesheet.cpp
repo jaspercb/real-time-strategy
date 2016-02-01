@@ -69,11 +69,12 @@ Spritesheet::Spritesheet(SDL_Renderer* renderer, const char* src, int w, int h, 
 	}
 
 void Spritesheet::render(SDL_Renderer* renderer, int spriteX, int spriteY, int renderX, int renderY){
+	//draws the spritesheet CENTERED at (renderX, renderY)
 	assert(spriteX>=0);
 	assert(spriteY>=0);
 
-	tclip.x = renderX;
-	tclip.y = renderY;
+	tclip.x = renderX-spriteW/2;
+	tclip.y = renderY-spriteH/2;
 
 	clip.y = offsetY + spriteY*(spriteH+gapY);
 

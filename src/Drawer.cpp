@@ -13,10 +13,12 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer):
 	walkCycleStart(0),
 	attackCycleStart(0),
 	walkCycleLength(0),
-	attackCycleLength(0)
+	attackCycleLength(0),
+	hasSpritesheet(false),
+	hasShadowsheet(false)
 {
-	int sw=0, sh=0, ox=0, oy=0, gx=0, gy=0, sx=0, sy=0;
-	std::string filename;
+	int sw=0, sh=0, ox=0, oy=0, gx=0, gy=0, sx=0, sy=0, shh=0, shw=0, shx=0, shy=0;
+	std::string spritefilename, shadowfilename;
 
 	std::string s;
 
@@ -24,8 +26,14 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer):
 		if (s=="#"){
 			getline(is, s); // this is a comment. we ignore comments.
 		}
-		else if (s=="filename"){
-			is>>filename;
+		else if (s=="spritesheet"){
+			is>>spritefilename;
+			hasSpritesheet=true;
+		}
+
+		else if (s=="shadowsheet"){
+			is>>shadowfilename;
+			hasShadowsheet=true;
 		}
 		
 		else if (s=="numFacingDirections"){
@@ -48,14 +56,24 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer):
 			is>>attackCycleStart;
 		}
 
-		else if (s=="size"){
+		else if (s=="spritesize"){
 			is>>sw;
 			is>>sh;
 		}
 
-		else if (s=="sheetsize"){
+		else if (s=="shadowsize"){
+			is>>shw;
+			is>>shh;
+		}
+
+		else if (s=="spritesheetsize"){
 			is>>sx;
 			is>>sy;
+		}
+
+		else if (s=="shadowsheetsize"){
+			is>>shx;
+			is>>shy;
 		}
 
 		else if (s=="offset"){
@@ -69,8 +87,15 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer):
 		}
 
 		else if (s=="}"){
-			spritesheet = new Spritesheet(renderer, filename.c_str(), sw, sh, sx, sy, ox, oy, gx, gy);
+			if (hasSpritesheet) {
+				spritesheet = new Spritesheet(renderer, spritefilename.c_str(), sw, sh, sx, sy, ox, oy, gx, gy);
+			}
+			if (hasShadowsheet)
+				shadowsheet = new Spritesheet(renderer, shadowfilename.c_str(), shw, shh, shx, shy, ox, oy, gx, gy);
 			return;
+		}
+		else{
+			debugLog("Error: Drawer constructor passed ifstream with unrecognized label:"+s);
 		}
 	}
 }
@@ -79,12 +104,20 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 	// Draws the unit to the given surface.
 	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);
 	if (true) { // eventually, if walking
-		spritesheet->render(renderer,
-			( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
-			walkCycleStart + std::abs(unit.drawWalkStep)%walkCycleLength,
-			unit.xy.first,
-			unit.xy.second);
+		if (hasSpritesheet)
+			spritesheet->render(renderer,
+				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+				walkCycleStart + std::abs(unit.drawWalkStep)%walkCycleLength,
+				unit.xy.first,
+				unit.xy.second);
+
+			shadowsheet->render(renderer,
+				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+				walkCycleStart + std::abs(unit.drawWalkStep)%walkCycleLength,
+				unit.xy.first,
+				unit.xy.second);
 	} else{
-		spritesheet->render(renderer, ( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections), attackCycleStart + std::abs(unit.drawWalkStep)%attackCycleLength, unit.xy.first, unit.xy.second);		
+		if (hasSpritesheet)
+			spritesheet->render(renderer, ( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections), attackCycleStart + std::abs(unit.drawWalkStep)%attackCycleLength, unit.xy.first, unit.xy.second);		
 	}
 }
