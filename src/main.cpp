@@ -8,6 +8,7 @@
 
 const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 480;
+const int FRAMERATE = 20;
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
@@ -86,20 +87,6 @@ int main(){
 		Unit& a = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));
 		Unit& b = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(100, 100)));
 
-//		debugLog(a);
-//		a.attack(a);
-//		debugLog(a);
-
-
-		//Spritesheet a = Spritesheet(sdl_suface, 40, 36, 2, 2, 3, 3);
-		
-		/*for (int i=0; i<30; i++){
-			d.drawFacingAngle +=1;
-			d.drawFacingAngle %= 18;
-			draw_all(g);
-			SDL_Delay( 70 );
-		}*/
-
 		std::pair<int, int> target1(0, 0), target2(0, 0);
 		for (int i=0; i<5; i++){
 			target1 = std::pair<int,int>((target1.first+233) % 150, (target1.second + 66) % 150);
@@ -111,8 +98,9 @@ int main(){
 				a.move_towards(target1);
 				b.move_towards(target2);
 				draw_all(g);
-				//Wait a few seconds
-				SDL_Delay( 50 );
+
+				// framerate
+				SDL_Delay( 1000/FRAMERATE );
 			}
 		}
 	}
