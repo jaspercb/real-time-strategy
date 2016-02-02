@@ -11,9 +11,9 @@ SDL_Surface* loadSurface( std::string path) {
 	if( loadedSurface == NULL )
 		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
 	
-	debugLog("loading: "+path+". Bits per pixel:");
-	debugLog(loadedSurface->format->BytesPerPixel);
-	debugLog(loadedSurface->format->format);
+	//debugLog("loading: "+path+". Bits per pixel:");
+	//debugLog(loadedSurface->format->BytesPerPixel);
+	//debugLog(loadedSurface->format->format);
 
 	return loadedSurface;
 }
@@ -56,13 +56,6 @@ void teamColorSpritesheet(SDL_Surface *surface, TeamColor color){
 	// Changes the color palette, replacing the magenta color key with the specified color. See /resources/graphics/team-colors.png
 
 	SDL_Surface* colormapping = loadSurface("../resources/graphics/team-colors.png");
-
-	for (int i=0; i<16; i++){
-		for (int j=0; j<8; j++){
-			std::cout<<GetPixel8(colormapping, j, i)<<" ";
-		}
-		std::cout<<std::endl;
-	}
 
 	SDL_Color colors[8];
 
