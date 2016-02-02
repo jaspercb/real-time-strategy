@@ -18,14 +18,41 @@ SDL_Surface* loadSurface( std::string path) {
 	return loadedSurface;
 }
 
-SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path, TeamColor color) {
-	//The final texture
+SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColor color){
+	// Loads a spritesheet. Makes palette swaps with respect to TeamColor.
 	SDL_Texture* newTexture = NULL;
 
 	//Load image at specified path
 	SDL_Surface* loadedSurface = loadSurface(path);
 	
 	teamColorSpritesheet(loadedSurface, color);
+
+	//Create texture from surface pixels
+	newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
+	if( newTexture == NULL )
+	{
+		printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+	}
+	//Get rid of old loaded surface
+	SDL_FreeSurface( loadedSurface );
+
+	return newTexture;
+}
+
+SDL_Texture* loadShadowsheet( SDL_Renderer* renderer, std::string path ){
+	// Loads a spritesheet. Makes palette swaps with respect to TeamColor.
+	SDL_Texture* newTexture = NULL;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = loadSurface(path);
+	
+	SDL_Color color;
+	color.r = 0;
+	color.g = 0;
+	color.b = 0;
+	color.a = 128;
+	
+	SDL_SetPaletteColors(loadedSurface->format->palette, &color, 1, 1); // the first 1 is hardcoded and assumes the shadow color palette will bind 1 to the shadow color.
 
 	//Create texture from surface pixels
 	newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
@@ -91,8 +118,7 @@ Spritesheet::Spritesheet(SDL_Texture *src, int w, int h, int sX, int sY, int off
 		tclip.h = spriteH;
 	}
 
-Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, int sX, int sY, int offX, int offY, int gX, int gY):
-	sheet(loadTexture(renderer, (std::string)src)),
+Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, int sX, int sY, int offX, int offY, int gX, int gY, bool shadow):
 	spriteW(w),
 	spriteH(h),
 	spritesX(sX),
@@ -104,6 +130,12 @@ Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, 
 	clip(SDL_Rect()),
 	tclip(SDL_Rect())
 	{
+		if (shadow){
+			sheet = loadShadowsheet(renderer, (std::string)src);
+		}
+		else{
+			sheet = loadSpritesheet(renderer, (std::string)src);
+		}
 		clip.w = spriteW;
 		clip.h = spriteH;
 		tclip.w = spriteW;

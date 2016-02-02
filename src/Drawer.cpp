@@ -88,10 +88,10 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer):
 
 		else if (s=="}"){
 			if (hasSpritesheet) {
-				spritesheet = new Spritesheet(renderer, spritefilename.c_str(), sw, sh, sx, sy, ox, oy, gx, gy);
+				spritesheet = new Spritesheet(renderer, spritefilename.c_str(), sw, sh, sx, sy, ox, oy, gx, gy, false);
 			}
 			if (hasShadowsheet)
-				shadowsheet = new Spritesheet(renderer, shadowfilename.c_str(), shw, shh, shx, shy, ox, oy, gx, gy);
+				shadowsheet = new Spritesheet(renderer, shadowfilename.c_str(), shw, shh, shx, shy, ox, oy, gx, gy, true);
 			return;
 		}
 		else{

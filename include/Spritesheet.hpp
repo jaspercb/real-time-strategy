@@ -27,8 +27,10 @@ enum TeamColor{
 
 };
 
-SDL_Surface* loadSurface( std::string path);
-SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path, TeamColor color = COLOR_BLUE);
+SDL_Surface* loadSurface( std::string path );
+SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColor color = COLOR_BLUE );
+SDL_Texture* loadShadowsheet( SDL_Renderer* renderer, std::string path );
+
 
 void teamColorSpritesheet(SDL_Surface *surface, TeamColor color);
 
@@ -37,7 +39,7 @@ class Spritesheet{
 	public:
 		Spritesheet(SDL_Texture* src, int w, int h, int sX, int sY, int offX = 0, int offY = 0, int gX = 0, int gY = 0);
 
-		Spritesheet(SDL_Renderer* renderer, const char* src, int w, int h, int sX, int sY, int offX = 0, int offY = 0, int gX = 0, int gY = 0);
+		Spritesheet(SDL_Renderer* renderer, const char* src, int w, int h, int sX, int sY, int offX = 0, int offY = 0, int gX = 0, int gY = 0, bool shadow=false);
 
 		void render(SDL_Renderer* renderer, int spriteX, int spriteY, int renderX, int renderY);
 	private:
