@@ -1,5 +1,4 @@
 # rts
 
-* so the idea is to make a sort of starcraft clone thing
-* haven't decided if it's going to be more of a starcraft clone or an AI War clone quite yet
-* guess we'll see
+* Real-time strategy inspired by Starcraft and similar old sprite-based 2D RTS games.
+* Features fully customizable unit loadouts, check out /conf/ for samples
