@@ -16,8 +16,12 @@ class Drawer{
 
 		int walkCycleStart;
 		int walkCycleLength;
-		int attackCycleLength;
+
 		int attackCycleStart;
+		int attackCycleLength;
+
+		int deathCycleStart;
+		int deathCycleLength;
 		int numFacingDirections;
 
 	private:

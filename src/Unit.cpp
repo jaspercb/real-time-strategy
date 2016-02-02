@@ -18,7 +18,8 @@ unitID(uID),
 teamID(tID),
 unitTemplateID(utID),
 xy(pos),
-drawWalkStep(0),
+animationState(ANIMSTATE_WALKING),
+drawAnimationStep(0),
 drawFacingAngle(0)
 {
 	UnitTemplate& unitTemplate = getUnitTemplate();
@@ -41,7 +42,8 @@ dimension(u.dimension),
 hp(u.hp),
 es(u.es),
 game(u.game),
-drawWalkStep(u.drawWalkStep),
+animationState(u.animationState),
+drawAnimationStep(u.drawAnimationStep),
 drawFacingAngle(u.drawFacingAngle)
 {
 	for(Weapon &w : u.weapons_) {
@@ -55,31 +57,49 @@ UnitTemplate& Unit::getUnitTemplate(){
 	return game.getTeam(teamID).unitTemplates.at(unitTemplateID);
 }
 
-int Unit::update()
+UpdateStatus Unit::update()
 {
 	UnitTemplate &unitTemplate = getUnitTemplate();
 
 	//'if unit is dead' logic should probably go here
 
-	hp = std::min(unitTemplate.maxHP(), hp+unitTemplate.regHP());
-	es = std::min(unitTemplate.maxES(), es+unitTemplate.regES());
+	switch (animationState){
+		case (ANIMSTATE_DYING):
+			if (drawAnimationStep>20){
+				return STATUS_REMOVE;
+			}
+			drawAnimationStep++;
+			return STATUS_OK;
+
+		//case (ANIMSTATE_ATTACKING):
+			
+
+		//case (ANIMSTATE_WALKING):
 
 
-	for (auto i = weapons_.begin(); i!=weapons_.end(); i++)
-	{
-		i->update();
+		default:
+			if (hp<=0){
+				animationState = ANIMSTATE_DYING;
+				drawAnimationStep = 0;
+				return STATUS_OK;
+			}
+
+			hp = std::min(unitTemplate.maxHP(), hp+unitTemplate.regHP());
+			es = std::min(unitTemplate.maxES(), es+unitTemplate.regES());
+
+			for (auto i = weapons_.begin(); i!=weapons_.end(); i++)
+				i->update();
+			if (StateQueue_.size())
+			{
+				StateExitCode stateComplete = StateQueue_.front()->update(*this);
+				if (stateComplete == STATE_EXIT_COMPLETE)
+				{
+					delete StateQueue_.front();
+					StateQueue_.pop_front();
+				}
+			}
 	}
-
-	if (StateQueue_.size())
-	{
-		StateExitCode stateComplete = StateQueue_.front()->update(*this);
-		if (stateComplete == STATE_EXIT_COMPLETE)
-		{
-			delete StateQueue_.front();
-			StateQueue_.pop_front();
-		}
-	}
-	return 0;
+	return STATUS_OK;
 }
 
 void Unit::handleCommand(Command command)
@@ -123,6 +143,7 @@ void Unit::damage(const int quant, const DamageType dmgtype) {
 		dmg = std::max(1, dmg-utmpl.armor());
 		hp -= dmg;
 	}
+
 }
 
 int Unit::getAttackRange(){
@@ -140,11 +161,13 @@ void Unit::move_towards(const Coordinate c){
 	int spd = getUnitTemplate().speed();
 	if (pythagoreanDistance(xy, c)<=spd) {
 		move(c);
-		drawWalkStep = 0;
+		animationState = ANIMSTATE_WALKING;
+		drawAnimationStep = 0;
 	}
 	else {
 		move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) );
-		drawWalkStep++;
+		animationState = ANIMSTATE_WALKING;
+		drawAnimationStep++;
 		drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
 		//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
 		//debugLog("setting drawFacingAngle to:");

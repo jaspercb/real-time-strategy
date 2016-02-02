@@ -56,6 +56,14 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer):
 			is>>attackCycleStart;
 		}
 
+		else if (s=="deathCycleLength"){
+			is>>deathCycleLength;
+		}
+
+		else if (s=="deathCycleStart"){
+			is>>deathCycleStart;
+		}
+
 		else if (s=="spritesize"){
 			is>>sw;
 			is>>sh;
@@ -103,32 +111,43 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer):
 void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate cameraposition */){
 	// Draws the unit to the given surface.
 	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);
-	if (true) { // eventually, if walking
-		if (NULL != shadowsheet)
-			shadowsheet->render(renderer,
-				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
-				walkCycleStart + std::abs(unit.drawWalkStep)%walkCycleLength,
-				unit.xy.first,
-				unit.xy.second);
-		if (NULL != spritesheet)
-			spritesheet->render(renderer,
-				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
-				walkCycleStart + std::abs(unit.drawWalkStep)%walkCycleLength,
-				unit.xy.first,
-				unit.xy.second);
-	} else{
-		if (NULL != shadowsheet)
-			shadowsheet->render(renderer,
-				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
-				attackCycleStart + std::abs(unit.drawWalkStep)%attackCycleLength,
-				unit.xy.first,
-				unit.xy.second);		
-		if (NULL != spritesheet)
-			spritesheet->render(renderer,
-				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
-				attackCycleStart + std::abs(unit.drawWalkStep)%attackCycleLength,
-				unit.xy.first,
-				unit.xy.second);
+	switch (unit.animationState) {
+		case ANIMSTATE_WALKING:
+			if (NULL != shadowsheet)
+				shadowsheet->render(renderer,
+					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+					walkCycleStart + std::abs(unit.drawAnimationStep)%walkCycleLength,
+					unit.xy.first,
+					unit.xy.second);
+			if (NULL != spritesheet)
+				spritesheet->render(renderer,
+					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+					walkCycleStart + std::abs(unit.drawAnimationStep)%walkCycleLength,
+					unit.xy.first,
+					unit.xy.second);
+			break;
 
+		case ANIMSTATE_ATTACKING:
+			if (NULL != shadowsheet)
+				shadowsheet->render(renderer,
+					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+					attackCycleStart + std::abs(unit.drawAnimationStep)%attackCycleLength,
+					unit.xy.first,
+					unit.xy.second);		
+			if (NULL != spritesheet)
+				spritesheet->render(renderer,
+					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+					attackCycleStart + std::abs(unit.drawAnimationStep)%attackCycleLength,
+					unit.xy.first,
+					unit.xy.second);
+			break;
+
+		case ANIMSTATE_DYING:
+			spritesheet->render(renderer,
+				unit.drawAnimationStep < deathCycleLength ? unit.drawAnimationStep : deathCycleLength-1,
+				deathCycleStart,
+				unit.xy.first,
+				unit.xy.second);
+			break;
 	}
 }

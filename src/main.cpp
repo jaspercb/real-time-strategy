@@ -65,6 +65,23 @@ void draw_all(Game &g){
 	SDL_RenderPresent( gRenderer );
 }
 
+void update_all(Game &g){
+	std::vector<UnitID> toDelete;
+	for (auto u = g.unitsByID.begin(); u!=g.unitsByID.end(); u++){
+		if (u->second.update() == STATUS_REMOVE){
+			toDelete.push_back(u->first);
+		}
+	}
+	for (auto u = toDelete.begin(); u!=toDelete.end(); u++){
+		Unit& p = g.getUnit(*u);
+		g.inhabitedGrid.erase(p);
+		g.unitsByID.erase(*u);
+	}
+
+
+	debugLog("swag");
+}
+
 int main(){
 	debugLog(" Testing...");
 
@@ -95,8 +112,10 @@ int main(){
 				//a.move_towards(std::pair<int, int>(0, 300));
 				//b.move_towards(std::pair<int, int>(300, 300));
 				//c.move_towards(std::pair<int, int>(0, 0));
-				a.move_towards(target1);
-				b.move_towards(target2);
+				//a.move_towards(target1);
+				//b.move_towards(target2);
+				b.hp=-100;
+				update_all(g);
 				draw_all(g);
 
 				// framerate

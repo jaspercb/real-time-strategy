@@ -20,9 +20,15 @@ class Game;
 
 typedef int UnitID;
 
+enum AnimationState{
+	ANIMSTATE_WALKING,
+	ANIMSTATE_ATTACKING,
+	ANIMSTATE_DYING
+};
+
 enum UpdateStatus{
 	STATUS_OK,
-	STATUS_DEAD
+	STATUS_REMOVE
 };
 
 class Unit
@@ -33,7 +39,7 @@ public:
 	Unit(Game&, UnitID, TeamID, UnitTemplateID, Coordinate);
 	Unit(Unit &&u);
 	UnitTemplate& getUnitTemplate();
-	int update(); //returns 1 if should be destroyed, 0 otherwise
+	UpdateStatus update(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command);
 	void move(const Coordinate);
 	void damage(const int, const DamageType);
@@ -53,12 +59,11 @@ public:
 	int es;
 	int dim;
 
-	int drawWalkStep, drawFacingAngle;
+	AnimationState animationState;
+	int drawAnimationStep, drawFacingAngle;
 	
 	Game& game;
 	std::vector<Weapon> weapons_;
 private:
-
-
 	std::deque<UnitState*> StateQueue_;
 };
