@@ -27,7 +27,10 @@ enum TeamColor{
 
 };
 
-SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path );
+SDL_Surface* loadSurface( std::string path);
+SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path, TeamColor color = COLOR_BLUE);
+
+void teamColorSpritesheet(SDL_Surface *surface, TeamColor color);
 
 class Spritesheet{
 	// Class for the actual image files that form spritesheets, and abstracting away all the pixel alignment messiness.
