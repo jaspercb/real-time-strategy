@@ -25,6 +25,7 @@ SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColo
 	//Load image at specified path
 	SDL_Surface* loadedSurface = loadSurface(path);
 	
+	color = COLOR_PINK;
 	teamColorSpritesheet(loadedSurface, color);
 
 	//Create texture from surface pixels
@@ -109,13 +110,13 @@ Spritesheet::Spritesheet(SDL_Texture *src, int w, int h, int sX, int sY, int off
 	offsetY(offY),
 	gapX(gX),
 	gapY(gY),
-	clip(SDL_Rect()),
-	tclip(SDL_Rect())
+	clip(),
+	tclip()
 	{
-		clip.w = spriteW;
-		clip.h = spriteH;
-		tclip.w = spriteW;
-		tclip.h = spriteH;
+		this->clip.w = w;
+		this->clip.h = h;
+		this->tclip.w = w;
+		this->tclip.h = h;
 	}
 
 Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, int sX, int sY, int offX, int offY, int gX, int gY, bool shadow):
@@ -127,19 +128,19 @@ Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, 
 	offsetY(offY),
 	gapX(gX),
 	gapY(gY),
-	clip(SDL_Rect()),
-	tclip(SDL_Rect())
+	clip(),
+	tclip()
 	{
 		if (shadow){
-			sheet = loadShadowsheet(renderer, (std::string)src);
+			this->sheet = loadShadowsheet(renderer, (std::string)src);
 		}
 		else{
-			sheet = loadSpritesheet(renderer, (std::string)src);
+			this->sheet = loadSpritesheet(renderer, (std::string)src);
 		}
-		clip.w = spriteW;
-		clip.h = spriteH;
-		tclip.w = spriteW;
-		tclip.h = spriteH;
+		this->clip.w = w;
+		this->clip.h = h;
+		this->tclip.w = w;
+		this->tclip.h = h;
 	}
 
 void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int renderX, int renderY){
@@ -147,20 +148,20 @@ void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int r
 	assert(spriteX>=0);
 	assert(spriteY>=0);
 
-	tclip.x = renderX-spriteW/2;
-	tclip.y = renderY-spriteH/2;
+	this->tclip.x = renderX-this->spriteW/2;
+	this->tclip.y = renderY-spriteH/2;
 
-	clip.y = offsetY + spriteY*(spriteH+gapY);
+	this->clip.y = offsetY + spriteY*(spriteH+gapY);
 
 	if (spriteX>=2*spritesX){
 		debugLog(spriteX);
 		return;
 	}
 	if (spriteX<spritesX){
-		clip.x = offsetX + spriteX*(spriteW+gapX);
+		this->clip.x = offsetX + spriteX*(spriteW+gapX);
 		SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_NONE /*flip parameter*/ );
 	} else {
-		clip.x = offsetX + (spritesX-(spriteX%spritesX))*(spriteW+gapX);
-		SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_HORIZONTAL /*flip parameter*/ );
+		this->clip.x = offsetX + (spritesX-(spriteX%spritesX))*(spriteW+gapX);
+		SDL_RenderCopyEx( renderer, sheet, &this->clip, &this->tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_HORIZONTAL /*flip parameter*/ );
 	}
 }

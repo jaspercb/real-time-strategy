@@ -14,12 +14,12 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer):
 	attackCycleStart(0),
 	walkCycleLength(0),
 	attackCycleLength(0),
-	hasSpritesheet(false),
-	hasShadowsheet(false)
+	spritesheet(NULL),
+	shadowsheet(NULL)
 {
 	int sw=0, sh=0, ox=0, oy=0, gx=0, gy=0, sx=0, sy=0, shh=0, shw=0, shx=0, shy=0;
 	std::string spritefilename, shadowfilename;
-
+	bool hasShadowsheet=false, hasSpritesheet=false;
 	std::string s;
 
 	while (is>>s){
@@ -104,20 +104,31 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 	// Draws the unit to the given surface.
 	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);
 	if (true) { // eventually, if walking
-		if (hasSpritesheet)
-			spritesheet->render(renderer,
-				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
-				walkCycleStart + std::abs(unit.drawWalkStep)%walkCycleLength,
-				unit.xy.first,
-				unit.xy.second);
-
+		if (NULL != shadowsheet)
 			shadowsheet->render(renderer,
 				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 				walkCycleStart + std::abs(unit.drawWalkStep)%walkCycleLength,
 				unit.xy.first,
 				unit.xy.second);
+		if (NULL != spritesheet)
+			spritesheet->render(renderer,
+				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+				walkCycleStart + std::abs(unit.drawWalkStep)%walkCycleLength,
+				unit.xy.first,
+				unit.xy.second);
 	} else{
-		if (hasSpritesheet)
-			spritesheet->render(renderer, ( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections), attackCycleStart + std::abs(unit.drawWalkStep)%attackCycleLength, unit.xy.first, unit.xy.second);		
+		if (NULL != shadowsheet)
+			shadowsheet->render(renderer,
+				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+				attackCycleStart + std::abs(unit.drawWalkStep)%attackCycleLength,
+				unit.xy.first,
+				unit.xy.second);		
+		if (NULL != spritesheet)
+			spritesheet->render(renderer,
+				( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+				attackCycleStart + std::abs(unit.drawWalkStep)%attackCycleLength,
+				unit.xy.first,
+				unit.xy.second);
+
 	}
 }

@@ -28,7 +28,7 @@ enum TeamColor{
 };
 
 SDL_Surface* loadSurface( std::string path );
-SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColor color = COLOR_BLUE );
+SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColor color = COLOR_GREEN );
 SDL_Texture* loadShadowsheet( SDL_Renderer* renderer, std::string path );
 
 

@@ -16,9 +16,16 @@ weapon{
 
 drawer {
 	spritesheet ../resources/graphics/zerg/units/ultralisk.png
-	size 128 128
-	sheetsize 17 16
+	shadowsheet ../resources/graphics/zerg/units/ultralisk-shadow.png
+	
+	spritesize 128 128
+	spritesheetsize 17 16
+
+	shadowsize 128 128
+	shadowsheetsize 17 15
+
 	numFacingDirections 17
+
 	walkCycleStart 0
 	walkCycleLength 9
 	attackCycleStart 9

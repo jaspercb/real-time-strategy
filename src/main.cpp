@@ -75,7 +75,7 @@ int main(){
 	else {
 		Game g = Game();
 		TeamID tID = g.createTeam();
-		UnitTemplate p = UnitTemplate(std::ifstream("../conf/units/marine1"), gRenderer);
+		UnitTemplate p = UnitTemplate(std::ifstream("../conf/units/ultralisk"), gRenderer);
 
 		Team& t = g.getTeam(tID);
 
