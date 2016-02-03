@@ -55,7 +55,8 @@ WeaponTemplate::WeaponTemplate(std::ifstream &is)
 			else if (s=="DMG_EXPLOSIVE")
 				damageType_ = DMG_EXPLOSIVE;
 			else{
-				throw "Error: WeaponTemplate created with invalid damage type: "+s;
+				debugLog("Error: WeaponTemplate "+name_+" created with invalid damage type: "+s);
+				throw;
 			}
 		}
 		else if (s=="damage")
