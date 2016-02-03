@@ -1,0 +1,35 @@
+name Hydralisk
+maxHP 100
+speed 7
+radius 1
+dimension 1 0 0 0
+weapon{
+	name Hydralisk Spit
+	damageType DMG_KINETIC
+	damage 50
+	reloadTime 3
+	range 50
+	weaponVelocity 0
+	aoeRadius 0
+	dimensions 1 0 0 1
+}
+
+drawer {
+	spritesheet ../resources/graphics/zerg/units/hydralisk.png
+	shadowsheet ../resources/graphics/zerg/units/hydralisk-shadow.png
+	
+	spritesize 128 128
+	spritesheetsize 17 18
+
+	shadowsize 128 128
+	shadowsheetsize 17 18
+
+	numFacingDirections 17
+
+	walkCycleStart 5
+	walkCycleLength 7
+	attackCycleStart 0
+	attackCycleLength 5
+	deathCycleStart 12
+	deathCycleLength 8
+}
