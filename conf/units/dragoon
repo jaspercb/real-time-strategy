@@ -1,0 +1,35 @@
+name Dragoon
+maxHP 200
+speed 5
+radius 1
+dimension 1 0 0 0
+weapon{
+	name Dragoon Energy Cannon
+	damageType DMG_ELECTRO
+	damage 50
+	reloadTime 3
+	range 50
+	weaponVelocity 0
+	aoeRadius 0
+	dimensions 1 0 0 1
+}
+
+drawer {
+	spritesheet ../resources/graphics/protoss/units/dragoon.png
+	shadowsheet ../resources/graphics/protoss/units/pdrshad.png
+	
+	spritesize 96 96
+	spritesheetsize 17 25
+
+	shadowsize 96 96
+	shadowsheetsize 17 24
+
+	numFacingDirections 17
+
+	walkCycleStart 8
+	walkCycleLength 9
+	attackCycleStart 17
+	attackCycleLength 7
+	deathCycleStart 24
+	deathCycleLength 7
+}

@@ -70,8 +70,9 @@ SDL_Texture* loadShadowsheet( SDL_Renderer* renderer, std::string path ){
 	color.g = 0;
 	color.b = 0;
 	color.a = 128;
-	
-	SDL_SetPaletteColors(loadedSurface->format->palette, &color, 1, 1); // the first 1 is hardcoded and assumes the shadow color palette will bind 1 to the shadow color.
+
+	for (int i=1; i<255; i++)
+		SDL_SetPaletteColors(loadedSurface->format->palette, &color, i, 1);
 
 	//Create texture from surface pixels
 	newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
