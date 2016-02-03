@@ -65,18 +65,6 @@ void draw_all(Game &g){
 	SDL_RenderPresent( gRenderer );
 }
 
-void update_all(Game &g){
-	std::vector<UnitID> toDelete;
-	for (auto u = g.unitsByID.begin(); u!=g.unitsByID.end(); u++){
-		if (u->second.update() == STATUS_REMOVE){
-			toDelete.push_back(u->first);
-		}
-	}
-	for (auto u = toDelete.begin(); u!=toDelete.end(); u++){
-		g.deleteUnit(*u);
-	}
-}
-
 int main(){
 	debugLog(" Testing...");
 
@@ -87,7 +75,7 @@ int main(){
 	else {
 		Game g = Game();
 		TeamID tID = g.createTeam();
-		UnitTemplate p = UnitTemplate(std::ifstream("../conf/units/ultralisk"), gRenderer);
+		UnitTemplate p = UnitTemplate(std::ifstream("../conf/units/marine1"), gRenderer);
 
 		Team& t = g.getTeam(tID);
 
@@ -110,7 +98,7 @@ int main(){
 				//c.move_towards(std::pair<int, int>(0, 0));
 				g.getUnit(0).move_towards(target1);
 				//g.getUnit(1).move_towards(target2);
-				update_all(g);
+				g.tick();
 				draw_all(g);
 
 				// framerate

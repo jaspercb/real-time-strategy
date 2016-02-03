@@ -59,6 +59,18 @@ Team& Game::getTeam(TeamID i)
 	}
 }
 
+void Game::tick(){
+	std::vector<UnitID> toDelete;
+	for (auto u = this->unitsByID.begin(); u!=this->unitsByID.end(); u++){
+		if (u->second.update() == STATUS_REMOVE){
+			toDelete.push_back(u->first);
+		}
+	}
+	for (auto u = toDelete.begin(); u!=toDelete.end(); u++){
+		this->deleteUnit(*u);
+	}
+}
+
 UnitID Game::smallestUnusedUnitID() {
 	return smallestUnusedUnitID_++;
 }

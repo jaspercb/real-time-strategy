@@ -24,6 +24,8 @@ public:
 	UnitID smallestUnusedUnitID();
 	TeamID smallestUnusedTeamID();
 
+	void tick();
+
 	bool teamsAreFriendly(TeamID, TeamID);
 
 	InhabitedGrid inhabitedGrid;
