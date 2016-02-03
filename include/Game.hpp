@@ -17,7 +17,7 @@ public:
 	Game();
 	TeamID createTeam();
 	UnitID createUnit(TeamID team, UnitTemplateID unitTemplateID, Coordinate pos);
-
+	void deleteUnit(UnitID);
 	Unit& getUnit(UnitID i);
 	Team& getTeam(TeamID i);
 

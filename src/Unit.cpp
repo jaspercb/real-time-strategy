@@ -155,23 +155,25 @@ int Unit::getAttackRange(){
 }
 
 void Unit::move_towards(const Coordinate c){
-	int dx = c.first - xy.first;
-	int dy = c.second - xy.second;
-	int dr = std::pow(dx*dx + dy*dy, 0.5);
-	int spd = getUnitTemplate().speed();
-	if (pythagoreanDistance(xy, c)<=spd) {
-		move(c);
-		animationState = ANIMSTATE_WALKING;
-		drawAnimationStep = 0;
-	}
-	else {
-		move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) );
-		animationState = ANIMSTATE_WALKING;
-		drawAnimationStep++;
-		drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
-		//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
-		//debugLog("setting drawFacingAngle to:");
-		//debugLog((int)drawFacingAngle);
+	if (animationState!=ANIMSTATE_DYING){
+		int dx = c.first - xy.first;
+		int dy = c.second - xy.second;
+		int dr = std::pow(dx*dx + dy*dy, 0.5);
+		int spd = getUnitTemplate().speed();
+		if (pythagoreanDistance(xy, c)<=spd) {
+			move(c);
+			animationState = ANIMSTATE_WALKING;
+			drawAnimationStep = 0;
+		}
+		else {
+			move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) );
+			animationState = ANIMSTATE_WALKING;
+			drawAnimationStep++;
+			drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
+			//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
+			//debugLog("setting drawFacingAngle to:");
+			//debugLog((int)drawFacingAngle);
+		}
 	}
 }
 

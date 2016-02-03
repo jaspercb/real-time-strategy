@@ -73,13 +73,8 @@ void update_all(Game &g){
 		}
 	}
 	for (auto u = toDelete.begin(); u!=toDelete.end(); u++){
-		Unit& p = g.getUnit(*u);
-		g.inhabitedGrid.erase(p);
-		g.unitsByID.erase(*u);
+		g.deleteUnit(*u);
 	}
-
-
-	debugLog("swag");
 }
 
 int main(){
@@ -108,13 +103,13 @@ int main(){
 		for (int i=0; i<5; i++){
 			target1 = std::pair<int,int>((target1.first+233) % 150, (target1.second + 66) % 150);
 			target2 = std::pair<int,int>((target2.first+273) % 200, (target2.second + 133) % 150);
+			if (i==2){b.hp=-100;}
 			for (int j=0; j<16; j++) {
 				//a.move_towards(std::pair<int, int>(0, 300));
 				//b.move_towards(std::pair<int, int>(300, 300));
 				//c.move_towards(std::pair<int, int>(0, 0));
-				//a.move_towards(target1);
-				//b.move_towards(target2);
-				b.hp=-100;
+				g.getUnit(0).move_towards(target1);
+				//g.getUnit(1).move_towards(target2);
 				update_all(g);
 				draw_all(g);
 

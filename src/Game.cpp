@@ -29,6 +29,12 @@ UnitID Game::createUnit(TeamID teamID, UnitTemplateID unitTemplateID, Coordinate
 	return id;
 }
 
+void Game::deleteUnit(UnitID id){
+	Unit& u = this->getUnit(id);
+	this->inhabitedGrid.erase(u);
+	this->unitsByID.erase(id);
+}
+
 Unit& Game::getUnit(UnitID i)
 {
 	try{
