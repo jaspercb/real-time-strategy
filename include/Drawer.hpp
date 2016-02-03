@@ -27,3 +27,5 @@ class Drawer{
 	private:
 		Spritesheet* spritesheet, *shadowsheet;
 };
+
+void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY);

@@ -16,8 +16,9 @@ SDL_Window* gWindow = NULL;
 //The surface contained by the window
 SDL_Renderer* gRenderer = NULL;
 
-//The image we will load and show on the screen
-SDL_Surface* gHelloWorld = NULL;
+extern SDL_Texture* hpBarEmpty;
+extern SDL_Texture* hpBarFull;
+
 
 bool init() {
 	//Initialization flag
@@ -91,7 +92,6 @@ int main(){
 		for (int i=0; i<5; i++){
 			target1 = std::pair<int,int>((target1.first+233) % 150, (target1.second + 66) % 150);
 			target2 = std::pair<int,int>((target2.first+273) % 200, (target2.second + 133) % 150);
-			if (i==2){b.hp=-100;}
 			for (int j=0; j<16; j++) {
 				//a.move_towards(std::pair<int, int>(0, 300));
 				//b.move_towards(std::pair<int, int>(300, 300));
@@ -100,7 +100,7 @@ int main(){
 				//g.getUnit(1).move_towards(target2);
 				g.tick();
 				draw_all(g);
-
+				b.hp-=5;
 				// framerate
 				SDL_Delay( 1000/FRAMERATE );
 			}

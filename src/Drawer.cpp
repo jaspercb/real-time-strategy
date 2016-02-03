@@ -3,6 +3,10 @@
 #include "Drawer.hpp"
 #include "Spritesheet.hpp"
 #include "Logging.hpp"
+#include "UnitTemplate.hpp"
+
+SDL_Texture* hpBarEmpty = NULL;
+SDL_Texture* hpBarFull = NULL;
 
 Drawer::Drawer(Spritesheet* sp):
 	spritesheet(sp)
@@ -150,4 +154,44 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 				unit.xy.second);
 			break;
 	}
+	if (unit.animationState!=ANIMSTATE_DYING){
+		draw_HP_bar(renderer, unit, unit.xy.first, unit.xy.second);
+	}
+}
+
+void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY){
+	// Draws an HP bar centered at (renderX, renderY)
+	const int granularity = 25;
+
+	int HP = unit.hp;
+	int maxHP = unit.getUnitTemplate().maxHP();
+
+	if (hpBarEmpty==NULL)
+		hpBarEmpty=loadTexture(renderer, "../resources/graphics/ui/tpbrempt.png");
+	if (hpBarFull==NULL)
+		hpBarFull=loadTexture(renderer, "../resources/graphics/ui/tpbrfull.png");
+
+	SDL_Rect fullclip, emptyclip, tclip;
+
+	int barlength = 5+3*maxHP/granularity;
+
+	fullclip.w = 3 + 3*HP/granularity;
+	fullclip.h = 10;
+	fullclip.x = 0;
+	fullclip.y = 0;
+	
+	emptyclip.w = barlength-fullclip.w;
+	emptyclip.h = 10;
+	emptyclip.x = 107-emptyclip.w;
+	emptyclip.y = 0;
+
+	tclip.w = 3 + 3*HP/granularity;
+	tclip.h = 10;
+	tclip.x=renderX-(barlength)/2;
+	tclip.y=renderY-20;
+	
+	SDL_RenderCopy(renderer, hpBarFull, &fullclip, &tclip);
+	tclip.x+=fullclip.w;
+	tclip.w=emptyclip.w;
+	SDL_RenderCopy(renderer, hpBarEmpty, &emptyclip, &tclip);
 }

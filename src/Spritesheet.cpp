@@ -18,6 +18,25 @@ SDL_Surface* loadSurface( std::string path) {
 	return loadedSurface;
 }
 
+SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path){
+	// Loads a spritesheet. Makes no palette swaps.
+	SDL_Texture* newTexture = NULL;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = loadSurface(path);
+
+	//Create texture from surface pixels
+	newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
+	if( newTexture == NULL )
+	{
+		printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+	}
+	//Get rid of old loaded surface
+	SDL_FreeSurface( loadedSurface );
+
+	return newTexture;
+}
+
 SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColor color){
 	// Loads a spritesheet. Makes palette swaps with respect to TeamColor.
 	SDL_Texture* newTexture = NULL;
@@ -25,7 +44,6 @@ SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColo
 	//Load image at specified path
 	SDL_Surface* loadedSurface = loadSurface(path);
 	
-	color = COLOR_PINK;
 	teamColorSpritesheet(loadedSurface, color);
 
 	//Create texture from surface pixels
