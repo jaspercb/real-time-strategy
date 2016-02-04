@@ -16,7 +16,7 @@ Game::Game():
 TeamID Game::createTeam(){
 	TeamID id = smallestUnusedTeamID();
 	Team t = Team(*this, id);
-	teamsByID.emplace(id, t);
+	this->teamsByID.emplace(id, t);
 
 	return id;
 }

@@ -17,6 +17,8 @@ public:
 
 	// Creates and sets up a new unit, linked to the templateID from 
 
+	void loadUnitTemplate( std::string s );
+
 	Game& game;
 	const TeamID teamID;
 

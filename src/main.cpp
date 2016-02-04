@@ -5,20 +5,14 @@
 #include "Unit.hpp"
 #include "Logging.hpp"
 #include "Drawer.hpp"
+#include "globals.hpp"
 
 const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 480;
 const int FRAMERATE = 20;
 
-//The window we'll be rendering to
 SDL_Window* gWindow = NULL;
-
-//The surface contained by the window
 SDL_Renderer* gRenderer = NULL;
-
-extern SDL_Texture* hpBarEmpty;
-extern SDL_Texture* hpBarFull;
-
 
 bool init() {
 	//Initialization flag
@@ -76,11 +70,9 @@ int main(){
 	else {
 		Game g = Game();
 		TeamID tID = g.createTeam();
-		UnitTemplate p = UnitTemplate(std::ifstream("../conf/units/broodling"), gRenderer);
-
 		Team& t = g.getTeam(tID);
-
-		t.unitTemplates.emplace((UnitTemplateID)3, p);
+		t.loadUnitTemplate("../conf/units/broodling");
+		UnitTemplate& p = t.unitTemplates.begin()->second;
 
 		//Unit& a = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));
 		//Unit& b = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 300)));

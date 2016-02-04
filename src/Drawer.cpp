@@ -4,6 +4,7 @@
 #include "Spritesheet.hpp"
 #include "Logging.hpp"
 #include "UnitTemplate.hpp"
+#include "globals.hpp"
 
 SDL_Texture* hpBarEmpty = NULL;
 SDL_Texture* hpBarFull = NULL;
@@ -12,8 +13,7 @@ Drawer::Drawer(Spritesheet* sp):
 	spritesheet(sp)
 {
 }
-
-Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer):
+Drawer::Drawer(std::ifstream& is):
 	walkCycleStart(0),
 	attackCycleStart(0),
 	walkCycleLength(0),
@@ -100,10 +100,10 @@ Drawer::Drawer(std::ifstream& is, SDL_Renderer* renderer):
 
 		else if (s=="}"){
 			if (hasSpritesheet) {
-				spritesheet = new Spritesheet(renderer, spritefilename.c_str(), sw, sh, sx, sy, ox, oy, gx, gy, false);
+				spritesheet = new Spritesheet(gRenderer, spritefilename.c_str(), sw, sh, sx, sy, ox, oy, gx, gy, false);
 			}
 			if (hasShadowsheet)
-				shadowsheet = new Spritesheet(renderer, shadowfilename.c_str(), shw, shh, shx, shy, ox, oy, gx, gy, true);
+				shadowsheet = new Spritesheet(gRenderer, shadowfilename.c_str(), shw, shh, shx, shy, ox, oy, gx, gy, true);
 			return;
 		}
 		else{

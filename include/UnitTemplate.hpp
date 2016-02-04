@@ -21,8 +21,8 @@ public:
 			int _radius,
 			EnvironmentSpec _dimension,
 			std::vector<WeaponTemplate> _weaponTemplates);
-	UnitTemplate(std::ifstream, SDL_Renderer*);
-	UnitTemplate(std::string, SDL_Renderer*);
+	UnitTemplate(std::ifstream);
+	UnitTemplate(std::string);
 	int maxHP();
 	int regHP(){return regHP_;}
 	int maxES();
