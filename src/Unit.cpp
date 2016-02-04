@@ -79,6 +79,8 @@ UpdateStatus Unit::update()
 
 		default:
 			if (hp<=0){
+				if (unitTemplate.drawer->deathCycleLength==0)
+					return STATUS_REMOVE;
 				animationState = ANIMSTATE_DYING;
 				drawAnimationStep = 0;
 				return STATUS_OK;

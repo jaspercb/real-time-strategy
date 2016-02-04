@@ -71,7 +71,7 @@ int main(){
 		Game g = Game();
 		TeamID tID = g.createTeam();
 		Team& t = g.getTeam(tID);
-		t.loadUnitTemplate("../conf/units/broodling");
+		t.loadUnitTemplate("../conf/units/guardian");
 		UnitTemplate& p = t.unitTemplates.begin()->second;
 
 		//Unit& a = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));

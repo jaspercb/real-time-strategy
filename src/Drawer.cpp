@@ -18,6 +18,8 @@ Drawer::Drawer(std::ifstream& is):
 	attackCycleStart(0),
 	walkCycleLength(0),
 	attackCycleLength(0),
+	deathCycleStart(0),
+	deathCycleLength(0),
 	spritesheet(NULL),
 	shadowsheet(NULL)
 {
