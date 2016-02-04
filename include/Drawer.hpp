@@ -23,6 +23,8 @@ class Drawer{
 
 		int deathCycleStart;
 		int deathCycleLength;
+		bool deathCycleVertical;
+
 		int numFacingDirections;
 
 	private:

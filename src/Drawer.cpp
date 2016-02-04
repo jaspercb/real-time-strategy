@@ -22,6 +22,7 @@ Drawer::Drawer(std::ifstream& is):
 	attackCycleLength(0),
 	deathCycleStart(0),
 	deathCycleLength(0),
+	deathCycleVertical(false),
 	spritesheet(NULL),
 	shadowsheet(NULL)
 {
@@ -78,6 +79,10 @@ Drawer::Drawer(std::ifstream& is):
 
 		else if (s=="deathCycleStart"){
 			is>>deathCycleStart;
+		}
+
+		else if (s=="deathCycleVertical"){
+			is>>deathCycleVertical;
 		}
 
 		else if (s=="spritesize"){
@@ -192,11 +197,18 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 			break;
 
 		case ANIMSTATE_DYING:
-			spritesheet->render(renderer,
-				unit.drawAnimationStep < deathCycleLength ? unit.drawAnimationStep : deathCycleLength-1,
-				deathCycleStart,
-				unit.xy.first,
-				unit.xy.second + dy);
+			if (deathCycleVertical)
+				spritesheet->render(renderer,
+					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+					deathCycleStart + std::min(deathCycleLength-1, std::abs(unit.drawAnimationStep)),
+					unit.xy.first,
+					unit.xy.second + dy);
+			else
+				spritesheet->render(renderer,
+					unit.drawAnimationStep < deathCycleLength ? unit.drawAnimationStep : deathCycleLength-1,
+					deathCycleStart,
+					unit.xy.first,
+					unit.xy.second + dy);
 			break;
 	}
 	if (unit.animationState!=ANIMSTATE_DYING){
