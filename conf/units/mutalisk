@@ -1,0 +1,31 @@
+name Mutalisk
+maxHP 100
+speed 7
+radius 1
+dimension 0 0 0 1
+weapon{
+	name Mutalisk Spit
+	damageType DMG_KINETIC
+	damage 50
+	reloadTime 3
+	range 50
+	weaponVelocity 0
+	aoeRadius 0
+	dimensions 1 0 0 0
+}
+
+drawer {
+	spritesheet ../resources/graphics/zerg/units/mutalisk.png
+	
+	spritesize 128 128
+	spritesheetsize 17 6
+
+	numFacingDirections 17
+
+	walkCycleStart 0
+	walkCycleLength 5
+	attackCycleStart 0
+	attackCycleLength 5
+	deathCycleStart 5
+	deathCycleLength 1
+}
