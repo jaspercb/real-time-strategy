@@ -117,6 +117,8 @@ Drawer::Drawer(std::ifstream& is):
 void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate cameraposition */){
 	// Draws the unit to the given surface.
 	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);
+	int dy = unit.dimension.air ? -10 : 0;
+
 	switch (unit.animationState) {
 		case ANIMSTATE_WALKING:
 			if (NULL != shadowsheet)
@@ -130,7 +132,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					walkCycleStart + std::abs(unit.drawAnimationStep)%walkCycleLength,
 					unit.xy.first,
-					unit.xy.second);
+					unit.xy.second + dy);
 			break;
 
 		case ANIMSTATE_ATTACKING:
@@ -145,7 +147,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					attackCycleStart + std::abs(unit.drawAnimationStep)%attackCycleLength,
 					unit.xy.first,
-					unit.xy.second);
+					unit.xy.second + dy);
 			break;
 
 		case ANIMSTATE_DYING:
@@ -153,7 +155,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 				unit.drawAnimationStep < deathCycleLength ? unit.drawAnimationStep : deathCycleLength-1,
 				deathCycleStart,
 				unit.xy.first,
-				unit.xy.second);
+				unit.xy.second + dy);
 			break;
 	}
 	if (unit.animationState!=ANIMSTATE_DYING){
@@ -164,6 +166,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY){
 	// Draws an HP bar centered at (renderX, renderY)
 	const int granularity = 25;
+	int dy = unit.dimension.air ? -10 : 0;
 
 	int HP = unit.hp;
 	int maxHP = unit.getUnitTemplate().maxHP();
@@ -190,7 +193,7 @@ void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const in
 	tclip.w = 3 + 3*HP/granularity;
 	tclip.h = 10;
 	tclip.x=renderX-(barlength)/2;
-	tclip.y=renderY-20;
+	tclip.y=renderY+dy-25;
 	
 	SDL_RenderCopy(renderer, hpBarFull, &fullclip, &tclip);
 	tclip.x+=fullclip.w;
