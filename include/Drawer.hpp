@@ -12,6 +12,9 @@ class Drawer{
 		Drawer(std::ifstream&);
 		void draw(SDL_Renderer* renderer, Unit& unit/*, Coordinate cameraposition */);
 
+		int idleCycleStart;
+		int idleCycleLength;
+
 		int walkCycleStart;
 		int walkCycleLength;
 

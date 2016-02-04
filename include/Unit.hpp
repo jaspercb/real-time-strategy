@@ -21,6 +21,7 @@ class Game;
 typedef int UnitID;
 
 enum AnimationState{
+	ANIMSTATE_IDLE,
 	ANIMSTATE_WALKING,
 	ANIMSTATE_ATTACKING,
 	ANIMSTATE_DYING

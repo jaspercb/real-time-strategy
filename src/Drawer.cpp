@@ -14,9 +14,11 @@ Drawer::Drawer(Spritesheet* sp):
 {
 }
 Drawer::Drawer(std::ifstream& is):
+	idleCycleStart(0),
+	idleCycleLength(0),
 	walkCycleStart(0),
-	attackCycleStart(0),
 	walkCycleLength(0),
+	attackCycleStart(0),
 	attackCycleLength(0),
 	deathCycleStart(0),
 	deathCycleLength(0),
@@ -44,6 +46,14 @@ Drawer::Drawer(std::ifstream& is):
 		
 		else if (s=="numFacingDirections"){
 			is>>numFacingDirections;
+		}
+
+		else if (s=="idleCycleStart"){
+			is>>idleCycleStart;
+		}
+
+		else if (s=="idleCycleLength"){
+			is>>idleCycleLength;
 		}
 
 		else if (s=="walkCycleStart"){
@@ -120,7 +130,38 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 	int dy = unit.dimension.air ? -10 : 0;
 
 	switch (unit.animationState) {
-		case ANIMSTATE_WALKING:
+		case ANIMSTATE_IDLE: {
+			if (idleCycleLength){
+				if (NULL != shadowsheet)
+					shadowsheet->render(renderer,
+						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+						idleCycleStart + std::abs(unit.drawAnimationStep)%idleCycleLength,
+						unit.xy.first,
+						unit.xy.second);
+				if (NULL != spritesheet)
+					spritesheet->render(renderer,
+						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+						idleCycleStart + std::abs(unit.drawAnimationStep)%idleCycleLength,
+						unit.xy.first,
+						unit.xy.second + dy);
+			}
+			else{
+				if (NULL != shadowsheet)
+					shadowsheet->render(renderer,
+						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+						idleCycleStart,
+						unit.xy.first,
+						unit.xy.second);
+				if (NULL != spritesheet)
+					spritesheet->render(renderer,
+						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
+						idleCycleStart,
+						unit.xy.first,
+						unit.xy.second + dy);				
+			}
+			break;
+		}
+		case ANIMSTATE_WALKING: {
 			if (NULL != shadowsheet)
 				shadowsheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
@@ -134,7 +175,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 					unit.xy.first,
 					unit.xy.second + dy);
 			break;
-
+		}
 		case ANIMSTATE_ATTACKING:
 			if (NULL != shadowsheet)
 				shadowsheet->render(renderer,

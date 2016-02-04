@@ -22,6 +22,8 @@ drawer {
 
 	numFacingDirections 17
 
+	idleCycleStart 0
+	idleCycleLength 5
 	walkCycleStart 0
 	walkCycleLength 5
 	attackCycleStart 0

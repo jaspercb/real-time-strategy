@@ -71,7 +71,7 @@ int main(){
 		Game g = Game();
 		TeamID tID = g.createTeam();
 		Team& t = g.getTeam(tID);
-		t.loadUnitTemplate("../conf/units/mutalisk");
+		t.loadUnitTemplate("../conf/units/marine1");
 		UnitTemplate& p = t.unitTemplates.begin()->second;
 
 		//Unit& a = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));
@@ -79,7 +79,7 @@ int main(){
 		//Unit& c = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(300, 300)));
 		Unit& a = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));
 		Unit& b = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(100, 100)));
-
+		a.xy=std::make_pair(100, 100);
 		std::pair<int, int> target1(0, 0), target2(0, 0);
 		for (int i=0; i<5; i++){
 			target1 = std::pair<int,int>((target1.first+233) % 150, (target1.second + 66) % 150);
