@@ -76,7 +76,7 @@ int main(){
 	else {
 		Game g = Game();
 		TeamID tID = g.createTeam();
-		UnitTemplate p = UnitTemplate(std::ifstream("../conf/units/hydralisk"), gRenderer);
+		UnitTemplate p = UnitTemplate(std::ifstream("../conf/units/broodling"), gRenderer);
 
 		Team& t = g.getTeam(tID);
 
