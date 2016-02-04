@@ -1,0 +1,29 @@
+name Guardian
+maxHP 200
+speed 5
+radius 1
+dimension 0 0 0 1
+weapon{
+	name Guardian Bomb
+	damageType DMG_THERMAL
+	damage 50
+	reloadTime 3
+	range 50
+	weaponVelocity 0
+	aoeRadius 0
+	dimensions 1 0 0 0
+}
+
+drawer {
+	spritesheet ../resources/graphics/zerg/units/guardian.png
+	
+	spritesize 96 96
+	spritesheetsize 17 7
+
+	numFacingDirections 17
+
+	walkCycleStart 0
+	walkCycleLength 7
+	attackCycleStart 0
+	attackCycleLength 0
+}
