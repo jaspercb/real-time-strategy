@@ -1,8 +1,9 @@
 #include "Team.hpp"
 
-#include "UnitTemplate.hpp"
 #include "Game.hpp"
 #include "Unit.hpp"
+#include "UnitTemplate.hpp"
+#include "enums.hpp"
 
 Team::Team(Game& _game, TeamID tID):
 game(_game),
@@ -14,5 +15,5 @@ teamID(tID)
 
 
 void Team::loadUnitTemplate( std::string filename ){
-	unitTemplates.emplace( 3, UnitTemplate(std::ifstream(filename)) ); // this is so broken. fix later. 3 is not good
+	unitTemplates.emplace( 3, UnitTemplate(std::ifstream(filename), (TeamColor)teamID) ); // this is so broken. fix later. 3 is not good
 };

@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 
-#include "UnitTemplate.hpp"
 #include "typedefs.hpp"
+#include "UnitTemplate.hpp"
 
 class Game;
 

@@ -138,7 +138,7 @@ Spritesheet::Spritesheet(SDL_Texture *src, int w, int h, int sX, int sY, int off
 		this->tclip.h = h;
 	}
 
-Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, int sX, int sY, int offX, int offY, int gX, int gY, bool shadow):
+Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, int sX, int sY, int offX, int offY, int gX, int gY, bool shadow, TeamColor teamColor):
 	spriteW(w),
 	spriteH(h),
 	spritesX(sX),
@@ -154,7 +154,7 @@ Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, 
 			this->sheet = loadShadowsheet(renderer, (std::string)src);
 		}
 		else{
-			this->sheet = loadSpritesheet(renderer, (std::string)src);
+			this->sheet = loadSpritesheet(renderer, (std::string)src, teamColor);
 		}
 		this->clip.w = w;
 		this->clip.h = h;

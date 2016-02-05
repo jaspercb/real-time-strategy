@@ -69,16 +69,22 @@ int main(){
 	}
 	else {
 		Game g = Game();
-		TeamID tID = g.createTeam();
-		Team& t = g.getTeam(tID);
-		t.loadUnitTemplate("../conf/units/marine");
-		UnitTemplate& p = t.unitTemplates.begin()->second;
+		TeamID tID1 = g.createTeam();
+		TeamID tID2 = g.createTeam();
+
+		Team& t1 = g.getTeam(tID1);
+		Team& t2 = g.getTeam(tID2);
+		
+		t1.loadUnitTemplate("../conf/units/marine");
+		t2.loadUnitTemplate("../conf/units/marine");
+		UnitTemplate& p1 = t1.unitTemplates.begin()->second;
+		UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
 		//Unit& a = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));
 		//Unit& b = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 300)));
 		//Unit& c = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(300, 300)));
-		Unit& a = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(0, 0)));
-		Unit& b = g.getUnit(g.createUnit(tID, (UnitTemplateID)3, Coordinate(100, 100)));
+		Unit& a = g.getUnit(g.createUnit(tID1, (UnitTemplateID)3, Coordinate(0, 0)));
+		Unit& b = g.getUnit(g.createUnit(tID2, (UnitTemplateID)3, Coordinate(100, 100)));
 		a.xy=std::make_pair(100, 100);
 		std::pair<int, int> target1(0, 0), target2(0, 0);
 		for (int i=0; i<5; i++){

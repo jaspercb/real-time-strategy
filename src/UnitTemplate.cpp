@@ -1,9 +1,7 @@
 #include "UnitTemplate.hpp"
 
-#include "WeaponTemplate.hpp"
-#include "EnvironmentSpec.hpp"
-
 #include "Logging.hpp"
+#include "Drawer.hpp"
 
 UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _maxES, int _speed, int _radius,
 	EnvironmentSpec _dimension, std::vector<WeaponTemplate> _weaponTemplates ) :
@@ -15,7 +13,7 @@ UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _maxES, int _speed
 		dimension(_dimension),
 		weaponTemplates(_weaponTemplates) {debugLog("you probably shouldn't be using this constructor for UnitTemplate, but making:"+_name);}
 
-UnitTemplate::UnitTemplate(std::ifstream is){
+UnitTemplate::UnitTemplate(std::ifstream is, TeamColor teamColor){
 	maxHP_ = 0;
 	regHP_ = 0;
 	maxES_ = 0;
@@ -57,10 +55,7 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 		}
 		else if (s=="drawer"){
 			is>>s; // to clean out the brace
-			drawer = new Drawer(is);
-		}
-		else if (s=="spritesize"){
-
+			drawer = new Drawer(is, teamColor);
 		}
 		else if (s=="weapon"){
 			is>>s; // to get rid of the trailing {
@@ -75,8 +70,8 @@ UnitTemplate::UnitTemplate(std::ifstream is){
 	}
 }
 
-UnitTemplate::UnitTemplate(std::string s):
-	UnitTemplate(std::ifstream("../conf/units/"+s))
+UnitTemplate::UnitTemplate(std::string s, TeamColor teamColor):
+	UnitTemplate(std::ifstream("../conf/units/"+s), teamColor)
 	{}
 
 

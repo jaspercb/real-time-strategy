@@ -6,9 +6,9 @@
 
 #include "EnvironmentSpec.hpp"
 #include "WeaponTemplate.hpp"
-#include "Spritesheet.hpp"
+#include "enums.hpp"
 
-class SDL_Renderer;
+class Drawer;
 
 class UnitTemplate
 {
@@ -21,8 +21,8 @@ public:
 			int _radius,
 			EnvironmentSpec _dimension,
 			std::vector<WeaponTemplate> _weaponTemplates);
-	UnitTemplate(std::ifstream);
-	UnitTemplate(std::string);
+	UnitTemplate(std::ifstream, TeamColor teamColor);
+	UnitTemplate(std::string, TeamColor teamColor);
 	int maxHP();
 	int regHP(){return regHP_;}
 	int maxES();
