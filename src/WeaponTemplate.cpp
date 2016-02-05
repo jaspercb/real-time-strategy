@@ -104,12 +104,12 @@ void WeaponTemplate::fire(Weapon& weapon, Unit& target)
 				if (!target.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID) &&
 				dimensions_.overlaps(potentialTarget.dimension) )
 				{
-					potentialTarget.damage(damage(), damageType_);
+					potentialTarget.damage(damage(), damageType_, weapon.owner);
 				}
 			}
 		}
 		else{
-			target.damage(damage(), damageType_);
+			target.damage(damage(), damageType_, weapon.owner);
 		}
 		
 		weapon.ticksUntilCanFire = reloadTime();
@@ -129,7 +129,7 @@ void WeaponTemplate::fire(Weapon& weapon, Coordinate& target)
 				if (!weapon.owner.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID) &&
 				dimensions_.overlaps(potentialTarget.dimension) )
 				{
-					potentialTarget.damage(damage(), damageType_);
+					potentialTarget.damage(damage(), damageType_, weapon.owner);
 				}
 			}
 		}

@@ -43,7 +43,7 @@ public:
 	UpdateStatus update(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command);
 	void move(const Coordinate);
-	void damage(const int, const DamageType);
+	void damage(const int, const DamageType, Unit& attackedBy);
 	int getAttackRange(); // returns the range of the 
 	void move_towards(const Coordinate c);
 	void attack(Unit& target);
@@ -67,4 +67,6 @@ public:
 	std::vector<Weapon> weapons_;
 private:
 	std::deque<UnitState*> StateQueue_;
+	TeamID lastAttackingTeamID;
+	UnitID lastAttackingUnitID;
 };

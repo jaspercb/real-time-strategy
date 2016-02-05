@@ -135,7 +135,7 @@ void Unit::move(const Coordinate c){
 	game.inhabitedGrid.updatePos(*this, oldcoord);
 }
 
-void Unit::damage(const int quant, const DamageType dmgtype) {
+void Unit::damage(const int quant, const DamageType dmgtype, Unit& attackedBy) {
 	UnitTemplate& utmpl = getUnitTemplate();
 	if (es>0)
 		es -= quant*utmpl.getDamageEffectivenessVsES(dmgtype);
@@ -144,7 +144,8 @@ void Unit::damage(const int quant, const DamageType dmgtype) {
 		dmg = std::max(1, dmg-utmpl.armor());
 		hp -= dmg;
 	}
-
+	lastAttackingTeamID = attackedBy.unitID;
+	lastAttackingUnitID = attackedBy.teamID;
 }
 
 int Unit::getAttackRange(){
