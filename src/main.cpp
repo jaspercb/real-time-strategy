@@ -94,7 +94,7 @@ int main(){
 				//a.move_towards(std::pair<int, int>(0, 300));
 				//b.move_towards(std::pair<int, int>(300, 300));
 				//c.move_towards(std::pair<int, int>(0, 0));
-				g.getUnit(0).move_towards(target1);
+				g.getUnit(1).move_towards(target1);
 				//g.getUnit(1).move_towards(target2);
 				g.tick();
 				draw_all(g);
