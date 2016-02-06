@@ -18,7 +18,7 @@ SDL_Surface* loadSurface( std::string path) {
 	return loadedSurface;
 }
 
-SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path){
+SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path) {
 	// Loads a spritesheet. Makes no palette swaps.
 	SDL_Texture* newTexture = NULL;
 
@@ -37,7 +37,7 @@ SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path){
 	return newTexture;
 }
 
-SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColor color){
+SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColor color) {
 	// Loads a spritesheet. Makes palette swaps with respect to TeamColor.
 	SDL_Texture* newTexture = NULL;
 
@@ -58,7 +58,7 @@ SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColo
 	return newTexture;
 }
 
-SDL_Texture* loadShadowsheet( SDL_Renderer* renderer, std::string path ){
+SDL_Texture* loadShadowsheet( SDL_Renderer* renderer, std::string path ) {
 	// Loads a spritesheet. Makes palette swaps with respect to TeamColor.
 	SDL_Texture* newTexture = NULL;
 
@@ -86,20 +86,19 @@ SDL_Texture* loadShadowsheet( SDL_Renderer* renderer, std::string path ){
 	return newTexture;
 }
 
-Uint32 GetPixel8(const SDL_Surface *surface, const int x, const int y){
+Uint32 GetPixel8(const SDL_Surface *surface, const int x, const int y) {
 	Uint8 * pixel = (Uint8*)surface->pixels;
 	pixel += (y * surface->pitch) + x;
 	return *pixel;
 }
 
-void PutPixel8_nolock(SDL_Surface *surface, int x, int y, Uint8 color)
-{
+void PutPixel8_nolock(SDL_Surface *surface, int x, int y, Uint8 color) {
 	Uint8 * pixel = (Uint8*)surface->pixels;
 	pixel += (y * surface->pitch) + x;
 	*pixel = color;
 }
 
-void teamColorSpritesheet(SDL_Surface *surface, TeamColor color){
+void teamColorSpritesheet(SDL_Surface *surface, TeamColor color) {
 	// Changes the color palette, replacing the magenta color key with the specified color. See /resources/graphics/team-colors.png
 
 	SDL_Surface* colormapping = loadSurface("../resources/graphics/team-colors.png");
@@ -162,7 +161,7 @@ Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, 
 		this->tclip.h = h;
 	}
 
-void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int renderX, int renderY){
+void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int renderX, int renderY) {
 	//draws the spritesheet CENTERED at (renderX, renderY)
 	assert(spriteX>=0);
 	assert(spriteY>=0);

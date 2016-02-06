@@ -12,8 +12,9 @@ SDL_Texture* hpBarFull = NULL;
 
 Drawer::Drawer(Spritesheet* sp):
 	spritesheet(sp)
-{
-}
+	{
+	}
+
 Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 	idleCycleStart(0),
 	idleCycleLength(0),
@@ -130,7 +131,7 @@ Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 	}
 }
 
-void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate cameraposition */){
+void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate cameraposition */) {
 	// Draws the unit to the given surface.
 	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);
 	int dy = unit.dimension.air ? -10 : 0;
@@ -219,7 +220,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 	}
 }
 
-void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY){
+void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY) {
 	// Draws an HP bar centered at (renderX, renderY)
 	const int granularity = 25;
 	int dy = unit.dimension.air ? -10 : 0;

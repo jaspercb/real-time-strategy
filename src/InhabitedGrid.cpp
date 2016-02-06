@@ -3,12 +3,11 @@
 #include "Game.hpp"
 #include <cmath>
 
-int pythagoreanDistance(Coordinate a, Coordinate b)
-{
+int pythagoreanDistance(Coordinate a, Coordinate b) {
 	return (int)pow(pow(a.first-b.first, 2) + pow(a.second-b.second, 2), 0.5);
 }
 
-bool coordInRect(Coordinate a, Coordinate b, Coordinate c){
+bool coordInRect(Coordinate a, Coordinate b, Coordinate c) {
 	// returns whether a is in the rectangle formed by b and c
 	int bx = std::min(a.first, b.first);
 	int by = std::min(a.second, b.second);
@@ -17,7 +16,7 @@ bool coordInRect(Coordinate a, Coordinate b, Coordinate c){
 	return (bx<=a.first) && (a.first<=cx) && (by<=a.second) && (a.second>=cy);
 }
 
-bool coordInCircle(Coordinate a, Coordinate c, int r){
+bool coordInCircle(Coordinate a, Coordinate c, int r) {
 	// returns whether a is in the circle with center c and radius r
 	return pythagoreanDistance(a, c)<=r;
 }
@@ -25,33 +24,31 @@ bool coordInCircle(Coordinate a, Coordinate c, int r){
 
 
 InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int dw, int dh):
-		game(game),
-		cellsX(dw),
-		cellsY(dh),
-		cellWidth(w),
-		cellHeight(h)
-		{
-			for (int x=0; x<w; x++){
-				for (int y=0; y<h; y++){
+	game(game),
+	cellsX(dw),
+	cellsY(dh),
+	cellWidth(w),
+	cellHeight(h)
+	{
+		for (int x=0; x<w; x++){
+			for (int y=0; y<h; y++){
 
-				}
 			}
 		}
+	}
 
-Coordinate InhabitedGrid::getCellCoords(Coordinate p)
-{
+Coordinate InhabitedGrid::getCellCoords(Coordinate p) {
 	return Coordinate(p.first/cellWidth, p.second/cellWidth);
 }
 
-const std::unordered_set<UnitID> &InhabitedGrid::unitsInCell(Coordinate c){
+const std::unordered_set<UnitID> &InhabitedGrid::unitsInCell(Coordinate c) {
 	if (grid.count(c)){
 		return grid[c];
 	}
 	return emptyUnitIDvector;
 }
 
-void InhabitedGrid::emplace(const Unit &unit)
-{
+void InhabitedGrid::emplace(const Unit &unit) {
 	Coordinate pos = getCellCoords(unit.xy);
 	if (grid.count(pos)){
 	}
@@ -61,20 +58,17 @@ void InhabitedGrid::emplace(const Unit &unit)
 	grid[pos].emplace(unit.unitID);
 }
 
-void InhabitedGrid::erase(const Unit &unit)
-{
+void InhabitedGrid::erase(const Unit &unit) {
 	Coordinate pos = getCellCoords(unit.xy);
 	grid[pos].erase(unit.unitID);
 }
 
-void InhabitedGrid::eraseWithHint(const Unit &unit, const Coordinate oldcoord)
-{
+void InhabitedGrid::eraseWithHint(const Unit &unit, const Coordinate oldcoord) {
 	Coordinate oldpos = getCellCoords(oldcoord);
 	grid[oldpos].erase(unit.unitID);
 }
 
-void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord)
-{
+void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord) {
 	Coordinate oldpos, newpos;
 	oldpos = getCellCoords(oldcoord);
 	newpos = getCellCoords(unit.xy);
@@ -87,8 +81,7 @@ void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord)
 	}
 }
 
-std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b)
-{
+std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) {
 	std::vector<UnitID> ret;
 
 	Coordinate ga = getCellCoords(a);
@@ -111,8 +104,7 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b)
 	return ret;
 }
 
-std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius)
-{
+std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius) {
 	std::vector<UnitID> ret;
 
 	Coordinate gc = getCellCoords(c);

@@ -92,8 +92,6 @@ int main(){
 
 		g.getUnit(a).handleCommand(cmd1);
 
-
-		
 		Command cmd2(CMD_GOTOCOORD);
 		cmd2.targetCoord = Coordinate(300, 300);
 		cmd2.queueSetting=QUEUE_OVERWRITE;
