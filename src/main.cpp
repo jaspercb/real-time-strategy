@@ -76,7 +76,7 @@ int main(){
 		Team& t2 = g.getTeam(tID2);
 		
 		t1.loadUnitTemplate("../conf/units/marine");
-		t2.loadUnitTemplate("../conf/units/marine");
+		t2.loadUnitTemplate("../conf/units/ultralisk");
 		UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 

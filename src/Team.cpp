@@ -2,7 +2,6 @@
 
 #include "Game.hpp"
 #include "Unit.hpp"
-#include "UnitTemplate.hpp"
 #include "enums.hpp"
 
 Team::Team(Game& _game, TeamID tID):
