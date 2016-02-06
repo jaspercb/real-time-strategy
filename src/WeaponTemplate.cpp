@@ -91,7 +91,7 @@ bool WeaponTemplate::canFire(Weapon& weapon) const
 	return weapon.ticksUntilCanFire <= 0;
 }
 
-virtual bool canAttack(Unit& target) const{
+bool WeaponTemplate::canAttack(Unit& target) const{
 	return dimensions_.overlaps(target.dimension);
 } // returns whether the weapon is theoretically capable of hitting the target, IGNORING COOLDOWN
 

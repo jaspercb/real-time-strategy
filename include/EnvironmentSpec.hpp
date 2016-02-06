@@ -18,10 +18,9 @@ public:
 
 	bool ground, sea, submerged, air;
 
-	bool overlaps(EnvironmentSpec other){
+	bool overlaps(EnvironmentSpec other) const{
 		return (ground && other.ground) || (sea && other.sea) || (submerged && other.submerged) || (air && other.air);
 	}
-
 };
 
 

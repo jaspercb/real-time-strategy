@@ -7,7 +7,7 @@
 #include "StateAttack.hpp"
 #include "StateGotoCoordinate.hpp"
 #include "StateIdle.hpp"
-
+#include "Logging.hpp"
 
 UnitState* UnitState::handleCommand(Unit& unit, Command command)
 {
@@ -22,10 +22,14 @@ UnitState* UnitState::handleCommand(Unit& unit, Command command)
 			return new StateAttack(command.targetID);
 		}
 	}
-	return 0;
+	return NULL;
 }
 
 UnitState* UnitState::handleEvent(Unit& unit, Event event)
 {
-	return 0;
+	return NULL;
+}
+
+StateExitCode UnitState::update(Unit& unit) {
+	return STATE_EXIT_INCOMPLETE;
 }

@@ -11,6 +11,7 @@
 #include "EnvironmentSpec.hpp"
 #include "Drawer.hpp"
 #include "Command.hpp"
+#include "UnitState.hpp"
 
 class Team;
 class UnitTemplate;
@@ -63,6 +64,7 @@ public:
 	AnimationState animationState;
 	int drawAnimationStep, drawFacingAngle;
 	
+	UnitID attackTargetID;
 	Game& game;
 	std::vector<Weapon> weapons_;
 private:

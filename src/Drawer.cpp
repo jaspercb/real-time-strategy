@@ -186,15 +186,17 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 			if (NULL != shadowsheet)
 				shadowsheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
-					attackCycleStart + std::abs(unit.drawAnimationStep)%attackCycleLength,
+					attackCycleStart + unit.drawAnimationStep%attackCycleLength,
 					unit.xy.first,
-					unit.xy.second);		
+					unit.xy.second);
 			if (NULL != spritesheet)
 				spritesheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
-					attackCycleStart + std::abs(unit.drawAnimationStep)%attackCycleLength,
+					attackCycleStart + unit.drawAnimationStep%attackCycleLength,
 					unit.xy.first,
 					unit.xy.second + dy);
+			//debugLog(attackCycleStart + unit.drawAnimationStep%attackCycleLength);
+			//debugLog("");
 			break;
 
 		case ANIMSTATE_DYING:

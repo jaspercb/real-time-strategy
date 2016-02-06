@@ -1,6 +1,7 @@
 #include "StateGotoCoordinate.hpp"
 #include "Unit.hpp"
 #include "InhabitedGrid.hpp"
+#include "Logging.hpp"
 
 StateGotoCoordinate::StateGotoCoordinate(Coordinate targ):
 	target(targ)
@@ -11,6 +12,7 @@ StateExitCode StateGotoCoordinate::update(Unit& unit){
 	// otherwise we're done
 	if (pythagoreanDistance(unit.xy, target) > 0){
 		unit.move_towards(target);
+
 		return STATE_EXIT_INCOMPLETE;
 	}
 	else{

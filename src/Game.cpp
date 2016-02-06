@@ -22,9 +22,9 @@ TeamID Game::createTeam(){
 }
 
 UnitID Game::createUnit(TeamID teamID, UnitTemplateID unitTemplateID, Coordinate pos){
-	UnitID id = smallestUnusedUnitID();
-	unitsByID.emplace(id, Unit(*this, id, teamID, unitTemplateID, pos));
-	inhabitedGrid.emplace(getUnit(id));
+	UnitID id = this->smallestUnusedUnitID();
+	this->unitsByID.emplace(id, Unit(*this, id, teamID, unitTemplateID, pos));
+	this->inhabitedGrid.emplace(this->getUnit(id));
 
 	return id;
 }
@@ -37,14 +37,7 @@ void Game::deleteUnit(UnitID id){
 
 Unit& Game::getUnit(UnitID i)
 {
-	try{
-		return unitsByID.at(i);
-	}
-	catch (std::out_of_range e){
-		debugLog("Game::getUnit(UnitID) called with invalid UnitID: ");
-		debugLog(i);
-		debugLog(e.what());
-	}
+	return unitsByID.at(i);
 }
 
 Team& Game::getTeam(TeamID i)

@@ -21,7 +21,8 @@ unitTemplateID(utID),
 xy(pos),
 animationState(ANIMSTATE_IDLE),
 drawAnimationStep(0),
-drawFacingAngle(0)
+drawFacingAngle(0),
+attackTargetID(0)
 {
 	UnitTemplate& unitTemplate = getUnitTemplate();
 	
@@ -32,6 +33,8 @@ drawFacingAngle(0)
 	for (auto it = unitTemplate.weaponTemplates.begin(); it!=unitTemplate.weaponTemplates.end(); it++){
 		weapons_.push_back(Weapon(*it, *this));
 	}
+
+	StateQueue_.push_back(new StateIdle());
 }
 
 Unit::Unit(Unit &&u) : 
@@ -45,7 +48,9 @@ es(u.es),
 game(u.game),
 animationState(u.animationState),
 drawAnimationStep(u.drawAnimationStep),
-drawFacingAngle(u.drawFacingAngle)
+drawFacingAngle(u.drawFacingAngle),
+attackTargetID(u.attackTargetID),
+StateQueue_(u.StateQueue_)
 {
 	for(Weapon &w : u.weapons_) {
 		weapons_.push_back(Weapon(w, *this));
@@ -64,41 +69,50 @@ UpdateStatus Unit::update()
 
 	drawAnimationStep++;
 	
+	if (StateQueue_.empty()) {
+		StateQueue_.push_back(new StateIdle());
+	}
 	switch (animationState){
-		case (ANIMSTATE_DYING):
+		case (ANIMSTATE_DYING): {
 			if (drawAnimationStep>20){
 				return STATUS_REMOVE;
 			}
 			return STATUS_OK;
+		}
 
-		//case (ANIMSTATE_ATTACKING):
-			
+		case (ANIMSTATE_ATTACKING): {
+
+		}
+
 
 		//case (ANIMSTATE_WALKING):
 
 
 		default:
-			if (hp<=0){
-				if (unitTemplate.drawer->deathCycleLength==0)
+			if (hp<=0) {
+				if (unitTemplate.drawer->deathCycleLength == 0)
 					return STATUS_REMOVE;
 				animationState = ANIMSTATE_DYING;
 				drawAnimationStep = 0;
 				return STATUS_OK;
 			}
 
-			hp = std::min(unitTemplate.maxHP(), hp+unitTemplate.regHP());
-			es = std::min(unitTemplate.maxES(), es+unitTemplate.regES());
+			this->hp = std::min(unitTemplate.maxHP(), hp+unitTemplate.regHP());
+			this->es = std::min(unitTemplate.maxES(), es+unitTemplate.regES());
 
-			for (auto i = weapons_.begin(); i!=weapons_.end(); i++)
+			for (auto i = this->weapons_.begin(); i != this->weapons_.end(); i++)
 				i->update();
-			if (StateQueue_.size())
-			{
+
+			if (StateQueue_.size()) {
 				StateExitCode stateComplete = StateQueue_.front()->update(*this);
-				if (stateComplete == STATE_EXIT_COMPLETE)
-				{
-					delete StateQueue_.front();
+				if (stateComplete == STATE_EXIT_COMPLETE) {
+					UnitState* p = StateQueue_.front();
 					StateQueue_.pop_front();
+					// delete p; // Uncommenting this causes a segfault when a movement ends. We definitely have a memory leak.
 				}
+			}
+			if (StateQueue_.empty()) {
+				StateQueue_.push_back(new StateIdle());
 			}
 	}
 	return STATUS_OK;
@@ -112,22 +126,18 @@ void Unit::handleCommand(Command command)
 
 	UnitState* state = StateQueue_.front()->handleCommand(*this, command);
 	if (state != NULL) {
-		switch (command.queueSetting){
-			case QUEUE_OVERWRITE: // delete state queue and replace with just this command
-			{
-				for (std::deque<UnitState*>::const_iterator it = StateQueue_.begin(); it != StateQueue_.end(); it++)
-				{
+		switch (command.queueSetting) {
+			case QUEUE_OVERWRITE: { // delete state queue and replace with just this command
+				for (auto it = StateQueue_.begin(); it != StateQueue_.end(); it++) {
 					delete *it;
 				}
 				StateQueue_.clear();
 				StateQueue_.push_front(state);
 			}
-			case QUEUE_BACK: // append to queue, do after other states
-			{
+			case QUEUE_BACK: { // append to queue, do after other states
 				StateQueue_.push_back(state);
 			}
-			case QUEUE_FRONT: // prepend to queue, but execute other states after
-			{
+			case QUEUE_FRONT: { // prepend to queue, but execute other states after
 				StateQueue_.push_front(state);
 			}
 		}
@@ -174,8 +184,8 @@ void Unit::move_towards(const Coordinate c){
 		}
 		else {
 			move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) );
-			animationState = ANIMSTATE_WALKING;
-			drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
+			this->animationState = ANIMSTATE_WALKING;
+			this->drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
 			//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
 			//debugLog("setting drawFacingAngle to:");
 			//debugLog((int)drawFacingAngle);
@@ -184,14 +194,42 @@ void Unit::move_towards(const Coordinate c){
 }
 
 void Unit::attack(Unit& target){
-	// Fires all weapons that are
-	// a) off cooldown
-	// b) in range
-	// c) capable of hitting the target's dimension
+	// Starts or continues the unit's attacking state.
+	// If the attacking animation has completed, fires all weapons.
 
-	if (!game.teamsAreFriendly(teamID, target.teamID)) {
-		for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
-			it->fire(target);
+	UnitTemplate& unitTemplate = this->getUnitTemplate();
+
+	switch (this->animationState){
+		case ANIMSTATE_DYING:{
+			this->drawAnimationStep = 0;
+			this->attackTargetID = 0;
+			return;
+		}
+		case ANIMSTATE_ATTACKING: {
+			if (target.unitID == this->attackTargetID){
+				if (this->drawAnimationStep+1 < unitTemplate.drawer->attackCycleLength){
+					this->drawAnimationStep++;
+					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.second-this->xy.second, target.xy.first-this->xy.first); // turn to face target
+				}
+				else if (this->drawAnimationStep+1 == unitTemplate.drawer->attackCycleLength) {
+					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.second-this->xy.second, target.xy.first-this->xy.first); // turn to face target
+					for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
+						it->fire(target);
+					}
+				}
+				else{
+					this->drawAnimationStep = 0;
+					this->attackTargetID = 0;
+				}
+				return;
+			}
+		}
+		default: {
+			if (!game.teamsAreFriendly(teamID, target.teamID) && pythagoreanDistance(this->xy, target.xy) < weapons_.begin()->weaponTemplate.range() ) {
+				this->animationState = ANIMSTATE_ATTACKING;
+				this->drawAnimationStep = 0;
+				this->attackTargetID = target.unitID;
+			}
 		}
 	}
 }

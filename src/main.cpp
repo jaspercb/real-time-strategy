@@ -80,16 +80,23 @@ int main(){
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
-		Unit& a = g.getUnit(g.createUnit(tID1, (UnitTemplateID)3, Coordinate(0, 0)));
-		Unit& b = g.getUnit(g.createUnit(tID2, (UnitTemplateID)3, Coordinate(100, 100)));
+		UnitID a,b;
+		a = g.createUnit(tID1, (UnitTemplateID)3, Coordinate(100, 100));
+		b = g.createUnit(tID2, (UnitTemplateID)3, Coordinate(150, 150));
 
-		Command cmd;
-		cmd.cmdtype = CMD_GOTOCOORD;
+		/*
+		Command cmd(CMD_GOTOCOORD);
 		cmd.targetCoord = Coordinate(200, 200);
-		b.handleCommand(cmd);
+		*/
 
-		a.xy=std::make_pair(100, 100);
-		std::pair<int, int> target1(0, 0), target2(0, 0);
+		Command cmd(CMD_ATTACK);
+		cmd.cmdtype = CMD_ATTACK;
+		cmd.targetID = b;
+
+		cmd.queueSetting=QUEUE_OVERWRITE;
+
+		g.getUnit(a).handleCommand(cmd);
+
 		for (int i=0; i<5; i++){
 			//target1 = std::pair<int,int>((target1.first+233) % 150, (target1.second + 66) % 150);
 			//target2 = std::pair<int,int>((target2.first+273) % 200, (target2.second + 133) % 150);
@@ -101,7 +108,7 @@ int main(){
 				//g.getUnit(1).move_towards(target2);
 				g.tick();
 				draw_all(g);
-				b.hp-=5;
+				//b.hp-=5;
 				// framerate
 				SDL_Delay( 1000/FRAMERATE );
 			}
