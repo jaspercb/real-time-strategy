@@ -77,8 +77,8 @@ int main(){
 		
 		t1.loadUnitTemplate("../conf/units/marine");
 		t2.loadUnitTemplate("../conf/units/ultralisk");
-		UnitTemplate& p1 = t1.unitTemplates.begin()->second;
-		UnitTemplate& p2 = t2.unitTemplates.begin()->second;
+		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
+		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
 		Unit& a = g.getUnit(g.createUnit(tID1, (UnitTemplateID)3, Coordinate(0, 0)));
 		Unit& b = g.getUnit(g.createUnit(tID2, (UnitTemplateID)3, Coordinate(100, 100)));

@@ -21,5 +21,5 @@ public:
 	virtual void enter(Unit& unit) {}
 	virtual UnitState* handleCommand(Unit& unit, Command command);
 	virtual UnitState* handleEvent(Unit& unit, Event event);
-	virtual StateExitCode update(Unit& unit) {} // returns 1 if should be removed, 0 otherwise
+	virtual StateExitCode update(Unit& unit) {return STATE_EXIT_INCOMPLETE;} // returns STATE_EXIT_COMPLETE if should be removed, STATE_EXIT_INCOMPLETE otherwise
 };

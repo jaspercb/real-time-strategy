@@ -14,8 +14,8 @@ Weapon::Weapon(WeaponTemplate &_weaponTemplate, Unit &_owner):
 	}
 
 Weapon::Weapon(Weapon &w, Unit &u):
-	owner(u),
 	weaponTemplate(w.weaponTemplate),
+	owner(u),
 	ticksUntilCanFire(w.ticksUntilCanFire)
 	{}
 
