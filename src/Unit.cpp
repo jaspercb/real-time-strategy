@@ -11,6 +11,7 @@
 #include "Game.hpp"
 #include "Logging.hpp"
 #include "Command.hpp"
+#include "StateIdle.hpp"
 
 Unit::Unit(Game &g, UnitID uID, TeamID tID, UnitTemplateID utID, Coordinate pos):
 game(g),
@@ -105,6 +106,10 @@ UpdateStatus Unit::update()
 
 void Unit::handleCommand(Command command)
 {
+	if (StateQueue_.empty()){
+		StateQueue_.push_front(new StateIdle());
+	}
+
 	UnitState* state = StateQueue_.front()->handleCommand(*this, command);
 	if (state != NULL) {
 		switch (command.queueSetting){

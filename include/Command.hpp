@@ -22,6 +22,7 @@ enum QueueSetting{
 class Command
 {
 public:
+	Command();
 	Command(CommandType cmdtype_);
 	CommandType cmdtype;
 	QueueSetting queueSetting;
