@@ -131,6 +131,11 @@ Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 	}
 }
 
+Drawer::~Drawer() {
+	delete this->spritesheet;
+	delete this->shadowsheet;
+}
+
 void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate cameraposition */) {
 	// Draws the unit to the given surface.
 	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);

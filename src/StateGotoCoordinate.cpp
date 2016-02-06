@@ -12,7 +12,6 @@ StateExitCode StateGotoCoordinate::update(Unit& unit){
 	// otherwise we're done
 	if (pythagoreanDistance(unit.xy, target) > 0){
 		unit.move_towards(target);
-
 		return STATE_EXIT_INCOMPLETE;
 	}
 	else{

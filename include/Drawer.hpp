@@ -10,6 +10,7 @@ class Drawer{
 	public:
 		Drawer(Spritesheet* sp);
 		Drawer(std::ifstream&, TeamColor teamColor);
+		~Drawer();
 		void draw(SDL_Renderer* renderer, Unit& unit/*, Coordinate cameraposition */);
 
 		int idleCycleStart;

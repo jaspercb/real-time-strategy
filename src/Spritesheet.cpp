@@ -161,6 +161,12 @@ Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, 
 		this->tclip.h = h;
 	}
 
+
+Spritesheet::~Spritesheet() {
+	SDL_DestroyTexture(this->sheet);
+}
+
+
 void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int renderX, int renderY) {
 	//draws the spritesheet CENTERED at (renderX, renderY)
 	assert(spriteX>=0);
@@ -179,7 +185,7 @@ void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int r
 		this->clip.x = offsetX + spriteX*(spriteW+gapX);
 		SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_NONE /*flip parameter*/ );
 	} else {
-		this->clip.x = offsetX + (spritesX-(spriteX%spritesX))*(spriteW+gapX);
+		this->clip.x = offsetX + (spritesX-1-(spriteX%spritesX))*(spriteW+gapX);
 		SDL_RenderCopyEx( renderer, sheet, &this->clip, &this->tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_HORIZONTAL /*flip parameter*/ );
 	}
 }

@@ -84,13 +84,12 @@ int main(){
 		a = g.createUnit(tID1, (UnitTemplateID)3, Coordinate(100, 100));
 		b = g.createUnit(tID2, (UnitTemplateID)3, Coordinate(150, 150));
 
-		Command cmd1(CMD_ATTACK);
-		cmd1.cmdtype = CMD_ATTACK;
-		cmd1.targetID = b;
+		//Command cmd1(CMD_GOTOCOORD);
+		//cmd1.targetID = b;
 
-		cmd1.queueSetting=QUEUE_OVERWRITE;
+		//cmd1.queueSetting=QUEUE_OVERWRITE;
 
-		g.getUnit(a).handleCommand(cmd1);
+		//g.getUnit(a).handleCommand(cmd1);
 
 		Command cmd2(CMD_GOTOCOORD);
 		cmd2.targetCoord = Coordinate(300, 300);
@@ -99,21 +98,27 @@ int main(){
 		g.getUnit(b).handleCommand(cmd2);
 
 
-		for (int i=0; i<6; i++){
-			//target1 = std::pair<int,int>((target1.first+233) % 150, (target1.second + 66) % 150);
-			//target2 = std::pair<int,int>((target2.first+273) % 200, (target2.second + 133) % 150);
-			for (int j=0; j<16; j++) {
-				//a.move_towards(std::pair<int, int>(0, 300));
-				//b.move_towards(std::pair<int, int>(300, 300));
-				//c.move_towards(std::pair<int, int>(0, 0));
-				//g.getUnit(1).move_towards(target1);
-				//g.getUnit(1).move_towards(target2);
-				g.tick();
-				draw_all(g);
-				//b.hp-=5;
-				// framerate
-				SDL_Delay( 1000/FRAMERATE );
+		bool quit = false;
+
+		for (int i=0; i<100; i++){
+			if (quit)
+				break;
+
+			SDL_Event event;
+
+			while(SDL_PollEvent(&event)) {
+				if (event.type == SDL_QUIT) {
+					quit = true;
+				}
+				if (event.type == SDL_MOUSEBUTTONDOWN) {
+					cmd2.targetCoord = Coordinate(event.button.x, event.button.y);
+					g.getUnit(a).handleCommand(cmd2);
+				}
 			}
+
+			g.tick();
+			draw_all(g);
+			SDL_Delay( 1000/FRAMERATE );
 		}
 	}
 

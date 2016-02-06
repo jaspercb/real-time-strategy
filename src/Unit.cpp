@@ -104,8 +104,8 @@ UpdateStatus Unit::update()
 				i->update();
 
 			if (StateQueue_.size()) {
-				StateExitCode stateComplete = StateQueue_.front()->update(*this);
-				if (stateComplete == STATE_EXIT_COMPLETE) {
+				StateExitCode isStateComplete = StateQueue_.front()->update(*this);
+				if (isStateComplete == STATE_EXIT_COMPLETE) {
 					UnitState* p = StateQueue_.front();
 					StateQueue_.pop_front();
 					// delete p; // Uncommenting this causes a segfault when a movement ends. We definitely have a memory leak.
@@ -128,8 +128,9 @@ void Unit::handleCommand(Command command)
 	if (state != NULL) {
 		switch (command.queueSetting) {
 			case QUEUE_OVERWRITE: { // delete state queue and replace with just this command
-				for (auto it = StateQueue_.begin(); it != StateQueue_.end(); it++) {
-					delete *it;
+				while ( !StateQueue_.empty() ) {
+					//delete StateQueue_.front();
+					StateQueue_.pop_front();
 				}
 				StateQueue_.clear();
 				StateQueue_.push_front(state);
