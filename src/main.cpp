@@ -111,8 +111,10 @@ int main(){
 					quit = true;
 				}
 				if (event.type == SDL_MOUSEBUTTONDOWN) {
-					cmd2.targetCoord = Coordinate(event.button.x, event.button.y);
-					g.getUnit(a).handleCommand(cmd2);
+					if (event.button.button == SDL_BUTTON_RIGHT) {
+						cmd2.targetCoord = Coordinate(event.button.x, event.button.y);
+						g.getUnit(a).handleCommand(cmd2);
+					}
 				}
 			}
 
