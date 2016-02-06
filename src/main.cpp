@@ -84,18 +84,22 @@ int main(){
 		a = g.createUnit(tID1, (UnitTemplateID)3, Coordinate(100, 100));
 		b = g.createUnit(tID2, (UnitTemplateID)3, Coordinate(150, 150));
 
-		/*
-		Command cmd(CMD_GOTOCOORD);
-		cmd.targetCoord = Coordinate(200, 200);
-		*/
+		Command cmd1(CMD_ATTACK);
+		cmd1.cmdtype = CMD_ATTACK;
+		cmd1.targetID = b;
 
-		Command cmd(CMD_ATTACK);
-		cmd.cmdtype = CMD_ATTACK;
-		cmd.targetID = b;
+		cmd1.queueSetting=QUEUE_OVERWRITE;
 
-		cmd.queueSetting=QUEUE_OVERWRITE;
+		g.getUnit(a).handleCommand(cmd1);
 
-		g.getUnit(a).handleCommand(cmd);
+
+		
+		Command cmd2(CMD_GOTOCOORD);
+		cmd2.targetCoord = Coordinate(300, 300);
+		cmd2.queueSetting=QUEUE_OVERWRITE;
+
+		g.getUnit(b).handleCommand(cmd2);
+
 
 		for (int i=0; i<5; i++){
 			//target1 = std::pair<int,int>((target1.first+233) % 150, (target1.second + 66) % 150);
