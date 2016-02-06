@@ -46,6 +46,7 @@ public:
 	virtual int aoeRadius(){return aoeRadius_;}
 	virtual int weaponVelocity(){return weaponVelocity_;};
 	virtual bool canFire(Weapon& weapon) const;
+	virtual bool canAttack(Unit& target) const; // returns whether the weapon is theoretically capable of hitting the target, IGNORING COOLDOWN
 	virtual void fire(Weapon& weapon, Unit& target);
 	virtual void fire(Weapon& weapon, Coordinate& target);
 protected:
