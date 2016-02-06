@@ -164,11 +164,15 @@ void Unit::damage(const int quant, const DamageType dmgtype, Unit& attackedBy) {
 }
 
 int Unit::getAttackRange(){
+	/*
 	int r = 0;
 	for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
 		r = std::max(r, it->weaponTemplate.range());
 	}
 	return r;
+	*/
+
+	return weapons_.begin()->weaponTemplate.range();
 }
 
 void Unit::move_towards(const Coordinate c){
@@ -225,7 +229,7 @@ void Unit::attack(Unit& target){
 			}
 		}
 		default: {
-			if (!game.teamsAreFriendly(teamID, target.teamID) && pythagoreanDistance(this->xy, target.xy) < weapons_.begin()->weaponTemplate.range() ) {
+			if (!game.teamsAreFriendly(teamID, target.teamID) && pythagoreanDistance(this->xy, target.xy) <= this->getAttackRange() ) {
 				this->animationState = ANIMSTATE_ATTACKING;
 				this->drawAnimationStep = 0;
 				this->attackTargetID = target.unitID;

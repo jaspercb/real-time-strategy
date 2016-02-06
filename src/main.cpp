@@ -101,7 +101,7 @@ int main(){
 		g.getUnit(b).handleCommand(cmd2);
 
 
-		for (int i=0; i<5; i++){
+		for (int i=0; i<6; i++){
 			//target1 = std::pair<int,int>((target1.first+233) % 150, (target1.second + 66) % 150);
 			//target2 = std::pair<int,int>((target2.first+273) % 200, (target2.second + 133) % 150);
 			for (int j=0; j<16; j++) {
