@@ -90,7 +90,6 @@ void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord) {
 		this->eraseWithHint(unit, oldcoord);
 		this->emplace(unit);
 	}
-	debugLog(this->grid.size());
 }
 
 std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) {
