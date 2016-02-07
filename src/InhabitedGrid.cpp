@@ -1,7 +1,9 @@
+#include <cmath>
+
 #include "InhabitedGrid.hpp"
 #include "Unit.hpp"
 #include "Game.hpp"
-#include <cmath>
+#include "Logging.hpp"
 
 int pythagoreanDistance(Coordinate a, Coordinate b) {
 	return (int)pow(pow(a.first-b.first, 2) + pow(a.second-b.second, 2), 0.5);
@@ -13,7 +15,7 @@ bool coordInRect(Coordinate a, Coordinate b, Coordinate c) {
 	int by = std::min(a.second, b.second);
 	int cx = std::max(a.first, b.first);
 	int cy = std::max(a.second, b.second);
-	return (bx<=a.first) && (a.first<=cx) && (by<=a.second) && (a.second>=cy);
+	return (bx<=a.first) && (a.first<=cx) && (by<=a.second) && (a.second<=cy);
 }
 
 bool coordInCircle(Coordinate a, Coordinate c, int r) {
