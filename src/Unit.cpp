@@ -143,6 +143,7 @@ void Unit::handleCommand(Command command)
 }
 
 void Unit::move(const Coordinate c){
+	// Unchecked movement
 	const Coordinate oldcoord = xy;
 	xy = c;
 	game.inhabitedGrid.updatePos(*this, oldcoord);
@@ -174,23 +175,32 @@ int Unit::getAttackRange(){
 }
 
 void Unit::move_towards(const Coordinate c){
+	// Speed-limited movement, with collision handling
 	if (animationState!=ANIMSTATE_DYING){
 		int dx = c.first - xy.first;
 		int dy = c.second - xy.second;
 		int dr = std::pow(dx*dx + dy*dy, 0.5);
-		int spd = getUnitTemplate().speed();
+		int spd = this->getUnitTemplate().speed();
+
 		if (pythagoreanDistance(xy, c)<=spd) {
-			move(c);
-			animationState = ANIMSTATE_IDLE;
-			//drawAnimationStep = 0;
+			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, c)){
+				debugLog("we good");
+				this->move(c);
+				this->animationState = ANIMSTATE_IDLE;
+				//drawAnimationStep = 0;
+			}
 		}
 		else {
-			move(Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr) );
-			this->animationState = ANIMSTATE_WALKING;
-			this->drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
-			//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
-			//debugLog("setting drawFacingAngle to:");
-			//debugLog((int)drawFacingAngle);
+			Coordinate target = Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr);
+			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)){
+				debugLog("we good");
+				this->move(target);
+				this->animationState = ANIMSTATE_WALKING;
+				this->drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
+				//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
+				//debugLog("setting drawFacingAngle to:");
+				//debugLog((int)drawFacingAngle);
+			}
 		}
 	}
 }

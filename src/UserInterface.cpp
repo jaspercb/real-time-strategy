@@ -49,7 +49,25 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 	}
 }
 
-void UserInterface::render( SDL_Renderer* renderer ) {
+void UserInterface::renderSelection( SDL_Renderer* renderer ) {
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
+	
+	SDL_Rect drawRect;
+	drawRect.w = 30;
+	drawRect.h = 15;
+	for (UnitID &i : unitsInSelectionBox){
+		Unit& u = this->game.getUnit(i);
+		drawRect.x = u.xy.first-15;
+		drawRect.y = u.xy.second;
+		SDL_RenderDrawRect(renderer, &drawRect);
+
+		if (u.dimension.air){
+			SDL_RenderDrawLine(renderer, u.xy.first, u.xy.second+7, u.xy.first, u.xy.second-AIRBORNE_RENDER_HEIGHT);
+		}
+	}
+}
+
+void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 	if (this->drawSelectionBox){
 		SDL_Rect selectionBox;
 		selectionBox.x = std::min(this->selectionBoxCorner1.first, this->selectionBoxCorner2.first);
@@ -57,7 +75,7 @@ void UserInterface::render( SDL_Renderer* renderer ) {
 		selectionBox.w = std::abs(this->selectionBoxCorner2.first - this->selectionBoxCorner1.first);
 		selectionBox.h = std::abs(this->selectionBoxCorner2.second - this->selectionBoxCorner1.second);
 
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
 		if (SDL_RenderDrawRect(renderer, &selectionBox))
 			debugLog(SDL_GetError());
 		//debugLog(this->unitsInSelectionBox.size());

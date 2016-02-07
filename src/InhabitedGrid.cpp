@@ -23,6 +23,10 @@ bool coordInCircle(Coordinate a, Coordinate c, int r) {
 	return pythagoreanDistance(a, c)<=r;
 }
 
+bool unitInCircle(Unit& u, Coordinate c, int r) {
+	// returns whether a unit's circle overlaps with the circle with center c and radius r
+	return pythagoreanDistance(u.xy, c) <= (r+u.getUnitTemplate().radius());
+}
 
 
 InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int dw, int dh):
@@ -30,7 +34,8 @@ InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int dw, int dh):
 	cellsX(dw),
 	cellsY(dh),
 	cellWidth(w),
-	cellHeight(h)
+	cellHeight(h),
+	emptyUnitIDset(new std::unordered_set<UnitID>())
 	{
 		for (int x=0; x<w; x++){
 			for (int y=0; y<h; y++){
@@ -43,11 +48,11 @@ Coordinate InhabitedGrid::getCellCoords(Coordinate p) {
 	return Coordinate(p.first/cellWidth, p.second/cellWidth);
 }
 
-const std::unordered_set<UnitID> &InhabitedGrid::unitsInCell(Coordinate c) {
+const std::shared_ptr<std::unordered_set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) {
 	if (grid.count(c)){
 		return grid[c];
 	}
-	return emptyUnitIDvector;
+	return this->emptyUnitIDset;
 }
 
 void InhabitedGrid::emplace(const Unit &unit) {
@@ -55,19 +60,19 @@ void InhabitedGrid::emplace(const Unit &unit) {
 	if (grid.count(pos)){
 	}
 	else{
-		grid.emplace(pos, std::unordered_set<UnitID>());
+		grid.emplace(pos, std::shared_ptr<std::unordered_set<UnitID> > (new std::unordered_set<UnitID>()));
 	}
-	grid[pos].emplace(unit.unitID);
+	grid[pos]->emplace(unit.unitID);
 }
 
 void InhabitedGrid::erase(const Unit &unit) {
 	Coordinate pos = getCellCoords(unit.xy);
-	grid[pos].erase(unit.unitID);
+	grid[pos]->erase(unit.unitID);
 }
 
 void InhabitedGrid::eraseWithHint(const Unit &unit, const Coordinate oldcoord) {
 	Coordinate oldpos = getCellCoords(oldcoord);
-	grid[oldpos].erase(unit.unitID);
+	grid[oldpos]->erase(unit.unitID);
 }
 
 void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord) {
@@ -95,8 +100,8 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) 
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
-			const std::unordered_set<UnitID> unitSubset = unitsInCell(Coordinate(x,y));
-			for (std::unordered_set<UnitID>::const_iterator it = unitSubset.begin(); it!=unitSubset.end(); it++){
+			const auto unitSubset = unitsInCell(Coordinate(x,y));
+			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
 				if (coordInRect(game->getUnit(*it).xy, a, b)){
 					ret.push_back(*it);
 				}
@@ -117,8 +122,8 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius) {
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
-			const std::unordered_set<UnitID> unitSubset = unitsInCell(Coordinate(x,y));
-			for (std::unordered_set<UnitID>::const_iterator it = unitSubset.begin(); it!=unitSubset.end(); it++){
+			const auto unitSubset = unitsInCell(Coordinate(x,y));
+			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
 				if (coordInCircle(game->getUnit(*it).xy, c, radius)){
 					ret.push_back(*it);
 				}
@@ -126,4 +131,32 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius) {
 		}
 	}
 	return ret;
+}
+
+
+
+
+bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
+	std::vector<UnitID> ret;
+
+	Coordinate gc = getCellCoords(location);
+	int startX = gc.first - 1 - cellWidth;
+	int endX = gc.first + 1 + cellWidth;
+	int startY = gc.second - 1 - cellHeight;
+	int endY = gc.second + 1 + cellHeight;
+
+	const int radius = u.getUnitTemplate().radius();
+
+	for (int x=startX; x<=endX; x++){
+		for (int y=startY; y<=endY; y++){
+			const auto unitSubset = unitsInCell(Coordinate(x,y));
+			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
+				Unit& other = game->getUnit(*it);
+				if (u.unitID != other.unitID && unitInCircle(other, location, radius)) {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
 }

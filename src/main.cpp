@@ -8,8 +8,8 @@
 #include "Drawer.hpp"
 #include "globals.hpp"
 
-const int SCREEN_WIDTH = 600;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1600;
+const int SCREEN_HEIGHT = 900;
 const int FRAMERATE = 20;
 
 SDL_Window* gWindow = NULL;
@@ -53,11 +53,13 @@ void draw_all(Game &g, UserInterface& ui){
 	SDL_SetRenderDrawColor(gRenderer, 128, 128, 128, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(gRenderer);
 
+	ui.renderSelection( gRenderer );
+
 	for (auto &u : g.unitsByID){
 		u.second.draw( gRenderer );
 	}
 
-	ui.render( gRenderer );
+	ui.renderHUD( gRenderer );
 
 	SDL_RenderPresent( gRenderer );
 }
@@ -80,13 +82,15 @@ int main(){
 		Team& t2 = g.getTeam(tID2);
 		
 		t1.loadUnitTemplate("../conf/units/marine");
-		t2.loadUnitTemplate("../conf/units/ultralisk");
+		t2.loadUnitTemplate("../conf/units/mutalisk");
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
 		UnitID a,b;
-		a = g.createUnit(tID1, (UnitTemplateID)3, Coordinate(100, 100));
-		b = g.createUnit(tID2, (UnitTemplateID)3, Coordinate(150, 150));
+		for (int i=0; i<10; i++){
+			g.createUnit(tID2, (UnitTemplateID)3, Coordinate(500-50*i, 50*i));
+		}
+		//b = g.createUnit(tID2, (UnitTemplateID)3, Coordinate(150, 150));
 
 		//Command cmd1(CMD_GOTOCOORD);
 		//cmd1.targetID = b;
@@ -95,13 +99,13 @@ int main(){
 
 		//g.getUnit(a).handleCommand(cmd1);
 
-		Command cmd2(CMD_GOTOCOORD);
-		cmd2.targetCoord = Coordinate(300, 300);
-		cmd2.queueSetting=QUEUE_OVERWRITE;
+		//Command cmd2(CMD_GOTOCOORD);
+		//cmd2.targetCoord = Coordinate(300, 300);
+		//cmd2.queueSetting=QUEUE_OVERWRITE;
 
-		g.getUnit(b).handleCommand(cmd2);
-
-
+		//g.getUnit(b).handleCommand(cmd2);
+		
+		
 		for (int i=0; i<200; i++){
 			if (userInterface.quit)
 				break;

@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <map>
 #include <vector>
+#include <memory>
 
 #include "typedefs.hpp"
 
@@ -17,9 +18,11 @@ class InhabitedGrid{
 public:
 	InhabitedGrid(Game* game, int w, int h, int dw, int dh);
 
-	const std::unordered_set<UnitID> &unitsInCell(Coordinate c);
+	const std::shared_ptr<std::unordered_set<UnitID> > &unitsInCell(Coordinate c);
 	std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
 	std::vector<UnitID> unitsInCircle(Coordinate c, int range);
+
+	bool unitOKToMoveTo(Unit&, const Coordinate);
 
 	void emplace(const Unit &unit);
 	void erase(const Unit &unit);
@@ -33,6 +36,6 @@ private:
 	const int cellsY;
 	const int cellWidth;
 	const int cellHeight;
-	std::unordered_set<UnitID> emptyUnitIDvector;
-	std::map<Coordinate, std::unordered_set<UnitID> > grid;
+	const std::shared_ptr<std::unordered_set<UnitID>> emptyUnitIDset;
+	std::map<Coordinate, std::shared_ptr<std::unordered_set<UnitID> > > grid;
 };

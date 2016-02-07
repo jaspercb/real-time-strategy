@@ -4,3 +4,4 @@
 
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
+extern int AIRBORNE_RENDER_HEIGHT;

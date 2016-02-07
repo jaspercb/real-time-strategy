@@ -12,7 +12,8 @@ class UserInterface{
 public:
 	UserInterface(Game& g);
 	void handleInputEvent(const SDL_Event& event);
-	void render( SDL_Renderer* renderer );
+	void renderSelection( SDL_Renderer* renderer );
+	void renderHUD( SDL_Renderer* renderer );
 
 	Game& game;
 

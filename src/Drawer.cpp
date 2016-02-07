@@ -10,6 +10,8 @@
 SDL_Texture* hpBarEmpty = NULL;
 SDL_Texture* hpBarFull = NULL;
 
+int AIRBORNE_RENDER_HEIGHT = 40;
+
 Drawer::Drawer(Spritesheet* sp):
 	spritesheet(sp)
 	{
@@ -139,7 +141,7 @@ Drawer::~Drawer() {
 void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate cameraposition */) {
 	// Draws the unit to the given surface.
 	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);
-	int dy = unit.dimension.air ? -10 : 0;
+	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
 
 	switch (unit.animationState) {
 		case ANIMSTATE_IDLE: {
@@ -228,7 +230,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY) {
 	// Draws an HP bar centered at (renderX, renderY)
 	const int granularity = 25;
-	int dy = unit.dimension.air ? -10 : 0;
+	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
 
 	int HP = unit.hp;
 	int maxHP = unit.getUnitTemplate().maxHP();
