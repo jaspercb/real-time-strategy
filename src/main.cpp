@@ -39,9 +39,6 @@ bool init() {
 			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
 		}
 	}
-
-	SDL_SetRenderDrawColor(gRenderer, 128, 128, 128, 255);
-
 	return success;
 }
 
@@ -52,12 +49,12 @@ void cleanup_SDL()
 }
 
 void draw_all(Game &g){
+	SDL_SetRenderDrawColor(gRenderer, 128, 128, 128, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(gRenderer);
 
 	for (auto &u : g.unitsByID){
 		u.second.draw(gRenderer);
 	}
-	SDL_RenderPresent( gRenderer );
 }
 
 int main(){
@@ -100,26 +97,68 @@ int main(){
 
 		bool quit = false;
 
-		for (int i=0; i<100; i++){
+		bool drawSelectionBox = false;
+		Coordinate selectionBoxCorner1;
+		Coordinate selectionBoxCorner2;
+		std::vector<UnitID> unitsInSelectionBox;
+
+		for (int i=0; i<200; i++){
 			if (quit)
 				break;
 
 			SDL_Event event;
-
+			std::cout<<selectionBoxCorner1.first<<","<<selectionBoxCorner1.second<<std::endl;
+			std::cout<<selectionBoxCorner2.first<<","<<selectionBoxCorner2.second<<std::endl;
+			std::cout<<unitsInSelectionBox.size()<<std::endl;
+			std::cout<<std::endl;
 			while(SDL_PollEvent(&event)) {
 				if (event.type == SDL_QUIT) {
 					quit = true;
+					break;
 				}
-				if (event.type == SDL_MOUSEBUTTONDOWN) {
+				else if (event.type == SDL_MOUSEBUTTONDOWN) {
 					if (event.button.button == SDL_BUTTON_RIGHT) {
-						cmd2.targetCoord = Coordinate(event.button.x, event.button.y);
-						g.getUnit(a).handleCommand(cmd2);
+						Command movecmd;
+						movecmd.targetCoord = Coordinate(event.button.x, event.button.y);
+						movecmd.queueSetting = QUEUE_OVERWRITE;
+						for (auto &i : unitsInSelectionBox) {
+							std::cout<<"MOVE COMMAND"<<std::endl;
+							g.getUnit(i).handleCommand(movecmd);
+						}
+					}
+					else if (event.button.button=SDL_BUTTON_LEFT) {
+						selectionBoxCorner1=Coordinate(event.button.x, event.button.y);
+						drawSelectionBox = true;
+					}
+				}
+				else if (event.type == SDL_MOUSEBUTTONUP) {
+					if (event.button.button == SDL_BUTTON_LEFT) {
+						drawSelectionBox = false;
+					}
+				}
+				else if (event.type == SDL_MOUSEMOTION) {
+					if (SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)) { // if left mouse button is being held down
+						selectionBoxCorner2 = Coordinate(event.button.x, event.button.y); 
+
+						unitsInSelectionBox.clear();
+						unitsInSelectionBox = g.inhabitedGrid.unitsInRectangle(selectionBoxCorner1, selectionBoxCorner2);
 					}
 				}
 			}
 
 			g.tick();
 			draw_all(g);
+			if (drawSelectionBox){
+				SDL_Rect selectionBox;
+				selectionBox.x = selectionBoxCorner1.first;
+				selectionBox.y = selectionBoxCorner1.second;
+				selectionBox.w = selectionBoxCorner2.first - selectionBoxCorner1.first;
+				selectionBox.h = selectionBoxCorner2.second - selectionBoxCorner1.second;
+				SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+				if (!SDL_RenderDrawRect(gRenderer, &selectionBox))
+					debugLog(SDL_GetError());
+			}
+			SDL_RenderPresent( gRenderer );
 			SDL_Delay( 1000/FRAMERATE );
 		}
 	}
