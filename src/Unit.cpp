@@ -34,7 +34,7 @@ attackTargetID(0)
 		weapons_.push_back(Weapon(*it, *this));
 	}
 
-	StateQueue_.push_back(new StateIdle());
+	stateQueue_.push_back(std::shared_ptr<UnitState>(new StateIdle()));
 }
 
 Unit::Unit(Unit &&u) : 
@@ -50,7 +50,7 @@ animationState(u.animationState),
 drawAnimationStep(u.drawAnimationStep),
 drawFacingAngle(u.drawFacingAngle),
 attackTargetID(u.attackTargetID),
-StateQueue_(u.StateQueue_)
+stateQueue_(u.stateQueue_)
 {
 	for(Weapon &w : u.weapons_) {
 		weapons_.push_back(Weapon(w, *this));
@@ -69,8 +69,8 @@ UpdateStatus Unit::update()
 
 	drawAnimationStep++;
 	
-	if (StateQueue_.empty()) {
-		StateQueue_.push_back(new StateIdle());
+	if (stateQueue_.empty()) {
+		stateQueue_.push_back(std::shared_ptr<UnitState>(new StateIdle()));
 	}
 	switch (animationState){
 		case (ANIMSTATE_DYING): {
@@ -103,16 +103,14 @@ UpdateStatus Unit::update()
 			for (auto i = this->weapons_.begin(); i != this->weapons_.end(); i++)
 				i->update();
 
-			if (StateQueue_.size()) {
-				StateExitCode isStateComplete = StateQueue_.front()->update(*this);
+			if (stateQueue_.size()) {
+				StateExitCode isStateComplete = stateQueue_.front()->update(*this);
 				if (isStateComplete == STATE_EXIT_COMPLETE) {
-					UnitState* p = StateQueue_.front();
-					StateQueue_.pop_front();
-					// delete p; // Uncommenting this causes a segfault when a movement ends. We definitely have a memory leak.
+					stateQueue_.pop_front();
 				}
 			}
-			if (StateQueue_.empty()) {
-				StateQueue_.push_back(new StateIdle());
+			if (stateQueue_.empty()) {
+				stateQueue_.push_back(std::shared_ptr<UnitState>(new StateIdle()));
 			}
 	}
 	return STATUS_OK;
@@ -120,26 +118,25 @@ UpdateStatus Unit::update()
 
 void Unit::handleCommand(Command command)
 {
-	if (StateQueue_.empty()){
-		StateQueue_.push_front(new StateIdle());
+	if (stateQueue_.empty()){
+		stateQueue_.push_front(std::shared_ptr<UnitState>(new StateIdle()));
 	}
 
-	UnitState* state = StateQueue_.front()->handleCommand(*this, command);
+	std::shared_ptr<UnitState> state = stateQueue_.front()->handleCommand(*this, command);
 	if (state != NULL) {
 		switch (command.queueSetting) {
 			case QUEUE_OVERWRITE: { // delete state queue and replace with just this command
-				while ( !StateQueue_.empty() ) {
-					//delete StateQueue_.front();
-					StateQueue_.pop_front();
+				while ( !stateQueue_.empty() ) {
+					stateQueue_.pop_front();
 				}
-				StateQueue_.clear();
-				StateQueue_.push_front(state);
+				stateQueue_.clear();
+				stateQueue_.push_front(state);
 			}
 			case QUEUE_BACK: { // append to queue, do after other states
-				StateQueue_.push_back(state);
+				stateQueue_.push_back(state);
 			}
 			case QUEUE_FRONT: { // prepend to queue, but execute other states after
-				StateQueue_.push_front(state);
+				stateQueue_.push_front(state);
 			}
 		}
 	}

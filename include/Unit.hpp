@@ -68,7 +68,7 @@ public:
 	Game& game;
 	std::vector<Weapon> weapons_;
 private:
-	std::deque<UnitState*> StateQueue_;
+	std::deque<std::shared_ptr<UnitState> > stateQueue_;
 	TeamID lastAttackingTeamID;
 	UnitID lastAttackingUnitID;
 };

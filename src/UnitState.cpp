@@ -9,23 +9,23 @@
 #include "StateIdle.hpp"
 #include "Logging.hpp"
 
-UnitState* UnitState::handleCommand(Unit& unit, Command command)
+std::shared_ptr<UnitState> UnitState::handleCommand(Unit& unit, Command command)
 {
 	switch (command.cmdtype){
 		case CMD_IDLE: {
-			return new StateIdle();
+			return std::shared_ptr<UnitState>(new StateIdle());
 		}
 		case CMD_GOTOCOORD: {
-			return new StateGotoCoordinate(command.targetCoord);
+			return std::shared_ptr<UnitState>(new StateGotoCoordinate(command.targetCoord));
 		}
 		case CMD_ATTACK: {
-			return new StateAttack(command.targetID);
+			return std::shared_ptr<UnitState>(new StateAttack(command.targetID));
 		}
 	}
 	return NULL;
 }
 
-UnitState* UnitState::handleEvent(Unit& unit, Event event)
+std::shared_ptr<UnitState> UnitState::handleEvent(Unit& unit, Event event)
 {
 	return NULL;
 }
