@@ -29,13 +29,11 @@ bool unitInCircle(Unit& u, Coordinate c, int r) {
 }
 
 
-InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int dw, int dh):
+InhabitedGrid::InhabitedGrid(Game* game, int w, int h):
 	game(game),
-	cellsX(dw),
-	cellsY(dh),
 	cellWidth(w),
 	cellHeight(h),
-	emptyUnitIDset(new std::unordered_set<UnitID>())
+	emptyUnitIDset(new std::unordered_set<UnitID>)
 	{
 		for (int x=0; x<w; x++){
 			for (int y=0; y<h; y++){
@@ -68,11 +66,17 @@ void InhabitedGrid::emplace(const Unit &unit) {
 void InhabitedGrid::erase(const Unit &unit) {
 	Coordinate pos = getCellCoords(unit.xy);
 	grid[pos]->erase(unit.unitID);
+	if (grid[pos]->size()==0){
+		this->grid.erase(pos);
+	}
 }
 
 void InhabitedGrid::eraseWithHint(const Unit &unit, const Coordinate oldcoord) {
 	Coordinate oldpos = getCellCoords(oldcoord);
 	grid[oldpos]->erase(unit.unitID);
+	if (grid[oldpos]->size()==0){
+		this->grid.erase(oldpos);
+	}
 }
 
 void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord) {
@@ -83,9 +87,10 @@ void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord) {
 		return;
 	}
 	else{
-		eraseWithHint(unit, oldcoord);
-		emplace(unit);
+		this->eraseWithHint(unit, oldcoord);
+		this->emplace(unit);
 	}
+	debugLog(this->grid.size());
 }
 
 std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) {

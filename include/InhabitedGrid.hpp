@@ -16,7 +16,7 @@ bool coordInCircle(Coordinate a, Coordinate c, int r);
 
 class InhabitedGrid{
 public:
-	InhabitedGrid(Game* game, int w, int h, int dw, int dh);
+	InhabitedGrid(Game* game, int w, int h);
 
 	const std::shared_ptr<std::unordered_set<UnitID> > &unitsInCell(Coordinate c);
 	std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
@@ -32,8 +32,6 @@ public:
 	Game* game;
 private:
 	Coordinate getCellCoords(Coordinate c);
-	const int cellsX;
-	const int cellsY;
 	const int cellWidth;
 	const int cellHeight;
 	const std::shared_ptr<std::unordered_set<UnitID>> emptyUnitIDset;

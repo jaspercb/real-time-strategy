@@ -6,7 +6,7 @@
 #include "Logging.hpp"
 
 Game::Game():
-	inhabitedGrid(InhabitedGrid(this, 100, 100, 10, 10)),
+	inhabitedGrid(InhabitedGrid(this, 25, 25)),
 	smallestUnusedUnitID_(1),
 	smallestUnusedTeamID_(1)
 	{

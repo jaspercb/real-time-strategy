@@ -104,8 +104,8 @@ int main(){
 		//cmd2.queueSetting=QUEUE_OVERWRITE;
 
 		//g.getUnit(b).handleCommand(cmd2);
-		
-		
+
+
 		for (int i=0; i<200; i++){
 			if (userInterface.quit)
 				break;
@@ -115,7 +115,6 @@ int main(){
 			while(SDL_PollEvent(&event)) {
 				userInterface.handleInputEvent(event);
 			}
-
 			g.tick();
 			draw_all(g, userInterface);
 			SDL_Delay( 1000/FRAMERATE );

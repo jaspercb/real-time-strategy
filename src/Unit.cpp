@@ -184,7 +184,6 @@ void Unit::move_towards(const Coordinate c){
 
 		if (pythagoreanDistance(xy, c)<=spd) {
 			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, c)){
-				debugLog("we good");
 				this->move(c);
 				this->animationState = ANIMSTATE_IDLE;
 				//drawAnimationStep = 0;
@@ -193,7 +192,6 @@ void Unit::move_towards(const Coordinate c){
 		else {
 			Coordinate target = Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr);
 			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)){
-				debugLog("we good");
 				this->move(target);
 				this->animationState = ANIMSTATE_WALKING;
 				this->drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
