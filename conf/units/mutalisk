@@ -1,6 +1,6 @@
 name Mutalisk
 maxHP 100
-speed 7
+speed 10
 radius 10
 dimension 0 0 0 1
 weapon{

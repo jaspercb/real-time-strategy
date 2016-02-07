@@ -156,7 +156,7 @@ bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 			const auto unitSubset = unitsInCell(Coordinate(x,y));
 			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
 				Unit& other = game->getUnit(*it);
-				if (u.unitID != other.unitID && unitInCircle(other, location, radius)) {
+				if (u.unitID != other.unitID && unitInCircle(other, location, radius) && u.dimension.overlaps(other.dimension)) {
 					return false;
 				}
 			}

@@ -87,10 +87,13 @@ int main(){
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
 		UnitID a,b;
-		for (int i=0; i<10; i++){
-			g.createUnit(tID2, (UnitTemplateID)3, Coordinate(500-50*i, 50*i));
+		for (int i=5; i<8; i++){
+			for (int j=5; j<8; j++){
+				g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
+				g.createUnit(tID1, (UnitTemplateID)3, Coordinate(50*i, 50*j));
+
+			}
 		}
-		//b = g.createUnit(tID2, (UnitTemplateID)3, Coordinate(150, 150));
 
 		//Command cmd1(CMD_GOTOCOORD);
 		//cmd1.targetID = b;
