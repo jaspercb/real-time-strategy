@@ -109,7 +109,7 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) 
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
-			const auto unitSubset = unitsInCell(Coordinate(x,y));
+			const auto &unitSubset = unitsInCell(Coordinate(x,y));
 			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
 				if (coordInRect(game->getUnit(*it).xy, a, b)){
 					ret.push_back(*it);
@@ -121,6 +121,7 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) 
 }
 
 std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius) {
+	// Returns units that clip the given circle, (center & radius provided)
 	std::vector<UnitID> ret;
 
 	Coordinate gc = getCellCoords(c);
@@ -131,9 +132,9 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius) {
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
-			const auto unitSubset = unitsInCell(Coordinate(x,y));
+			const auto &unitSubset = unitsInCell(Coordinate(x,y));
 			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
-				if (coordInCircle(game->getUnit(*it).xy, c, radius)){
+				if (unitInCircle(game->getUnit(*it), c, radius)){
 					ret.push_back(*it);
 				}
 			}
@@ -141,9 +142,6 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius) {
 	}
 	return ret;
 }
-
-
-
 
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 	Coordinate gc = getCellCoords(location);
@@ -156,7 +154,7 @@ bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
-			const auto unitSubset = unitsInCell(Coordinate(x,y));
+			const auto &unitSubset = unitsInCell(Coordinate(x,y));
 			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
 				Unit& other = game->getUnit(*it);
 				if (u.unitID != other.unitID && unitInCircle(other, location, radius) && u.dimension.overlaps(other.dimension)) {

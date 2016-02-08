@@ -87,10 +87,10 @@ int main(){
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
 		UnitID a,b;
-		for (int i=2; i<12; i++){
-			for (int j=2; j<12; j++){
+		for (int i=5; i<15; i++){
+			for (int j=5; j<15; j++){
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID1, (UnitTemplateID)3, Coordinate(50*i, 50*j));
+				g.createUnit(tID1, (UnitTemplateID)3, Coordinate(25*i, 25*j));
 
 			}
 		}
