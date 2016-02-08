@@ -1,6 +1,6 @@
 #pragma once
 
-#include <unordered_set>
+#include <set>
 #include <map>
 #include <vector>
 #include <memory>
@@ -18,7 +18,7 @@ class InhabitedGrid{
 public:
 	InhabitedGrid(Game* game, int w, int h);
 
-	const std::shared_ptr<std::unordered_set<UnitID> > &unitsInCell(Coordinate c);
+	const std::shared_ptr<std::set<UnitID> > &unitsInCell(Coordinate c);
 	std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
 	std::vector<UnitID> unitsInCircle(Coordinate c, int range);
 
@@ -34,6 +34,6 @@ private:
 	Coordinate getCellCoords(Coordinate c);
 	const int cellWidth;
 	const int cellHeight;
-	const std::shared_ptr<std::unordered_set<UnitID>> emptyUnitIDset;
-	std::map<Coordinate, std::shared_ptr<std::unordered_set<UnitID> > > grid;
+	const std::shared_ptr<std::set<UnitID>> emptyUnitIDset;
+	std::map<Coordinate, std::shared_ptr<std::set<UnitID> > > grid;
 };

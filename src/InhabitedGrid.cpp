@@ -33,7 +33,7 @@ InhabitedGrid::InhabitedGrid(Game* game, int w, int h):
 	game(game),
 	cellWidth(w),
 	cellHeight(h),
-	emptyUnitIDset(new std::unordered_set<UnitID>)
+	emptyUnitIDset(new std::set<UnitID>)
 	{
 		for (int x=0; x<w; x++){
 			for (int y=0; y<h; y++){
@@ -46,7 +46,7 @@ Coordinate InhabitedGrid::getCellCoords(Coordinate p) {
 	return Coordinate(p.first/cellWidth, p.second/cellWidth);
 }
 
-const std::shared_ptr<std::unordered_set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) {
+const std::shared_ptr<std::set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) {
 	if (grid.count(c)){
 		return grid[c];
 	}
@@ -58,7 +58,7 @@ void InhabitedGrid::emplace(const Unit &unit) {
 	if (grid.count(pos)){
 	}
 	else{
-		grid.emplace(pos, std::shared_ptr<std::unordered_set<UnitID> > (new std::unordered_set<UnitID>()));
+		grid.emplace(pos, std::shared_ptr<std::set<UnitID> > (new std::set<UnitID>()));
 	}
 	grid[pos]->emplace(unit.unitID);
 }
@@ -141,8 +141,6 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius) {
 
 
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
-	std::vector<UnitID> ret;
-
 	Coordinate gc = getCellCoords(location);
 	int startX = gc.first - 1 - cellWidth;
 	int endX = gc.first + 1 + cellWidth;
