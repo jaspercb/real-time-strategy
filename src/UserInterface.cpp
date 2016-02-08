@@ -32,6 +32,9 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 			this->selectionBoxCorner1=Coordinate(event.button.x, event.button.y);
 			this->selectionBoxCorner2=Coordinate(event.button.x, event.button.y);
 			this->drawSelectionBox = true;
+			
+			this->unitsInSelectionBox.clear();
+			this->unitsInSelectionBox = this->game.inhabitedGrid.unitsInRectangle(this->selectionBoxCorner1, this->selectionBoxCorner2);
 		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP) {

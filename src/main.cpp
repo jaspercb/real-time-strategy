@@ -91,7 +91,6 @@ int main(){
 			for (int j=5; j<15; j++){
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
 				g.createUnit(tID1, (UnitTemplateID)3, Coordinate(25*i, 25*j));
-
 			}
 		}
 
