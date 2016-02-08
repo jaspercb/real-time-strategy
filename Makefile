@@ -8,7 +8,7 @@ TARGET := bin/rts
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
-CFLAGS := -std=c++0x -g
+CFLAGS := -std=c++0x -g -O3
 LIB := -lSDL2 -lSDL2_image
 INC := -I include
 
