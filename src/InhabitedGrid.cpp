@@ -124,10 +124,10 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius) {
 	std::vector<UnitID> ret;
 
 	Coordinate gc = getCellCoords(c);
-	int startX = gc.first - 1 - cellWidth;
-	int endX = gc.first + 1 + cellWidth;
-	int startY = gc.second - 1 - cellHeight;
-	int endY = gc.second + 1 + cellHeight;
+	int startX = gc.first - 1 - radius/cellWidth;
+	int endX = gc.first + 1 + radius/cellWidth;
+	int startY = gc.second - 1 - radius/cellHeight;
+	int endY = gc.second + 1 + radius/cellHeight;
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
