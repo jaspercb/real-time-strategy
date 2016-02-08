@@ -6,7 +6,11 @@
 #include "Logging.hpp"
 
 int pythagoreanDistance(Coordinate a, Coordinate b) {
-	return (int)pow(pow(a.first-b.first, 2) + pow(a.second-b.second, 2), 0.5);
+	return (int)pow( (a.first-b.first)*(a.first-b.first) + (a.second-b.second)*(a.second-b.second), 0.5);
+}
+
+bool pythagoreanDistanceLessThan(Coordinate a, Coordinate b, int r) {
+	return (a.first-b.first)*(a.first-b.first) + (a.second-b.second)*(a.second-b.second) <= r*r;
 }
 
 bool coordInRect(Coordinate a, Coordinate b, Coordinate c) {
@@ -20,12 +24,12 @@ bool coordInRect(Coordinate a, Coordinate b, Coordinate c) {
 
 bool coordInCircle(Coordinate a, Coordinate c, int r) {
 	// returns whether a is in the circle with center c and radius r
-	return pythagoreanDistance(a, c)<=r;
+	return pythagoreanDistanceLessThan(a, c, r);
 }
 
 bool unitInCircle(Unit& u, Coordinate c, int r) {
 	// returns whether a unit's circle overlaps with the circle with center c and radius r
-	return pythagoreanDistance(u.xy, c) <= (r+u.getUnitTemplate().radius());
+	return pythagoreanDistanceLessThan(u.xy, c, r+u.getUnitTemplate().radius());
 }
 
 
@@ -47,8 +51,9 @@ Coordinate InhabitedGrid::getCellCoords(Coordinate p) {
 }
 
 const std::shared_ptr<std::set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) {
-	if (grid.count(c)){
-		return grid[c];
+	auto found = this->grid.find(c);
+	if (found != this->grid.end()){
+		return found->second;
 	}
 	return this->emptyUnitIDset;
 }
@@ -142,10 +147,10 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius) {
 
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 	Coordinate gc = getCellCoords(location);
-	int startX = gc.first - 1 - cellWidth;
-	int endX = gc.first + 1 + cellWidth;
-	int startY = gc.second - 1 - cellHeight;
-	int endY = gc.second + 1 + cellHeight;
+	int startX = gc.first - 1;
+	int endX = gc.first + 1;
+	int startY = gc.second - 1;
+	int endY = gc.second + 1;
 
 	const int radius = u.getUnitTemplate().radius();
 

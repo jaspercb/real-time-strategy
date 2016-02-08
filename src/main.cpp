@@ -87,9 +87,9 @@ int main(){
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
 		UnitID a,b;
-		for (int i=2; i<8; i++){
-			for (int j=2; j<8; j++){
-				g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
+		for (int i=2; i<12; i++){
+			for (int j=2; j<12; j++){
+				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
 				g.createUnit(tID1, (UnitTemplateID)3, Coordinate(50*i, 50*j));
 
 			}
