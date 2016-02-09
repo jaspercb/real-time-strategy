@@ -183,14 +183,12 @@ void Unit::move_towards(const Coordinate c){
 		Distance spd = this->getUnitTemplate().speed();
 
 		if (pythagoreanDistance(xy, c)<=spd) {
-			debugLog(this->game.inhabitedGrid.unitOKToMoveTo(*this, c));
 			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, c)){
 				this->move(c);
 			}
 		}
 		else {
-			Coordinate target = Coordinate( xy.first + 2*spd*dx/dr , xy.second + 2*spd*dy/dr);
-			debugLog(this->game.inhabitedGrid.unitOKToMoveTo(*this, c));
+			Coordinate target = Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr);
 			for (int i=0; i<3; i++){
 				target = Coordinate( this->xy.first + (target.first - this->xy.first)/2, this->xy.second + (target.second - this->xy.second)/2);
 				if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)){
