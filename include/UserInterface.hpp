@@ -15,6 +15,9 @@ public:
 	void renderSelection( SDL_Renderer* renderer );
 	void renderHUD( SDL_Renderer* renderer );
 
+	Coordinate objectiveCoordinateFromScreen(const Coordinate c);
+	Coordinate screenCoordinateFromObjective(const Coordinate c);
+
 	Game& game;
 
 	bool quit;

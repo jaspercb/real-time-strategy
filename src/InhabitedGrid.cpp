@@ -4,21 +4,22 @@
 #include "Unit.hpp"
 #include "Game.hpp"
 #include "Logging.hpp"
+#include "globals.hpp"
 
-int pythagoreanDistance(Coordinate a, Coordinate b) {
-	return (int)pow( (a.first-b.first)*(a.first-b.first) + (a.second-b.second)*(a.second-b.second), 0.5);
+Distance pythagoreanDistance(Coordinate a, Coordinate b) {
+	return pow( (a.first-b.first)*(a.first-b.first) + (a.second-b.second)*(a.second-b.second), 0.5);
 }
 
-bool pythagoreanDistanceLessThan(Coordinate a, Coordinate b, int r) {
-	return (a.first-b.first)*(a.first-b.first) + (a.second-b.second)*(a.second-b.second) <= r*r;
+bool pythagoreanDistanceLessThan(Coordinate a, Coordinate b, Distance r) {
+	return ((float)a.first - (float)b.first) * ((float)a.first - (float)b.first) + ((float)a.second - (float)b.second)*((float)a.second - (float)b.second) <= (float)r*(float)r;
 }
 
 bool coordInRect(Coordinate a, Coordinate b, Coordinate c) {
 	// returns whether a is in the rectangle formed by b and c
-	int bx = std::min(a.first, b.first);
-	int by = std::min(a.second, b.second);
-	int cx = std::max(a.first, b.first);
-	int cy = std::max(a.second, b.second);
+	Distance bx = std::min(c.first, b.first);
+	Distance by = std::min(c.second, b.second);
+	Distance cx = std::max(c.first, b.first);
+	Distance cy = std::max(c.second, b.second);
 	return (bx<=a.first) && (a.first<=cx) && (by<=a.second) && (a.second<=cy);
 }
 
@@ -32,22 +33,17 @@ bool unitInCircle(Unit& u, Coordinate c, int r) {
 	return pythagoreanDistanceLessThan(u.xy, c, r+u.getUnitTemplate().radius());
 }
 
-
 InhabitedGrid::InhabitedGrid(Game* game, int w, int h):
 	game(game),
 	cellWidth(w),
 	cellHeight(h),
 	emptyUnitIDset(new std::set<UnitID>)
 	{
-		for (int x=0; x<w; x++){
-			for (int y=0; y<h; y++){
-
-			}
-		}
 	}
 
-Coordinate InhabitedGrid::getCellCoords(Coordinate p) {
-	return Coordinate(p.first/cellWidth, p.second/cellWidth);
+Coordinate InhabitedGrid::getCellCoords(Coordinate c) {
+	// takes an objective coordinate, returns the cell coordinates
+	return Coordinate(c.first/cellWidth, c.second/cellHeight);
 }
 
 const std::shared_ptr<std::set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) {
@@ -120,7 +116,7 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) 
 	return ret;
 }
 
-std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, int radius) {
+std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) {
 	// Returns units that clip the given circle, (center & radius provided)
 	std::vector<UnitID> ret;
 

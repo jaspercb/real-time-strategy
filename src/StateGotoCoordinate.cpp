@@ -10,11 +10,11 @@ StateGotoCoordinate::StateGotoCoordinate(Coordinate targ):
 StateExitCode StateGotoCoordinate::update(Unit& unit){
 	// if we're not at the target, move towards the target
 	// otherwise we're done
-	if (pythagoreanDistance(unit.xy, target) > 0){
-		unit.move_towards(target);
-		return STATE_EXIT_INCOMPLETE;
+	if (pythagoreanDistanceLessThan(unit.xy, target, 0)) {
+		return STATE_EXIT_COMPLETE;
 	}
 	else{
-		return STATE_EXIT_COMPLETE;
+		unit.move_towards(target);
+		return STATE_EXIT_INCOMPLETE;
 	}
 }

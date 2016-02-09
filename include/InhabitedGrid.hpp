@@ -10,7 +10,8 @@
 class Unit; //forward declaration
 class Game;
 
-int pythagoreanDistance(Coordinate a, Coordinate b);
+Distance pythagoreanDistance(Coordinate a, Coordinate b);
+bool pythagoreanDistanceLessThan(Coordinate a, Coordinate b, Distance r);
 bool coordInRect(Coordinate a, Coordinate b, Coordinate c);
 bool coordInCircle(Coordinate a, Coordinate c, int r);
 
@@ -20,7 +21,7 @@ public:
 
 	const std::shared_ptr<std::set<UnitID> > &unitsInCell(Coordinate c);
 	std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
-	std::vector<UnitID> unitsInCircle(Coordinate c, int range);
+	std::vector<UnitID> unitsInCircle(Coordinate c, Distance radius);
 
 	bool unitOKToMoveTo(Unit&, const Coordinate);
 

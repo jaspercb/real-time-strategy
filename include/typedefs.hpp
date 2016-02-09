@@ -1,7 +1,9 @@
 #pragma once
 #include <utility>
+#include <stdint.h>
 
-typedef std::pair<int, int> Coordinate;
+typedef int64_t Distance;
+typedef std::pair<Distance, Distance> Coordinate;
 
 typedef int UnitTemplateID;
 typedef int UnitID;

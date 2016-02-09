@@ -12,6 +12,9 @@ SDL_Texture* hpBarFull = NULL;
 
 int AIRBORNE_RENDER_HEIGHT = 40;
 
+const int PIXEL_WIDTH = 100;
+const int PIXEL_HEIGHT = 100;
+
 Drawer::Drawer(Spritesheet* sp):
 	spritesheet(sp)
 	{
@@ -150,28 +153,28 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 					shadowsheet->render(renderer,
 						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 						idleCycleStart + std::abs(unit.drawAnimationStep)%idleCycleLength,
-						unit.xy.first,
-						unit.xy.second);
+						unit.xy.first / PIXEL_WIDTH,
+						unit.xy.second / PIXEL_HEIGHT);
 				if (NULL != spritesheet)
 					spritesheet->render(renderer,
 						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 						idleCycleStart + std::abs(unit.drawAnimationStep)%idleCycleLength,
-						unit.xy.first,
-						unit.xy.second + dy);
+						unit.xy.first / PIXEL_WIDTH,
+						unit.xy.second / PIXEL_HEIGHT + dy);
 			}
 			else{
 				if (NULL != shadowsheet)
 					shadowsheet->render(renderer,
 						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 						idleCycleStart,
-						unit.xy.first,
+						unit.xy.first / PIXEL_WIDTH,
 						unit.xy.second);
 				if (NULL != spritesheet)
 					spritesheet->render(renderer,
 						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 						idleCycleStart,
-						unit.xy.first,
-						unit.xy.second + dy);				
+						unit.xy.first / PIXEL_WIDTH,
+						unit.xy.second / PIXEL_HEIGHT + dy);			
 			}
 			break;
 		}
@@ -180,14 +183,14 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 				shadowsheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					walkCycleStart + std::abs(unit.drawAnimationStep)%walkCycleLength,
-					unit.xy.first,
-					unit.xy.second);
+					unit.xy.first / PIXEL_WIDTH,
+					unit.xy.second / PIXEL_HEIGHT);
 			if (NULL != spritesheet)
 				spritesheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					walkCycleStart + std::abs(unit.drawAnimationStep)%walkCycleLength,
-					unit.xy.first,
-					unit.xy.second + dy);
+					unit.xy.first / PIXEL_WIDTH,
+					unit.xy.second / PIXEL_HEIGHT + dy);
 			break;
 		}
 		case ANIMSTATE_ATTACKING:
@@ -195,14 +198,14 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 				shadowsheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					attackCycleStart + unit.drawAnimationStep%attackCycleLength,
-					unit.xy.first,
-					unit.xy.second);
+					unit.xy.first / PIXEL_WIDTH,
+					unit.xy.second / PIXEL_HEIGHT);
 			if (NULL != spritesheet)
 				spritesheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					attackCycleStart + unit.drawAnimationStep%attackCycleLength,
-					unit.xy.first,
-					unit.xy.second + dy);
+					unit.xy.first / PIXEL_WIDTH,
+					unit.xy.second / PIXEL_HEIGHT + dy);
 			//debugLog(attackCycleStart + unit.drawAnimationStep%attackCycleLength);
 			//debugLog("");
 			break;
@@ -212,18 +215,18 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit /*, Coordinate camerapositi
 				spritesheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					deathCycleStart + std::min(deathCycleLength-1, std::abs(unit.drawAnimationStep)),
-					unit.xy.first,
-					unit.xy.second + dy);
+					unit.xy.first/PIXEL_WIDTH,
+					unit.xy.second / PIXEL_HEIGHT);
 			else
 				spritesheet->render(renderer,
 					unit.drawAnimationStep < deathCycleLength ? unit.drawAnimationStep : deathCycleLength-1,
 					deathCycleStart,
-					unit.xy.first,
-					unit.xy.second + dy);
+					unit.xy.first / PIXEL_WIDTH,
+					unit.xy.second / PIXEL_HEIGHT + dy);
 			break;
 	}
 	if (unit.animationState!=ANIMSTATE_DYING){
-		draw_HP_bar(renderer, unit, unit.xy.first, unit.xy.second);
+		draw_HP_bar(renderer, unit, unit.xy.first/PIXEL_WIDTH, unit.xy.second/PIXEL_HEIGHT);
 	}
 }
 

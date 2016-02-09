@@ -177,12 +177,13 @@ int Unit::getAttackRange(){
 void Unit::move_towards(const Coordinate c){
 	// Speed-limited movement, with collision handling
 	if (animationState!=ANIMSTATE_DYING){
-		int dx = c.first - xy.first;
-		int dy = c.second - xy.second;
-		int dr = std::pow(dx*dx + dy*dy, 0.5);
-		int spd = this->getUnitTemplate().speed();
+		Distance dx = c.first - xy.first;
+		Distance dy = c.second - xy.second;
+		Distance dr = pythagoreanDistance(xy, c);
+		Distance spd = this->getUnitTemplate().speed();
 
 		if (pythagoreanDistance(xy, c)<=spd) {
+			debugLog(this->game.inhabitedGrid.unitOKToMoveTo(*this, c));
 			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, c)){
 				this->move(c);
 				this->animationState = ANIMSTATE_IDLE;
@@ -191,6 +192,7 @@ void Unit::move_towards(const Coordinate c){
 		}
 		else {
 			Coordinate target = Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr);
+			debugLog(this->game.inhabitedGrid.unitOKToMoveTo(*this, c));
 			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)){
 				this->move(target);
 				this->animationState = ANIMSTATE_WALKING;

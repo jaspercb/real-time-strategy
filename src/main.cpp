@@ -90,7 +90,7 @@ int main(){
 		for (int i=5; i<15; i++){
 			for (int j=5; j<15; j++){
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID1, (UnitTemplateID)3, Coordinate(25*i, 25*j));
+				g.createUnit(tID1, (UnitTemplateID)3, Coordinate(2500*i, 2500*j));
 			}
 		}
 
@@ -108,7 +108,7 @@ int main(){
 		//g.getUnit(b).handleCommand(cmd2);
 
 
-		for (int i=0; i<200; i++){
+		for (int i=0; i<2000; i++){
 			if (userInterface.quit)
 				break;
 
