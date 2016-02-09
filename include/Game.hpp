@@ -21,9 +21,6 @@ public:
 	Unit& getUnit(UnitID i);
 	Team& getTeam(TeamID i);
 
-	UnitID smallestUnusedUnitID();
-	TeamID smallestUnusedTeamID();
-
 	void tick();
 
 	bool teamsAreFriendly(TeamID, TeamID);
@@ -33,6 +30,10 @@ public:
 	std::map<TeamID, Team> teamsByID;
 
 private:
+	void resolveCollisions();
+	UnitID smallestUnusedUnitID();
+	TeamID smallestUnusedTeamID();
+	
 	TeamID smallestUnusedTeamID_;
 	UnitID smallestUnusedUnitID_;
 };

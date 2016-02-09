@@ -11,6 +11,7 @@ StateExitCode StateGotoCoordinate::update(Unit& unit){
 	// if we're not at the target, move towards the target
 	// otherwise we're done
 	if (pythagoreanDistanceLessThan(unit.xy, target, 0)) {
+		unit.animationState = ANIMSTATE_IDLE;
 		return STATE_EXIT_COMPLETE;
 	}
 	else{

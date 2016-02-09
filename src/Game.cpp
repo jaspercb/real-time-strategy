@@ -60,6 +60,25 @@ void Game::tick() {
 	for (auto u = toDelete.begin(); u!=toDelete.end(); u++){
 		this->deleteUnit(*u);
 	}
+
+	this->resolveCollisions();
+}
+
+void Game::resolveCollisions() {
+	// Resolves 
+	for (auto &id_unit_pair : this->unitsByID){
+		UnitID id = id_unit_pair.first;
+		Unit& unit = id_unit_pair.second;
+		for ( auto &otherid : this->inhabitedGrid.unitsCollidingWith(unit) ) {
+			Unit& other = this->getUnit(otherid);
+			Distance dx = other.xy.first - unit.xy.first;
+			Distance dy = other.xy.second - unit.xy.second;
+			dx = dx ? ((Distance)30000/dx) : 0;
+			dy = dy ? ((Distance)30000/dy) : 0;
+			other.move_towards(Coordinate(other.xy.first+dx, other.xy.second+dy));
+		}
+
+	}
 }
 
 UnitID Game::smallestUnusedUnitID() {

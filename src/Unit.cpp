@@ -186,20 +186,22 @@ void Unit::move_towards(const Coordinate c){
 			debugLog(this->game.inhabitedGrid.unitOKToMoveTo(*this, c));
 			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, c)){
 				this->move(c);
-				this->animationState = ANIMSTATE_IDLE;
-				//drawAnimationStep = 0;
 			}
 		}
 		else {
-			Coordinate target = Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr);
+			Coordinate target = Coordinate( xy.first + 2*spd*dx/dr , xy.second + 2*spd*dy/dr);
 			debugLog(this->game.inhabitedGrid.unitOKToMoveTo(*this, c));
-			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)){
-				this->move(target);
-				this->animationState = ANIMSTATE_WALKING;
-				this->drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
-				//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
-				//debugLog("setting drawFacingAngle to:");
-				//debugLog((int)drawFacingAngle);
+			for (int i=0; i<3; i++){
+				target = Coordinate( this->xy.first + (target.first - this->xy.first)/2, this->xy.second + (target.second - this->xy.second)/2);
+				if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)){
+					this->move(target);
+					this->animationState = ANIMSTATE_WALKING;
+					this->drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
+					//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
+					//debugLog("setting drawFacingAngle to:");
+					//debugLog((int)drawFacingAngle);
+					break;
+				}
 			}
 		}
 	}

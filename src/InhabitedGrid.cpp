@@ -1,4 +1,5 @@
 #include <cmath>
+#include <algorithm>
 
 #include "InhabitedGrid.hpp"
 #include "Unit.hpp"
@@ -139,6 +140,12 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) 
 	return ret;
 }
 
+std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit& u){
+	std::vector<UnitID> ret = this->unitsInCircle(u.xy, u.getUnitTemplate().radius());
+	ret.erase(std::find(ret.begin(), ret.end(), u.unitID));
+	return ret;
+}
+
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 	Coordinate gc = getCellCoords(location);
 	int startX = gc.first - 1;
@@ -146,7 +153,7 @@ bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 	int startY = gc.second - 1;
 	int endY = gc.second + 1;
 
-	const int radius = u.getUnitTemplate().radius();
+	const int radius = u.getUnitTemplate().radius() / 2;
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){

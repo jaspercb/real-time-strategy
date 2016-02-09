@@ -22,6 +22,7 @@ public:
 	const std::shared_ptr<std::set<UnitID> > &unitsInCell(Coordinate c);
 	std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
 	std::vector<UnitID> unitsInCircle(Coordinate c, Distance radius);
+	std::vector<UnitID> unitsCollidingWith(Unit& u);
 
 	bool unitOKToMoveTo(Unit&, const Coordinate);
 
