@@ -24,6 +24,7 @@ public:
 	void tick();
 
 	bool teamsAreFriendly(TeamID, TeamID);
+	bool unitsAreFriendly(UnitID a, UnitID b);
 
 	InhabitedGrid inhabitedGrid;
 	std::map<UnitID, Unit> unitsByID;
@@ -33,7 +34,7 @@ private:
 	void resolveCollisions();
 	UnitID smallestUnusedUnitID();
 	TeamID smallestUnusedTeamID();
-	
+
 	TeamID smallestUnusedTeamID_;
 	UnitID smallestUnusedUnitID_;
 };

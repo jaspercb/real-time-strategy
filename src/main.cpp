@@ -73,16 +73,17 @@ int main(){
 	}
 	else {
 		Game g = Game();
-		UserInterface userInterface = UserInterface(g);
 
 		TeamID tID1 = g.createTeam();
 		TeamID tID2 = g.createTeam();
+
+		UserInterface userInterface = UserInterface(g, tID1);
 
 		Team& t1 = g.getTeam(tID1);
 		Team& t2 = g.getTeam(tID2);
 		
 		t1.loadUnitTemplate("../conf/units/marine");
-		t2.loadUnitTemplate("../conf/units/mutalisk");
+		t2.loadUnitTemplate("../conf/units/marine");
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
@@ -93,6 +94,8 @@ int main(){
 				g.createUnit(tID1, (UnitTemplateID)3, Coordinate(2500*i, 2500*j));
 			}
 		}
+
+		g.createUnit(tID2, (UnitTemplateID)3, Coordinate(2500*16, 2500*16));
 
 		//Command cmd1(CMD_GOTOCOORD);
 		//cmd1.targetID = b;

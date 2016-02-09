@@ -71,13 +71,21 @@ void Game::resolveCollisions() {
 		Unit& unit = id_unit_pair.second;
 		for ( auto &otherid : this->inhabitedGrid.unitsCollidingWith(unit) ) {
 			Unit& other = this->getUnit(otherid);
-			Distance dx = other.xy.first - unit.xy.first;
-			Distance dy = other.xy.second - unit.xy.second;
-			dx = dx ? ((Distance)30000/dx) : 0;
-			dy = dy ? ((Distance)30000/dy) : 0;
-			other.move_towards(Coordinate(other.xy.first+dx, other.xy.second+dy));
+			if ( unit.animationState == ANIMSTATE_WALKING && other.animationState == ANIMSTATE_IDLE) { // 
+				Distance dx = other.xy.first - unit.xy.first;
+				Distance dy = other.xy.second - unit.xy.second;
+				dx = dx ? ((Distance)200000/dx) : 0;
+				dy = dy ? ((Distance)200000/dy) : 0;
+				other.move_towards(Coordinate(other.xy.first+dx, other.xy.second+dy));				
+			}
+			else if ( (unit.animationState != ANIMSTATE_IDLE && other.animationState != ANIMSTATE_WALKING) ) {
+				Distance dx = other.xy.first - unit.xy.first;
+				Distance dy = other.xy.second - unit.xy.second;
+				dx = dx ? ((Distance)30000/dx) : 0;
+				dy = dy ? ((Distance)30000/dy) : 0;
+				other.move_towards(Coordinate(other.xy.first+dx, other.xy.second+dy));
+			}
 		}
-
 	}
 }
 
@@ -92,3 +100,8 @@ TeamID Game::smallestUnusedTeamID() {
 bool Game::teamsAreFriendly(TeamID a, TeamID b) {
 	return a==b;
 }
+
+bool Game::unitsAreFriendly(UnitID a, UnitID b) {
+	return this->teamsAreFriendly(this->getUnit(a).teamID, this->getUnit(b).teamID);
+}
+

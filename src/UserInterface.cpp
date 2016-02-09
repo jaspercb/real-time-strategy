@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <algorithm>
 
 #include "UserInterface.hpp"
 #include "Game.hpp"
@@ -7,10 +8,11 @@
 #include "Unit.hpp"
 #include "Logging.hpp"
 
-UserInterface::UserInterface(Game& g):
+UserInterface::UserInterface(Game& g, TeamID teamID):
 	quit(false),
 	drawSelectionBox(false),
-	game(g)
+	game(g),
+	teamID(teamID)
 {
 	
 }
@@ -21,6 +23,19 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN) {
 		if (event.button.button == SDL_BUTTON_RIGHT) {
+			Coordinate targetCoord = objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
+			for ( auto &i : game.inhabitedGrid.unitsInCircle(targetCoord, (Distance)10) ) {
+				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(i).teamID) ) {
+					debugLog("issuing attack command");
+					Command atkcmd(CMD_ATTACK);
+					atkcmd.targetID = i;
+					for (auto &i : unitsInSelectionBox) {
+						this->game.getUnit(i).handleCommand(atkcmd);
+					}
+					return;
+				}
+			}
+
 			Command movecmd(CMD_GOTOCOORD);
 			movecmd.targetCoord = objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
 			movecmd.queueSetting = QUEUE_OVERWRITE;
@@ -34,7 +49,11 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 			this->drawSelectionBox = true;
 
 			this->unitsInSelectionBox.clear();
-			this->unitsInSelectionBox = this->game.inhabitedGrid.unitsInRectangle(this->selectionBoxCorner1, this->selectionBoxCorner2);
+			auto unfilteredUnits = this->game.inhabitedGrid.unitsInRectangle(this->selectionBoxCorner1, this->selectionBoxCorner2);
+			auto lambda = [this](UnitID u) {
+				return this->game.teamsAreFriendly(this->teamID, this->game.getUnit(u).teamID);
+			};
+			std::copy_if(unfilteredUnits.begin(), unfilteredUnits.end(), std::back_inserter(this->unitsInSelectionBox), lambda);
 		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP) {
@@ -45,11 +64,14 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 	else if (event.type == SDL_MOUSEMOTION) {
 		if (SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)) { // if left mouse button is being held down
 			this->selectionBoxCorner2 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
-			std::cout<< this->selectionBoxCorner1.first <<","<< this->selectionBoxCorner1.second <<std::endl;
-			std::cout<< this->selectionBoxCorner2.first <<","<< this->selectionBoxCorner2.second <<std::endl;
-			std::cout<<std::endl;
+
+			auto unfilteredUnits = this->game.inhabitedGrid.unitsInRectangle(this->selectionBoxCorner1, this->selectionBoxCorner2);
+			auto lambda = [this](UnitID u) {
+				return this->game.teamsAreFriendly(this->teamID, this->game.getUnit(u).teamID);
+			};
+
 			this->unitsInSelectionBox.clear();
-			this->unitsInSelectionBox = this->game.inhabitedGrid.unitsInRectangle(this->selectionBoxCorner1, this->selectionBoxCorner2);
+			std::copy_if(unfilteredUnits.begin(), unfilteredUnits.end(), std::back_inserter(this->unitsInSelectionBox), lambda);
 		}
 	}
 }

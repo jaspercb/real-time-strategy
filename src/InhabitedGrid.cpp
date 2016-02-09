@@ -153,7 +153,7 @@ bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 	int startY = gc.second - 1;
 	int endY = gc.second + 1;
 
-	const int radius = u.getUnitTemplate().radius() / 2;
+	const int radius = u.getUnitTemplate().radius() / 3;
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){

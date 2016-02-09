@@ -10,7 +10,7 @@ class Game;
 
 class UserInterface{
 public:
-	UserInterface(Game& g);
+	UserInterface(Game& g, TeamID t);
 	void handleInputEvent(const SDL_Event& event);
 	void renderSelection( SDL_Renderer* renderer );
 	void renderHUD( SDL_Renderer* renderer );
@@ -21,6 +21,8 @@ public:
 	Game& game;
 
 	bool quit;
+
+	TeamID teamID;
 
 private:
 	bool drawSelectionBox;

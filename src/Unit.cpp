@@ -188,9 +188,10 @@ void Unit::move_towards(const Coordinate c){
 			}
 		}
 		else {
-			Coordinate target = Coordinate( xy.first + spd*dx/dr , xy.second + spd*dy/dr);
-			for (int i=0; i<3; i++){
-				target = Coordinate( this->xy.first + (target.first - this->xy.first)/2, this->xy.second + (target.second - this->xy.second)/2);
+			int factor = 1.4;
+			Coordinate target = Coordinate( xy.first + factor*spd*dx/dr , xy.second + factor*spd*dy/dr);
+			for (int i=0; i<8; i++){
+				target = Coordinate( this->xy.first + (target.first - this->xy.first)/factor, this->xy.second + (target.second - this->xy.second)/factor);
 				if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)){
 					this->move(target);
 					this->animationState = ANIMSTATE_WALKING;
