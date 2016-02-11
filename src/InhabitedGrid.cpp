@@ -147,6 +147,7 @@ std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit& u){
 }
 
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
+	return true;
 	Coordinate gc = getCellCoords(location);
 	int startX = gc.first - 1;
 	int endX = gc.first + 1;

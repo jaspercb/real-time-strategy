@@ -180,7 +180,7 @@ Distance Unit::getAttackRange(){
 }
 
 bool Unit::canAttack(Unit& u){
-	if (u.unitID == this->unitID){
+	if (this->game.unitsAreFriendly(u.unitID,this->unitID) || u.animationState == ANIMSTATE_DYING) {
 		return false;
 	}
 	for (auto &w : this->weapons_) {

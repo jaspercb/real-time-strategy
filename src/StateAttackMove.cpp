@@ -17,20 +17,22 @@ StateExitCode StateAttackMove::update(Unit& unit) {
 	// Otherwise, behave like we're walking
 	// otherwise do nothing
 	
-	if (!attacking){ // if we're not targeting anyone
+	if (!this->attacking){ // if we're not targeting anyone
 		this->updateTarget(unit);
 	}
 
 	if (this->attacking){
-		debugLog("attackstate");
+		unit.animationState = ANIMSTATE_ATTACKING;
 		StateExitCode ret = this->atkstate.update(unit);
 		if (ret == STATE_EXIT_COMPLETE){
 			this->attacking = false;
+			unit.animationState = ANIMSTATE_IDLE;
 		}
 		return STATE_EXIT_INCOMPLETE;
 	}
 	else {
-		debugLog("walkstate");
+		//debugLog("walkstate");
+		unit.animationState = ANIMSTATE_WALKING;
 		return this->gotostate.update(unit);
 	}
 }
@@ -39,9 +41,10 @@ bool StateAttackMove::updateTarget(Unit& unit) {
 	auto potentialIDs = unit.game.inhabitedGrid.unitsInCircle(unit.xy, unit.getAttackRange());
 	for (auto &i : potentialIDs){
 		Unit& potentialUnit = unit.game.getUnit(i);
-		if (unit.canAttack(potentialUnit)){
+		if (unit.canAttack(potentialUnit)) {
 			this->atkstate.targetID = i;
 			this->attacking = true;
+			unit.drawAnimationStep = 0;
 			return true;
 		}
 	}
