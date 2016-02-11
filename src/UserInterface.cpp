@@ -27,10 +27,10 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 			for ( auto &i : game.inhabitedGrid.unitsInCircle(targetCoord, (Distance)10) ) {
 				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(i).teamID) ) {
 					debugLog("issuing attack command");
-					Command atkcmd(CMD_ATTACK);
-					atkcmd.targetID = i;
-					for (auto &i : unitsInSelectionBox) {
-						this->game.getUnit(i).handleCommand(atkcmd);
+					Command atkcmd(CMD_ATTACKMOVE);
+					atkcmd.targetCoord = targetCoord;
+					for (auto &j : unitsInSelectionBox) {
+						this->game.getUnit(j).handleCommand(atkcmd);
 					}
 					return;
 				}

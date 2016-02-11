@@ -21,10 +21,13 @@ public:
 	bool overlaps(EnvironmentSpec other) const{
 		return (ground && other.ground) || (sea && other.sea) || (submerged && other.submerged) || (air && other.air);
 	}
+	EnvironmentSpec either(EnvironmentSpec other) const{
+		return EnvironmentSpec(ground || other.ground, sea || other.sea, submerged || other.submerged, air || other.air);		
+	}
 };
 
 
 const EnvironmentSpec GROUND_ONLY(1, 0, 0, 0);
-const EnvironmentSpec AIR_ONLY(0, 0, 0, 1);
 const EnvironmentSpec SEA_ONLY(0, 1, 0, 0);
 const EnvironmentSpec SUBMERSIBLE_SEA(0, 1, 1, 0);
+const EnvironmentSpec AIR_ONLY(0, 0, 0, 1);

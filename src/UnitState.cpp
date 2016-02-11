@@ -7,6 +7,7 @@
 #include "StateAttack.hpp"
 #include "StateGotoCoordinate.hpp"
 #include "StateIdle.hpp"
+#include "StateAttackMove.hpp"
 #include "Logging.hpp"
 
 std::shared_ptr<UnitState> UnitState::handleCommand(Unit& unit, Command command)
@@ -20,6 +21,9 @@ std::shared_ptr<UnitState> UnitState::handleCommand(Unit& unit, Command command)
 		}
 		case CMD_ATTACK: {
 			return std::shared_ptr<UnitState>(new StateAttack(command.targetID));
+		}
+		case CMD_ATTACKMOVE: {
+			return std::shared_ptr<UnitState>(new StateAttackMove(command.targetCoord));
 		}
 	}
 	return NULL;

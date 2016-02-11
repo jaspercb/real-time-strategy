@@ -95,7 +95,12 @@ int main(){
 			}
 		}
 
-		g.createUnit(tID2, (UnitTemplateID)3, Coordinate(2500*16, 2500*16));
+		for (int i=5; i<15; i++){
+			for (int j=5; j<15; j++){
+				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
+				g.createUnit(tID2, (UnitTemplateID)3, Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
+			}
+		}
 
 		//Command cmd1(CMD_GOTOCOORD);
 		//cmd1.targetID = b;

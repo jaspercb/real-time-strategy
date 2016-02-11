@@ -162,7 +162,7 @@ void Unit::damage(const int quant, const DamageType dmgtype, Unit& attackedBy) {
 	lastAttackingUnitID = attackedBy.teamID;
 }
 
-int Unit::getAttackRange(){
+Distance Unit::getAttackRange(){
 	/*
 	int r = 0;
 	for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
@@ -171,7 +171,23 @@ int Unit::getAttackRange(){
 	return r;
 	*/
 
-	return weapons_.begin()->weaponTemplate.range();
+	if (this->weapons_.size() == 0) {
+		return 0;
+	}
+	else {
+		return this->weapons_.begin()->weaponTemplate.range();
+	}
+}
+
+bool Unit::canAttack(Unit& u){
+	if (u.unitID == this->unitID){
+		return false;
+	}
+	for (auto &w : this->weapons_) {
+		if (w.canAttack(u) )
+			return true;
+	}
+	return false;
 }
 
 void Unit::move_towards(const Coordinate c){

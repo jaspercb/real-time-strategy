@@ -5,6 +5,7 @@
 
 class StateAttack : public UnitState
 {
+	friend class StateAttackMove;
 public:
 	StateAttack(UnitID);
 	StateExitCode update(Unit& unit);

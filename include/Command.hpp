@@ -10,7 +10,7 @@ enum CommandType{
 	CMD_IDLE, 
 	CMD_GOTOCOORD,
 	CMD_ATTACK,
-	//CMD_AMOVE,
+	CMD_ATTACKMOVE
 };
 
 enum QueueSetting{

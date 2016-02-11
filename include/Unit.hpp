@@ -45,7 +45,8 @@ public:
 	void handleCommand(Command);
 	void move(const Coordinate);
 	void damage(const int, const DamageType, Unit& attackedBy);
-	int getAttackRange(); // returns the range of the 
+	Distance getAttackRange(); // returns the range of the first weapon
+	bool canAttack(Unit& u);
 	void move_towards(const Coordinate c);
 	void attack(Unit& target);
 

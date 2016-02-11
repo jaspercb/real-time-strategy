@@ -24,6 +24,10 @@ bool Weapon::canFire(){
 	return weaponTemplate.canFire(*this);
 }
 
+bool Weapon::canAttack(Unit& u){
+	return weaponTemplate.canAttack(u);
+}
+
 void Weapon::fire(Unit& target){
 	//debugLog("firing weapon");
 	weaponTemplate.fire(*this, target);

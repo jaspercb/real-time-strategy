@@ -4,11 +4,13 @@
 
 class StateGotoCoordinate : public UnitState
 {
+	friend class StateAttackMove;
+
 public:
 	StateGotoCoordinate(Coordinate c);
-	StateExitCode update(Unit& unit);
-private:
-	Coordinate target;
+	virtual StateExitCode update(Unit& unit);
+protected:
+	Coordinate targetCoord;
 	int last5distances[5];
 	Distance last5FramesDistance;
 	//std::deque<Coordinate> path;
