@@ -262,6 +262,6 @@ void Unit::attack(Unit& target){
 	}
 }
 
-void Unit::draw(SDL_Renderer* renderer) {
-	getUnitTemplate().drawer->draw(renderer, *this);
+void Unit::draw(SDL_Renderer* renderer, UserInterface* ui) {
+	getUnitTemplate().drawer->draw(renderer, *this, ui);
 }

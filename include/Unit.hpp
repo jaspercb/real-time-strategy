@@ -50,7 +50,7 @@ public:
 	void move_towards(const Coordinate c);
 	void attack(Unit& target);
 
-	void draw(SDL_Renderer*);
+	void draw(SDL_Renderer*, UserInterface*);
 
 	const TeamID teamID;
 	const UnitID unitID;

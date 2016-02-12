@@ -120,7 +120,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ){
 	this->renderSelection( renderer );
 
 	for (auto &u : this->game.unitsByID){
-		u.second.draw( renderer );
+		u.second.draw( renderer, this );
 	}
 
 	this->renderHUD( renderer );

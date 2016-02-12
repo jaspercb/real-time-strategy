@@ -4,6 +4,7 @@
 #include "Spritesheet.hpp"
 
 class Unit;
+class UserInterface;
 
 class Drawer{
 	// Class that attaches to a Unit and manages all the data that is only relevant to drawing
@@ -11,7 +12,7 @@ class Drawer{
 		Drawer(Spritesheet* sp);
 		Drawer(std::ifstream&, TeamColor teamColor);
 		~Drawer();
-		void draw(SDL_Renderer* renderer, Unit& unit/*, Coordinate cameraposition */);
+		void draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui/*, Coordinate cameraposition */);
 
 		int idleCycleStart;
 		int idleCycleLength;
