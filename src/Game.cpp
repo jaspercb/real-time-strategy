@@ -65,26 +65,38 @@ void Game::tick() {
 }
 
 void Game::resolveCollisions() {
-	// Resolves 
+	// Resolves any soft collisions between units.
 	for (auto &id_unit_pair : this->unitsByID){
 		UnitID id = id_unit_pair.first;
 		Unit& unit = id_unit_pair.second;
 		for ( auto &otherid : this->inhabitedGrid.unitsCollidingWith(unit) ) {
 			Unit& other = this->getUnit(otherid);
-			if ( unit.animationState == ANIMSTATE_WALKING && other.animationState == ANIMSTATE_IDLE) { // 
-				Distance dx = other.xy.first - unit.xy.first;
-				Distance dy = other.xy.second - unit.xy.second;
-				dx = dx ? ((Distance)200000/dx) : 500*(1-unit.xy.first%3);
-				dy = dy ? ((Distance)200000/dy) : 500*(1-unit.xy.second%3);
-				other.move_towards(Coordinate(other.xy.first+dx, other.xy.second+dy));				
+			if (unit.unitID == other.unitID) {
+				continue;
 			}
-			else if ( (unit.animationState != ANIMSTATE_IDLE && other.animationState != ANIMSTATE_WALKING) ) {
+			else if (unit.xy == other.xy){
+				other.xy.first +=
+				( (other.unitID+other.xy.first) % 3 == 0) ? 1 :
+				( (other.unitID+other.xy.first) % 3 == 1) ? 0 :
+															-1;
+				other.xy.second +=
+				( (other.unitID+other.xy.second) % 3 == 0) ? 1 :
+				( (other.unitID+other.xy.second) % 3 == 1) ? 0 :
+															-1;
+			}
+			else if ( unit.animationState == ANIMSTATE_WALKING && other.animationState == ANIMSTATE_IDLE) { // 
 				Distance dx = other.xy.first - unit.xy.first;
 				Distance dy = other.xy.second - unit.xy.second;
-				dx = dx ? ((Distance)30000/dx) : 500*(1-unit.xy.first%3);
-				dy = dy ? ((Distance)30000/dy) : 500*(1-unit.xy.second%3);
 				other.move_towards(Coordinate(other.xy.first+dx, other.xy.second+dy));
 			}
+/*			else if ( (unit.animationState != ANIMSTATE_IDLE && other.animationState != ANIMSTATE_WALKING) ) {
+				Distance dx = other.xy.first - unit.xy.first;
+				Distance dy = other.xy.second - unit.xy.second;
+				dx = dx ? ((Distance)10000000/dx) : 20000*((unit.xy.first+unit.unitID)%2? 1 : -1);
+				dy = dy ? ((Distance)10000000/dy) : 20000*((unit.xy.second+unit.unitID)%2? 1 : -1);
+				other.move_towards(Coordinate(other.xy.first+dx, other.xy.second+dy));
+			}
+*/
 		}
 	}
 }

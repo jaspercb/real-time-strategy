@@ -22,7 +22,7 @@ StateExitCode StateAttackMove::update(Unit& unit) {
 	}
 
 	if (this->attacking){
-		unit.animationState = ANIMSTATE_ATTACKING;
+		//debugLog("attackstate");
 		StateExitCode ret = this->atkstate.update(unit);
 		if (ret == STATE_EXIT_COMPLETE){
 			this->attacking = false;
@@ -44,7 +44,6 @@ bool StateAttackMove::updateTarget(Unit& unit) {
 		if (unit.canAttack(potentialUnit)) {
 			this->atkstate.targetID = i;
 			this->attacking = true;
-			unit.drawAnimationStep = 0;
 			return true;
 		}
 	}

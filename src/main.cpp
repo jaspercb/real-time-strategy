@@ -82,7 +82,7 @@ int main(){
 		Team& t1 = g.getTeam(tID1);
 		Team& t2 = g.getTeam(tID2);
 		
-		t1.loadUnitTemplate("../conf/units/marine");
+		t1.loadUnitTemplate("../conf/units/mutalisk");
 		t2.loadUnitTemplate("../conf/units/marine");
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;

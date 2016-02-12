@@ -190,25 +190,25 @@ bool Unit::canAttack(Unit& u){
 	return false;
 }
 
-void Unit::move_towards(const Coordinate c){
+void Unit::move_towards(const Coordinate c) {
 	// Speed-limited movement, with collision handling
-	if (animationState!=ANIMSTATE_DYING){
+	if (animationState!=ANIMSTATE_DYING) {
 		Distance dx = c.first - xy.first;
 		Distance dy = c.second - xy.second;
 		Distance dr = pythagoreanDistance(xy, c);
 		Distance spd = this->getUnitTemplate().speed();
 
 		if (pythagoreanDistance(xy, c)<=spd) {
-			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, c)){
+			if (this->game.inhabitedGrid.unitOKToMoveTo(*this, c)) {
 				this->move(c);
 			}
 		}
 		else {
 			int factor = 1.4;
 			Coordinate target = Coordinate( xy.first + factor*spd*dx/dr , xy.second + factor*spd*dy/dr);
-			for (int i=0; i<8; i++){
+			for (int i=0; i<8; i++) {
 				target = Coordinate( this->xy.first + (target.first - this->xy.first)/factor, this->xy.second + (target.second - this->xy.second)/factor);
-				if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)){
+				if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)) {
 					this->move(target);
 					this->animationState = ANIMSTATE_WALKING;
 					this->drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
@@ -225,19 +225,17 @@ void Unit::move_towards(const Coordinate c){
 void Unit::attack(Unit& target){
 	// Starts or continues the unit's attacking state.
 	// If the attacking animation has completed, fires all weapons.
-
 	UnitTemplate& unitTemplate = this->getUnitTemplate();
 
 	switch (this->animationState){
 		case ANIMSTATE_DYING:{
-			this->drawAnimationStep = 0;
 			this->attackTargetID = 0;
 			return;
 		}
 		case ANIMSTATE_ATTACKING: {
-			if (target.unitID == this->attackTargetID){
-				if (this->drawAnimationStep+1 < unitTemplate.drawer->attackCycleLength){
-					this->drawAnimationStep++;
+			if (target.unitID == this->attackTargetID) { // to ensure a player can't start targeting one unit, then instantly switch to another
+				//debugLog(this->drawAnimationStep+1);
+				if (this->drawAnimationStep+1 < unitTemplate.drawer->attackCycleLength) {
 					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.second-this->xy.second, target.xy.first-this->xy.first); // turn to face target
 				}
 				else if (this->drawAnimationStep+1 == unitTemplate.drawer->attackCycleLength) {
@@ -245,8 +243,9 @@ void Unit::attack(Unit& target){
 					for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
 						it->fire(target);
 					}
+					this->drawAnimationStep=0;
 				}
-				else{
+				else {
 					this->drawAnimationStep = 0;
 					this->attackTargetID = 0;
 				}
@@ -263,6 +262,6 @@ void Unit::attack(Unit& target){
 	}
 }
 
-void Unit::draw(SDL_Renderer* renderer){
+void Unit::draw(SDL_Renderer* renderer) {
 	getUnitTemplate().drawer->draw(renderer, *this);
 }

@@ -141,12 +141,18 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) 
 }
 
 std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit& u){
-	std::vector<UnitID> ret = this->unitsInCircle(u.xy, u.getUnitTemplate().radius());
-	ret.erase(std::find(ret.begin(), ret.end(), u.unitID));
+	std::vector<UnitID> ret;
+	for (auto &unitID : this->unitsInCircle(u.xy, u.getUnitTemplate().radius())) {
+		Unit& other = this->game->getUnit(unitID);
+		if (other.unitID != u.unitID && other.dimension.overlaps(u.dimension)) {
+			ret.push_back(unitID);
+		}
+	}
 	return ret;
 }
 
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
+	return true; // testing soft collisions
 	Coordinate gc = getCellCoords(location);
 	int startX = gc.first - 1;
 	int endX = gc.first + 1;
