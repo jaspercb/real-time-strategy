@@ -12,7 +12,9 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	quit(false),
 	drawSelectionBox(false),
 	game(g),
-	teamID(teamID)
+	teamID(teamID),
+	viewCenter(Coordinate(0, 0)),
+	viewMagnification(1.0)
 {
 	
 }
@@ -109,6 +111,23 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 		//debugLog(this->unitsInSelectionBox.size());
 	}
 }
+
+
+void UserInterface::renderAll( SDL_Renderer* renderer ){
+	SDL_SetRenderDrawColor(renderer, 128, 128, 128, SDL_ALPHA_OPAQUE);
+	SDL_RenderClear(renderer);
+
+	this->renderSelection( renderer );
+
+	for (auto &u : this->game.unitsByID){
+		u.second.draw( renderer );
+	}
+
+	this->renderHUD( renderer );
+
+	SDL_RenderPresent( renderer );
+}
+
 
 
 Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c){

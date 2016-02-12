@@ -14,6 +14,7 @@ public:
 	void handleInputEvent(const SDL_Event& event);
 	void renderSelection( SDL_Renderer* renderer );
 	void renderHUD( SDL_Renderer* renderer );
+	void renderAll( SDL_Renderer* renderer );
 
 	Coordinate objectiveCoordinateFromScreen(const Coordinate c);
 	Coordinate screenCoordinateFromObjective(const Coordinate c);
@@ -28,6 +29,8 @@ private:
 	bool drawSelectionBox;
 	Coordinate selectionBoxCorner1;
 	Coordinate selectionBoxCorner2;
+	Coordinate viewCenter;
+	float viewMagnification;
 	std::vector<UnitID> unitsInSelectionBox;
 };
 

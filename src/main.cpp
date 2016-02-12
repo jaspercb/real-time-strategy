@@ -49,21 +49,6 @@ void cleanup_SDL()
 	SDL_Quit();
 }
 
-void draw_all(Game &g, UserInterface& ui){
-	SDL_SetRenderDrawColor(gRenderer, 128, 128, 128, SDL_ALPHA_OPAQUE);
-	SDL_RenderClear(gRenderer);
-
-	ui.renderSelection( gRenderer );
-
-	for (auto &u : g.unitsByID){
-		u.second.draw( gRenderer );
-	}
-
-	ui.renderHUD( gRenderer );
-
-	SDL_RenderPresent( gRenderer );
-}
-
 int main(){
 	debugLog(" Testing...");
 
@@ -126,7 +111,7 @@ int main(){
 				userInterface.handleInputEvent(event);
 			}
 			g.tick();
-			draw_all(g, userInterface);
+			userInterface.renderAll( gRenderer );
 			SDL_Delay( 1000/FRAMERATE );
 		}
 	}
