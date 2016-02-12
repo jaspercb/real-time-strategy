@@ -29,9 +29,8 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 					debugLog("issuing attack command");
 					Command atkcmd(CMD_ATTACKMOVE);
 					atkcmd.targetCoord = targetCoord;
-					for (auto &j : unitsInSelectionBox) {
-						this->game.getUnit(j).handleCommand(atkcmd);
-					}
+					atkcmd.commanded = this->unitsInSelectionBox;
+					game.handleCommand(atkcmd);
 					return;
 				}
 			}
@@ -39,9 +38,8 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 			Command movecmd(CMD_GOTOCOORD);
 			movecmd.targetCoord = objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
 			movecmd.queueSetting = QUEUE_OVERWRITE;
-			for (auto &i : unitsInSelectionBox) {
-				this->game.getUnit(i).handleCommand(movecmd);
-			}
+			movecmd.commanded = this->unitsInSelectionBox;
+			game.handleCommand(movecmd);
 		}
 		else if (event.button.button == SDL_BUTTON_LEFT) {
 			this->selectionBoxCorner1 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));

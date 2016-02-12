@@ -64,6 +64,12 @@ void Game::tick() {
 	this->resolveCollisions();
 }
 
+void Game::handleCommand(const Command& cmd){
+	for (const UnitID &unitID : cmd.commanded){
+		this->getUnit(unitID).handleCommand(cmd);
+	}
+}
+
 void Game::resolveCollisions() {
 	// Resolves any soft collisions between units.
 	for (auto &id_unit_pair : this->unitsByID){

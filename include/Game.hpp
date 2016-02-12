@@ -10,6 +10,7 @@
 
 class Unit;
 class InhabitedGrid;
+class Command;
 
 class Game
 {
@@ -21,6 +22,7 @@ public:
 	Unit& getUnit(UnitID i);
 	Team& getTeam(TeamID i);
 
+	void handleCommand(const Command&);
 	void tick();
 
 	bool teamsAreFriendly(TeamID, TeamID);
