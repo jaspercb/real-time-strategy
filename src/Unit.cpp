@@ -143,9 +143,9 @@ void Unit::handleCommand(Command command)
 }
 
 void Unit::move(const Coordinate c){
-	// Unchecked movement
-	const Coordinate oldcoord = xy;
-	xy = c;
+	// Unchecked, instant movement to a given point.
+	const Coordinate oldcoord = this->xy;
+	this->xy = c;
 	game.inhabitedGrid.updatePos(*this, oldcoord);
 }
 
@@ -235,10 +235,10 @@ void Unit::attack(Unit& target){
 		case ANIMSTATE_ATTACKING: {
 			if (target.unitID == this->attackTargetID) { // to ensure a player can't start targeting one unit, then instantly switch to another
 				//debugLog(this->drawAnimationStep+1);
-				if (this->drawAnimationStep+1 < unitTemplate.drawer->attackCycleLength) {
+				if (this->drawAnimationStep < unitTemplate.drawer->attackCycleLength) {
 					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.second-this->xy.second, target.xy.first-this->xy.first); // turn to face target
 				}
-				else if (this->drawAnimationStep+1 == unitTemplate.drawer->attackCycleLength) {
+				else if (this->drawAnimationStep == unitTemplate.drawer->attackCycleLength) {
 					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.second-this->xy.second, target.xy.first-this->xy.first); // turn to face target
 					for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
 						it->fire(target);

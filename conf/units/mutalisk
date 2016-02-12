@@ -1,7 +1,7 @@
 name Mutalisk
 maxHP 100
 speed 1000
-radius 500
+radius 1000
 dimension 0 0 0 1
 weapon{
 	name Mutalisk Spit
