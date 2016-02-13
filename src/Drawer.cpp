@@ -228,8 +228,8 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 					pos.second + dy);
 			break;
 	}
-	if (unit.animationState!=ANIMSTATE_DYING){
-		draw_HP_bar(renderer, unit, unit.xy.first/PIXEL_WIDTH, unit.xy.second/PIXEL_HEIGHT);
+	if (unit.animationState != ANIMSTATE_DYING){
+		draw_HP_bar(renderer, unit, pos.first, pos.second);
 	}
 }
 

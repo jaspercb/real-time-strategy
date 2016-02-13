@@ -13,7 +13,7 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	drawSelectionBox(false),
 	game(g),
 	teamID(teamID),
-	viewCenter(Coordinate(0, 0)),
+	viewCenter(Coordinate(5000, 5000)),
 	viewMagnification(1.0)
 {
 	
@@ -128,9 +128,11 @@ void UserInterface::renderAll( SDL_Renderer* renderer ){
 }
 
 Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c){
-	return Coordinate( PIXEL_WIDTH/this->viewMagnification*(c.first+this->viewCenter.first), PIXEL_HEIGHT/this->viewMagnification*(c.second+this->viewCenter.second) );
+	return Coordinate(	PIXEL_WIDTH/this->viewMagnification*c.first + this->viewCenter.first,
+						PIXEL_HEIGHT/this->viewMagnification*c.second + this->viewCenter.second );
 }
 
 Coordinate UserInterface::screenCoordinateFromObjective(const Coordinate c){
-	return Coordinate( (c.first-this->viewCenter.first)*this->viewMagnification/PIXEL_WIDTH, (c.second-this->viewCenter.second)*this->viewMagnification/PIXEL_HEIGHT );
+	return Coordinate(	(c.first-this->viewCenter.first)*this->viewMagnification/PIXEL_WIDTH,
+						(c.second-this->viewCenter.second)*this->viewMagnification/PIXEL_HEIGHT );
 }
