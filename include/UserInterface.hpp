@@ -8,7 +8,7 @@
 union SDL_Event;
 class Game;
 
-class UserInterface{
+class UserInterface {
 public:
 	UserInterface(Game& g, TeamID t);
 	void handleInputEvent(const SDL_Event& event);
@@ -17,6 +17,8 @@ public:
 	void renderAll( SDL_Renderer* renderer );
 
 	void tick();
+
+	void zoom(int dy);
 
 	Coordinate objectiveCoordinateFromScreen(const Coordinate c);
 	Coordinate screenCoordinateFromObjective(const Coordinate c);

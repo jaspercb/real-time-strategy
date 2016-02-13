@@ -85,11 +85,7 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 	}
 
 	else if (event.type == SDL_MOUSEWHEEL) {
-		if (event.wheel.y > 0)
-			this->viewMagnification *= 1.1; 
-		else if (event.wheel.y < 0) {
-			this->viewMagnification /= 1.1;
-		}
+		this->zoom(event.wheel.y);
 	}
 
 	else if (event.type == SDL_KEYDOWN) {
@@ -141,12 +137,12 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
 	
 	SDL_Rect drawRect;
-	drawRect.w = 30;
-	drawRect.h = 15;
+	drawRect.w = 25*this->viewMagnification;
+	drawRect.h = 15*this->viewMagnification;
 	for (UnitID &i : unitsInSelectionBox){
 		Unit& u = this->game.getUnit(i);
 		Coordinate drawCenter = this->screenCoordinateFromObjective(u.xy);
-		drawRect.x = drawCenter.first-15;
+		drawRect.x = drawCenter.first-drawRect.w/2;
 		drawRect.y = drawCenter.second;
 		SDL_RenderDrawRect(renderer, &drawRect);
 
@@ -191,6 +187,21 @@ void UserInterface::renderAll( SDL_Renderer* renderer ){
 void UserInterface::tick() {
 	this->viewCenter.first += this->cameraVx;
 	this->viewCenter.second += this->cameraVy;
+}
+
+void UserInterface::zoom(int dy) {
+	this->viewCenter.first += SCREEN_WIDTH * PIXEL_WIDTH/this->viewMagnification/2;
+	this->viewCenter.second += SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
+	
+	if (dy > 0)
+		this->viewMagnification *= 1.1;
+	else if (dy < 0) {
+		this->viewMagnification /= 1.1;
+	}
+
+	this->viewCenter.first -= SCREEN_WIDTH * PIXEL_WIDTH/this->viewMagnification/2;
+	this->viewCenter.second -= SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
+
 }
 
 Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c){
