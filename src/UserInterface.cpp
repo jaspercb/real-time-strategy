@@ -84,6 +84,14 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 		}
 	}
 
+	else if (event.type == SDL_MOUSEWHEEL) {
+		if (event.wheel.y > 0)
+			this->viewMagnification *= 1.1; 
+		else if (event.wheel.y < 0) {
+			this->viewMagnification /= 1.1;
+		}
+	}
+
 	else if (event.type == SDL_KEYDOWN) {
 		if (!event.key.repeat) {
 			switch(event.key.keysym.sym) {

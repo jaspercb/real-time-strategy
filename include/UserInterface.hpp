@@ -26,13 +26,14 @@ public:
 	bool quit;
 
 	TeamID teamID;
+	
+	float viewMagnification;
 
 private:
 	bool drawSelectionBox;
 	Coordinate selectionBoxCorner1;
 	Coordinate selectionBoxCorner2;
 	Coordinate viewCenter;
-	float viewMagnification;
 	std::vector<UnitID> unitsInSelectionBox;
 	int cameraVx, cameraVy;
 	int viewCenterMaxSpeed;

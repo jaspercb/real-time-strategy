@@ -145,9 +145,7 @@ Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, 
 	offsetX(offX),
 	offsetY(offY),
 	gapX(gX),
-	gapY(gY),
-	clip(),
-	tclip()
+	gapY(gY)
 	{
 		if (shadow){
 			this->sheet = loadShadowsheet(renderer, (std::string)src);
@@ -167,13 +165,16 @@ Spritesheet::~Spritesheet() {
 }
 
 
-void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int renderX, int renderY) {
+void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int renderX, int renderY, float magnification) {
 	//draws the spritesheet CENTERED at (renderX, renderY)
 	assert(spriteX>=0);
 	assert(spriteY>=0);
 
-	this->tclip.x = renderX-this->spriteW/2;
-	this->tclip.y = renderY-spriteH/2;
+	this->tclip.x = renderX - magnification*this->spriteW/2;
+	this->tclip.y = renderY - magnification*spriteH/2;
+
+	this->tclip.w = magnification*this->clip.w;
+	this->tclip.h = magnification*this->clip.h;
 
 	this->clip.y = offsetY + spriteY*(spriteH+gapY);
 

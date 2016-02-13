@@ -157,13 +157,15 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 						idleCycleStart + std::abs(unit.drawAnimationStep)%idleCycleLength,
 						pos.first,
-						pos.second);
+						pos.second,
+						ui->viewMagnification);
 				if (NULL != spritesheet)
 					spritesheet->render(renderer,
 						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 						idleCycleStart + std::abs(unit.drawAnimationStep)%idleCycleLength,
 						pos.first,
-						pos.second + dy);
+						pos.second + dy,
+						ui->viewMagnification);
 			}
 			else{
 				if (NULL != shadowsheet)
@@ -171,13 +173,15 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 						idleCycleStart,
 						unit.xy.first / PIXEL_WIDTH,
-						unit.xy.second);
+						unit.xy.second,
+						ui->viewMagnification);
 				if (NULL != spritesheet)
 					spritesheet->render(renderer,
 						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 						idleCycleStart,
 						pos.first,
-						pos.second + dy);		
+						pos.second + dy,
+						ui->viewMagnification);		
 			}
 			break;
 		}
@@ -187,13 +191,15 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					walkCycleStart + std::abs(unit.drawAnimationStep)%walkCycleLength,
 					pos.first,
-					pos.second);
+					pos.second,
+					ui->viewMagnification);
 			if (NULL != spritesheet)
 				spritesheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					walkCycleStart + std::abs(unit.drawAnimationStep)%walkCycleLength,
 					pos.first,
-					pos.second + dy);
+					pos.second + dy,
+					ui->viewMagnification);
 			break;
 		}
 		case ANIMSTATE_ATTACKING:
@@ -202,13 +208,15 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					attackCycleStart + unit.drawAnimationStep%attackCycleLength,
 					pos.first,
-					pos.second);
+					pos.second,
+					ui->viewMagnification);
 			if (NULL != spritesheet)
 				spritesheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					attackCycleStart + unit.drawAnimationStep%attackCycleLength,
 					pos.first,
-					pos.second + dy);
+					pos.second + dy,
+					ui->viewMagnification);
 			//debugLog(attackCycleStart + unit.drawAnimationStep%attackCycleLength);
 			//debugLog("");
 			break;
@@ -219,21 +227,23 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					deathCycleStart + std::min(deathCycleLength-1, std::abs(unit.drawAnimationStep)),
 					pos.first,
-					pos.second);
+					pos.second,
+					ui->viewMagnification);
 			else
 				spritesheet->render(renderer,
 					unit.drawAnimationStep < deathCycleLength ? unit.drawAnimationStep : deathCycleLength-1,
 					deathCycleStart,
 					pos.first,
-					pos.second + dy);
+					pos.second + dy,
+					ui->viewMagnification);
 			break;
 	}
 	if (unit.animationState != ANIMSTATE_DYING){
-		draw_HP_bar(renderer, unit, pos.first, pos.second);
+		draw_HP_bar(renderer, unit, pos.first, pos.second, ui->viewMagnification);
 	}
 }
 
-void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY) {
+void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY, const float magnification) {
 	// Draws an HP bar centered at (renderX, renderY)
 	const int granularity = 25;
 	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
