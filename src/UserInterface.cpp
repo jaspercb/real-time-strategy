@@ -112,7 +112,6 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 	}
 }
 
-
 void UserInterface::renderAll( SDL_Renderer* renderer ){
 	SDL_SetRenderDrawColor(renderer, 128, 128, 128, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
@@ -128,12 +127,10 @@ void UserInterface::renderAll( SDL_Renderer* renderer ){
 	SDL_RenderPresent( renderer );
 }
 
-
-
 Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c){
-	return Coordinate(c.first*PIXEL_WIDTH, c.second*PIXEL_HEIGHT);
+	return Coordinate( PIXEL_WIDTH/this->viewMagnification*(c.first+this->viewCenter.first), PIXEL_HEIGHT/this->viewMagnification*(c.second+this->viewCenter.second) );
 }
 
 Coordinate UserInterface::screenCoordinateFromObjective(const Coordinate c){
-	return Coordinate(c.first/PIXEL_WIDTH, c.second/PIXEL_HEIGHT);
+	return Coordinate( (c.first-this->viewCenter.first)*this->viewMagnification/PIXEL_WIDTH, (c.second-this->viewCenter.second)*this->viewMagnification/PIXEL_HEIGHT );
 }
