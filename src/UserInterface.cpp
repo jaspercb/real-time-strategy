@@ -65,6 +65,12 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 		}
 	}
 	else if (event.type == SDL_MOUSEMOTION) {
+		if (SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(2)) { // if middle mouse button is being held down
+			Coordinate newViewCenter = this->screenCoordinateFromObjective(this->viewCenter);
+			newViewCenter.first -= event.motion.xrel;
+			newViewCenter.second -= event.motion.yrel;
+			this->viewCenter = this->objectiveCoordinateFromScreen(newViewCenter);
+		}
 		if (SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)) { // if left mouse button is being held down
 			this->selectionBoxCorner2 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
 
