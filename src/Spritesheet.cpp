@@ -105,7 +105,7 @@ void teamColorSpritesheet(SDL_Surface *surface, TeamColor color) {
 
 	SDL_Color colors[8];
 
-	for (int i=0; i<8; i++){
+	for (int i=0; i<8; i++) {
 		colors[i]=colormapping->format->palette->colors[GetPixel8(colormapping, i, (int)color)];
 	}
 
@@ -147,7 +147,7 @@ Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, 
 	gapX(gX),
 	gapY(gY)
 	{
-		if (shadow){
+		if (shadow) {
 			this->sheet = loadShadowsheet(renderer, (std::string)src);
 		}
 		else{
@@ -178,11 +178,11 @@ void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int r
 
 	this->clip.y = offsetY + spriteY*(spriteH+gapY);
 
-	if (spriteX>=2*spritesX){
+	if (spriteX>=2*spritesX) {
 		debugLog(spriteX);
 		return;
 	}
-	if (spriteX<spritesX){
+	if (spriteX<spritesX) {
 		this->clip.x = offsetX + spriteX*(spriteW+gapX);
 		SDL_RenderCopyEx( renderer, sheet, &clip, &tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_NONE /*flip parameter*/ );
 	} else {

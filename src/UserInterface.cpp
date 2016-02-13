@@ -22,13 +22,13 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	
 }
 
-void UserInterface::handleInputEvent(const SDL_Event& event){
+void UserInterface::handleInputEvent(const SDL_Event& event) {
 	if (event.type == SDL_QUIT) {
 		this->quit = true;
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN) {
 		if (event.button.button == SDL_BUTTON_RIGHT) {			
-			Coordinate clickedCoord = objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));;
+			Coordinate clickedCoord = objectiveCoordinateFromScreen( Coordinate(event.button.x, event.button.y) );
 
 			Command cmd;
 			cmd.commanded = this->unitsInSelectionBox;
@@ -159,21 +159,21 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	SDL_Rect drawRect;
 	drawRect.w = 25*this->viewMagnification;
 	drawRect.h = 15*this->viewMagnification;
-	for (UnitID &i : unitsInSelectionBox){
+	for (UnitID &i : unitsInSelectionBox) {
 		Unit& u = this->game.getUnit(i);
 		Coordinate drawCenter = this->screenCoordinateFromObjective(u.xy);
 		drawRect.x = drawCenter.first-drawRect.w/2;
 		drawRect.y = drawCenter.second;
 		SDL_RenderDrawRect(renderer, &drawRect);
 
-		if (u.dimension.air){
+		if (u.dimension.air) {
 			SDL_RenderDrawLine(renderer, drawCenter.first, drawCenter.second+7, drawCenter.first, drawCenter.second-AIRBORNE_RENDER_HEIGHT);
 		}
 	}
 }
 
 void UserInterface::renderHUD( SDL_Renderer* renderer ) {
-	if (this->drawSelectionBox){
+	if (this->drawSelectionBox) {
 		SDL_Rect selectionBox;
 		Coordinate screenCorner1 = this->screenCoordinateFromObjective(this->selectionBoxCorner1);
 		Coordinate screenCorner2 = this->screenCoordinateFromObjective(this->selectionBoxCorner2);
@@ -189,13 +189,13 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 	}
 }
 
-void UserInterface::renderAll( SDL_Renderer* renderer ){
+void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	SDL_SetRenderDrawColor(renderer, 128, 128, 128, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
 
 	this->renderSelection( renderer );
 
-	for (auto &u : this->game.unitsByID){
+	for (auto &u : this->game.unitsByID) {
 		u.second.draw( renderer, this );
 	}
 
@@ -223,12 +223,12 @@ void UserInterface::zoom(int dy) {
 	this->viewCenter.second -= SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
 }
 
-Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c){
+Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c) {
 	return Coordinate(	PIXEL_WIDTH/this->viewMagnification*c.first + this->viewCenter.first,
 						PIXEL_HEIGHT/this->viewMagnification*c.second + this->viewCenter.second );
 }
 
-Coordinate UserInterface::screenCoordinateFromObjective(const Coordinate c){
+Coordinate UserInterface::screenCoordinateFromObjective(const Coordinate c) {
 	return Coordinate(	(c.first-this->viewCenter.first)*this->viewMagnification/PIXEL_WIDTH,
 						(c.second-this->viewCenter.second)*this->viewMagnification/PIXEL_HEIGHT );
 }

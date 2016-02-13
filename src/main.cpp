@@ -20,8 +20,7 @@ bool init() {
 	bool success = true;
 
 	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-	{
+	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
 		success = false;
 	}
@@ -29,13 +28,11 @@ bool init() {
 	{
 		//Create window
 		gWindow = SDL_CreateWindow( "I totally know how SDL works", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( gWindow == NULL )
-		{
+		if( gWindow == NULL ) {
 			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 			success = false;
 		}
-		else
-		{
+		else {
 			//Get window surface
 			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
 		}
@@ -43,13 +40,12 @@ bool init() {
 	return success;
 }
 
-void cleanup_SDL()
-{
+void cleanup_SDL() {
 	SDL_DestroyWindow( gWindow );
 	SDL_Quit();
 }
 
-int main(){
+int main() {
 	debugLog(" Testing...");
 
 	//Start up SDL and create window
@@ -73,15 +69,15 @@ int main(){
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
 		UnitID a,b;
-		for (int i=5; i<15; i++){
-			for (int j=5; j<15; j++){
+		for (int i=5; i<15; i++) {
+			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
 				g.createUnit(tID1, (UnitTemplateID)3, Coordinate(2500*i, 2500*j));
 			}
 		}
 
-		for (int i=5; i<15; i++){
-			for (int j=5; j<15; j++){
+		for (int i=5; i<15; i++) {
+			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
 				g.createUnit(tID2, (UnitTemplateID)3, Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
 			}
@@ -101,7 +97,7 @@ int main(){
 		//g.getUnit(b).handleCommand(cmd2);
 
 
-		for (int i=0; i<2000; i++){
+		for (int i=0; i<2000; i++) {
 			if (userInterface.quit)
 				break;
 

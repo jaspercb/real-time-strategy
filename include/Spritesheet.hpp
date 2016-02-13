@@ -13,7 +13,7 @@ SDL_Texture* loadShadowsheet( SDL_Renderer* renderer, std::string path );
 
 void teamColorSpritesheet(SDL_Surface *surface, TeamColor color);
 
-class Spritesheet{
+class Spritesheet {
 	// Class for the actual image files that form spritesheets, and abstracting away all the pixel alignment messiness.
 	public:
 		Spritesheet(SDL_Texture* src, int w, int h, int sX, int sY, int offX = 0, int offY = 0, int gX = 0, int gY = 0);

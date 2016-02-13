@@ -6,7 +6,7 @@
 class Unit;
 class UserInterface;
 
-class Drawer{
+class Drawer {
 	// Class that attaches to a Unit and manages all the data that is only relevant to drawing
 	public:
 		Drawer(Spritesheet* sp);

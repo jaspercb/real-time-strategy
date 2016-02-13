@@ -140,7 +140,7 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) 
 	return ret;
 }
 
-std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit& u){
+std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit& u) {
 	std::vector<UnitID> ret;
 	for (auto &unitID : this->unitsInCircle(u.xy, u.getUnitTemplate().radius())) {
 		Unit& other = this->game->getUnit(unitID);

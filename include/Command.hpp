@@ -6,21 +6,20 @@
 
 class Unit;
 
-enum CommandType{
+enum CommandType {
 	CMD_IDLE, 
 	CMD_GOTOCOORD,
 	CMD_ATTACK,
 	CMD_ATTACKMOVE
 };
 
-enum QueueSetting{
+enum QueueSetting {
 	QUEUE_OVERWRITE,
 	QUEUE_FRONT,
 	QUEUE_BACK
 };
 
-class Command
-{
+class Command {
 public:
 	Command();
 	Command(CommandType cmdtype_);

@@ -39,91 +39,91 @@ Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 	bool hasShadowsheet=false, hasSpritesheet=false;
 	std::string s;
 
-	while (is>>s){
-		if (s=="#"){
+	while (is>>s) {
+		if (s=="#") {
 			getline(is, s); // this is a comment. we ignore comments.
 		}
-		else if (s=="spritesheet"){
+		else if (s=="spritesheet") {
 			is>>spritefilename;
 			hasSpritesheet=true;
 		}
 
-		else if (s=="shadowsheet"){
+		else if (s=="shadowsheet") {
 			is>>shadowfilename;
 			hasShadowsheet=true;
 		}
 		
-		else if (s=="numFacingDirections"){
+		else if (s=="numFacingDirections") {
 			is>>numFacingDirections;
 		}
 
-		else if (s=="idleCycleStart"){
+		else if (s=="idleCycleStart") {
 			is>>idleCycleStart;
 		}
 
-		else if (s=="idleCycleLength"){
+		else if (s=="idleCycleLength") {
 			is>>idleCycleLength;
 		}
 
-		else if (s=="walkCycleStart"){
+		else if (s=="walkCycleStart") {
 			is>>walkCycleStart;
 		}
 
-		else if (s=="walkCycleLength"){
+		else if (s=="walkCycleLength") {
 			is>>walkCycleLength;
 		}
 
-		else if (s=="attackCycleLength"){
+		else if (s=="attackCycleLength") {
 			is>>attackCycleLength;
 		}
 
-		else if (s=="attackCycleStart"){
+		else if (s=="attackCycleStart") {
 			is>>attackCycleStart;
 		}
 
-		else if (s=="deathCycleLength"){
+		else if (s=="deathCycleLength") {
 			is>>deathCycleLength;
 		}
 
-		else if (s=="deathCycleStart"){
+		else if (s=="deathCycleStart") {
 			is>>deathCycleStart;
 		}
 
-		else if (s=="deathCycleVertical"){
+		else if (s=="deathCycleVertical") {
 			is>>deathCycleVertical;
 		}
 
-		else if (s=="spritesize"){
+		else if (s=="spritesize") {
 			is>>sw;
 			is>>sh;
 		}
 
-		else if (s=="shadowsize"){
+		else if (s=="shadowsize") {
 			is>>shw;
 			is>>shh;
 		}
 
-		else if (s=="spritesheetsize"){
+		else if (s=="spritesheetsize") {
 			is>>sx;
 			is>>sy;
 		}
 
-		else if (s=="shadowsheetsize"){
+		else if (s=="shadowsheetsize") {
 			is>>shx;
 			is>>shy;
 		}
 
-		else if (s=="offset"){
+		else if (s=="offset") {
 			is>>ox;
 			is>>oy;
 		}
 
-		else if (s=="gap"){
+		else if (s=="gap") {
 			is>>gx;
 			is>>gy;
 		}
 
-		else if (s=="}"){
+		else if (s=="}") {
 			if (hasSpritesheet) {
 				spritesheet = new Spritesheet(gRenderer, spritefilename.c_str(), sw, sh, sx, sy, ox, oy, gx, gy, false, teamColor);
 			}
@@ -151,7 +151,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 
 	switch (unit.animationState) {
 		case ANIMSTATE_IDLE: {
-			if (idleCycleLength){
+			if (idleCycleLength) {
 				if (NULL != shadowsheet)
 					shadowsheet->render(renderer,
 						( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
@@ -238,7 +238,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 					ui->viewMagnification);
 			break;
 	}
-	if (unit.animationState != ANIMSTATE_DYING){
+	if (unit.animationState != ANIMSTATE_DYING) {
 		draw_HP_bar(renderer, unit, pos.first, pos.second, ui->viewMagnification);
 	}
 }
