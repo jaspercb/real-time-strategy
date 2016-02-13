@@ -111,6 +111,7 @@ int main(){
 				userInterface.handleInputEvent(event);
 			}
 			g.tick();
+			userInterface.tick();
 			userInterface.renderAll( gRenderer );
 			SDL_Delay( 1000/FRAMERATE );
 		}

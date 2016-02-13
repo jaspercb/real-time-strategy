@@ -14,7 +14,10 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	game(g),
 	teamID(teamID),
 	viewCenter(Coordinate(5000, 5000)),
-	viewMagnification(1.0)
+	viewMagnification(1.0),
+	cameraVy(0),
+	cameraVx(0),
+	viewCenterMaxSpeed(1000)
 {
 	
 }
@@ -74,6 +77,50 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 			std::copy_if(unfilteredUnits.begin(), unfilteredUnits.end(), std::back_inserter(this->unitsInSelectionBox), lambda);
 		}
 	}
+
+	else if (event.type == SDL_KEYDOWN) {
+		if (!event.key.repeat) {
+			switch(event.key.keysym.sym) {
+				case SDLK_UP: {
+					this->cameraVy -= this->viewCenterMaxSpeed;
+					break;
+				}
+				case SDLK_DOWN: {
+					this->cameraVy += this->viewCenterMaxSpeed;
+					break;
+				}
+				case SDLK_LEFT: {
+					this->cameraVx -= this->viewCenterMaxSpeed;
+					break;
+				}
+				case SDLK_RIGHT: {
+					this->cameraVx += this->viewCenterMaxSpeed;
+					break;
+				}
+			}
+		}
+	}
+
+	else if (event.type == SDL_KEYUP) {
+		switch(event.key.keysym.sym) {
+			case SDLK_UP: {
+				this->cameraVy = 0;
+				break;
+		}
+			case SDLK_DOWN: {
+				this->cameraVy = 0;
+				break;
+			}
+			case SDLK_LEFT: {
+				this->cameraVx = 0;
+				break;
+			}
+			case SDLK_RIGHT: {
+				this->cameraVx = 0;
+				break;
+			}
+		}
+	}
 }
 
 void UserInterface::renderSelection( SDL_Renderer* renderer ) {
@@ -125,6 +172,11 @@ void UserInterface::renderAll( SDL_Renderer* renderer ){
 	this->renderHUD( renderer );
 
 	SDL_RenderPresent( renderer );
+}
+
+void UserInterface::tick() {
+	this->viewCenter.first += this->cameraVx;
+	this->viewCenter.second += this->cameraVy;
 }
 
 Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c){

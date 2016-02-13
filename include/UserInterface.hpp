@@ -16,6 +16,8 @@ public:
 	void renderHUD( SDL_Renderer* renderer );
 	void renderAll( SDL_Renderer* renderer );
 
+	void tick();
+
 	Coordinate objectiveCoordinateFromScreen(const Coordinate c);
 	Coordinate screenCoordinateFromObjective(const Coordinate c);
 
@@ -32,5 +34,7 @@ private:
 	Coordinate viewCenter;
 	float viewMagnification;
 	std::vector<UnitID> unitsInSelectionBox;
+	int cameraVx, cameraVy;
+	int viewCenterMaxSpeed;
 };
 
