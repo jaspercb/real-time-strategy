@@ -270,13 +270,13 @@ void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const in
 	emptyclip.x = 107-emptyclip.w;
 	emptyclip.y = 0;
 
-	tclip.w = 3 + 3*HP/granularity;
-	tclip.h = 10;
-	tclip.x=renderX-(barlength)/2;
-	tclip.y=renderY+dy-25;
+	tclip.w = magnification*(3 + 3*HP/granularity);
+	tclip.h = magnification*10;
+	tclip.x=renderX-(magnification*barlength)/2;
+	tclip.y=renderY+ (dy - 25) * magnification;
 	
 	SDL_RenderCopy(renderer, hpBarFull, &fullclip, &tclip);
-	tclip.x+=fullclip.w;
-	tclip.w=emptyclip.w;
+	tclip.x += magnification*fullclip.w;
+	tclip.w = magnification*emptyclip.w;
 	SDL_RenderCopy(renderer, hpBarEmpty, &emptyclip, &tclip);
 }
