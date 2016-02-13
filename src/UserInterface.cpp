@@ -27,25 +27,37 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 		this->quit = true;
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN) {
-		if (event.button.button == SDL_BUTTON_RIGHT) {
-			Coordinate targetCoord = objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
-			for ( auto &i : game.inhabitedGrid.unitsInCircle(targetCoord, (Distance)10) ) {
+		if (event.button.button == SDL_BUTTON_RIGHT) {			
+			Coordinate clickedCoord = objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));;
+
+			Command cmd;
+			cmd.commanded = this->unitsInSelectionBox;
+
+			if ( this->shiftHeld ) {
+				cmd.queueSetting = QUEUE_BACK;
+			}
+			else{
+				cmd.queueSetting = QUEUE_OVERWRITE;
+			}
+			
+
+			for ( auto &i : game.inhabitedGrid.unitsInCircle(clickedCoord, (Distance)10) ) { // hackish way of handling targeting selection
 				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(i).teamID) ) {
+					cmd.cmdtype = CMD_ATTACK;
+					cmd.targetID = i;
 					debugLog("issuing attack command");
-					Command atkcmd(CMD_ATTACKMOVE);
-					atkcmd.targetCoord = targetCoord;
-					atkcmd.commanded = this->unitsInSelectionBox;
-					game.handleCommand(atkcmd);
+					game.handleCommand(cmd);
 					return;
 				}
 			}
 
-			Command movecmd(CMD_GOTOCOORD);
-			movecmd.targetCoord = objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
-			movecmd.queueSetting = QUEUE_OVERWRITE;
-			movecmd.commanded = this->unitsInSelectionBox;
-			game.handleCommand(movecmd);
+			debugLog("issuing move command");
+			// if we're not attacking, we're moving
+			cmd.cmdtype = CMD_GOTOCOORD;
+			cmd.targetCoord = clickedCoord;
+			game.handleCommand(cmd);
 		}
+		
 		else if (event.button.button == SDL_BUTTON_LEFT) {
 			this->selectionBoxCorner1 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
 			this->selectionBoxCorner2 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
@@ -107,6 +119,10 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 					this->cameraVx += this->viewCenterMaxSpeed;
 					break;
 				}
+				case SDLK_LSHIFT: {
+					this->shiftHeld = true;
+					break;
+				}
 			}
 		}
 	}
@@ -129,6 +145,10 @@ void UserInterface::handleInputEvent(const SDL_Event& event){
 				this->cameraVx = 0;
 				break;
 			}
+				case SDLK_LSHIFT: {
+					this->shiftHeld = false;
+					break;
+				}
 		}
 	}
 }
@@ -201,7 +221,6 @@ void UserInterface::zoom(int dy) {
 
 	this->viewCenter.first -= SCREEN_WIDTH * PIXEL_WIDTH/this->viewMagnification/2;
 	this->viewCenter.second -= SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
-
 }
 
 Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c){

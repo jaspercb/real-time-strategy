@@ -6,10 +6,10 @@
 
 StateGotoCoordinate::StateGotoCoordinate(Coordinate targ):
 	targetCoord(targ),
-	last5FramesDistance(0)
+	last5FramesDistance(100000)
 	{
 		for (int i=0; i<5; i++){
-			this->last5distances[i] = 0;
+			this->last5distances[i] = 10000;
 		}
 	}
 

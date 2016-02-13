@@ -26,15 +26,15 @@ attackTargetID(0)
 {
 	UnitTemplate& unitTemplate = getUnitTemplate();
 	
-	hp = unitTemplate.maxHP();
-	es = unitTemplate.maxES();
-	dimension = unitTemplate.dimension;
+	this->hp = unitTemplate.maxHP();
+	this->es = unitTemplate.maxES();
+	this->dimension = unitTemplate.dimension;
 
 	for (auto it = unitTemplate.weaponTemplates.begin(); it!=unitTemplate.weaponTemplates.end(); it++){
-		weapons_.push_back(Weapon(*it, *this));
+		this->weapons_.push_back(Weapon(*it, *this));
 	}
 
-	stateQueue_.push_back(std::shared_ptr<UnitState>(new StateIdle()));
+	this->idleState = std::shared_ptr<UnitState>( new StateIdle() );
 }
 
 Unit::Unit(Unit &&u) : 
@@ -50,7 +50,8 @@ animationState(u.animationState),
 drawAnimationStep(u.drawAnimationStep),
 drawFacingAngle(u.drawFacingAngle),
 attackTargetID(u.attackTargetID),
-stateQueue_(u.stateQueue_)
+stateQueue_(u.stateQueue_),
+idleState(u.idleState)
 {
 	for(Weapon &w : u.weapons_) {
 		weapons_.push_back(Weapon(w, *this));
@@ -69,9 +70,6 @@ UpdateStatus Unit::update()
 
 	drawAnimationStep++;
 	
-	if (stateQueue_.empty()) {
-		stateQueue_.push_back(std::shared_ptr<UnitState>(new StateIdle()));
-	}
 	switch (animationState){
 		case (ANIMSTATE_DYING): {
 			if (drawAnimationStep>20){
@@ -109,8 +107,8 @@ UpdateStatus Unit::update()
 					stateQueue_.pop_front();
 				}
 			}
-			if (stateQueue_.empty()) {
-				stateQueue_.push_back(std::shared_ptr<UnitState>(new StateIdle()));
+			else{
+				this->idleState->update(*this);
 			}
 	}
 	return STATUS_OK;
@@ -118,11 +116,14 @@ UpdateStatus Unit::update()
 
 void Unit::handleCommand(Command command)
 {
-	if (stateQueue_.empty()){
-		stateQueue_.push_front(std::shared_ptr<UnitState>(new StateIdle()));
+	std::shared_ptr<UnitState> state;
+	
+	if (this->stateQueue_.empty()) {
+		state = this->idleState->handleCommand(*this, command);
 	}
-
-	std::shared_ptr<UnitState> state = stateQueue_.front()->handleCommand(*this, command);
+	else {
+		state = this->stateQueue_.front()->handleCommand(*this, command);
+	}
 	if (state != NULL) {
 		switch (command.queueSetting) {
 			case QUEUE_OVERWRITE: { // delete state queue and replace with just this command
@@ -131,12 +132,15 @@ void Unit::handleCommand(Command command)
 				}
 				stateQueue_.clear();
 				stateQueue_.push_front(state);
+				break;
 			}
 			case QUEUE_BACK: { // append to queue, do after other states
 				stateQueue_.push_back(state);
+				break;
 			}
 			case QUEUE_FRONT: { // prepend to queue, but execute other states after
 				stateQueue_.push_front(state);
+				break;
 			}
 		}
 	}

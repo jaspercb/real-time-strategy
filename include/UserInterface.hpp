@@ -39,5 +39,7 @@ private:
 	std::vector<UnitID> unitsInSelectionBox;
 	int cameraVx, cameraVy;
 	int viewCenterMaxSpeed;
+
+	bool shiftHeld;
 };
 

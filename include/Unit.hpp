@@ -72,4 +72,5 @@ private:
 	std::deque<std::shared_ptr<UnitState> > stateQueue_;
 	TeamID lastAttackingTeamID;
 	UnitID lastAttackingUnitID;
+	std::shared_ptr<UnitState> idleState;
 };
