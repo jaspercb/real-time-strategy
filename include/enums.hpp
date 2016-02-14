@@ -18,6 +18,6 @@ enum TeamColor{
 	COLOR_IRIS=12,
 	COLOR_OLIVE=13,
 	COLOR_METAL=14,
-	COLOR_CYAN=15
-
+	COLOR_CYAN=15,
+	COLOR_NULL=16 // for when we don't want to recolor
 };

@@ -15,17 +15,11 @@ weapon{
 }
 
 drawer {
-	spritesheet ../resources/graphics/terran/units/marine.png
-	shadowsheet ../resources/graphics/terran/units/marine-shadow.png
-	
-	spritesize 64 64
-	spritesheetsize 17 14
-	
-	shadowsize 44 44
-	shadowsheetsize 17 14
-	
-	numFacingDirections 17
+	spritesheet marine-spritesheet
+	shadowsheet marine-shadowsheet
 
+	numFacingDirections 17
+	
 	attackCycleStart 2
 	attackCycleLength 2
 	walkCycleStart 4

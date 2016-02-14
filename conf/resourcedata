@@ -1,0 +1,13 @@
+marine-spritesheet {
+	filepath ../resources/graphics/terran/units/marine.png
+	size 64 64
+	sheetsize 17 14
+	shouldApplyTeamColor 1
+}
+
+marine-shadowsheet {
+	filepath ../resources/graphics/terran/units/marine-shadow.png
+	size 44 44
+	sheetsize 17 14
+	isShadow 1
+}

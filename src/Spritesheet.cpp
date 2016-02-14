@@ -137,28 +137,30 @@ Spritesheet::Spritesheet(SDL_Texture *src, int w, int h, int sX, int sY, int off
 		this->tclip.h = h;
 	}
 
-Spritesheet::Spritesheet(SDL_Renderer *renderer, const char* src, int w, int h, int sX, int sY, int offX, int offY, int gX, int gY, bool shadow, TeamColor teamColor):
-	spriteW(w),
-	spriteH(h),
-	spritesX(sX),
-	spritesY(sY),
-	offsetX(offX),
-	offsetY(offY),
-	gapX(gX),
-	gapY(gY)
+Spritesheet::Spritesheet(SDL_Renderer *renderer, ResourceData resourceData, TeamColor teamColor):
+	spriteW(resourceData.spriteW),
+	spriteH(resourceData.spriteH),
+	spritesX(resourceData.spritesX),
+	spritesY(resourceData.spritesY),
+	offsetX(resourceData.offsetX),
+	offsetY(resourceData.offsetY),
+	gapX(resourceData.gapX),
+	gapY(resourceData.gapY)
 	{
-		if (shadow) {
-			this->sheet = loadShadowsheet(renderer, (std::string)src);
+		if (resourceData.isShadow) {
+			this->sheet = loadShadowsheet(renderer, resourceData.filepath);
+		}
+		else if (resourceData.shouldApplyTeamColor) {
+			this->sheet = loadSpritesheet(renderer, resourceData.filepath, teamColor);
 		}
 		else{
-			this->sheet = loadSpritesheet(renderer, (std::string)src, teamColor);
+			this->sheet = loadTexture(renderer, resourceData.filepath);
 		}
-		this->clip.w = w;
-		this->clip.h = h;
-		this->tclip.w = w;
-		this->tclip.h = h;
+		this->clip.w = resourceData.spriteW;
+		this->clip.h = resourceData.spriteH;
+		this->tclip.w = resourceData.spriteW;
+		this->tclip.h = resourceData.spriteH;
 	}
-
 
 Spritesheet::~Spritesheet() {
 	SDL_DestroyTexture(this->sheet);
@@ -176,6 +178,7 @@ void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int r
 	this->tclip.w = magnification*this->clip.w;
 	this->tclip.h = magnification*this->clip.h;
 
+	this->clip.x = offsetX + spriteX*(spriteW+gapX);
 	this->clip.y = offsetY + spriteY*(spriteH+gapY);
 
 	if (spriteX>=2*spritesX) {

@@ -7,16 +7,18 @@
 #include "globals.hpp"
 #include "Unit.hpp"
 #include "UserInterface.hpp"
+#include "ResourceManager.hpp"
 
 SDL_Texture* hpBarEmpty = NULL;
 SDL_Texture* hpBarFull = NULL;
+
 
 int AIRBORNE_RENDER_HEIGHT = 40;
 
 const int PIXEL_WIDTH = 100;
 const int PIXEL_HEIGHT = 100;
 
-Drawer::Drawer(Spritesheet* sp):
+Drawer::Drawer(std::shared_ptr<Spritesheet> sp):
 	spritesheet(sp)
 	{
 	}
@@ -34,7 +36,6 @@ Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 	spritesheet(NULL),
 	shadowsheet(NULL)
 {
-	int sw=0, sh=0, ox=0, oy=0, gx=0, gy=0, sx=0, sy=0, shh=0, shw=0, shx=0, shy=0;
 	std::string spritefilename, shadowfilename;
 	bool hasShadowsheet=false, hasSpritesheet=false;
 	std::string s;
@@ -93,53 +94,21 @@ Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 			is>>deathCycleVertical;
 		}
 
-		else if (s=="spritesize") {
-			is>>sw;
-			is>>sh;
-		}
-
-		else if (s=="shadowsize") {
-			is>>shw;
-			is>>shh;
-		}
-
-		else if (s=="spritesheetsize") {
-			is>>sx;
-			is>>sy;
-		}
-
-		else if (s=="shadowsheetsize") {
-			is>>shx;
-			is>>shy;
-		}
-
-		else if (s=="offset") {
-			is>>ox;
-			is>>oy;
-		}
-
-		else if (s=="gap") {
-			is>>gx;
-			is>>gy;
-		}
-
 		else if (s=="}") {
 			if (hasSpritesheet) {
-				spritesheet = new Spritesheet(gRenderer, spritefilename.c_str(), sw, sh, sx, sy, ox, oy, gx, gy, false, teamColor);
+				spritesheet = gResourceManager->get(spritefilename, teamColor);
 			}
 			if (hasShadowsheet)
-				shadowsheet = new Spritesheet(gRenderer, shadowfilename.c_str(), shw, shh, shx, shy, ox, oy, gx, gy, true);
+				shadowsheet = gResourceManager->get(shadowfilename, teamColor);
 			return;
 		}
 		else{
-			debugLog("Error: Drawer constructor passed ifstream with unrecognized label:"+s);
+			debugLog("Error: Drawer constructor ifstream contained unknown token:"+s);
 		}
 	}
 }
 
 Drawer::~Drawer() {
-	delete this->spritesheet;
-	delete this->shadowsheet;
 }
 
 void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coordinate cameraposition */) {

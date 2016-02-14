@@ -1,12 +1,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "globals.hpp"
+
 #include "Game.hpp"
 #include "UserInterface.hpp"
 #include "Unit.hpp"
 #include "Logging.hpp"
 #include "Drawer.hpp"
-#include "globals.hpp"
+#include "ResourceManager.hpp"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -14,6 +16,7 @@ const int FRAMERATE = 20;
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
+ResourceManager* gResourceManager = NULL;
 
 bool init() {
 	//Initialization flag
@@ -37,6 +40,9 @@ bool init() {
 			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
 		}
 	}
+
+	gResourceManager = new ResourceManager();
+
 	return success;
 }
 
@@ -68,7 +74,6 @@ int main() {
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
-		UnitID a,b;
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
