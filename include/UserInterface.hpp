@@ -1,8 +1,11 @@
 #pragma once
 
 #include <vector>
+#include <memory>
+#include <set>
 
 #include "typedefs.hpp"
+#include "Animation.hpp"
 
 // Forward declarations
 union SDL_Event;
@@ -30,6 +33,8 @@ public:
 	TeamID teamID;
 	
 	float viewMagnification;
+
+	std::set<std::unique_ptr<Animation> > animations;
 
 private:
 	bool drawSelectionBox;

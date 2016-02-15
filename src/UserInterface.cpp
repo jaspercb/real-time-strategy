@@ -7,6 +7,7 @@
 #include "Command.hpp"
 #include "Unit.hpp"
 #include "Logging.hpp"
+#include "Animation.hpp"
 
 UserInterface::UserInterface(Game& g, TeamID teamID):
 	quit(false),
@@ -56,6 +57,8 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 			cmd.cmdtype = CMD_GOTOCOORD;
 			cmd.targetCoord = clickedCoord;
 			game.handleCommand(cmd);
+
+			this->animations.insert(newAnimation("gotocoord-animation", clickedCoord, 2));
 		}
 		
 		else if (event.button.button == SDL_BUTTON_LEFT) {
@@ -187,11 +190,16 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 			debugLog(SDL_GetError());
 		//debugLog(this->unitsInSelectionBox.size());
 	}
+
 }
 
 void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	SDL_SetRenderDrawColor(renderer, 128, 128, 128, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
+
+	for (auto &animation : this->animations){
+		animation->draw(renderer, this);
+	}
 
 	this->renderSelection( renderer );
 
@@ -207,6 +215,11 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 void UserInterface::tick() {
 	this->viewCenter.first += this->cameraVx;
 	this->viewCenter.second += this->cameraVy;
+
+	for (auto &animation : this->animations){
+		if (STATUS_REMOVE == animation->tick())
+			this->animations.erase(animation);
+	}
 }
 
 void UserInterface::zoom(int dy) {

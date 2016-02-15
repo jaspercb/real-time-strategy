@@ -105,3 +105,11 @@ zergling-shadowsheet {
 	isShadow 1
 }
 
+
+
+
+gotocoord-animation {
+	filepath ../resources/gotocoord-animation.png
+	size 64 64
+	sheetsize 4 1
+}

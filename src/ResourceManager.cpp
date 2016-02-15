@@ -2,7 +2,6 @@
 #include "Logging.hpp"
 #include "Spritesheet.hpp"
 
-
 #include "globals.hpp"
 
 #include <fstream>
@@ -84,4 +83,14 @@ std::shared_ptr<Spritesheet> ResourceManager::get(std::string resourcename, Team
 		this->resourceTable[key] = this->load(resourcename, teamColor);
 	}
 	return this->resourceTable[key];
+}
+
+
+
+int ResourceManager::getSpritesX(std::string resourcename) {
+	return this->resourceDataTable[resourcename].spritesX;
+}
+
+int ResourceManager::getSpritesY(std::string resourcename) {
+	return this->resourceDataTable[resourcename].spritesY;
 }
