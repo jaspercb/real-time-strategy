@@ -47,7 +47,7 @@ private:
 	Coordinate selectionBoxCorner1;
 	Coordinate selectionBoxCorner2;
 	Coordinate viewCenter;
-	std::vector<UnitID> unitsInSelectionBox;
+	std::vector<UnitID> selectedUnits;
 	int cameraVx, cameraVy;
 	int viewCenterMaxSpeed;
 

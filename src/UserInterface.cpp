@@ -48,9 +48,9 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 		
 		else if (event.button.button == SDL_BUTTON_LEFT) {
 			debugLog(this->keyboardState[SDL_SCANCODE_A]);
-			debugLog(this->unitsInSelectionBox.size());
+			debugLog(this->selectedUnits.size());
 			debugLog("");
-			if (this->keyboardState[SDL_SCANCODE_A] && this->unitsInSelectionBox.size() ) {
+			if (this->keyboardState[SDL_SCANCODE_A] && this->selectedUnits.size() ) {
 				debugLog("issuing attack move");
 				this->issueAttackMoveCmd(clickedCoord);
 				return;
@@ -60,12 +60,12 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 			this->selectionBoxCorner2 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
 			this->drawSelectionBox = true;
 
-			this->unitsInSelectionBox.clear();
+			this->selectedUnits.clear();
 			auto unfilteredUnits = this->game.inhabitedGrid.unitsInRectangle(this->selectionBoxCorner1, this->selectionBoxCorner2);
 			auto lambda = [this](UnitID u) {
 				return this->game.teamsAreFriendly(this->teamID, this->game.getUnit(u).teamID);
 			};
-			std::copy_if(unfilteredUnits.begin(), unfilteredUnits.end(), std::back_inserter(this->unitsInSelectionBox), lambda);
+			std::copy_if(unfilteredUnits.begin(), unfilteredUnits.end(), std::back_inserter(this->selectedUnits), lambda);
 		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP) {
@@ -88,8 +88,8 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 				return this->game.teamsAreFriendly(this->teamID, this->game.getUnit(u).teamID);
 			};
 
-			this->unitsInSelectionBox.clear();
-			std::copy_if(unfilteredUnits.begin(), unfilteredUnits.end(), std::back_inserter(this->unitsInSelectionBox), lambda);
+			this->selectedUnits.clear();
+			std::copy_if(unfilteredUnits.begin(), unfilteredUnits.end(), std::back_inserter(this->selectedUnits), lambda);
 		}
 	}
 
@@ -156,7 +156,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	SDL_Rect drawRect;
 	drawRect.w = 25*this->viewMagnification;
 	drawRect.h = 15*this->viewMagnification;
-	for (UnitID &i : unitsInSelectionBox) {
+	for (UnitID &i : selectedUnits) {
 		Unit& u = this->game.getUnit(i);
 		Coordinate drawCenter = this->screenCoordinateFromObjective(u.xy);
 		drawRect.x = drawCenter.first-drawRect.w/2;
@@ -182,7 +182,7 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 		SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
 		if (SDL_RenderDrawRect(renderer, &selectionBox))
 			debugLog(SDL_GetError());
-		//debugLog(this->unitsInSelectionBox.size());
+		//debugLog(this->selectedUnits.size());
 	}
 
 }
@@ -243,7 +243,7 @@ Coordinate UserInterface::screenCoordinateFromObjective(const Coordinate c) {
 
 void UserInterface::issueGotoCoordCmd(Coordinate targetCoord) {
 	Command cmd(CMD_GOTOCOORD);
-	cmd.commanded = this->unitsInSelectionBox;
+	cmd.commanded = this->selectedUnits;
 	cmd.queueSetting = this->shiftHeld ? QUEUE_BACK : QUEUE_OVERWRITE;
 	cmd.targetCoord = targetCoord;
 	
@@ -254,7 +254,7 @@ void UserInterface::issueGotoCoordCmd(Coordinate targetCoord) {
 
 void UserInterface::issueAttackCmd(UnitID targetID) {
 	Command cmd(CMD_ATTACK);
-	cmd.commanded = this->unitsInSelectionBox;
+	cmd.commanded = this->selectedUnits;
 	cmd.queueSetting = this->shiftHeld ? QUEUE_BACK : QUEUE_OVERWRITE;
 	cmd.targetID = targetID;
 	
@@ -265,7 +265,7 @@ void UserInterface::issueAttackCmd(UnitID targetID) {
 
 void UserInterface::issueAttackMoveCmd(Coordinate targetCoord){
 	Command cmd(CMD_ATTACKMOVE);
-	cmd.commanded = this->unitsInSelectionBox;
+	cmd.commanded = this->selectedUnits;
 	cmd.queueSetting = this->shiftHeld ? QUEUE_BACK : QUEUE_OVERWRITE;
 	cmd.targetCoord = targetCoord;
 	
