@@ -1,0 +1,29 @@
+name Scout
+maxHP 50
+speed 600
+radius 300
+dimension 0 0 0 1
+weapon {
+	name Small Plasma 
+	damageType DMG_KINETIC
+	damage 5
+	reloadTime 0
+	range 5000
+	weaponVelocity 0
+	aoeRadius 0
+	dimensions 0 0 0 1
+}
+
+drawer {
+	spritesheet scout-spritesheet
+
+	numFacingDirections 9
+
+	walkCycleStart 0
+	walkCycleLength 1
+	attackCycleStart 0
+	attackCycleLength 2
+	deathCycleStart 0
+	deathCycleLength 1
+		deathCycleVertical 1
+}

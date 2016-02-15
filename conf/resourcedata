@@ -119,3 +119,10 @@ attackmove-animation {
 	size 64 64
 	sheetsize 4 1
 }
+
+scout-spritesheet {
+	filepath 	../svgs/scout.png
+	size 32 32
+	sheetsize 9 2
+	shouldApplyTeamColor 1
+}
