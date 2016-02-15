@@ -1,28 +1,22 @@
 name Broodling
 maxHP 100
-speed 4
-radius 1
+speed 500
+radius 500
 dimension 1 0 0 0
 weapon{
 	name Broodling Spit
 	damageType DMG_KINETIC
-	damage 50
+	damage 10
 	reloadTime 3
-	range 50
+	range 5000
 	weaponVelocity 0
 	aoeRadius 0
 	dimensions 1 0 0 1
 }
 
 drawer {
-	spritesheet ../resources/graphics/zerg/units/broodling.png
-	shadowsheet ../resources/graphics/zerg/units/broodling-shadow.png
-	
-	spritesize 48 48
-	spritesheetsize 17 12
-
-	shadowsize 48 48
-	shadowsheetsize 17 12
+	spritesheet broodling-spritesheet
+	shadowsheet broodling-shadow
 
 	numFacingDirections 17
 

@@ -1,28 +1,22 @@
 name Zergling
-maxHP 100
-speed 8
-radius 1
+maxHP 50
+speed 800
+radius 500
 dimension 1 0 0 0
 weapon {
 	name Zergling Attack
 	damageType DMG_KINETIC
 	damage 10
 	reloadTime 3
-	range 5
+	range 2000
 	weaponVelocity 0
 	aoeRadius 0
 	dimensions 1 0 0 0
 }
 
 drawer {
-	spritesheet ../resources/graphics/zerg/units/zergling.png
-	shadowsheet ../resources/graphics/zerg/units/zergling-shadow.png
-	
-	spritesize 128 128
-	spritesheetsize 17 18
-
-	shadowsize 128 128
-	shadowsheetsize 17 18
+	spritesheet zergling-spritesheet
+	shadowsheet zergling-shadowsheet
 
 	numFacingDirections 17
 

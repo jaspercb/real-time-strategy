@@ -1,3 +1,61 @@
+broodling-spritesheet {
+	filepath ../resources/graphics/zerg/units/broodling.png
+	size 48 48
+	sheetsize 17 12
+	shouldApplyTeamColor 1
+}
+
+broodling-shadowsheet {
+	filepath ../resources/graphics/zerg/units/broodling-shadow.png
+	size 48 48
+	sheetsize 17 12
+	isShadow 1
+}
+
+defiler-spritesheet {
+	filepath ../resources/graphics/zerg/units/defiler.png
+	size 80 80
+	sheetsize 17 17
+	shouldApplyTeamColor 1
+}
+
+dragoon-spritesheet {
+	filepath ../resources/graphics/protoss/units/dragoon.png
+
+	size 96 96
+	sheetsize 17 25
+	shouldApplyTeamColor 1
+}
+
+dragoon-shadowsheet {
+	filepath ../resources/graphics/protoss/units/pdrshad.png
+
+	size 96 96
+	sheetsize 17 24
+	isShadow 1
+}
+
+guardian-spritesheet {
+	filepath ../resources/graphics/zerg/units/guardian.png
+
+	size 96 96
+	sheetsize 17 7
+}
+
+hydralisk-spritesheet {
+	filepath ../resources/graphics/zerg/units/hydralisk.png
+	size 128 128
+	sheetsize 17 18
+	shouldApplyTeamColor 1
+}
+
+hydralisk-shadowsheet {
+	filepath ../resources/graphics/zerg/units/hydralisk-shadow.png
+	size 128 128
+	sheetsize 17 18
+	isShadow 1
+}
+
 marine-spritesheet {
 	filepath ../resources/graphics/terran/units/marine.png
 	size 64 64
@@ -11,3 +69,39 @@ marine-shadowsheet {
 	sheetsize 17 14
 	isShadow 1
 }
+
+mutalisk-spritesheet {
+	filepath ../resources/graphics/zerg/units/mutalisk.png
+	size 128 128
+	sheetsize 17 6
+	shouldApplyTeamColor 1
+}
+
+ultralisk-spritesheet {
+	filepath 	../resources/graphics/zerg/units/ultralisk.png
+	size 128 128
+	sheetsize 17 16
+	shouldApplyTeamColor 1
+}
+
+ultralisk-shadowsheet {
+	filepath ../resources/graphics/zerg/units/ultralisk-shadow.png
+	size 128 128
+	sheetsize 17 15
+	isShadow 1
+}
+
+zergling-spritesheet {
+	filepath 	../resources/graphics/zerg/units/zergling.png
+	size 128 128
+	sheetsize 17 18
+	shouldApplyTeamColor 1
+}
+
+zergling-shadowsheet {
+	filepath ../resources/graphics/zerg/units/zergling-shadow.png
+	size 128 128
+	sheetsize 17 18
+	isShadow 1
+}
+

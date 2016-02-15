@@ -1,31 +1,28 @@
 name Defiler
 maxHP 150
-speed 6
-radius 1
+speed 600
+radius 500
 dimension 1 0 0 0
 weapon {
 	name Defiler Attack
 	damageType DMG_KINETIC
 	damage 10
 	reloadTime 3
-	range 5
+	range 3500
 	weaponVelocity 0
 	aoeRadius 0
 	dimensions 1 0 0 0
 }
 
 drawer {
-	spritesheet ../resources/graphics/zerg/units/defiler.png
-	
-	spritesize 80 80
-	spritesheetsize 17 17
+	spritesheet defiler-spritesheet
 
 	numFacingDirections 17
 
 	walkCycleStart 0
 	walkCycleLength 8
-	attackCycleStart 12
-	attackCycleLength 2
+	attackCycleStart 0
+	attackCycleLength 8
 	deathCycleStart 8
 	deathCycleLength 4
 		deathCycleVertical 1

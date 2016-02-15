@@ -15,10 +15,7 @@ weapon{
 }
 
 drawer {
-	spritesheet ../resources/graphics/zerg/units/mutalisk.png
-	
-	spritesize 128 128
-	spritesheetsize 17 6
+	spritesheet mutalisk-spritesheet
 
 	numFacingDirections 17
 

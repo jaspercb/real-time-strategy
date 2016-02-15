@@ -80,23 +80,25 @@ void Game::resolveCollisions() {
 			if (unit.unitID == other.unitID) {
 				continue;
 			}
-			else if (unit.xy == other.xy){
-				other.xy.first +=
-				( (other.unitID+other.xy.first) % 2 == 0) ? 1 :
-															-1;
-				other.xy.second +=
-				( (other.unitID+other.xy.second) % 3 == 0) ? 1 :
-				( (other.unitID+other.xy.second) % 3 == 1) ? 0 :
-															-1;
+
+			else if (unit.xy == other.xy) {
+				other.move( Coordinate(
+					other.xy.first + (
+						( (other.unitID+other.xy.first) % 2 == 0) ? 5 :
+																	-5 ),
+					other.xy.second + (
+						( (other.unitID+other.xy.second) % 3 == 0) ? 5 :
+						( (other.unitID+other.xy.second) % 3 == 1) ? 0 :
+																	-5 ) ) );
 			}
-			else if (unit.animationState != ANIMSTATE_DYING && other.animationState == ANIMSTATE_IDLE) { // 
+			else if (unit.animationState != ANIMSTATE_DYING && (other.animationState == ANIMSTATE_IDLE || other.animationState == ANIMSTATE_ATTACKING) ) { // 
 				Distance dx = other.xy.first - unit.xy.first;
 				Distance dy = other.xy.second - unit.xy.second;
 				//dx = dx ? 10000/dx : 0;
 				//dy = dy ? 10000/dy : 1;
 				dx/=3; // scale down for smoother movement
 				dy/=3;
-				other.move(Coordinate(other.xy.first+dx, other.xy.second+dy));
+				other.move( Coordinate(other.xy.first+dx, other.xy.second+dy) );
 			}
 /*			else if ( (unit.animationState != ANIMSTATE_IDLE && other.animationState != ANIMSTATE_WALKING) ) {
 				Distance dx = other.xy.first - unit.xy.first;
