@@ -51,8 +51,10 @@ private:
 	int cameraVx, cameraVy;
 	int viewCenterMaxSpeed;
 
-	bool shiftHeld;
+	const Uint8 *keyDown;
 
-	const Uint8 *keyboardState;
+	bool shiftHeld() {
+		return this->keyDown[SDL_SCANCODE_LSHIFT] || this->keyDown[SDL_SCANCODE_RSHIFT];
+	}
 };
 
