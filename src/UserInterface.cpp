@@ -18,7 +18,8 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	viewMagnification(1.0),
 	cameraVy(0),
 	cameraVx(0),
-	viewCenterMaxSpeed(1000)
+	viewCenterMaxSpeed(1000),
+	keyboardState( SDL_GetKeyboardState(NULL) )
 {
 	
 }
@@ -28,40 +29,33 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 		this->quit = true;
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN) {
-		if (event.button.button == SDL_BUTTON_RIGHT) {			
-			Coordinate clickedCoord = objectiveCoordinateFromScreen( Coordinate(event.button.x, event.button.y) );
+		Coordinate clickedCoord = objectiveCoordinateFromScreen( Coordinate(event.button.x, event.button.y) );
 
-			Command cmd;
-			cmd.commanded = this->unitsInSelectionBox;
-
-			if ( this->shiftHeld ) {
-				cmd.queueSetting = QUEUE_BACK;
-			}
-			else{
-				cmd.queueSetting = QUEUE_OVERWRITE;
-			}
-			
-
-			for ( auto &i : game.inhabitedGrid.unitsInCircle(clickedCoord, (Distance)10) ) { // hackish way of handling targeting selection
-				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(i).teamID) ) {
-					cmd.cmdtype = CMD_ATTACK;
-					cmd.targetID = i;
+		if (event.button.button == SDL_BUTTON_RIGHT) {
+			for ( auto &id : game.inhabitedGrid.unitsInCircle(clickedCoord, (Distance)10) ) { // hackish way of handling targeting selection
+				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(id).teamID) ) {
 					debugLog("issuing attack command");
-					game.handleCommand(cmd);
+					this->issueAttackCmd(id);
 					return;
 				}
 			}
 
 			debugLog("issuing move command");
 			// if we're not attacking, we're moving
-			cmd.cmdtype = CMD_GOTOCOORD;
-			cmd.targetCoord = clickedCoord;
-			game.handleCommand(cmd);
+			this->issueGotoCoordCmd(clickedCoord);
 
-			this->animations.insert(newAnimation("gotocoord-animation", clickedCoord, 2));
 		}
 		
 		else if (event.button.button == SDL_BUTTON_LEFT) {
+			debugLog(this->keyboardState[SDL_SCANCODE_A]);
+			debugLog(this->unitsInSelectionBox.size());
+			debugLog("");
+			if (this->keyboardState[SDL_SCANCODE_A] && this->unitsInSelectionBox.size() ) {
+				debugLog("issuing attack move");
+				this->issueAttackMoveCmd(clickedCoord);
+				return;
+			}
+
 			this->selectionBoxCorner1 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
 			this->selectionBoxCorner2 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
 			this->drawSelectionBox = true;
@@ -86,7 +80,7 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 			newViewCenter.second -= event.motion.yrel;
 			this->viewCenter = this->objectiveCoordinateFromScreen(newViewCenter);
 		}
-		if (SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)) { // if left mouse button is being held down
+		if (this->drawSelectionBox && SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)) { // if left mouse button is being held down
 			this->selectionBoxCorner2 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
 
 			auto unfilteredUnits = this->game.inhabitedGrid.unitsInRectangle(this->selectionBoxCorner1, this->selectionBoxCorner2);
@@ -244,4 +238,38 @@ Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c) {
 Coordinate UserInterface::screenCoordinateFromObjective(const Coordinate c) {
 	return Coordinate(	(c.first-this->viewCenter.first)*this->viewMagnification/PIXEL_WIDTH,
 						(c.second-this->viewCenter.second)*this->viewMagnification/PIXEL_HEIGHT );
+}
+
+
+void UserInterface::issueGotoCoordCmd(Coordinate targetCoord) {
+	Command cmd(CMD_GOTOCOORD);
+	cmd.commanded = this->unitsInSelectionBox;
+	cmd.queueSetting = this->shiftHeld ? QUEUE_BACK : QUEUE_OVERWRITE;
+	cmd.targetCoord = targetCoord;
+	
+	this->animations.insert(newAnimation("gotocoord-animation", targetCoord, 1));
+
+	game.handleCommand(cmd);
+}
+
+void UserInterface::issueAttackCmd(UnitID targetID) {
+	Command cmd(CMD_ATTACK);
+	cmd.commanded = this->unitsInSelectionBox;
+	cmd.queueSetting = this->shiftHeld ? QUEUE_BACK : QUEUE_OVERWRITE;
+	cmd.targetID = targetID;
+	
+	this->animations.insert(newAnimation("attackmove-animation", this->game.getUnit(targetID).xy, 1));
+
+	game.handleCommand(cmd);
+}
+
+void UserInterface::issueAttackMoveCmd(Coordinate targetCoord){
+	Command cmd(CMD_ATTACKMOVE);
+	cmd.commanded = this->unitsInSelectionBox;
+	cmd.queueSetting = this->shiftHeld ? QUEUE_BACK : QUEUE_OVERWRITE;
+	cmd.targetCoord = targetCoord;
+	
+	this->animations.insert(newAnimation("attackmove-animation", targetCoord, 1));
+
+	game.handleCommand(cmd);
 }

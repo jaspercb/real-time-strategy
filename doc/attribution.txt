@@ -1,0 +1,3 @@
+FILE										FROM
+resources/gotocoord-animation.png			http://opengameart.org/content/teleport-rune
+resources/attackmove-animation.png			http://opengameart.org/content/teleport-rune (colors modified from green to red)

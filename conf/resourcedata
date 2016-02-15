@@ -113,3 +113,9 @@ gotocoord-animation {
 	size 64 64
 	sheetsize 4 1
 }
+
+attackmove-animation {
+	filepath ../resources/attackmove-animation.png
+	size 64 64
+	sheetsize 4 1
+}

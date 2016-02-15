@@ -26,6 +26,12 @@ public:
 	Coordinate objectiveCoordinateFromScreen(const Coordinate c);
 	Coordinate screenCoordinateFromObjective(const Coordinate c);
 
+	void issueGotoCoordCmd(Coordinate targetCoord);
+
+	void issueAttackCmd(UnitID targetID);
+
+	void issueAttackMoveCmd(Coordinate targetCoord);
+
 	Game& game;
 
 	bool quit;
@@ -46,5 +52,7 @@ private:
 	int viewCenterMaxSpeed;
 
 	bool shiftHeld;
+
+	const Uint8 *keyboardState;
 };
 

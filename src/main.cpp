@@ -103,9 +103,12 @@ int main() {
 
 
 		for (int i=0; i<2000; i++) {
+
 			if (userInterface.quit)
 				break;
-
+			
+			SDL_PumpEvents();
+			
 			SDL_Event event;
 
 			while(SDL_PollEvent(&event)) {
