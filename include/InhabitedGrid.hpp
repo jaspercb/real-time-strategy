@@ -15,6 +15,9 @@ bool pythagoreanDistanceLessThan(Coordinate a, Coordinate b, Distance r);
 bool coordInRect(Coordinate a, Coordinate b, Coordinate c);
 bool coordInCircle(Coordinate a, Coordinate c, int r);
 
+bool unitInCircle(Unit& u, Coordinate c, int r);
+bool unitInRectangle(Unit& u, Coordinate b, Coordinate c);
+
 class InhabitedGrid{
 public:
 	InhabitedGrid(Game* game, int w, int h);

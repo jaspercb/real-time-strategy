@@ -1,7 +1,7 @@
 name Scout
 maxHP 50
 speed 600
-radius 300
+radius 800
 dimension 0 0 0 1
 weapon {
 	name Small Plasma 

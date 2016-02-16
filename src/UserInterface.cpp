@@ -32,16 +32,13 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 		Coordinate clickedCoord = objectiveCoordinateFromScreen( Coordinate(event.button.x, event.button.y) );
 
 		if (event.button.button == SDL_BUTTON_RIGHT) {
-			for ( auto &id : game.inhabitedGrid.unitsInCircle(clickedCoord, (Distance)10) ) { // hackish way of handling targeting selection
+			for ( auto &id : game.inhabitedGrid.unitsInCircle(clickedCoord, (Distance)1000) ) { // hackish way of handling targeting selection
 				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(id).teamID) ) {
-					debugLog("issuing attack command");
 					this->issueAttackCmd(id);
 					return;
 				}
 			}
-
-			debugLog("issuing move command");
-			// if we're not attacking, we're moving
+			// if we didn't click on an enemy, we move to that point
 			this->issueGotoCoordCmd(clickedCoord);
 
 		}
@@ -51,7 +48,6 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 			debugLog(this->selectedUnits.size());
 			debugLog("");
 			if (this->keyDown[SDL_SCANCODE_A] && this->selectedUnits.size() ) {
-				debugLog("issuing attack move");
 				this->issueAttackMoveCmd(clickedCoord);
 				return;
 			}

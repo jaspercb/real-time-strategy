@@ -34,6 +34,32 @@ bool unitInCircle(Unit& u, Coordinate c, int r) {
 	return pythagoreanDistanceLessThan(u.xy, c, r+u.getUnitTemplate().radius());
 }
 
+bool unitInRectangle(Unit& u, Coordinate b, Coordinate c) {
+	//make rect bigger
+	Distance radius = u.getUnitTemplate().radius();
+	if (b.first < c.first) {
+		b.first -= radius;
+		c.first += radius;
+	}
+	else {
+		b.first += radius;
+		c.first -= radius;
+	}
+
+	if (b.second < c.second) {
+		b.second -= radius;
+		c.second += radius;
+	}
+	else {
+		b.second += radius;
+		c.second -= radius;
+	}
+
+
+	// returns whether a unit's circle overlaps with the rectangle formed by a, b
+	return coordInRect(u.xy, b, c);
+}
+
 InhabitedGrid::InhabitedGrid(Game* game, int w, int h):
 	game(game),
 	cellWidth(w),
@@ -108,7 +134,7 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) 
 		for (int y=startY; y<=endY; y++){
 			const auto &unitSubset = unitsInCell(Coordinate(x,y));
 			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
-				if (coordInRect(game->getUnit(*it).xy, a, b)){
+				if (unitInRectangle(game->getUnit(*it), a, b)) {
 					ret.push_back(*it);
 				}
 			}
