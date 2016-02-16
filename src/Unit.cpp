@@ -195,6 +195,9 @@ bool Unit::canAttack(Unit& u){
 }
 
 void Unit::move_towards(const Coordinate c) {
+	if (this->getUnitTemplate().speed() == 0) {
+		return;
+	}
 	// Speed-limited movement, with collision handling
 	if (animationState!=ANIMSTATE_DYING) {
 		Distance dx = c.first - xy.first;
