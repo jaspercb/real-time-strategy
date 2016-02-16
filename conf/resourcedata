@@ -120,6 +120,13 @@ attackmove-animation {
 	sheetsize 4 1
 }
 
+ui-mockup {
+	filepath ../svgs/ui.png
+	size 1600 900
+	sheetsize 1 1
+}
+
+
 scout-spritesheet {
 	filepath 	../svgs/scout.png
 	size 32 32

@@ -51,6 +51,8 @@ private:
 	int cameraVx, cameraVy;
 	int viewCenterMaxSpeed;
 
+	std::shared_ptr<Spritesheet> uiWireframe;
+
 	const Uint8 *keyDown;
 
 	bool shiftHeld() {

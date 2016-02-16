@@ -9,6 +9,7 @@
 #include "Logging.hpp"
 #include "Animation.hpp"
 
+
 UserInterface::UserInterface(Game& g, TeamID teamID):
 	quit(false),
 	drawSelectionBox(false),
@@ -19,7 +20,8 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	cameraVy(0),
 	cameraVx(0),
 	viewCenterMaxSpeed(1000),
-	keyDown( SDL_GetKeyboardState(NULL) )
+	keyDown( SDL_GetKeyboardState(NULL) ),
+	uiWireframe(gResourceManager->get("ui-mockup"))
 {
 	
 }
@@ -172,6 +174,8 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 			debugLog(SDL_GetError());
 		//debugLog(this->selectedUnits.size());
 	}
+
+	this->uiWireframe->render(gRenderer, 0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1.0);
 
 }
 
