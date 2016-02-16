@@ -126,3 +126,10 @@ scout-spritesheet {
 	sheetsize 9 2
 	shouldApplyTeamColor 1
 }
+
+townhall-spritesheet {
+	filepath 	../svgs/townhall.png
+	size 196 196
+	sheetsize 1 1
+	shouldApplyTeamColor 1
+}

@@ -82,7 +82,7 @@ void Game::resolveCollisions() {
 			}
 
 			else if (unit.xy == other.xy) {
-				other.move( Coordinate(
+				other.move_towards( Coordinate(
 					other.xy.first + (
 						( (other.unitID+other.xy.first) % 2 == 0) ? 5 :
 																	-5 ),
@@ -98,7 +98,7 @@ void Game::resolveCollisions() {
 				//dy = dy ? 10000/dy : 1;
 				dx/=3; // scale down for smoother movement
 				dy/=3;
-				other.move( Coordinate(other.xy.first+dx, other.xy.second+dy) );
+				other.move_towards( Coordinate(other.xy.first+dx, other.xy.second+dy) );
 			}
 /*			else if ( (unit.animationState != ANIMSTATE_IDLE && other.animationState != ANIMSTATE_WALKING) ) {
 				Distance dx = other.xy.first - unit.xy.first;

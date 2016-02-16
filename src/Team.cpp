@@ -6,7 +6,8 @@
 
 Team::Team(Game& _game, TeamID tID):
 game(_game),
-teamID(tID)
+teamID(tID),
+smallestUnusedUnitTemplateID(0)
 {
 	//for testing
 	//unitTemplates.emplace(1, new UnitTemplate("testUnit", 100, 20, 20, GROUND_ONLY, WEAPONTEMPLATEVECTOR_GOHERE);
@@ -14,5 +15,5 @@ teamID(tID)
 
 
 void Team::loadUnitTemplate( std::string filename ){
-	unitTemplates.emplace( 3, UnitTemplate(std::ifstream(filename), (TeamColor)teamID) ); // this is so broken. fix later. 3 is not good
+	unitTemplates.emplace( this->smallestUnusedUnitTemplateID++, UnitTemplate(std::ifstream(filename), (TeamColor)teamID) );
 };

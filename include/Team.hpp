@@ -26,4 +26,5 @@ public:
 
 protected:
 	std::vector<int> resources;
+	int smallestUnusedUnitTemplateID;
 };

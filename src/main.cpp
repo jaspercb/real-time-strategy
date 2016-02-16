@@ -69,22 +69,28 @@ int main() {
 		Team& t1 = g.getTeam(tID1);
 		Team& t2 = g.getTeam(tID2);
 		
+		t1.loadUnitTemplate("../conf/units/townhall");
 		t1.loadUnitTemplate("../conf/units/scout");
+
 		t2.loadUnitTemplate("../conf/units/scout");
+		
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
+		
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID1, (UnitTemplateID)3, Coordinate(2500*i, 2500*j));
+				g.createUnit(tID1, (UnitTemplateID)1, Coordinate(2500*i, 2500*j));
 			}
 		}
+		
+		g.createUnit(tID1, (UnitTemplateID)0, Coordinate(-5000, -5000));
 
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID2, (UnitTemplateID)3, Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
+				g.createUnit(tID2, (UnitTemplateID)0, Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
 			}
 		}
 
