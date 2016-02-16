@@ -196,7 +196,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
 					deathCycleStart + std::min(deathCycleLength-1, std::abs(unit.drawAnimationStep)),
 					pos.first,
-					pos.second,
+					pos.second + dy,
 					ui->viewMagnification);
 			else
 				spritesheet->render(renderer,
