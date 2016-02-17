@@ -173,7 +173,7 @@ void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int r
 	assert(spriteY>=0);
 
 	this->tclip.x = renderX - magnification*this->spriteW/2;
-	this->tclip.y = renderY - magnification*spriteH/2;
+	this->tclip.y = renderY - magnification*this->spriteH/2;
 
 	this->tclip.w = magnification*this->clip.w;
 	this->tclip.h = magnification*this->clip.h;

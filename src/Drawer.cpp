@@ -16,7 +16,7 @@ SDL_Texture* hpBarFull = NULL;
 int AIRBORNE_RENDER_HEIGHT = 40;
 
 const int PIXEL_WIDTH = 100;
-const int PIXEL_HEIGHT = 100;
+const int PIXEL_HEIGHT = 130;
 
 Drawer::Drawer(std::shared_ptr<Spritesheet> sp):
 	spritesheet(sp)

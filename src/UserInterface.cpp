@@ -141,17 +141,19 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
 	
 	SDL_Rect drawRect;
-	drawRect.w = 25*this->viewMagnification;
-	drawRect.h = 15*this->viewMagnification;
 	for (UnitID &i : selectedUnits) {
 		Unit& u = this->game.getUnit(i);
+		UnitTemplate& uTemplate = u.getUnitTemplate();
+		drawRect.w = 2*uTemplate.radius()/PIXEL_WIDTH * this->viewMagnification;
+		drawRect.h = 2*uTemplate.radius()/PIXEL_HEIGHT * this->viewMagnification;
+
 		Coordinate drawCenter = this->screenCoordinateFromObjective(u.xy);
 		drawRect.x = drawCenter.first-drawRect.w/2;
-		drawRect.y = drawCenter.second;
+		drawRect.y = drawCenter.second-drawRect.h/2;
 		SDL_RenderDrawRect(renderer, &drawRect);
 
 		if (u.dimension.air) {
-			SDL_RenderDrawLine(renderer, drawCenter.first, drawCenter.second+7, drawCenter.first, drawCenter.second-AIRBORNE_RENDER_HEIGHT);
+			SDL_RenderDrawLine(renderer, drawCenter.first, drawCenter.second, drawCenter.first, drawCenter.second-AIRBORNE_RENDER_HEIGHT);
 		}
 	}
 }
