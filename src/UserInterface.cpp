@@ -46,9 +46,6 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 		}
 		
 		else if (event.button.button == SDL_BUTTON_LEFT) {
-			debugLog(this->keyDown[SDL_SCANCODE_A]);
-			debugLog(this->selectedUnits.size());
-			debugLog("");
 			if (this->keyDown[SDL_SCANCODE_A] && this->selectedUnits.size() ) {
 				this->issueAttackMoveCmd(clickedCoord);
 				return;
