@@ -81,16 +81,16 @@ int main() {
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID1, (UnitTemplateID)1, Coordinate(2500*i, 2500*j));
+				g.createUnit(tID1, "../conf/units/scout", Coordinate(2500*i, 2500*j));
 			}
 		}
 		
-		g.createUnit(tID1, (UnitTemplateID)0, Coordinate(-5000, -5000));
+		g.createUnit(tID1, "../conf/units/townhall", Coordinate(-5000, -5000));
 
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID2, (UnitTemplateID)0, Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
+				g.createUnit(tID2, "../conf/units/scout", Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
 			}
 		}
 

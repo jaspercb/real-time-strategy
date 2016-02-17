@@ -39,6 +39,9 @@ public:
 	EnvironmentSpec dimension;
 	Drawer* drawer;
 
+	std::vector<UnitTemplateID> spawnables; // for spawning separate units
+	std::vector<UnitTemplateID> morphables; // for morphing into a unit
+
 private:
 	int maxHP_;
 	int regHP_;
