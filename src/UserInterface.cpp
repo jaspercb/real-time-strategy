@@ -26,6 +26,18 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	
 }
 
+int UserInterface::handleInputEvents(){
+	SDL_PumpEvents();
+	
+	SDL_Event event;
+
+	while(SDL_PollEvent(&event)) {
+		this->handleInputEvent(event);
+	}
+
+	return this->quit;
+}
+
 void UserInterface::handleInputEvent(const SDL_Event& event) {
 	if (event.type == SDL_QUIT) {
 		this->quit = true;

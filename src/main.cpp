@@ -92,7 +92,7 @@ int main() {
 			}
 		}
 		
-		
+
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
@@ -116,17 +116,12 @@ int main() {
 
 		for (int i=0; i<2000; i++) {
 
-			if (userInterface.quit)
+			if (userInterface.handleInputEvents() ) { // returns 1 if should switch
 				break;
-			
-			SDL_PumpEvents();
-			
-			SDL_Event event;
-
-			while(SDL_PollEvent(&event)) {
-				userInterface.handleInputEvent(event);
 			}
+
 			g.tick();
+			
 			userInterface.tick();
 
 			userInterface.renderAll( gRenderer );

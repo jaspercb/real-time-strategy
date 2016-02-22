@@ -14,6 +14,7 @@ class Game;
 class UserInterface {
 public:
 	UserInterface(Game& g, TeamID t);
+	int handleInputEvents(); // returns 1 if should quit
 	void handleInputEvent(const SDL_Event& event);
 	void renderSelection( SDL_Renderer* renderer );
 	void renderHUD( SDL_Renderer* renderer );
@@ -34,8 +35,6 @@ public:
 
 	Game& game;
 
-	bool quit;
-
 	TeamID teamID;
 	
 	float viewMagnification;
@@ -43,6 +42,8 @@ public:
 	std::set<std::unique_ptr<Animation> > animations;
 
 private:
+	bool quit;
+	
 	bool drawSelectionBox;
 	Coordinate selectionBoxCorner1;
 	Coordinate selectionBoxCorner2;
