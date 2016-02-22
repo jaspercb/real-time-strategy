@@ -140,3 +140,10 @@ townhall-spritesheet {
 	sheetsize 1 1
 	shouldApplyTeamColor 1
 }
+
+
+inconsolata-font {
+	filepath 	../resources/inconsolata-font.png
+	size 19 40
+	sheetsize 32 8
+}

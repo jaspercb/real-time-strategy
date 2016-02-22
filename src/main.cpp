@@ -9,6 +9,7 @@
 #include "Logging.hpp"
 #include "Drawer.hpp"
 #include "ResourceManager.hpp"
+#include "FontManager.hpp"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -17,6 +18,7 @@ const int FRAMERATE = 20;
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 ResourceManager* gResourceManager = NULL;
+FontManager* gFontManager = NULL;
 
 bool init() {
 	//Initialization flag
@@ -42,11 +44,15 @@ bool init() {
 	}
 
 	gResourceManager = new ResourceManager();
+	gFontManager = new FontManager();
 
 	return success;
 }
 
 void cleanup_SDL() {
+	delete gResourceManager;
+	delete gFontManager;
+
 	SDL_DestroyWindow( gWindow );
 	SDL_Quit();
 }
@@ -122,7 +128,10 @@ int main() {
 			}
 			g.tick();
 			userInterface.tick();
+			gFontManager->renderText("test test", 0, 0);
+
 			userInterface.renderAll( gRenderer );
+
 			SDL_Delay( 1000/FRAMERATE );
 		}
 	}
