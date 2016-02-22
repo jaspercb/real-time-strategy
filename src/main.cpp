@@ -76,9 +76,9 @@ int main() {
 		Team& t2 = g.getTeam(tID2);
 		
 		t1.loadUnitTemplate("../conf/units/townhall");
-		t1.loadUnitTemplate("../conf/units/scout");
+		t1.loadUnitTemplate("../conf/units/marine");
 
-		t2.loadUnitTemplate("../conf/units/scout");
+		t2.loadUnitTemplate("../conf/units/marine");
 		
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
@@ -88,15 +88,15 @@ int main() {
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID1, "../conf/units/scout", Coordinate(2500*i, 2500*j));
+				g.createUnit(tID1, "../conf/units/marine", Coordinate(2500*i, 2500*j));
 			}
 		}
 		
-
+		
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID2, "../conf/units/scout", Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
+				g.createUnit(tID2, "../conf/units/marine", Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
 			}
 		}
 
@@ -128,10 +128,9 @@ int main() {
 			}
 			g.tick();
 			userInterface.tick();
-			gFontManager->renderText("test test", 0, 0);
 
 			userInterface.renderAll( gRenderer );
-
+			
 			SDL_Delay( 1000/FRAMERATE );
 		}
 	}
