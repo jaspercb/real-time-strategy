@@ -52,6 +52,8 @@ public:
 
 	void draw(SDL_Renderer*, UserInterface*);
 
+	// std::vector<Coordinate> getWaypoints(); // returns an ordered list of the coordinate targets of the unit's state queue
+
 	const TeamID teamID;
 	const UnitID unitID;
 	const UnitTemplateID unitTemplateID;

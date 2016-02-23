@@ -165,7 +165,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 		SDL_RenderDrawRect(renderer, &drawRect);
 
 		if (u.dimension.air) {
-			SDL_RenderDrawLine(renderer, drawCenter.first, drawCenter.second, drawCenter.first, drawCenter.second-AIRBORNE_RENDER_HEIGHT);
+			SDL_RenderDrawLine(renderer, drawCenter.first, drawCenter.second, drawCenter.first, drawCenter.second-AIRBORNE_RENDER_HEIGHT*this->viewMagnification);
 		}
 	}
 }

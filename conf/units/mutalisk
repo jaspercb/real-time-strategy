@@ -7,7 +7,7 @@ weapon{
 	name Mutalisk Spit
 	damageType DMG_KINETIC
 	damage 25
-	reloadTime 3
+	reloadTime 10
 	range 10000
 	weaponVelocity 0
 	aoeRadius 0

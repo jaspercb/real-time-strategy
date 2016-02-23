@@ -76,7 +76,7 @@ int main() {
 		Team& t2 = g.getTeam(tID2);
 		
 		t1.loadUnitTemplate("../conf/units/townhall");
-		t1.loadUnitTemplate("../conf/units/marine");
+		t1.loadUnitTemplate("../conf/units/mutalisk");
 
 		t2.loadUnitTemplate("../conf/units/marine");
 		
@@ -88,7 +88,7 @@ int main() {
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID1, "../conf/units/marine", Coordinate(2500*i, 2500*j));
+				g.createUnit(tID1, "../conf/units/mutalisk", Coordinate(2500*i, 2500*j));
 			}
 		}
 		

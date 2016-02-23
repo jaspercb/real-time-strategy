@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Spritesheet.hpp"
+#include "typedefs.hpp"
 
 class Unit;
 class UserInterface;
@@ -15,6 +16,11 @@ class Drawer {
 		Drawer(std::ifstream&, TeamColor teamColor);
 		~Drawer();
 		void draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui/*, Coordinate cameraposition */);
+		
+		void drawIdle(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy);
+		void drawWalking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy);
+		void drawAttacking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy);
+		void drawDying(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy);
 
 		int idleCycleStart;
 		int idleCycleLength;
