@@ -191,19 +191,22 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 
 	switch (unit.animationState) {
 		case ANIMSTATE_IDLE: {
-			this->drawIdle(renderer, unit, ui, pos, std::abs(unit.drawAnimationStep)%idleCycleLength, dy);
+			this->drawIdle(renderer, unit, ui, pos, std::abs(unit.drawAnimationStep)%this->idleCycleLength, dy);
 			break;
 		}
 		case ANIMSTATE_WALKING: {
-			this->drawWalking(renderer, unit, ui, pos, std::abs(unit.drawAnimationStep)%walkCycleLength, dy);
+			this->drawWalking(renderer, unit, ui, pos, std::abs(unit.drawAnimationStep)%this->walkCycleLength, dy);
 			break;
 		}
 		case ANIMSTATE_ATTACKING:
-			this->drawAttacking(renderer, unit, ui, pos, std::max(0, unit.drawAnimationStep%attackCycleLength), dy);
+			if (unit.drawAnimationStep < 0)
+				this->drawIdle(renderer, unit, ui, pos, std::abs(unit.drawAnimationStep+3*this->idleCycleLength)%this->idleCycleLength, dy);
+			else
+				this->drawAttacking(renderer, unit, ui, pos, std::max(0, unit.drawAnimationStep%this->attackCycleLength), dy);
 			break;
 
 		case ANIMSTATE_DYING:
-			this->drawDying(renderer, unit, ui, pos, std::min(deathCycleLength -1, std::abs(unit.drawAnimationStep)), dy);
+			this->drawDying(renderer, unit, ui, pos, std::min(this->deathCycleLength -1, std::abs(unit.drawAnimationStep)), dy);
 			break;
 	}
 	if (unit.animationState != ANIMSTATE_DYING) {
