@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 typedef int64_t Distance;
-const Distance MAX_DISTANCE = 9146744073709551615;
+const Distance MAX_DISTANCE = 906744073709551615;
 
 typedef std::pair<Distance, Distance> Coordinate;
 
