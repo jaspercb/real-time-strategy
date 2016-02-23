@@ -7,7 +7,7 @@ weapon{
 	name M-LWAR Model I
 	damageType DMG_KINETIC
 	damage 5
-	reloadTime 2
+	reloadTime 3
 	range 10000
 	weaponVelocity 5
 	aoeRadius 0

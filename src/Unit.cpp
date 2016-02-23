@@ -233,6 +233,9 @@ void Unit::attack(Unit& target){
 	// Starts or continues the unit's attacking state.
 	// If the attacking animation has completed, fires all weapons.
 	UnitTemplate& unitTemplate = this->getUnitTemplate();
+	int ticksUntilCanFire = this->weapons_[0].ticksUntilCanFire;
+	int mainWeaponAnimationLength = unitTemplate.drawer->attackCycleLength;
+
 
 	switch (this->animationState){
 		case ANIMSTATE_DYING:{
@@ -245,12 +248,12 @@ void Unit::attack(Unit& target){
 				if (this->drawAnimationStep < unitTemplate.drawer->attackCycleLength) {
 					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.second-this->xy.second, target.xy.first-this->xy.first); // turn to face target
 				}
-				else if (this->drawAnimationStep == unitTemplate.drawer->attackCycleLength) {
+				else if (this->drawAnimationStep >= unitTemplate.drawer->attackCycleLength) {
 					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.second-this->xy.second, target.xy.first-this->xy.first); // turn to face target
 					for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
 						it->fire(target);
 					}
-					this->drawAnimationStep=0;
+					this->drawAnimationStep = mainWeaponAnimationLength - ticksUntilCanFire;
 				}
 				else {
 					this->drawAnimationStep = 0;
@@ -262,7 +265,7 @@ void Unit::attack(Unit& target){
 		default: {
 			if (!game.teamsAreFriendly(teamID, target.teamID) && pythagoreanDistance(this->xy, target.xy) <= this->getAttackRange() ) {
 				this->animationState = ANIMSTATE_ATTACKING;
-				this->drawAnimationStep = 0;
+				this->drawAnimationStep = mainWeaponAnimationLength - ticksUntilCanFire;
 				this->attackTargetID = target.unitID;
 			}
 		}

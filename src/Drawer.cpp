@@ -175,14 +175,14 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 			if (NULL != shadowsheet)
 				shadowsheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
-					attackCycleStart + unit.drawAnimationStep%attackCycleLength,
+					attackCycleStart + std::max(0, unit.drawAnimationStep%attackCycleLength),
 					pos.first,
 					pos.second,
 					ui->viewMagnification);
 			if (NULL != spritesheet)
 				spritesheet->render(renderer,
 					( (unit.drawFacingAngle+90+360)*2*numFacingDirections/360) % (2*numFacingDirections),
-					attackCycleStart + unit.drawAnimationStep%attackCycleLength,
+					attackCycleStart + std::max(0, unit.drawAnimationStep%attackCycleLength),
 					pos.first,
 					pos.second + dy,
 					ui->viewMagnification);
