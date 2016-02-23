@@ -39,14 +39,24 @@ StateExitCode StateAttackMove::update(Unit& unit) {
 
 bool StateAttackMove::updateTarget(Unit& unit) {
 	auto potentialIDs = unit.game.inhabitedGrid.unitsInCircle(unit.xy, unit.getAttackRange());
+	UnitID closestTargetID = 0;
+	Distance closestTargetDistance = MAX_DISTANCE;
 	for (auto &i : potentialIDs){
 		Unit& potentialUnit = unit.game.getUnit(i);
-		if (unit.canAttack(potentialUnit)) {
-			this->atkstate.targetID = i;
-			this->attacking = true;
-			return true;
+		Distance r = pythagoreanDistance(unit.xy, potentialUnit.xy);
+		if (unit.canAttack(potentialUnit) && r<closestTargetDistance ) {
+			closestTargetID = i;
+			closestTargetDistance = r;
 		}
 	}
-	this->attacking = false;
-	return false;
+
+	if (closestTargetID) {
+		this->atkstate.targetID = closestTargetID;
+		this->attacking = true;
+		return true;
+	}
+	else {
+		this->attacking = false;
+		return false;
+	}
 }
