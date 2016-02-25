@@ -18,6 +18,11 @@ int AIRBORNE_RENDER_HEIGHT = 40;
 const int PIXEL_WIDTH = 100;
 const int PIXEL_HEIGHT = 130;
 
+int positiveRemainder(int a, int b) {
+	// returns the unique integer 0<=r<b such that mb+r = a for some integer n
+	return ((a%b)+b)%b;
+}
+
 Drawer::Drawer(std::shared_ptr<Spritesheet> sp):
 	spritesheet(sp)
 	{
@@ -191,18 +196,18 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 
 	switch (unit.animationState) {
 		case ANIMSTATE_IDLE: {
-			this->drawIdle(renderer, unit, ui, pos, std::abs(unit.drawAnimationStep)%this->idleCycleLength, dy);
+			this->drawIdle(renderer, unit, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
 			break;
 		}
 		case ANIMSTATE_WALKING: {
-			this->drawWalking(renderer, unit, ui, pos, std::abs(unit.drawAnimationStep)%this->walkCycleLength, dy);
+			this->drawWalking(renderer, unit, ui, pos, positiveRemainder(unit.drawAnimationStep, this->walkCycleLength), dy);
 			break;
 		}
 		case ANIMSTATE_ATTACKING:
 			if (unit.drawAnimationStep < 0)
-				this->drawIdle(renderer, unit, ui, pos, std::abs(unit.drawAnimationStep+3*this->idleCycleLength)%this->idleCycleLength, dy);
+				this->drawIdle(renderer, unit, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
 			else
-				this->drawAttacking(renderer, unit, ui, pos, std::max(0, unit.drawAnimationStep%this->attackCycleLength), dy);
+				this->drawAttacking(renderer, unit, ui, pos, std::max(0, positiveRemainder(unit.drawAnimationStep, this->attackCycleLength) ), dy);
 			break;
 
 		case ANIMSTATE_DYING:

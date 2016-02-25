@@ -13,7 +13,7 @@
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
-const int FRAMERATE = 20;
+const int FRAMERATE = 4;
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
