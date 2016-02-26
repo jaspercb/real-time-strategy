@@ -7,7 +7,7 @@ weapon {
 	name Small Plasma 
 	damageType DMG_KINETIC
 	damage 5
-	reloadTime 0
+	reloadTime 3
 	range 5000
 	weaponVelocity 0
 	aoeRadius 0

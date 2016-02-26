@@ -1,6 +1,8 @@
 #include <cassert>
+#include <cmath>
 #include <string>
 
+#include "typedefs.hpp"
 #include "Logging.hpp"
 #include "Spritesheet.hpp"
 
@@ -86,7 +88,28 @@ SDL_Texture* loadShadowsheet( SDL_Renderer* renderer, std::string path ) {
 	return newTexture;
 }
 
-Uint32 GetPixel8(const SDL_Surface *surface, const int x, const int y) {
+SDL_Color Uint32toSDL_Color(Uint32 int_color) {
+	//Change from an "int color" to an SDL_Color
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		SDL_Color color={(int_color & 0x00ff0000)/0x10000,(int_color &
+		0x0000ff00)/0x100,(int_color & 0x000000ff), (int_color & 0xff000000) / 0x1000000};
+	#else
+		SDL_Color color={(int_color & 0x000000ff),(int_color &
+		0x0000ff00)/0x100,(int_color & 0x00ff0000)/0x10000, (int_color & 0xff000000) / 0x1000000};
+	#endif
+	return color;
+}
+
+Uint32 SDL_ColortoUint32(SDL_Color color) {
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		Uint32 int_color = color.a*0x1000000 | color.r*0x10000 | color.g*0x100 | color.b;
+	#else
+		Uint32 int_color = color.a*0x1000000 | color.r | color.g*0x100 | color.b*0x10000;
+	#endif
+	return int_color;
+}
+
+Uint8 GetPixel8(const SDL_Surface *surface, const int x, const int y) {
 	Uint8 * pixel = (Uint8*)surface->pixels;
 	pixel += (y * surface->pitch) + x;
 	return *pixel;
@@ -98,10 +121,91 @@ void PutPixel8_nolock(SDL_Surface *surface, int x, int y, Uint8 color) {
 	*pixel = color;
 }
 
+Uint8 GetPixel32(const SDL_Surface *surface, const int x, const int y) {
+	Uint32 * pixel = (Uint32*)surface->pixels;
+	pixel += (y * surface->pitch) + x;
+	return *pixel;
+}
+
+void PutPixel32_nolock(SDL_Surface *surface, int x, int y, Uint32 color) {
+	Uint32 * pixel = (Uint32*)surface->pixels;
+	pixel += (y * surface->pitch) + x;
+	*pixel = color;
+}
+
+Matrix3 makeHueRotationMatrix(float radians) {
+	Matrix3 matrix;
+	float cosA = cos(radians);
+	float sinA = sin(radians);
+	matrix[0][0] = cosA + (1.0 - cosA) / 3.0;
+	matrix[0][1] = 1./3. * (1.0 - cosA) - sqrt(1./3.) * sinA;
+	matrix[0][2] = 1./3. * (1.0 - cosA) + sqrt(1./3.) * sinA;
+	matrix[1][0] = 1./3. * (1.0 - cosA) + sqrt(1./3.) * sinA;
+	matrix[1][1] = cosA + 1./3.*(1.0 - cosA);
+	matrix[1][2] = 1./3. * (1.0 - cosA) - sqrt(1./3.) * sinA;
+	matrix[2][0] = 1./3. * (1.0 - cosA) - sqrt(1./3.) * sinA;
+	matrix[2][1] = 1./3. * (1.0 - cosA) + sqrt(1./3.) * sinA;
+	matrix[2][2] = cosA + 1./3. * (1.0 - cosA);
+
+	return matrix;
+}
+
+SDL_Color _rotateColor(SDL_Color in, const Matrix3& matrix) {
+	SDL_Color ret;
+
+	ret.r = in.r * matrix[0][0] + in.g * matrix[0][1] + in.b * matrix[0][2];
+    ret.g = in.r * matrix[1][0] + in.g * matrix[1][1] + in.b * matrix[1][2];
+    ret.b = in.r * matrix[2][0] + in.g * matrix[2][1] + in.b * matrix[2][2];
+	ret.a = in.a;
+
+	return ret;
+}
+
+Uint32 _rotateColor(Uint32 int_color, Matrix3 matrix) {
+	return SDL_ColortoUint32(_rotateColor( Uint32toSDL_Color(int_color), matrix ));
+}
+
+SDL_Color rotateColor(SDL_Color color, float radians) {
+	return _rotateColor(color, makeHueRotationMatrix(radians) );
+}
+
+Uint32 rotateColor(Uint32 int_color, float radians) {
+	return SDL_ColortoUint32(_rotateColor(Uint32toSDL_Color(int_color), makeHueRotationMatrix(radians) ) );
+}
+
+void rotateColorOfSurface(SDL_Surface* surface, float radians) {
+	Matrix3 matrix = makeHueRotationMatrix(radians);
+
+	if (NULL == surface->format->palette) {
+		int npixels = surface->w * surface->h;
+		
+		if (surface->format->BytesPerPixel == 4) {
+			Uint32* pixel = (Uint32*)surface->pixels;
+			for (int i = 0; i < npixels; i++) {
+				*pixel = _rotateColor(*pixel, matrix);
+				pixel++;
+			}
+		}
+		else {
+			debugLog("Weird bytes per pixel in call to rotateColorOfSurface:");
+			debugLog(surface->format->BytesPerPixel);
+			throw;
+		}
+
+	}
+	else {
+		SDL_Color* colors = new SDL_Color[surface->format->palette->ncolors];
+		for (int i=0; i<surface->format->palette->ncolors; i++) {
+			colors[i] = rotateColor(surface->format->palette->colors[i], 0);
+		}
+		SDL_SetPaletteColors(surface->format->palette, colors, 0, surface->format->palette->ncolors);
+	}
+}
+
 void teamColorSpritesheet(SDL_Surface *surface, TeamColor color) {
 	// Changes the color palette, replacing the magenta color key with the specified color. See /resources/graphics/team-colors.png
 
-	SDL_Surface* colormapping = loadSurface("../resources/graphics/team-colors.png");
+	/*SDL_Surface* colormapping = loadSurface("../resources/graphics/team-colors.png");
 
 	SDL_Color colors[8];
 
@@ -115,6 +219,16 @@ void teamColorSpritesheet(SDL_Surface *surface, TeamColor color) {
 
 	if( SDL_MUSTLOCK(surface) )
 		SDL_UnlockSurface(surface);
+	*/
+	
+	/*SDL_Color* colors = new SDL_Color[surface->format->palette->ncolors];
+	for (int i=0; i<surface->format->palette->ncolors; i++) {
+		colors[i] = rotateColor(surface->format->palette->colors[i], 0);
+	}
+	*/
+
+	rotateColorOfSurface(surface, M_PI);
+
 }
 
 
