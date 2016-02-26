@@ -173,6 +173,15 @@ Uint32 rotateColor(Uint32 int_color, float radians) {
 	return SDL_ColortoUint32(_rotateColor(Uint32toSDL_Color(int_color), makeHueRotationMatrix(radians) ) );
 }
 
+bool shouldColorKey(SDL_Color color) { // literally "is this more red than it is blue?"
+	return color.r >= color.g && color.r >= color.b;
+	// red is now off-limits as a color btw
+}
+
+bool shouldColorKey(Uint32 int_color) {
+	return shouldColorKey(Uint32toSDL_Color(int_color));
+}
+
 void rotateColorOfSurface(SDL_Surface* surface, float radians) {
 	Matrix3 matrix = makeHueRotationMatrix(radians);
 
@@ -180,12 +189,17 @@ void rotateColorOfSurface(SDL_Surface* surface, float radians) {
 		int npixels = surface->w * surface->h;
 		
 		if (surface->format->BytesPerPixel == 4) {
+			//debugLog("4 byte");
 			Uint32* pixel = (Uint32*)surface->pixels;
 			for (int i = 0; i < npixels; i++) {
-				*pixel = _rotateColor(*pixel, matrix);
-				pixel++;
+				if (shouldColorKey(*pixel))
+					*pixel = _rotateColor(*pixel, matrix);
+					pixel++;
 			}
 		}
+		//else if (surface->format->BytesPerPixel == 1) {
+		//	debugLog("1 byte");
+		//}
 		else {
 			debugLog("Weird bytes per pixel in call to rotateColorOfSurface:");
 			debugLog(surface->format->BytesPerPixel);
@@ -193,12 +207,20 @@ void rotateColorOfSurface(SDL_Surface* surface, float radians) {
 		}
 
 	}
+	
 	else {
 		SDL_Color* colors = new SDL_Color[surface->format->palette->ncolors];
+		
 		for (int i=0; i<surface->format->palette->ncolors; i++) {
-			colors[i] = rotateColor(surface->format->palette->colors[i], 0);
+			SDL_Color color = surface->format->palette->colors[i];
+			if (shouldColorKey(color)) {
+				colors[i] = rotateColor(surface->format->palette->colors[i], 1);
+			} else{
+				colors[i] = surface->format->palette->colors[i];
+			}
 		}
 		SDL_SetPaletteColors(surface->format->palette, colors, 0, surface->format->palette->ncolors);
+		delete colors;
 	}
 }
 
