@@ -123,13 +123,14 @@ int main() {
 				break;
 			}
 
-			g.tick();
+			if (i%2)
+				g.tick();
 			
 			userInterface.tick();
 
 			userInterface.renderAll( gRenderer );
 			
-			SDL_Delay( 1000/FRAMERATE );
+			SDL_Delay( 500/FRAMERATE ); // HUD renders twice as often as the game, so selecting "feels smooth"
 		}
 	}
 

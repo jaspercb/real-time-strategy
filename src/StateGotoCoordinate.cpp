@@ -38,3 +38,7 @@ StateExitCode StateGotoCoordinate::update(Unit& unit){
 		return STATE_EXIT_INCOMPLETE;
 	}
 }
+
+std::vector<Coordinate> StateGotoCoordinate::getStateWaypoints() {
+	return std::vector<Coordinate>{this->targetCoord};
+}

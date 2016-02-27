@@ -1,4 +1,3 @@
-#include <SDL2/SDL.h>
 #include <algorithm>
 
 #include "UserInterface.hpp"
@@ -9,6 +8,7 @@
 #include "Logging.hpp"
 #include "Animation.hpp"
 #include "FontManager.hpp"
+#include "sdlTools.hpp"
 
 UserInterface::UserInterface(Game& g, TeamID teamID):
 	quit(false),
@@ -153,19 +153,40 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
 	
 	SDL_Rect drawRect;
-	for (UnitID &i : selectedUnits) {
+
+
+	// Draw paths
+	for (UnitID &i : this->selectedUnits) {
+		Unit& u = this->game.getUnit(i);
+		std::vector<Coordinate> path = u.getStateWaypoints();
+		int numWaypoints = path.size() + 1;
+		if ( numWaypoints >= 2 ) {
+
+		}
+		if ( path.size() >= 3 ) {
+			//for (int i=0; i<path)
+		}
+	}
+
+	// Draw a little individual green selection box for each selected unit
+	for (UnitID &i : this->selectedUnits) {
 		Unit& u = this->game.getUnit(i);
 		UnitTemplate& uTemplate = u.getUnitTemplate();
-		drawRect.w = 2*uTemplate.radius()/PIXEL_WIDTH * this->viewMagnification;
-		drawRect.h = 2*uTemplate.radius()/PIXEL_HEIGHT * this->viewMagnification;
-
+		
 		Coordinate drawCenter = this->screenCoordinateFromObjective(u.xy);
-		drawRect.x = drawCenter.first-drawRect.w/2;
-		drawRect.y = drawCenter.second-drawRect.h/2;
-		SDL_RenderDrawRect(renderer, &drawRect);
+		
+		int rw = uTemplate.radius()/PIXEL_WIDTH * this->viewMagnification;
+		int rh = uTemplate.radius()/PIXEL_HEIGHT * this->viewMagnification;
+
+		Coordinate selectionRectTopLeft(drawCenter.first-rw, drawCenter.second-rh );
+		Coordinate selectionRectBottomRight(drawCenter.first+rw, drawCenter.second+rh);
+
+		renderRectBorder(renderer, selectionRectTopLeft, selectionRectBottomRight, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
 
 		if (u.dimension.air) {
-			SDL_RenderDrawLine(renderer, drawCenter.first, drawCenter.second, drawCenter.first, drawCenter.second-AIRBORNE_RENDER_HEIGHT*this->viewMagnification);
+			Coordinate airborneCenter = drawCenter;
+			airborneCenter.second -= AIRBORNE_RENDER_HEIGHT * this->viewMagnification;
+			renderLine(renderer, drawCenter, airborneCenter, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
 		}
 	}
 }
@@ -175,15 +196,8 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 		SDL_Rect selectionBox;
 		Coordinate screenCorner1 = this->screenCoordinateFromObjective(this->selectionBoxCorner1);
 		Coordinate screenCorner2 = this->screenCoordinateFromObjective(this->selectionBoxCorner2);
-		selectionBox.x = std::min(screenCorner1.first, screenCorner2.first);
-		selectionBox.y = std::min(screenCorner1.second, screenCorner2.second);
-		selectionBox.w = std::abs(screenCorner2.first - screenCorner1.first);
-		selectionBox.h = std::abs(screenCorner2.second - screenCorner1.second);
 
-		SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-		if (SDL_RenderDrawRect(renderer, &selectionBox))
-			debugLog(SDL_GetError());
-		//debugLog(this->selectedUnits.size());
+		renderRectBorder(renderer, screenCorner1, screenCorner2, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
 	}
 
 	this->uiWireframe->render(gRenderer, 0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1.0);

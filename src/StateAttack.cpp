@@ -8,7 +8,7 @@ StateAttack::StateAttack(UnitID targ):
 	targetID(targ)
 	{}
 
-StateExitCode StateAttack::update(Unit& unit){
+StateExitCode StateAttack::update(Unit& unit) {
 	// if we're not in attacking range of the target, move towards the target
 	// otherwise do nothing
 	try{
@@ -32,3 +32,9 @@ StateExitCode StateAttack::update(Unit& unit){
 		return STATE_EXIT_COMPLETE;
 	}
 }
+
+/*
+std::vector<Coordinate> StateAttack::getStateWaypoints() {
+	// this needs to wait until the shared_ptr refactoring
+}
+*/

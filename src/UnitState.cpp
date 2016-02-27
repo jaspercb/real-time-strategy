@@ -37,3 +37,7 @@ std::shared_ptr<UnitState> UnitState::handleEvent(Unit& unit, Event event)
 StateExitCode UnitState::update(Unit& unit) {
 	return STATE_EXIT_INCOMPLETE;
 }
+
+std::vector<Coordinate> UnitState::getStateWaypoints() {
+	return std::vector<Coordinate>();
+}

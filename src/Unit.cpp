@@ -275,3 +275,12 @@ void Unit::attack(Unit& target){
 void Unit::draw(SDL_Renderer* renderer, UserInterface* ui) {
 	getUnitTemplate().drawer->draw(renderer, *this, ui);
 }
+
+std::vector<Coordinate> Unit::getStateWaypoints() {
+	std::vector<Coordinate> ret;
+	for (auto &i : this->stateQueue_)
+		for (auto &j : i->getStateWaypoints() )
+			ret.push_back(j);
+	
+	return ret;
+}
