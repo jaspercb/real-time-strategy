@@ -180,10 +180,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 		int rw = uTemplate.radius()/PIXEL_WIDTH * this->viewMagnification;
 		int rh = uTemplate.radius()/PIXEL_HEIGHT * this->viewMagnification;
 
-		Coordinate selectionRectTopLeft(drawCenter.first-rw, drawCenter.second-rh );
-		Coordinate selectionRectBottomRight(drawCenter.first+rw, drawCenter.second+rh);
-
-		renderRectBorder(renderer, selectionRectTopLeft, selectionRectBottomRight, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
+		renderEllipse(renderer, drawCenter, rw, rh, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
 
 		if (u.dimension.air) {
 			Coordinate airborneCenter = drawCenter;
