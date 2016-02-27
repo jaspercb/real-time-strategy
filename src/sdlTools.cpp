@@ -20,3 +20,7 @@ void renderLine(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color co
 
 	SDL_RenderDrawLine(renderer, a.first, a.second, b.first, b.second);
 }
+
+void renderEllipse(SDL_Renderer* renderer, Coordinate center, int rx, int ry SDL_Color color){
+	
+}
