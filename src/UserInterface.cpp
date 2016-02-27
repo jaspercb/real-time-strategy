@@ -153,7 +153,8 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
 	
 	SDL_Rect drawRect;
-
+	SDL_Color selectionColor = {0, 255, 0, SDL_ALPHA_OPAQUE};
+	SDL_Color waypointColor = {255, 255, 255, 255};
 
 	// Draw paths
 	for (UnitID &i : this->selectedUnits) {
@@ -162,11 +163,17 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 		int numWaypoints = path.size() + 1;
 		debugLog(numWaypoints);
 		if ( numWaypoints >= 2 ) {
-			renderLine(renderer, this->screenCoordinateFromObjective(u.xy), this->screenCoordinateFromObjective(path[0]), SDL_Color{255, 255, 255, SDL_ALPHA_OPAQUE});
+			renderLine(renderer, this->screenCoordinateFromObjective(u.xy), this->screenCoordinateFromObjective(path[0]), waypointColor);
+			for (int i=0; i<numWaypoints-1; i++)
+				renderEllipse(renderer,
+							this->screenCoordinateFromObjective(path[i]),
+							u.getUnitTemplate().radius()/PIXEL_WIDTH * this->viewMagnification,
+							u.getUnitTemplate().radius()/PIXEL_HEIGHT * this->viewMagnification,
+							waypointColor);
 		}
 		if ( numWaypoints >= 3 ) {
 			for (int i=1; i<numWaypoints-1; i++)
-				renderLine(renderer, this->screenCoordinateFromObjective(path[i]), this->screenCoordinateFromObjective(path[i-1]), SDL_Color{255, 255, 255, SDL_ALPHA_OPAQUE});
+				renderLine(renderer, this->screenCoordinateFromObjective(path[i]), this->screenCoordinateFromObjective(path[i-1]), waypointColor);
 		}
 	}
 
@@ -180,12 +187,12 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 		int rw = uTemplate.radius()/PIXEL_WIDTH * this->viewMagnification;
 		int rh = uTemplate.radius()/PIXEL_HEIGHT * this->viewMagnification;
 
-		renderEllipse(renderer, drawCenter, rw, rh, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
+		renderEllipse(renderer, drawCenter, rw, rh, selectionColor);
 
 		if (u.dimension.air) {
 			Coordinate airborneCenter = drawCenter;
 			airborneCenter.second -= AIRBORNE_RENDER_HEIGHT * this->viewMagnification;
-			renderLine(renderer, drawCenter, airborneCenter, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
+			renderLine(renderer, drawCenter, airborneCenter, selectionColor);
 		}
 	}
 }
