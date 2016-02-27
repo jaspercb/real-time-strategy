@@ -210,15 +210,18 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	int numSelectedUnits = this->selectedUnits.size();
 	if (numSelectedUnits == 1) {
 		Unit& selectedUnit = this->game.getUnit(this->selectedUnits[0]);
-		gFontManager->renderText("hp: "+std::to_string(selectedUnit.hp)+"/"+std::to_string(selectedUnit.getUnitTemplate().maxHP()), 320, 750);
-		gFontManager->renderText("weapon: " + std::to_string(selectedUnit.weapons_[0].ticksUntilCanFire) + "/" +std::to_string(selectedUnit.weapons_[0].weaponTemplate.reloadTime()), 320, 770);
-		
+		gFontManager->renderLine("hp: "+std::to_string(selectedUnit.hp)+"/"+std::to_string(selectedUnit.getUnitTemplate().maxHP()), 320, 750);
+		if (selectedUnit.weapons_.size())
+			gFontManager->renderLine("weapon: " + std::to_string(selectedUnit.weapons_[0].ticksUntilCanFire) + "/" +std::to_string(selectedUnit.weapons_[0].weaponTemplate.reloadTime()), 320, 770);
+		else
+			gFontManager->renderMultipleLines("no weapon\nhilol", 320, 770);
+
 
 	}
 	else if (numSelectedUnits > 1) {
 		int text = this->selectedUnits.size();
 
-		gFontManager->renderText("UNITS SELECTED: "+std::to_string(text), 320, 750);		
+		gFontManager->renderLine("UNITS SELECTED: "+std::to_string(text), 320, 750);		
 	}
 
 	SDL_RenderPresent( renderer );

@@ -8,7 +8,7 @@
 Game::Game():
 	inhabitedGrid(InhabitedGrid(this, 25000, 25000)),
 	smallestUnusedUnitID_(1),
-	smallestUnusedTeamID_(1)
+	smallestUnusedTeamID_(2)
 	{
 		//inhabitedGrid = InhabitedGrid(this, 100, 100, 10, 10);
 	}

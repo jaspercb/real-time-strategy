@@ -6,6 +6,22 @@
 #include "Logging.hpp"
 #include "Spritesheet.hpp"
 
+float colorThetas[NUM_TEAMCOLORS] = {
+					0, //null
+					0, //pink
+					0.55, //red
+					5, //blue
+					4.2, //teal
+					5.6, //purple
+					1, //orange
+					1.3, //brown
+					1.52, //yellow
+					2.5, //green
+					4.0, //pale
+					5.3, //iris
+					2, //olive
+				};
+
 SDL_Surface* loadSurface( std::string path) {
 	
 	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
@@ -249,7 +265,7 @@ void teamColorSpritesheet(SDL_Surface *surface, TeamColor color) {
 	}
 	*/
 
-	rotateColorOfSurface(surface, M_PI);
+	rotateColorOfSurface(surface, colorThetas[color]);
 
 }
 
