@@ -161,7 +161,6 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 		Unit& u = this->game.getUnit(i);
 		std::vector<Coordinate> path = u.getStateWaypoints();
 		int numWaypoints = path.size() + 1;
-		debugLog(numWaypoints);
 		if ( numWaypoints >= 2 ) {
 			renderLine(renderer, this->screenCoordinateFromObjective(u.xy), this->screenCoordinateFromObjective(path[0]), waypointColor);
 			for (int i=0; i<numWaypoints-1; i++)
