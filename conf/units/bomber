@@ -1,0 +1,28 @@
+name Bomber
+maxHP 50
+speed 600
+radius 800
+dimension 0 0 0 1
+weapon {
+	name Bomber Bomb
+	damageType DMG_EXPLOSIVE
+	damage 30
+	reloadTime 20
+	range 4000
+	weaponVelocity 0
+	aoeRadius 2000
+	dimensions 1 0 0 0
+}
+
+drawer {
+	spritesheet bomber-spritesheet
+
+	numFacingDirections 9
+
+	walkCycleStart 0
+	walkCycleLength 1
+	attackCycleStart 0
+	attackCycleLength 1
+	deathCycleStart 1
+	deathCycleLength 9
+}

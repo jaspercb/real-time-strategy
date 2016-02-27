@@ -75,10 +75,13 @@ int main() {
 		Team& t1 = g.getTeam(tID1);
 		Team& t2 = g.getTeam(tID2);
 		
+		for (int i=0; i<10; i++) {
+			int tID = g.createTeam();
+		}
 		t1.loadUnitTemplate("../conf/units/townhall");
-		t1.loadUnitTemplate("../conf/units/scout");
+		t1.loadUnitTemplate("../conf/units/bomber");
 
-		t2.loadUnitTemplate("../conf/units/scout");
+		t2.loadUnitTemplate("../conf/units/ground-dummy");
 		
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
@@ -88,7 +91,7 @@ int main() {
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID1, "../conf/units/scout", Coordinate(2500*i, 2500*j));
+				g.createUnit(tID1, "../conf/units/bomber", Coordinate(2500*i, 2500*j));
 			}
 		}
 		
@@ -96,7 +99,7 @@ int main() {
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID2, "../conf/units/scout", Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
+				g.createUnit(tID2, "../conf/units/ground-dummy", Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
 			}
 		}
 
@@ -116,7 +119,7 @@ int main() {
 
 		for (int i=0; i<2000; i++) {
 
-			if (userInterface.handleInputEvents() ) { // returns 1 if should switch
+			if (userInterface.handleInputEvents() ) { // returns 1 if quit command processed
 				break;
 			}
 

@@ -1,0 +1,20 @@
+name Ground Dummy
+maxHP 100
+speed 0
+radius 800
+dimension 1 0 0 0
+
+drawer {
+	spritesheet ground-dummy-spritesheet
+
+	numFacingDirections 1
+
+	idleCycleStart 0
+	idleCycleLength 1
+	walkCycleStart 0
+	walkCycleLength 1
+	attackCycleStart 0
+	attackCycleLength 1
+	deathCycleStart 0
+	deathCycleLength 1
+}

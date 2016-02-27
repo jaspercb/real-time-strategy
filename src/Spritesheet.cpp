@@ -173,7 +173,7 @@ Uint32 rotateColor(Uint32 int_color, float radians) {
 	return SDL_ColortoUint32(_rotateColor(Uint32toSDL_Color(int_color), makeHueRotationMatrix(radians) ) );
 }
 
-bool shouldColorKey(SDL_Color color) { // literally "is this more red than it is blue?"
+bool shouldColorKey(SDL_Color color) { // literally "is this more red than it is blue and green?"
 	return color.r >= color.g && color.r >= color.b;
 	// red is now off-limits as a color btw
 }
