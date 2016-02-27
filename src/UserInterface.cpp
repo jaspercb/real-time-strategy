@@ -9,6 +9,7 @@
 #include "Animation.hpp"
 #include "FontManager.hpp"
 #include "sdlTools.hpp"
+#include "InhabitedGrid.hpp"
 
 UserInterface::UserInterface(Game& g, TeamID teamID):
 	quit(false),
@@ -219,8 +220,12 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 
 	this->renderSelection( renderer );
 
+	Coordinate screenCorner1 = this->objectiveCoordinateFromScreen(Coordinate(-200, -200));
+	Coordinate screenCorner2 = this->objectiveCoordinateFromScreen(Coordinate(SCREEN_WIDTH+200, SCREEN_HEIGHT+200));
+
 	for (auto &u : this->game.unitsByID) {
-		u.second.draw( renderer, this );
+		if (unitInRectangle(u.second, screenCorner1, screenCorner2))
+			u.second.draw( renderer, this);
 	}
 
 	this->renderHUD( renderer );
