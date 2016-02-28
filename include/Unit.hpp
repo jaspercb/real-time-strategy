@@ -19,22 +19,19 @@ class Command;
 class UnitState;
 class Game;
 
-typedef int UnitID;
-
-enum AnimationState{
+enum AnimationState {
 	ANIMSTATE_IDLE,
 	ANIMSTATE_WALKING,
 	ANIMSTATE_ATTACKING,
 	ANIMSTATE_DYING
 };
 
-enum UpdateStatus{
+enum UpdateStatus {
 	STATUS_OK,
 	STATUS_REMOVE
 };
 
-class Unit
-{
+class Unit {
 public:
 
 	//Unit();

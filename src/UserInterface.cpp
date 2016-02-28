@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <sstream>
 
 #include "UserInterface.hpp"
 #include "Game.hpp"
@@ -234,18 +235,23 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	int numSelectedUnits = this->selectedUnits.size();
 	if (numSelectedUnits == 1) {
 		Unit& selectedUnit = this->game.getUnit(this->selectedUnits[0]);
-		gFontManager->renderLine("hp: "+std::to_string(selectedUnit.hp)+"/"+std::to_string(selectedUnit.getUnitTemplate().maxHP()), 320, 750);
+		std::stringstream infostream;
+		
+		infostream<<"HP: "<<std::to_string(selectedUnit.hp)<<"/"<<std::to_string(selectedUnit.getUnitTemplate().maxHP())<<std::endl;
+		
 		if (selectedUnit.weapons_.size())
-			gFontManager->renderLine("weapon: " + std::to_string(selectedUnit.weapons_[0].ticksUntilCanFire) + "/" +std::to_string(selectedUnit.weapons_[0].weaponTemplate.reloadTime()), 320, 770);
+			infostream << "WEAPON: "<< std::to_string(selectedUnit.weapons_[0].ticksUntilCanFire) << "/" << std::to_string(selectedUnit.weapons_[0].weaponTemplate.reloadTime()) << std::endl;
 		else
-			gFontManager->renderMultipleLines("no weapon\nhilol", 320, 770);
+			infostream << "UNARMED" << std::endl;
+
+		gFontManager->renderMultipleLines(infostream.str(), 320, 750, SDL_Colors::WHITE);
 
 
 	}
 	else if (numSelectedUnits > 1) {
 		int text = this->selectedUnits.size();
 
-		gFontManager->renderLine("UNITS SELECTED: "+std::to_string(text), 320, 750);		
+		gFontManager->renderLine("UNITS SELECTED: "+std::to_string(text), 320, 750, SDL_Colors::WHITE);
 	}
 
 	SDL_RenderPresent( renderer );
