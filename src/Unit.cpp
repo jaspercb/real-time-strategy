@@ -101,14 +101,11 @@ UpdateStatus Unit::update()
 			for (auto i = this->weapons_.begin(); i != this->weapons_.end(); i++)
 				i->update();
 
-			if (stateQueue_.size()) {
-				StateExitCode isStateComplete = stateQueue_.front()->update(*this);
-				if (isStateComplete == STATE_EXIT_COMPLETE) {
-					stateQueue_.pop_front();
-				}
-			}
-			else{
+			if (stateQueue_.empty() )
 				this->idleState->update(*this);
+
+			while (stateQueue_.size() && STATE_EXIT_COMPLETE == stateQueue_.front()->update(*this)) {
+				stateQueue_.pop_front();
 			}
 	}
 	return STATUS_OK;
