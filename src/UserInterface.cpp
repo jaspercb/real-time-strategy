@@ -23,7 +23,8 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	cameraVx(0),
 	viewCenterMaxSpeed(1000),
 	keyDown( SDL_GetKeyboardState(NULL) ),
-	uiWireframe(gResourceManager->get("ui-mockup"))
+	uiWireframe(gResourceManager->get("ui-mockup")),
+	frame(0)
 {
 	
 }
@@ -156,7 +157,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	
 	SDL_Rect drawRect;
 	SDL_Color selectionColor = {0, 255, 0, SDL_ALPHA_OPAQUE};
-	SDL_Color waypointColor = {255, 255, 255, 255};
+	SDL_Color waypointColor = {255, 255, 255, 10*std::abs( (this->frame % 18) - 9) + 64 };
 
 	// Draw paths
 	for (UnitID &i : this->selectedUnits) {
@@ -165,12 +166,14 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 		int numWaypoints = path.size() + 1;
 		if ( numWaypoints >= 2 ) {
 			renderLine(renderer, this->screenCoordinateFromObjective(u.xy), this->screenCoordinateFromObjective(path[0]), waypointColor);
-			for (int i=0; i<numWaypoints-1; i++)
+			for (int i=0; i<numWaypoints-1; i++) {
+				int size = 800;
 				renderEllipse(renderer,
 							this->screenCoordinateFromObjective(path[i]),
-							u.getUnitTemplate().radius()/PIXEL_WIDTH * this->viewMagnification,
-							u.getUnitTemplate().radius()/PIXEL_HEIGHT * this->viewMagnification,
+							size/PIXEL_WIDTH * this->viewMagnification,
+							size/PIXEL_HEIGHT * this->viewMagnification,
 							waypointColor);
+			}
 		}
 		if ( numWaypoints >= 3 ) {
 			for (int i=1; i<numWaypoints-1; i++)
@@ -258,6 +261,8 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 }
 
 void UserInterface::tick() {
+	this->frame++;
+
 	this->viewCenter.first += this->cameraVx;
 	this->viewCenter.second += this->cameraVy;
 

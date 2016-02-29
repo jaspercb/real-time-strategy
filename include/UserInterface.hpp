@@ -54,6 +54,8 @@ private:
 
 	std::shared_ptr<Spritesheet> uiWireframe;
 
+	long frame;
+
 	const Uint8 *keyDown;
 
 	bool shiftHeld() {

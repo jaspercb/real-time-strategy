@@ -40,6 +40,7 @@ bool init() {
 		else {
 			//Get window surface
 			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
+			SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND);
 		}
 	}
 
