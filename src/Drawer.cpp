@@ -9,10 +9,6 @@
 #include "UserInterface.hpp"
 #include "ResourceManager.hpp"
 
-SDL_Texture* hpBarEmpty = NULL;
-SDL_Texture* hpBarFull = NULL;
-
-
 int AIRBORNE_RENDER_HEIGHT = 40;
 
 const int PIXEL_WIDTH = 100;
@@ -222,22 +218,17 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 
 void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY, const float magnification) {
 	// Draws an HP bar centered at (renderX, renderY)
-	const int granularity = 25;
+	const int granularity = 50;
 	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
 
 	int HP = unit.hp;
 	int maxHP = unit.getUnitTemplate().maxHP();
 
-	if (hpBarEmpty==NULL)
-		hpBarEmpty=loadTexture(renderer, "../resources/graphics/ui/tpbrempt.png");
-	if (hpBarFull==NULL)
-		hpBarFull=loadTexture(renderer, "../resources/graphics/ui/tpbrfull.png");
-
 	SDL_Rect fullclip, emptyclip, tclip;
 
-	int barlength = 5+3*maxHP/granularity;
+	int barlength = 5+6*maxHP/granularity;
 
-	fullclip.w = 3 + 3*HP/granularity;
+	fullclip.w = 3 + 6*HP/granularity;
 	fullclip.h = 10;
 	fullclip.x = 0;
 	fullclip.y = 0;
@@ -247,13 +238,13 @@ void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const in
 	emptyclip.x = 107-emptyclip.w;
 	emptyclip.y = 0;
 
-	tclip.w = magnification*(3 + 3*HP/granularity);
+	tclip.w = magnification*(3 + 6*HP/granularity);
 	tclip.h = magnification*10;
 	tclip.x=renderX-(magnification*barlength)/2;
 	tclip.y=renderY+ (dy - 25) * magnification;
 	
-	SDL_RenderCopy(renderer, hpBarFull, &fullclip, &tclip);
+	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-full", COLOR_NULL)->sheet, &fullclip, &tclip);
 	tclip.x += magnification*fullclip.w;
 	tclip.w = magnification*emptyclip.w;
-	SDL_RenderCopy(renderer, hpBarEmpty, &emptyclip, &tclip);
+	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-empty", COLOR_NULL)->sheet, &emptyclip, &tclip);
 }

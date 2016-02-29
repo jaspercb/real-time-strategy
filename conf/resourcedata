@@ -157,3 +157,15 @@ inconsolata-font {
 	size 19 40
 	sheetsize 32 8
 }
+
+hpbar-full {
+	filepath ../resources/hpbar-full.png
+	size 108 9
+	sheetsize 1 1
+}
+
+hpbar-empty {
+	filepath ../resources/hpbar-empty.png
+	size 108 9
+	sheetsize 1 1
+}

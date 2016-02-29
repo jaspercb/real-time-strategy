@@ -24,8 +24,9 @@ class Spritesheet {
 		~Spritesheet();
 
 		void render(SDL_Renderer* renderer, int spriteX, int spriteY, int renderX, int renderY, float magnification);
-	private:
 		SDL_Texture* sheet;
+
+	private:
 		SDL_Rect clip, tclip;
 		int spriteW, spriteH; // the height and width of an individual sprite
 		int offsetX, offsetY; // the gap between the top-left pixel of the image and the top-left pixel of the first sprite
