@@ -54,7 +54,7 @@ private:
 
 	std::shared_ptr<Spritesheet> uiWireframe;
 
-	long frame;
+	int frame;
 
 	const Uint8 *keyDown;
 
