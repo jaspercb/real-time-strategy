@@ -5,6 +5,7 @@
 #include "typedefs.hpp"
 #include "UserInterface.hpp"
 #include "Logging.hpp"
+#include "sdlTools.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -128,5 +129,12 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 				this->drawTiles[i][j]->render(renderer, 0, 0, drawPos.first, drawPos.second +  (200-this->drawTiles[i][j]->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
 			}
 		}
+	}
+	SDL_Color gridLineColor{0, 0, 0, 186};
+	for (int i=0; i<this->width; i++) {
+		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 0)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*this->width)), gridLineColor );
+	}
+	for (int j=0; j<this->height; j++) {
+		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(0, 64*PIXEL_WIDTH*j)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*this->width, 64*PIXEL_WIDTH*j)), gridLineColor );
 	}
 }
