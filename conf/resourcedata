@@ -174,7 +174,7 @@ hpbar-empty {
 
 map-default {
 	filepath ../spike/map-test.png
-	size 8 8
+	size 49 49
 	sheetsize 1 1
 }
 

@@ -87,7 +87,7 @@ int main() {
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
-		g.createUnit(tID1, "../conf/units/townhall", Coordinate(-5000, -5000));
+		g.createUnit(tID1, "../conf/units/townhall", Coordinate(200000, 200000));
 		
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
