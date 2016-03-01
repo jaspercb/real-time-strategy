@@ -66,16 +66,11 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 				return;
 			}
 
-			this->selectionBoxCorner1 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
-			this->selectionBoxCorner2 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
+			this->selectionBoxCorner1 = Coordinate(event.button.x, event.button.y);
+			this->selectionBoxCorner2 = Coordinate(event.button.x, event.button.y);
 			this->drawSelectionBox = true;
 
-			this->selectedUnits.clear();
-			auto unfilteredUnits = this->game.inhabitedGrid.unitsInRectangle(this->selectionBoxCorner1, this->selectionBoxCorner2);
-			auto lambda = [this](UnitID u) {
-				return this->game.teamsAreFriendly(this->teamID, this->game.getUnit(u).teamID);
-			};
-			std::copy_if(unfilteredUnits.begin(), unfilteredUnits.end(), std::back_inserter(this->selectedUnits), lambda);
+			this->updateSelectedUnits();
 		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP) {
@@ -91,15 +86,8 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 			this->viewCenter = this->objectiveCoordinateFromScreen(newViewCenter);
 		}
 		if (this->drawSelectionBox && SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)) { // if left mouse button is being held down
-			this->selectionBoxCorner2 = this->objectiveCoordinateFromScreen(Coordinate(event.button.x, event.button.y));
-
-			auto unfilteredUnits = this->game.inhabitedGrid.unitsInRectangle(this->selectionBoxCorner1, this->selectionBoxCorner2);
-			auto lambda = [this](UnitID u) {
-				return this->game.teamsAreFriendly(this->teamID, this->game.getUnit(u).teamID);
-			};
-
-			this->selectedUnits.clear();
-			std::copy_if(unfilteredUnits.begin(), unfilteredUnits.end(), std::back_inserter(this->selectedUnits), lambda);
+			this->selectionBoxCorner2 = Coordinate(event.button.x, event.button.y);
+			this->updateSelectedUnits();
 		}
 	}
 
@@ -150,6 +138,20 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 			}
 		}
 	}
+}
+
+void UserInterface::updateSelectedUnits() {
+	this->selectedUnits.clear();
+	
+	auto lambda = [this](Unit& u) {
+		return coordInRect(this->screenCoordinateFromObjective(u.xy) , this->selectionBoxCorner1, this->selectionBoxCorner2);// && this->game.teamsAreFriendly(this->teamID, u.teamID);
+	};
+
+	for (auto& unitID_unit : this->game.unitsByID) {
+		if (lambda(unitID_unit.second))
+			this->selectedUnits.push_back(unitID_unit.first);
+	}
+
 }
 
 void UserInterface::renderSelection( SDL_Renderer* renderer ) {
@@ -204,10 +206,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 	if (this->drawSelectionBox) {
 		SDL_Rect selectionBox;
-		Coordinate screenCorner1 = this->screenCoordinateFromObjective(this->selectionBoxCorner1);
-		Coordinate screenCorner2 = this->screenCoordinateFromObjective(this->selectionBoxCorner2);
-
-		renderRectBorder(renderer, screenCorner1, screenCorner2, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
+		renderRectBorder(renderer, selectionBoxCorner1, selectionBoxCorner2, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
 	}
 
 	this->uiWireframe->render(gRenderer, 0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1.0);
