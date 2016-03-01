@@ -144,7 +144,7 @@ void UserInterface::updateSelectedUnits() {
 	this->selectedUnits.clear();
 	
 	auto lambda = [this](Unit& u) {
-		return coordInRect(this->screenCoordinateFromObjective(u.xy) , this->selectionBoxCorner1, this->selectionBoxCorner2);// && this->game.teamsAreFriendly(this->teamID, u.teamID);
+		return coordInRect(this->screenCoordinateFromObjective(u.xy) , this->selectionBoxCorner1, this->selectionBoxCorner2) && this->game.teamsAreFriendly(this->teamID, u.teamID);
 	};
 
 	for (auto& unitID_unit : this->game.unitsByID) {
