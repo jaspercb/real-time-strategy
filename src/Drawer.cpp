@@ -115,14 +115,14 @@ Drawer::~Drawer() {
 void Drawer::drawIdle(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
 	if (NULL != shadowsheet)
 		shadowsheet->render(renderer,
-			( (unit.drawFacingAngle+90+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->idleCycleStart + frame,
 			drawPos.first,
 			drawPos.second,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
-			( (unit.drawFacingAngle+90+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			idleCycleStart + frame,
 			drawPos.first,
 			drawPos.second + dy,
@@ -132,14 +132,14 @@ void Drawer::drawIdle(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coo
 void Drawer::drawWalking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
 	if (NULL != shadowsheet)
 		shadowsheet->render(renderer,
-			( (unit.drawFacingAngle+90+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->walkCycleStart + frame,
 			drawPos.first,
 			drawPos.second,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
-			( (unit.drawFacingAngle+90+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->walkCycleStart + frame,
 			drawPos.first,
 			drawPos.second + dy,
@@ -149,14 +149,14 @@ void Drawer::drawWalking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, 
 void Drawer::drawAttacking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
 	if (NULL != shadowsheet)
 		shadowsheet->render(renderer,
-			( (unit.drawFacingAngle+90+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->attackCycleStart + frame,
 			drawPos.first,
 			drawPos.second,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
-			( (unit.drawFacingAngle+90+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->attackCycleStart + frame,
 			drawPos.first,
 			drawPos.second + dy,
@@ -167,7 +167,7 @@ void Drawer::drawDying(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Co
 	if (this->deathCycleVertical) {
 		if (NULL != spritesheet)
 			spritesheet->render(renderer,
-				( (unit.drawFacingAngle+90+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+				( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 				this->deathCycleStart + frame,
 				drawPos.first,
 				drawPos.second + dy,
