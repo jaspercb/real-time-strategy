@@ -234,7 +234,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	}
 
 	this->renderHUD( renderer );
-
+	this->game.terrain.renderMinimap(renderer, this);
 
 	int numSelectedUnits = this->selectedUnits.size();
 	if (numSelectedUnits == 1) {

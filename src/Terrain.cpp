@@ -11,6 +11,7 @@
 
 Terrain::Terrain(std::string mapName) {
 	SDL_Surface* image = gResourceManager->getRawSurface(mapName);
+	this->minimap = gResourceManager->get(mapName);
 
 	Uint32* pixels = (Uint32*)image->pixels;
 
@@ -25,7 +26,7 @@ Terrain::Terrain(std::string mapName) {
 		for (int j=0; j<this->height; j++) {
 			
 			TerrainType tile = NONE;
-			switch (pixels[i*height + j]) {
+			switch (pixels[i*height + (height-j-1)]) {
 				case -65536:
 					tile = WATER;
 					break;
@@ -33,7 +34,7 @@ Terrain::Terrain(std::string mapName) {
 					tile = GRASS;
 					break;
 				default:
-					debugLog("in Terrain::Terrain(), encountered weird pixel value: "+pixels[i*height + j]);
+					debugLog("in Terrain::Terrain(), encountered weird pixel value: "+pixels[i*height + (height-j-1)]);
 			}
 			this->tiles[i][j] = tile;
 		}
@@ -47,7 +48,6 @@ Terrain::Terrain(std::string mapName) {
 	}
 
 	SDL_FreeSurface(image);
-
 }
 
 TerrainType Terrain::getTerrainAt(int x, int y) {
@@ -137,4 +137,12 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 	for (int j=0; j<this->height; j++) {
 		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(0, 64*PIXEL_WIDTH*j)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*this->width, 64*PIXEL_WIDTH*j)), gridLineColor );
 	}
+}
+void Terrain::renderMinimap(SDL_Renderer* renderer, UserInterface* ui) {
+	SDL_Rect target;
+	target.x = 10+40;
+	target.y = 610+40;
+	target.w = 280/sqrt(2);
+	target.h = 280/sqrt(2);
+	SDL_RenderCopyEx(renderer, this->minimap->sheet, NULL, &target, -45, NULL, SDL_FLIP_NONE);
 }
