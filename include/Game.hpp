@@ -13,8 +13,7 @@ class Unit;
 class InhabitedGrid;
 class Command;
 
-class Game
-{
+class Game {
 public:
 	Game();
 	TeamID createTeam();

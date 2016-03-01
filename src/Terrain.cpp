@@ -23,12 +23,20 @@ Terrain::Terrain(std::string mapName) {
 			this->tiles[i][j] = tile;
 		}
 	}
+
+	for (int i=5; i<10; i++){
+		for (int j=5; j<10; j++){
+			this->tiles[i][j]=WATER;
+		}
+	}
+
 	for (int i=0; i<this->width; i++) {
 		this->drawTiles[i].resize(this->height);
 		for (int j=0; j<this->height; j++) {
 			this->updateDrawTile(i, j);
 		}
 	}
+
 }
 
 TerrainType Terrain::getTerrainAt(int x, int y) {
@@ -44,15 +52,15 @@ void Terrain::updateDrawTile(int x, int y) {
 	}
 
 	TerrainType nw, n, ne, w, center, e, sw, s, se;
-	nw = this->getTerrainAt(x-1, y-1);
-	n = this->getTerrainAt(x, y-1);
-	ne = this->getTerrainAt(x+1, y-1);
-	w = this->getTerrainAt(x-1, y);
+	nw = this->getTerrainAt(x-1, y+1);
+	n = this->getTerrainAt(x-1, y);
+	ne = this->getTerrainAt(x-1, y-1);
+	w = this->getTerrainAt(x, y+1);
 	center = this->getTerrainAt(x, y);
-	e = this->getTerrainAt(x+1, y);
-	sw = this->getTerrainAt(x-1, y+1);
-	s = this->getTerrainAt(x, y+1);
-	se = this->getTerrainAt(x+1, y+1);
+	e = this->getTerrainAt(x, y-1);
+	sw = this->getTerrainAt(x+1, y+1);
+	s = this->getTerrainAt(x+1, y);
+	se = this->getTerrainAt(x+1, y-1);
 
 	nw = (nw!=NONE) ? nw : center;
 	n = (n!=NONE) ? n : center;
@@ -94,6 +102,9 @@ void Terrain::updateDrawTile(int x, int y) {
 			resource = "tile-ocean-grass-cornerSW";
 		else if (se == GRASS)
 			resource = "tile-ocean-grass-cornerSE";
+		else{
+			resource = "tile-ocean";
+		}
 	}
 
 	this->drawTiles[x][y] = gResourceManager->get(resource);
@@ -103,8 +114,8 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 	for (int i=0; i<this->width; i++) {
 		for (int j=0; j<this->height; j++) {
 			if (this->drawTiles[i][j]) {
-				Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*j));
-				this->drawTiles[i][j]->render(renderer, 0, 0, drawPos.first, drawPos.second, ui->viewMagnification);
+				Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*j ));
+				this->drawTiles[i][j]->render(renderer, 0, 0, drawPos.first, drawPos.second +  (83-this->drawTiles[i][j]->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
 			}
 		}
 	}

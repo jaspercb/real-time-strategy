@@ -188,73 +188,79 @@ tile-grass {
 }
 
 tile-ocean-grass-cornerNE {
-	filepath ../resources/tiles/grass/cornerNE.png
+	filepath ../resources/tiles/ocean/grass/cornerNE.png
 	size 132 83
 	sheetsize 1 1
 }
 
 tile-ocean-grass-cornerNW {
-	filepath ../resources/tiles/grass/cornerNW.png
+	filepath ../resources/tiles/ocean/grass/cornerNW.png
 	size 132 83
 	sheetsize 1 1
 }
 
 tile-ocean-grass-cornerSE {
-	filepath ../resources/tiles/grass/cornerSE.png
+	filepath ../resources/tiles/ocean/grass/cornerSE.png
 	size 132 99
 	sheetsize 1 1
 }
 
 tile-ocean-grass-cornerSW {
-	filepath ../resources/tiles/grass/cornerSW.png
+	filepath ../resources/tiles/ocean/grass/cornerSW.png
 	size 132 83
 	sheetsize 1 1
 }
 
 tile-ocean-grass-E {
-	filepath ../resources/tiles/grass/E.png
+	filepath ../resources/tiles/ocean/grass/E.png
 	size 132 99
 	sheetsize 1 1
 }
 
 tile-ocean-grass-N {
-	filepath ../resources/tiles/grass/N.png
+	filepath ../resources/tiles/ocean/grass/N.png
 	size 132 99
 	sheetsize 1 1
 }
 
 tile-ocean-grass-S {
-	filepath ../resources/tiles/grass/S.png
+	filepath ../resources/tiles/ocean/grass/S.png
 	size 132 83
 	sheetsize 1 1
 }
 
 tile-ocean-grass-W {
-	filepath ../resources/tiles/grass/W.png
+	filepath ../resources/tiles/ocean/grass/W.png
 	size 132 83
 	sheetsize 1 1
 }
 
 tile-ocean-grass-NE {
-	filepath ../resources/tiles/grass/NE.png
+	filepath ../resources/tiles/ocean/grass/NE.png
 	size 132 99
 	sheetsize 1 1
 }
 
 tile-ocean-grass-NW {
-	filepath ../resources/tiles/grass/NW.png
+	filepath ../resources/tiles/ocean/grass/NW.png
 	size 132 99
 	sheetsize 1 1
 }
 
 tile-ocean-grass-SE {
-	filepath ../resources/tiles/grass/SE.png
+	filepath ../resources/tiles/ocean/grass/SE.png
 	size 132 99
 	sheetsize 1 1
 }
 
 tile-ocean-grass-SW {
-	filepath ../resources/tiles/grass/SW.png
+	filepath ../resources/tiles/ocean/grass/SW.png
+	size 132 83
+	sheetsize 1 1
+}
+
+tile-ocean {
+	filepath ../resources/tiles/ocean/ocean.png
 	size 132 83
 	sheetsize 1 1
 }
