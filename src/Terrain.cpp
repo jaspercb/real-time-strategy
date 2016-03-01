@@ -4,13 +4,17 @@
 #include "globals.hpp"
 #include "typedefs.hpp"
 #include "UserInterface.hpp"
+#include "Logging.hpp"
 
 #include <SDL2/SDL.h>
 
 Terrain::Terrain(std::string mapName) {
-	std::shared_ptr<Spritesheet> image = gResourceManager->get(mapName);
-	this->width = image->spriteW;
-	this->height = image->spriteH;
+	SDL_Surface* image = gResourceManager->getRawSurface(mapName);
+
+	Uint32* pixels = (Uint32*)image->pixels;
+
+	this->width = image->w;
+	this->height = image->h;
 
 	this->tiles.resize(this->width);
 	this->drawTiles.resize(this->width);
@@ -18,18 +22,19 @@ Terrain::Terrain(std::string mapName) {
 		this->tiles[i].resize(this->height);
 		this->drawTiles[i].resize(this->height);
 		for (int j=0; j<this->height; j++) {
-			TerrainType tile;
-			if (true)
-				tile = GRASS;
-			else
-				tile = WATER;
+			
+			TerrainType tile = NONE;
+			switch (pixels[i*height + j]) {
+				case -65536:
+					tile = WATER;
+					break;
+				case -16711936:
+					tile = GRASS;
+					break;
+				default:
+					debugLog("in Terrain::Terrain(), encountered weird pixel value: "+pixels[i*height + j]);
+			}
 			this->tiles[i][j] = tile;
-		}
-	}
-
-	for (int i=5; i<10; i++){
-		for (int j=5; j<10; j++){
-			this->tiles[i][j]=WATER;
 		}
 	}
 
@@ -39,6 +44,8 @@ Terrain::Terrain(std::string mapName) {
 			this->updateDrawTile(i, j);
 		}
 	}
+
+	SDL_FreeSurface(image);
 
 }
 
@@ -118,7 +125,7 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 		for (int j=0; j<this->height; j++) {
 			if (this->drawTiles[i][j]) {
 				Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*j ));
-				this->drawTiles[i][j]->render(renderer, 0, 0, drawPos.first, drawPos.second +  (83-this->drawTiles[i][j]->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
+				this->drawTiles[i][j]->render(renderer, 0, 0, drawPos.first, drawPos.second +  (200-this->drawTiles[i][j]->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
 			}
 		}
 	}

@@ -189,7 +189,7 @@ tile-grass {
 
 tile-ocean-grass-cornerNE {
 	filepath ../resources/tiles/ocean/grass/cornerNE.png
-	size 132 83
+	size 132 99
 	sheetsize 1 1
 }
 
@@ -201,7 +201,7 @@ tile-ocean-grass-cornerNW {
 
 tile-ocean-grass-cornerSE {
 	filepath ../resources/tiles/ocean/grass/cornerSE.png
-	size 132 99
+	size 132 83
 	sheetsize 1 1
 }
 

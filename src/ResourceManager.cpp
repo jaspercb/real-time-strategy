@@ -68,6 +68,10 @@ ResourceData ResourceManager::loadResourceData(std::ifstream& is) {
 	return ret;
 }
 
+SDL_Surface* ResourceManager::getRawSurface(std::string resourcename) {
+	return loadSurface(this->resourceDataTable[resourcename].filepath);
+}
+
 std::shared_ptr<Spritesheet> ResourceManager::load(std::string resourcename, TeamColor teamColor) {
 	return std::shared_ptr<Spritesheet>( new Spritesheet(gRenderer, this->resourceDataTable[resourcename], teamColor) );
 }

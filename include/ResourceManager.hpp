@@ -18,10 +18,12 @@ class ResourceManager {
 		std::shared_ptr<Spritesheet> load(std::string resourcename, TeamColor teamColor);
 		
 		std::shared_ptr<Spritesheet> get(std::string resourcename, TeamColor teamColor = COLOR_NULL);
+		
 		int getSpritesX(std::string resourcename);
 
 		int getSpritesY(std::string resourcename);
 
+		SDL_Surface* getRawSurface(std::string resourcename);
 		// Given a resource address, checks if it's already loaded, loads it if necessary, and returns it.
 		// If given a resource address that doesn't exist, throws.
 

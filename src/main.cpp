@@ -104,6 +104,8 @@ int main() {
 			}
 		}
 
+		g.createUnit(tID2, "../conf/units/ground-dummy", Coordinate(0, 0));
+
 		//Command cmd1(CMD_GOTOCOORD);
 		//cmd1.targetID = b;
 
