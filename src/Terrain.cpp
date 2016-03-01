@@ -19,7 +19,10 @@ Terrain::Terrain(std::string mapName) {
 		this->drawTiles[i].resize(this->height);
 		for (int j=0; j<this->height; j++) {
 			TerrainType tile;
-			tile = GRASS;
+			if (true)
+				tile = GRASS;
+			else
+				tile = WATER;
 			this->tiles[i][j] = tile;
 		}
 	}
