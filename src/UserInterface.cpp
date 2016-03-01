@@ -218,6 +218,8 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	SDL_SetRenderDrawColor(renderer, 128, 128, 128, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
 
+	this->game.terrain.render(renderer, this);
+
 	for (auto &animation : this->animations){
 		animation->draw(renderer, this);
 	}
@@ -228,7 +230,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	Coordinate screenCorner2 = this->objectiveCoordinateFromScreen(Coordinate(SCREEN_WIDTH+200, SCREEN_HEIGHT+200));
 
 	for (auto &u : this->game.unitsByID) {
-		if (unitInRectangle(u.second, screenCorner1, screenCorner2))
+		//if (unitInRectangle(u.second, screenCorner1, screenCorner2))
 			u.second.draw( renderer, this);
 	}
 
@@ -273,8 +275,8 @@ void UserInterface::tick() {
 }
 
 void UserInterface::zoom(int dy) {
-	this->viewCenter.first += SCREEN_WIDTH * PIXEL_WIDTH/this->viewMagnification/2;
-	this->viewCenter.second += SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
+	//this->viewCenter.first += SCREEN_WIDTH * PIXEL_WIDTH/this->viewMagnification/2;
+	//this->viewCenter.second += SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
 	
 	if (dy > 0)
 		this->viewMagnification *= 1.1;
@@ -282,18 +284,26 @@ void UserInterface::zoom(int dy) {
 		this->viewMagnification /= 1.1;
 	}
 
-	this->viewCenter.first -= SCREEN_WIDTH * PIXEL_WIDTH/this->viewMagnification/2;
-	this->viewCenter.second -= SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
+	//this->viewCenter.first -= SCREEN_WIDTH * PIXEL_WIDTH/this->viewMagnification/2;
+	//this->viewCenter.second -= SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
 }
 
 Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c) {
-	return Coordinate(	PIXEL_WIDTH/this->viewMagnification*c.first + this->viewCenter.first,
-						PIXEL_HEIGHT/this->viewMagnification*c.second + this->viewCenter.second );
+	// returns an isometric coordinate
+
+	//return Coordinate(	PIXEL_WIDTH/this->viewMagnification*c.first + this->viewCenter.first,
+	//					PIXEL_HEIGHT/this->viewMagnification*c.second + this->viewCenter.second );
+	Distance x = PIXEL_WIDTH/this->viewMagnification*c.first;
+	Distance y = PIXEL_WIDTH/this->viewMagnification*c.second;
+	return Coordinate(	(2*y + x)/2  + this->viewCenter.first,
+						(2*y - x)/2  + this->viewCenter.second);
 }
 
 Coordinate UserInterface::screenCoordinateFromObjective(const Coordinate c) {
-	return Coordinate(	(c.first-this->viewCenter.first)*this->viewMagnification/PIXEL_WIDTH,
-						(c.second-this->viewCenter.second)*this->viewMagnification/PIXEL_HEIGHT );
+	Distance x = (c.first-this->viewCenter.first)*this->viewMagnification/PIXEL_WIDTH;
+	Distance y = (c.second-this->viewCenter.second)*this->viewMagnification/PIXEL_WIDTH;
+	return Coordinate(	(x-y),
+						(x+y)/2 );
 }
 
 

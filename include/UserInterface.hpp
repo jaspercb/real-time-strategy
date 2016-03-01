@@ -41,13 +41,13 @@ public:
 
 	std::set<std::unique_ptr<Animation> > animations;
 
+	Coordinate viewCenter;
 private:
 	bool quit;
 	
 	bool drawSelectionBox;
 	Coordinate selectionBoxCorner1;
 	Coordinate selectionBoxCorner2;
-	Coordinate viewCenter;
 	std::vector<UnitID> selectedUnits;
 	int cameraVx, cameraVy;
 	int viewCenterMaxSpeed;

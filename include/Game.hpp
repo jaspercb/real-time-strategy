@@ -7,6 +7,7 @@
 #include "typedefs.hpp"
 #include "InhabitedGrid.hpp"
 #include "Team.hpp"
+#include "Terrain.hpp"
 
 class Unit;
 class InhabitedGrid;
@@ -29,6 +30,8 @@ public:
 	bool unitsAreFriendly(UnitID a, UnitID b);
 
 	InhabitedGrid inhabitedGrid;
+	Terrain terrain;
+
 	std::map<UnitID, Unit> unitsByID;
 	std::map<TeamID, Team> teamsByID;
 

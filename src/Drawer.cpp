@@ -12,7 +12,7 @@
 int AIRBORNE_RENDER_HEIGHT = 40;
 
 const int PIXEL_WIDTH = 100;
-const int PIXEL_HEIGHT = 130;
+const int PIXEL_HEIGHT = 200;
 
 int positiveRemainder(int a, int b) {
 	// returns the unique integer 0<=r<b such that mb+r = a for some integer n

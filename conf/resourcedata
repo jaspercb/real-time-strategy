@@ -169,3 +169,92 @@ hpbar-empty {
 	size 108 9
 	sheetsize 1 1
 }
+
+
+
+map-default {
+	filepath ../spike/map-test.png
+	size 8 8
+	sheetsize 1 1
+}
+
+
+
+
+tile-grass {
+	filepath ../resources/tiles/grass/grass.png
+	size 132 99
+	sheetsize 1 1
+}
+
+tile-ocean-grass-cornerNE {
+	filepath ../resources/tiles/grass/cornerNE.png
+	size 132 83
+	sheetsize 1 1
+}
+
+tile-ocean-grass-cornerNW {
+	filepath ../resources/tiles/grass/cornerNW.png
+	size 132 83
+	sheetsize 1 1
+}
+
+tile-ocean-grass-cornerSE {
+	filepath ../resources/tiles/grass/cornerSE.png
+	size 132 99
+	sheetsize 1 1
+}
+
+tile-ocean-grass-cornerSW {
+	filepath ../resources/tiles/grass/cornerSW.png
+	size 132 83
+	sheetsize 1 1
+}
+
+tile-ocean-grass-E {
+	filepath ../resources/tiles/grass/E.png
+	size 132 99
+	sheetsize 1 1
+}
+
+tile-ocean-grass-N {
+	filepath ../resources/tiles/grass/N.png
+	size 132 99
+	sheetsize 1 1
+}
+
+tile-ocean-grass-S {
+	filepath ../resources/tiles/grass/S.png
+	size 132 83
+	sheetsize 1 1
+}
+
+tile-ocean-grass-W {
+	filepath ../resources/tiles/grass/W.png
+	size 132 83
+	sheetsize 1 1
+}
+
+tile-ocean-grass-NE {
+	filepath ../resources/tiles/grass/NE.png
+	size 132 99
+	sheetsize 1 1
+}
+
+tile-ocean-grass-NW {
+	filepath ../resources/tiles/grass/NW.png
+	size 132 99
+	sheetsize 1 1
+}
+
+tile-ocean-grass-SE {
+	filepath ../resources/tiles/grass/SE.png
+	size 132 99
+	sheetsize 1 1
+}
+
+tile-ocean-grass-SW {
+	filepath ../resources/tiles/grass/SW.png
+	size 132 83
+	sheetsize 1 1
+}

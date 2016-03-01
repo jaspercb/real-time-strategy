@@ -24,12 +24,14 @@ class Spritesheet {
 		~Spritesheet();
 
 		void render(SDL_Renderer* renderer, int spriteX, int spriteY, int renderX, int renderY, float magnification);
+
 		SDL_Texture* sheet;
+
+		const int spritesX, spritesY; // the number of sprites wide and high
+		const int spriteW, spriteH; // the height and width of an individual sprite
+		const int offsetX, offsetY; // the gap between the top-left pixel of the image and the top-left pixel of the first sprite
+		const int gapX, gapY; // the gap between successive sprites
 
 	private:
 		SDL_Rect clip, tclip;
-		int spriteW, spriteH; // the height and width of an individual sprite
-		int offsetX, offsetY; // the gap between the top-left pixel of the image and the top-left pixel of the first sprite
-		int gapX, gapY; // the gap between successive sprites
-		int spritesX, spritesY; // the number of sprites wide and high
 };
