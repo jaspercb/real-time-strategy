@@ -95,7 +95,29 @@ void Terrain::updateDrawTile(int x, int y) {
 		resource = "tile-grass";
 	
 	else if (center == WATER) {
-		if (n == GRASS && w == GRASS)
+		if (n == WATER && w == WATER && s == WATER && e == WATER
+		&& nw == WATER && ne == WATER && sw == WATER && se == WATER)
+			resource = "tile-ocean";
+		
+		else if (n == WATER && e == WATER && w != WATER && s != WATER
+		&& ne != WATER )
+			resource = "tile-river-grass-bendNE";
+		else if (n == WATER && e != WATER && w == WATER && s != WATER
+		&& nw != WATER )
+			resource = "tile-river-grass-bendNW";
+		else if (n != WATER && e == WATER && w != WATER && s == WATER
+		&& se != WATER )
+			resource = "tile-river-grass-bendSE";
+		else if (n != WATER && e != WATER && w == WATER && s == WATER
+		&& sw != WATER )
+			resource = "tile-river-grass-bendSW";
+
+		else if (n == WATER && s == WATER && e != WATER && w != WATER)
+			resource = "tile-river-grass-straightN";
+		else if (n != WATER && s != WATER && e == WATER && w == WATER)
+			resource = "tile-river-grass-straightE";
+
+		else if (n == GRASS && w == GRASS)
 			resource = "tile-ocean-grass-NW";
 		else if (n == GRASS && e == GRASS)
 			resource = "tile-ocean-grass-NE";
@@ -131,20 +153,20 @@ void Terrain::updateDrawTile(int x, int y) {
 
 		else if (n == ROAD && s == ROAD && e == ROAD && w == ROAD
 		&& nw == GRASS && ne == GRASS && sw == GRASS && se == GRASS)
-			resource = "tile-road-grass4waycross";
+			resource = "tile-road-grass-4waycross";
 		
 		else if (n == GRASS && s == ROAD && e == ROAD && w == ROAD
-		&& nw == GRASS && ne == GRASS && sw == GRASS && se == GRASS)
-			resource = "tile-road-grass-3cornerN";
+		&& sw == GRASS && se == GRASS)
+			resource = "tile-road-grass-3crossN";
 		else if (n == ROAD && s == GRASS && e == ROAD && w == ROAD
-		&& nw == GRASS && ne == GRASS && sw == GRASS && se == GRASS)
-			resource = "tile-road-grass-3cornerS";
+		&& nw == GRASS && ne == GRASS)
+			resource = "tile-road-grass-3crossS";
 		else if (n == ROAD && s == ROAD && e == GRASS && w == ROAD
-		&& nw == GRASS && ne == GRASS && sw == GRASS && se == GRASS)
-			resource = "tile-road-grass-3cornerE";
+		&& nw == GRASS && sw == GRASS)
+			resource = "tile-road-grass-3crossE";
 		else if (n == ROAD && s == ROAD && e == ROAD && w == GRASS
-		&& nw == GRASS && ne == GRASS && sw == GRASS && se == GRASS)
-			resource = "tile-road-grass-3cornerW";
+		&& ne == GRASS && se == GRASS)
+			resource = "tile-road-grass-3crossW";
 
 		else if (n == ROAD && s == ROAD && e == ROAD && w == ROAD
 		&& nw == ROAD && ne == GRASS && sw == ROAD && se == GRASS)
@@ -177,17 +199,13 @@ void Terrain::updateDrawTile(int x, int y) {
 		else if (n == ROAD && w == ROAD && s == ROAD && e != ROAD)
 			resource = "tile-road-grassE";
 		
-		else if (n != ROAD && s != ROAD && e != ROAD && w == ROAD
-		&& nw != ROAD && sw != ROAD)
+		else if (n != ROAD && s != ROAD && e != ROAD && w == ROAD)
 			resource = "tile-road-grass-endE";
-		else if (n != ROAD && s != ROAD && e == ROAD && w != ROAD
-		&& ne != ROAD && se != ROAD)
+		else if (n != ROAD && s != ROAD && e == ROAD && w != ROAD)
 			resource = "tile-road-grass-endW";
-		else if (n == ROAD && s != ROAD && e != ROAD && w != ROAD
-		&& se != ROAD && sw != ROAD)
+		else if (n == ROAD && s != ROAD && e != ROAD && w != ROAD)
 			resource = "tile-road-grass-endN";
-		else if (n != ROAD && s == ROAD && e != ROAD && w != ROAD
-		&& ne != ROAD && nw != ROAD)
+		else if (n != ROAD && s == ROAD && e != ROAD && w != ROAD)
 			resource = "tile-road-grass-endS";
 
 		else if (n == ROAD && e == ROAD && s != ROAD && w != ROAD)

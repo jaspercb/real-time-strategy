@@ -265,6 +265,44 @@ tile-ocean {
 	sheetsize 1 1
 }
 
+
+tile-river-grass-straightN {
+	filepath ../resources/tiles/river/grass-straightN.png
+	size 133 99
+	sheetsize 1 1
+}
+
+tile-river-grass-straightE {
+	filepath ../resources/tiles/river/grass-straightE.png
+	size 133 99
+	sheetsize 1 1
+}
+
+tile-river-grass-bendNE {
+	filepath ../resources/tiles/river/grass-bendNE.png
+	size 133 99
+	sheetsize 1 1
+}
+
+tile-river-grass-bendNW {
+	filepath ../resources/tiles/river/grass-bendNW.png
+	size 133 99
+	sheetsize 1 1
+}
+
+tile-river-grass-bendSE {
+	filepath ../resources/tiles/river/grass-bendSE.png
+	size 133 99
+	sheetsize 1 1
+}
+
+tile-river-grass-bendSW {
+	filepath ../resources/tiles/river/grass-bendSW.png
+	size 133 99
+	sheetsize 1 1
+}
+
+
 tile-road {
 	filepath ../resources/tiles/road/road.png
 	size 132 99
@@ -445,4 +483,3 @@ tile-road-grass-straightE {
 	size 132 99
 	sheetsize 1 1
 }
-
