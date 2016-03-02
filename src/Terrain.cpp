@@ -6,6 +6,7 @@
 #include "UserInterface.hpp"
 #include "Logging.hpp"
 #include "sdlTools.hpp"
+#include "InhabitedGrid.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -122,11 +123,15 @@ void Terrain::updateDrawTile(int x, int y) {
 }
 
 void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
+	Coordinate screenCorner1(-100*ui->viewMagnification, -100*ui->viewMagnification);
+	Coordinate screenCorner2(SCREEN_WIDTH+100*ui->viewMagnification, SCREEN_HEIGHT+100*ui->viewMagnification);
 	for (int i=0; i<this->width; i++) {
 		for (int j=0; j<this->height; j++) {
 			if (this->drawTiles[i][j]) {
 				Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*j ));
-				this->drawTiles[i][j]->render(renderer, 0, 0, drawPos.first, drawPos.second +  (200-this->drawTiles[i][j]->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
+				if (coordInRect(drawPos, screenCorner1, screenCorner2)) {
+					this->drawTiles[i][j]->render(renderer, 0, 0, drawPos.first, drawPos.second +  (200-this->drawTiles[i][j]->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
+				}
 			}
 		}
 	}
