@@ -21,7 +21,7 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	viewMagnification(1.0),
 	cameraVy(0),
 	cameraVx(0),
-	viewCenterMaxSpeed(1000),
+	viewCenterMaxSpeed(2500),
 	keyDown( SDL_GetKeyboardState(NULL) ),
 	uiWireframe(gResourceManager->get("ui-mockup")),
 	frame(0)
@@ -300,8 +300,8 @@ Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c) {
 
 	//return Coordinate(	PIXEL_WIDTH/this->viewMagnification*c.first + this->viewCenter.first,
 	//					PIXEL_HEIGHT/this->viewMagnification*c.second + this->viewCenter.second );
-	Distance x = PIXEL_WIDTH/this->viewMagnification*c.first;
-	Distance y = PIXEL_WIDTH/this->viewMagnification*c.second;
+	Distance x = PIXEL_WIDTH/this->viewMagnification*(c.first - SCREEN_WIDTH/2);
+	Distance y = PIXEL_WIDTH/this->viewMagnification*(c.second - SCREEN_HEIGHT/2);
 	return Coordinate(	(2*y + x)/2  + this->viewCenter.first,
 						(2*y - x)/2  + this->viewCenter.second);
 }
@@ -309,8 +309,8 @@ Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c) {
 Coordinate UserInterface::screenCoordinateFromObjective(const Coordinate c) {
 	Distance x = (c.first-this->viewCenter.first)*this->viewMagnification/PIXEL_WIDTH;
 	Distance y = (c.second-this->viewCenter.second)*this->viewMagnification/PIXEL_WIDTH;
-	return Coordinate(	(x-y),
-						(x+y)/2 );
+	return Coordinate(	(x-y) + SCREEN_WIDTH/2,
+						(x+y)/2 + SCREEN_HEIGHT/2);
 }
 
 
