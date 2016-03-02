@@ -207,7 +207,7 @@ void Terrain::updateDrawTile(int x, int y) {
 		else if (n == ROAD && s == ROAD)
 			resource = "tile-road-grass-straightN";
 		else if (e == ROAD && w == ROAD)
-			resource = "tile-road-water-straightE";
+			resource = "tile-road-grass-straightE";
 
 		else
 			resource = "tile-road";

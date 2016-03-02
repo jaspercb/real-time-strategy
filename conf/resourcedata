@@ -424,13 +424,13 @@ tile-road-grass-turnSW {
 
 tile-road-water-straightN {
 	filepath ../resources/tiles/road/water-straightN.png
-	size 132 99
+	size 132 97
 	sheetsize 1 1
 }
 
 tile-road-water-straightE {
-	filepath ../resources/tiles/road/grass-straightE.png
-	size 132 99
+	filepath ../resources/tiles/road/water-straightE.png
+	size 132 97
 	sheetsize 1 1
 }
 
