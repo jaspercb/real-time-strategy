@@ -135,11 +135,18 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 			}
 		}
 	}
+
+	int step = 1;
+	while (step < 1/ui->viewMagnification ) {
+		step *= 2;
+	}
+	//step *= 16;
+
 	SDL_Color gridLineColor{0, 0, 0, 186};
-	for (int i=0; i<this->width; i++) {
+	for (int i=0; i<this->width; i+=step) {
 		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 0)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*this->width)), gridLineColor );
 	}
-	for (int j=0; j<this->height; j++) {
+	for (int j=0; j<this->height; j+=step) {
 		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(0, 64*PIXEL_WIDTH*j)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*this->width, 64*PIXEL_WIDTH*j)), gridLineColor );
 	}
 }
