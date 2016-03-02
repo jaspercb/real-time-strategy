@@ -34,8 +34,13 @@ Terrain::Terrain(std::string mapName) {
 				case -16711936:
 					tile = GRASS;
 					break;
+				case -8355712:
+					tile = ROAD;
+					break;
 				default:
-					debugLog("in Terrain::Terrain(), encountered weird pixel value: "+pixels[i*height + (height-j-1)]);
+					tile = NONE;
+					debugLog("in Terrain::Terrain(), encountered weird pixel value: ");
+					debugLog(pixels[i*height + (height-j-1)]);
 			}
 			this->tiles[i][j] = tile;
 		}
@@ -117,6 +122,97 @@ void Terrain::updateDrawTile(int x, int y) {
 		else{
 			resource = "tile-ocean";
 		}
+	}
+
+	else if (center == ROAD) {
+		if (n == ROAD && s == ROAD && e == ROAD && w == ROAD
+		&& nw == ROAD && ne == ROAD && sw == ROAD && se == ROAD)
+			resource = "tile-road";
+
+		else if (n == ROAD && s == ROAD && e == ROAD && w == ROAD
+		&& nw == GRASS && ne == GRASS && sw == GRASS && se == GRASS)
+			resource = "tile-road-grass4waycross";
+		
+		else if (n == GRASS && s == ROAD && e == ROAD && w == ROAD
+		&& nw == GRASS && ne == GRASS && sw == GRASS && se == GRASS)
+			resource = "tile-road-grass-3cornerN";
+		else if (n == ROAD && s == GRASS && e == ROAD && w == ROAD
+		&& nw == GRASS && ne == GRASS && sw == GRASS && se == GRASS)
+			resource = "tile-road-grass-3cornerS";
+		else if (n == ROAD && s == ROAD && e == GRASS && w == ROAD
+		&& nw == GRASS && ne == GRASS && sw == GRASS && se == GRASS)
+			resource = "tile-road-grass-3cornerE";
+		else if (n == ROAD && s == ROAD && e == ROAD && w == GRASS
+		&& nw == GRASS && ne == GRASS && sw == GRASS && se == GRASS)
+			resource = "tile-road-grass-3cornerW";
+
+		else if (n == ROAD && s == ROAD && e == ROAD && w == ROAD
+		&& nw == ROAD && ne == GRASS && sw == ROAD && se == GRASS)
+			resource = "tile-road-grass-2cornerE";
+		else if (n == ROAD && s == ROAD && e == ROAD && w == ROAD
+		&& nw == GRASS && ne == ROAD && sw == GRASS && se == ROAD)
+			resource = "tile-road-grass-2cornerW";
+		else if (n == ROAD && s == ROAD && e == ROAD && w == ROAD
+		&& nw == GRASS && ne == GRASS && sw == ROAD && se == ROAD)
+			resource = "tile-road-grass-2cornerN";
+		else if (n == ROAD && s == ROAD && e == ROAD && w == ROAD
+		&& nw == ROAD && ne == ROAD && sw == GRASS && se == GRASS)
+			resource = "tile-road-grass-2cornerS";
+		
+		else if (n != ROAD && e != ROAD && s == ROAD && w == ROAD && sw == ROAD)
+			resource = "tile-road-grass-cornerNE";
+		else if (n != ROAD && e == ROAD && s == ROAD && w != ROAD && se == ROAD)
+			resource = "tile-road-grass-cornerNW";
+		else if (n == ROAD && e != ROAD && s != ROAD && w == ROAD && nw == ROAD)
+			resource = "tile-road-grass-cornerSE";
+		else if (n == ROAD && e == ROAD && s != ROAD && w != ROAD && ne == ROAD)
+			resource = "tile-road-grass-cornerSW";
+
+		else if (n != ROAD && w == ROAD && s == ROAD && e == ROAD)
+			resource = "tile-road-grassN";
+		else if (n == ROAD && w != ROAD && s == ROAD && e == ROAD)
+			resource = "tile-road-grassW";
+		else if (n == ROAD && w == ROAD && s != ROAD && e == ROAD)
+			resource = "tile-road-grassS";
+		else if (n == ROAD && w == ROAD && s == ROAD && e != ROAD)
+			resource = "tile-road-grassE";
+		
+		else if (n != ROAD && s != ROAD && e != ROAD && w == ROAD
+		&& nw != ROAD && sw != ROAD)
+			resource = "tile-road-grass-endE";
+		else if (n != ROAD && s != ROAD && e == ROAD && w != ROAD
+		&& ne != ROAD && se != ROAD)
+			resource = "tile-road-grass-endW";
+		else if (n == ROAD && s != ROAD && e != ROAD && w != ROAD
+		&& se != ROAD && sw != ROAD)
+			resource = "tile-road-grass-endN";
+		else if (n != ROAD && s == ROAD && e != ROAD && w != ROAD
+		&& ne != ROAD && nw != ROAD)
+			resource = "tile-road-grass-endS";
+
+		else if (n == ROAD && e == ROAD && s != ROAD && w != ROAD)
+			resource = "tile-road-grass-turnNE";
+		else if (n == ROAD && e != ROAD && s != ROAD && w == ROAD)
+			resource = "tile-road-grass-turnNW";
+		else if (n != ROAD && e == ROAD && s == ROAD && w != ROAD)
+			resource = "tile-road-grass-turnSE";
+		else if (n != ROAD && e != ROAD && s == ROAD && w == ROAD)
+			resource = "tile-road-grass-turnSW";
+
+		else if (n == ROAD && s == ROAD && e == WATER && w == WATER)
+			resource = "tile-road-water-straightN";
+		else if (n == WATER && s == WATER && e == ROAD && w == ROAD)
+			resource = "tile-road-water-straightE";
+
+		else if (n == ROAD && s == ROAD)
+			resource = "tile-road-grass-straightN";
+		else if (e == ROAD && w == ROAD)
+			resource = "tile-road-water-straightE";
+
+		else
+			resource = "tile-road";
+
+
 	}
 
 	this->drawTiles[x][y] = gResourceManager->get(resource);

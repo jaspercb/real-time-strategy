@@ -11,7 +11,8 @@ class Spritesheet;
 enum TerrainType {
 	NONE,
 	GRASS,
-	WATER
+	WATER,
+	ROAD
 };
 
 class Terrain {
