@@ -100,18 +100,22 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 			switch(event.key.keysym.sym) {
 				case SDLK_UP: {
 					this->cameraVy -= this->viewCenterMaxSpeed;
+					this->cameraVx -= this->viewCenterMaxSpeed;
 					break;
 				}
 				case SDLK_DOWN: {
 					this->cameraVy += this->viewCenterMaxSpeed;
+					this->cameraVx += this->viewCenterMaxSpeed;
 					break;
 				}
 				case SDLK_LEFT: {
 					this->cameraVx -= this->viewCenterMaxSpeed;
+					this->cameraVy += this->viewCenterMaxSpeed;
 					break;
 				}
 				case SDLK_RIGHT: {
 					this->cameraVx += this->viewCenterMaxSpeed;
+					this->cameraVy -= this->viewCenterMaxSpeed;
 					break;
 				}
 			}
@@ -121,19 +125,23 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 	else if (event.type == SDL_KEYUP) {
 		switch(event.key.keysym.sym) {
 			case SDLK_UP: {
-				this->cameraVy = 0;
+				this->cameraVy += this->viewCenterMaxSpeed;
+				this->cameraVx += this->viewCenterMaxSpeed;
 				break;
-		}
+			}
 			case SDLK_DOWN: {
-				this->cameraVy = 0;
+				this->cameraVy -= this->viewCenterMaxSpeed;
+				this->cameraVx -= this->viewCenterMaxSpeed;
 				break;
 			}
 			case SDLK_LEFT: {
-				this->cameraVx = 0;
+				this->cameraVx += this->viewCenterMaxSpeed;
+				this->cameraVy -= this->viewCenterMaxSpeed;
 				break;
 			}
 			case SDLK_RIGHT: {
-				this->cameraVx = 0;
+				this->cameraVx -= this->viewCenterMaxSpeed;
+				this->cameraVy += this->viewCenterMaxSpeed;
 				break;
 			}
 		}

@@ -13,7 +13,7 @@
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
-const int FRAMERATE = 20;
+const int FRAMERATE = 30;
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -126,14 +126,13 @@ int main() {
 				break;
 			}
 
-			if (i%2)
-				g.tick();
+			g.tick();
 			
 			userInterface.tick();
 
 			userInterface.renderAll( gRenderer );
 			
-			SDL_Delay( 500/FRAMERATE ); // HUD renders twice as often as the game, so selecting "feels smooth"
+			SDL_Delay( 1000/FRAMERATE );
 		}
 	}
 
