@@ -12,6 +12,10 @@ Distance pythagoreanDistance(Coordinate a, Coordinate b) {
 }
 
 bool pythagoreanDistanceLessThan(Coordinate a, Coordinate b, Distance r) {
+	return ((float)a.first - (float)b.first) * ((float)a.first - (float)b.first) + ((float)a.second - (float)b.second)*((float)a.second - (float)b.second) < (float)r*(float)r;
+}
+
+bool pythagoreanDistanceLessEqThan(Coordinate a, Coordinate b, Distance r) {
 	return ((float)a.first - (float)b.first) * ((float)a.first - (float)b.first) + ((float)a.second - (float)b.second)*((float)a.second - (float)b.second) <= (float)r*(float)r;
 }
 
@@ -60,17 +64,18 @@ bool unitInRectangle(Unit& u, Coordinate b, Coordinate c) {
 	return coordInRect(u.xy, b, c);
 }
 
-InhabitedGrid::InhabitedGrid(Game* game, int w, int h):
+InhabitedGrid::InhabitedGrid(Game* game):
 	game(game),
-	cellWidth(w),
-	cellHeight(h),
-	emptyUnitIDset(new std::set<UnitID>)
+	cellWidth(PIXEL_WIDTH * 66),
+	cellHeight(PIXEL_WIDTH * 66),
+	emptyUnitIDset(std::make_shared<std::set<UnitID> >() )
 	{
+
 	}
 
 Coordinate InhabitedGrid::getCellCoords(Coordinate c) {
 	// takes an objective coordinate, returns the cell coordinates
-	return Coordinate(c.first/cellWidth, c.second/cellHeight);
+	return Coordinate((c.first+cellWidth*0.2)/cellWidth, (c.second+cellHeight*0.25)/cellHeight); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
 }
 
 const std::shared_ptr<std::set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) {
@@ -89,6 +94,8 @@ void InhabitedGrid::emplace(const Unit &unit) {
 		grid.emplace(pos, std::shared_ptr<std::set<UnitID> > (new std::set<UnitID>()));
 	}
 	grid[pos]->emplace(unit.unitID);
+
+	this->incrementTileVisibility(unit.xy, unit.teamID);
 }
 
 void InhabitedGrid::erase(const Unit &unit) {
@@ -97,6 +104,7 @@ void InhabitedGrid::erase(const Unit &unit) {
 	if (grid[pos]->size()==0){
 		this->grid.erase(pos);
 	}
+	this->decrementTileVisibility(unit.xy, unit.teamID);
 }
 
 void InhabitedGrid::eraseWithHint(const Unit &unit, const Coordinate oldcoord) {
@@ -105,6 +113,7 @@ void InhabitedGrid::eraseWithHint(const Unit &unit, const Coordinate oldcoord) {
 	if (grid[oldpos]->size()==0){
 		this->grid.erase(oldpos);
 	}
+	this->decrementTileVisibility(oldcoord, unit.teamID);
 }
 
 void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord) {
@@ -175,6 +184,45 @@ std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit& u) {
 		}
 	}
 	return ret;
+}
+
+void InhabitedGrid::incrementTileVisibility(const Coordinate location, const TeamID team) {
+	Coordinate center = this->getCellCoords(location);
+	auto key_pair = std::make_pair(center, team);
+
+	for (int i = -visibilityRadius ; i<=visibilityRadius ; i++ ) {
+		for (int j = -visibilityRadius ; j<=visibilityRadius ; j++ ) {
+			Coordinate coord(center.first+i, center.second+j);
+			if (pythagoreanDistanceLessThan(center, coord, InhabitedGrid::visibilityRadius)) {
+				this->visibilityGrid[make_pair(coord, team)]++;
+			}
+		}
+	}
+}
+
+void InhabitedGrid::decrementTileVisibility(const Coordinate location, const TeamID team) {
+	Coordinate center = this->getCellCoords(location);
+	auto key_pair = std::make_pair(center, team);
+
+	for (int i = -visibilityRadius ; i<=visibilityRadius ; i++ ) {
+		for (int j = -visibilityRadius ; j<=visibilityRadius ; j++ ) {
+			Coordinate coord(center.first+i, center.second+j);
+			if (pythagoreanDistanceLessThan(center, coord, InhabitedGrid::visibilityRadius)) {
+				this->visibilityGrid[make_pair(coord, team)]--;
+			}
+		}
+	}
+}
+
+int InhabitedGrid::coordIsVisibleToTeam(const Coordinate location, const TeamID team) {
+	Coordinate coord = this->getCellCoords(location);
+	auto p = this->visibilityGrid.find(std::make_pair(coord, team));
+	return p==this->visibilityGrid.end() ? 0 : p->second;
+}
+
+int InhabitedGrid::tileIsVisibleToTeam(const Coordinate tile, const TeamID team) {
+	auto p = this->visibilityGrid.find(std::make_pair(tile, team));
+	return p==this->visibilityGrid.end() ? 0 : p->second;
 }
 
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {

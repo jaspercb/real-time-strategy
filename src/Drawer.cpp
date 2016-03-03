@@ -186,7 +186,7 @@ void Drawer::drawDying(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Co
 void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coordinate cameraposition */) {
 	// Draws the unit to the given surface.
 	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);
-	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
+	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : -10;
 	dy += (unit.animationState == ANIMSTATE_DYING && unit.dimension.air) ? 0.03*(unit.drawAnimationStep+2)*(unit.drawAnimationStep+2) : 0;
 	dy *= ui->viewMagnification;
 	Coordinate pos = ui->screenCoordinateFromObjective(unit.xy);

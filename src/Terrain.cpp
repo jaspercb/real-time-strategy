@@ -7,6 +7,7 @@
 #include "Logging.hpp"
 #include "sdlTools.hpp"
 #include "InhabitedGrid.hpp"
+#include "Game.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -244,7 +245,12 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 			if (this->drawTiles[i][j]) {
 				Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*j ));
 				if (coordInRect(drawPos, screenCorner1, screenCorner2)) {
+					if (! (ui->game.inhabitedGrid.tileIsVisibleToTeam(std::make_pair(i, j), ui->teamID)))
+						SDL_SetTextureColorMod(this->drawTiles[i][j]->sheet, 128, 128, 128);
+
 					this->drawTiles[i][j]->render(renderer, 0, 0, drawPos.first, drawPos.second +  (200-this->drawTiles[i][j]->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
+	
+					SDL_SetTextureColorMod(this->drawTiles[i][j]->sheet, 255, 255, 255); // resetting color key for safety reasons
 				}
 			}
 		}
@@ -264,6 +270,7 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(0, 64*PIXEL_WIDTH*j)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*this->width, 64*PIXEL_WIDTH*j)), gridLineColor );
 	}
 }
+
 void Terrain::renderMinimap(SDL_Renderer* renderer, UserInterface* ui) {
 	SDL_Rect target;
 	target.x = 10+40;
