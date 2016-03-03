@@ -18,27 +18,29 @@ bool coordInCircle(Coordinate a, Coordinate c, int r);
 bool unitInCircle(Unit& u, Coordinate c, int r);
 bool unitInRectangle(Unit& u, Coordinate b, Coordinate c);
 
-class InhabitedGrid{
-public:
-	InhabitedGrid(Game* game, int w, int h);
+class InhabitedGrid {
+	public:
+		InhabitedGrid(Game* game, int w = InhabitedGrid::defaultGridSize, int h = InhabitedGrid::defaultGridSize);
 
-	const std::shared_ptr<std::set<UnitID> > &unitsInCell(Coordinate c);
-	std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
-	std::vector<UnitID> unitsInCircle(Coordinate c, Distance radius);
-	std::vector<UnitID> unitsCollidingWith(Unit& u);
+		const std::shared_ptr<std::set<UnitID> > &unitsInCell(Coordinate c);
+		std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b);
+		std::vector<UnitID> unitsInCircle(Coordinate c, Distance radius);
+		std::vector<UnitID> unitsCollidingWith(Unit& u);
 
-	bool unitOKToMoveTo(Unit&, const Coordinate);
+		bool unitOKToMoveTo(Unit&, const Coordinate);
 
-	void emplace(const Unit &unit);
-	void erase(const Unit &unit);
-	void eraseWithHint(const Unit &unit, const Coordinate oldcoord);
-	void updatePos(const Unit &unit, Coordinate oldcoord);
+		void emplace(const Unit &unit);
+		void erase(const Unit &unit);
+		void eraseWithHint(const Unit &unit, const Coordinate oldcoord);
+		void updatePos(const Unit &unit, Coordinate oldcoord);
 
-	Game* game;
-private:
-	Coordinate getCellCoords(Coordinate c);
-	const int cellWidth;
-	const int cellHeight;
-	const std::shared_ptr<std::set<UnitID>> emptyUnitIDset;
-	std::map<Coordinate, std::shared_ptr<std::set<UnitID> > > grid;
+		Game* game;
+	private:
+		static const int defaultGridSize = 25000;
+
+		Coordinate getCellCoords(Coordinate c);
+		const int cellWidth;
+		const int cellHeight;
+		const std::shared_ptr<std::set<UnitID>> emptyUnitIDset;
+		std::map<Coordinate, std::shared_ptr<std::set<UnitID> > > grid;
 };

@@ -8,12 +8,12 @@ float colorThetas[NUM_TEAMCOLORS] = {
 					0, //pink
 					0.55, //red
 					5, //blue
-					4.2, //teal
+					2.5, //green
 					5.6, //purple
 					1, //orange
 					1.3, //brown
 					1.52, //yellow
-					2.5, //green
+					4.2, //teal
 					4.0, //pale
 					5.3, //iris
 					2, //olive
