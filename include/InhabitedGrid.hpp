@@ -33,6 +33,7 @@ class InhabitedGrid {
 		void decrementTileVisibility(const Coordinate location, const TeamID team);
 		int coordIsVisibleToTeam(const Coordinate location, const TeamID team);
 		int tileIsVisibleToTeam(const Coordinate tile, const TeamID team);
+		int unitIsVisibleToTeam(const Unit& unit, const TeamID team);
 
 		void emplace(const Unit &unit);
 		void erase(const Unit &unit);

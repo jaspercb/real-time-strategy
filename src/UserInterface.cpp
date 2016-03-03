@@ -248,13 +248,17 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	
 	// draw non-air units
 	for (auto &u : unitsInDrawOrder) {
-		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2) && u->dimension.overlaps(GROUND_ONLY))
+		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2)
+		&& u->dimension.overlaps(GROUND_ONLY)
+		&& this->game.inhabitedGrid.unitIsVisibleToTeam(*u, this->teamID))
 			u->draw( renderer, this );
 	}
 
 	// draw air units
 	for (auto &u : unitsInDrawOrder) {
-		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2) && !u->dimension.overlaps(GROUND_ONLY))
+		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2)
+		&& !u->dimension.overlaps(GROUND_ONLY)
+		&& this->game.inhabitedGrid.unitIsVisibleToTeam(*u, this->teamID))
 			u->draw( renderer, this );
 	}
 

@@ -225,6 +225,12 @@ int InhabitedGrid::tileIsVisibleToTeam(const Coordinate tile, const TeamID team)
 	return p==this->visibilityGrid.end() ? 0 : p->second;
 }
 
+int InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) {
+	Coordinate tile = this->getCellCoords(unit.xy);
+	auto p = this->visibilityGrid.find(std::make_pair(tile, team));
+	return p==this->visibilityGrid.end() ? 0 : p->second;
+}
+
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 	return true; // testing soft collisions
 	Coordinate gc = getCellCoords(location);
