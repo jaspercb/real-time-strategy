@@ -233,12 +233,29 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 
 	this->renderSelection( renderer );
 
-	Coordinate screenCorner1 = this->objectiveCoordinateFromScreen(Coordinate(-200, -200));
-	Coordinate screenCorner2 = this->objectiveCoordinateFromScreen(Coordinate(SCREEN_WIDTH+200, SCREEN_HEIGHT+200));
+	Coordinate screenCorner1 = Coordinate(-500, -500);
+	Coordinate screenCorner2 = Coordinate(SCREEN_WIDTH+500, SCREEN_HEIGHT+500);
 
-	for (auto &u : this->game.unitsByID) {
-		//if (unitInRectangle(u.second, screenCorner1, screenCorner2))
-			u.second.draw( renderer, this);
+	std::vector<Unit*> unitsInDrawOrder;
+	for (auto &i : this->game.unitsByID)
+		unitsInDrawOrder.push_back(&i.second);
+
+	auto sortLambda = [this](Unit* a, Unit* b) {
+		return (this->screenCoordinateFromObjective(a->xy).second) < (this->screenCoordinateFromObjective(b->xy).second);
+	};
+
+	std::sort(unitsInDrawOrder.begin(), unitsInDrawOrder.end(), sortLambda);
+	
+	// draw non-air units
+	for (auto &u : unitsInDrawOrder) {
+		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2) && u->dimension.overlaps(GROUND_ONLY))
+			u->draw( renderer, this );
+	}
+
+	// draw air units
+	for (auto &u : unitsInDrawOrder) {
+		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2) && !u->dimension.overlaps(GROUND_ONLY))
+			u->draw( renderer, this );
 	}
 
 	this->renderHUD( renderer );
