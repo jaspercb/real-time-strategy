@@ -167,7 +167,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	
 	SDL_Rect drawRect;
 	SDL_Color selectionColor = {0, 255, 0, SDL_ALPHA_OPAQUE};
-	SDL_Color waypointColor = {255, 255, 255, 10*std::abs( (this->frame % 18) - 9) + 64 };
+	SDL_Color waypointColor = {255, 255, 255, (Uint8) (10*std::abs( (this->frame % 18) - 9) + 64) };
 
 	// Draw paths
 	for (UnitID &i : this->selectedUnits) {
@@ -236,29 +236,28 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	Coordinate screenCorner1 = Coordinate(-500, -500);
 	Coordinate screenCorner2 = Coordinate(SCREEN_WIDTH+500, SCREEN_HEIGHT+500);
 
-	std::vector<Unit*> unitsInDrawOrder;
+	std::vector<Unit*> visiblevisibleUnitsInDrawOrder;
 	for (auto &i : this->game.unitsByID)
-		unitsInDrawOrder.push_back(&i.second);
+		if (this->game.inhabitedGrid.unitIsVisibleToTeam(i.second, this->teamID))
+			visibleUnitsInDrawOrder.push_back(&i.second);
 
 	auto sortLambda = [this](Unit* a, Unit* b) {
 		return (this->screenCoordinateFromObjective(a->xy).second) < (this->screenCoordinateFromObjective(b->xy).second);
 	};
 
-	std::sort(unitsInDrawOrder.begin(), unitsInDrawOrder.end(), sortLambda);
+	std::sort(visibleUnitsInDrawOrder.begin(), visibleUnitsInDrawOrder.end(), sortLambda);
 	
 	// draw non-air units
-	for (auto &u : unitsInDrawOrder) {
+	for (auto &u : visibleUnitsInDrawOrder) {
 		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2)
-		&& u->dimension.overlaps(GROUND_ONLY)
-		&& this->game.inhabitedGrid.unitIsVisibleToTeam(*u, this->teamID))
+		&& u->dimension.overlaps(GROUND_ONLY) )
 			u->draw( renderer, this );
 	}
 
 	// draw air units
-	for (auto &u : unitsInDrawOrder) {
+	for (auto &u : visibleUnitsInDrawOrder) {
 		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2)
-		&& !u->dimension.overlaps(GROUND_ONLY)
-		&& this->game.inhabitedGrid.unitIsVisibleToTeam(*u, this->teamID))
+		&& !u->dimension.overlaps(GROUND_ONLY) )
 			u->draw( renderer, this );
 	}
 
