@@ -20,11 +20,11 @@ Weapon::Weapon(Weapon &w, Unit &u):
 	{}
 
 
-bool Weapon::canFire(){
+bool Weapon::canFire() const{
 	return weaponTemplate.canFire(*this);
 }
 
-bool Weapon::canAttack(Unit& u){
+bool Weapon::canAttack(Unit& u) const{
 	return weaponTemplate.canAttack(u);
 }
 

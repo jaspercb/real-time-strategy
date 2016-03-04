@@ -37,13 +37,13 @@ public:
 	//Unit();
 	Unit(Game&, UnitID, TeamID, UnitTemplateID, Coordinate);
 	Unit(Unit &&u);
-	UnitTemplate& getUnitTemplate();
+	UnitTemplate& getUnitTemplate() const;
 	UpdateStatus update(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command);
 	void move(const Coordinate);
 	void damage(const int, const DamageType, Unit& attackedBy);
 	Distance getAttackRange(); // returns the range of the first weapon
-	bool canAttack(Unit& u);
+	bool canAttack(Unit& u) const;
 	void move_towards(const Coordinate c);
 	void attack(Unit& target);
 

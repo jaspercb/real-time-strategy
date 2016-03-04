@@ -60,7 +60,7 @@ idleState(u.idleState)
 	u.weapons_.clear();
 }
 
-UnitTemplate& Unit::getUnitTemplate(){
+UnitTemplate& Unit::getUnitTemplate() const{
 	return game.getTeam(teamID).unitTemplates.at(unitTemplateID);
 }
 
@@ -163,7 +163,7 @@ void Unit::damage(const int quant, const DamageType dmgtype, Unit& attackedBy) {
 	lastAttackingUnitID = attackedBy.teamID;
 }
 
-Distance Unit::getAttackRange(){
+Distance Unit::getAttackRange() {
 	/*
 	int r = 0;
 	for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
@@ -180,7 +180,7 @@ Distance Unit::getAttackRange(){
 	}
 }
 
-bool Unit::canAttack(Unit& u){
+bool Unit::canAttack(Unit& u) const {
 	if (this->game.unitsAreFriendly(u.unitID,this->unitID) || u.animationState == ANIMSTATE_DYING) {
 		return false;
 	}

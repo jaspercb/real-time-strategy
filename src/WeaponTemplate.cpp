@@ -86,12 +86,12 @@ WeaponTemplate::WeaponTemplate(std::string s):
 	{debugLog("swag");}
 */
 
-bool WeaponTemplate::canFire(Weapon& weapon) const
+bool WeaponTemplate::canFire(const Weapon& weapon) const
 {
 	return weapon.ticksUntilCanFire <= 0;
 }
 
-bool WeaponTemplate::canAttack(Unit& target) const{
+bool WeaponTemplate::canAttack(const Unit& target) const{
 	return dimensions_.overlaps(target.dimension);
 } // returns whether the weapon is theoretically capable of hitting the target, IGNORING COOLDOWN
 

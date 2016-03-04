@@ -50,14 +50,14 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 
 		if (event.button.button == SDL_BUTTON_RIGHT) {
 			for ( auto &id : game.inhabitedGrid.unitsInCircle(clickedCoord, (Distance)1000) ) { // hackish way of handling targeting selection
-				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(id).teamID) ) {
+				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(id).teamID) && this->selectedUnits.size()) {
 					this->issueAttackCmd(id);
 					return;
 				}
 			}
 			// if we didn't click on an enemy, we move to that point
-			this->issueGotoCoordCmd(clickedCoord);
-
+			if (this->selectedUnits.size())
+				this->issueGotoCoordCmd(clickedCoord);
 		}
 		
 		else if (event.button.button == SDL_BUTTON_LEFT) {
@@ -150,15 +150,34 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 
 void UserInterface::updateSelectedUnits() {
 	this->selectedUnits.clear();
-	
-	auto lambda = [this](Unit& u) {
-		return coordInRect(this->screenCoordinateFromObjective(u.xy) , this->selectionBoxCorner1, this->selectionBoxCorner2) && this->game.teamsAreFriendly(this->teamID, u.teamID);
-	};
 
-	for (auto& unitID_unit : this->game.unitsByID) {
-		if (lambda(unitID_unit.second))
-			this->selectedUnits.push_back(unitID_unit.first);
+	int diff = std::abs(this->selectionBoxCorner1.first-this->selectionBoxCorner2.first) + std::abs(this->selectionBoxCorner1.second-this->selectionBoxCorner2.second);
+	if (diff < 10) {
+		auto center = this->objectiveCoordinateFromScreen(this->selectionBoxCorner1);
+		Distance closestDistance = MAX_DISTANCE;
+		UnitID closestUnitID = 0;
+		for (auto &i : this->game.inhabitedGrid.unitsInCircle(center, 2000) ) {
+			const Unit& unit = this->game.getUnit(i);
+			if (unit.teamID == this->teamID && pythagoreanDistanceLessThan(unit.xy, center, std::min(closestDistance, (Distance)unit.getUnitTemplate().radius()+500 ))) {
+				closestUnitID = i;
+			}
+		}
+
+		if (closestUnitID){
+			this->selectedUnits.push_back(closestUnitID);
+		}
 	}
+	else{
+		auto lambda = [this](Unit& u) {
+			return coordInRect(this->screenCoordinateFromObjective(u.xy) , this->selectionBoxCorner1, this->selectionBoxCorner2) && this->game.teamsAreFriendly(this->teamID, u.teamID);
+		};
+
+		for (auto& unitID_unit : this->game.unitsByID) {
+			if (lambda(unitID_unit.second))
+				this->selectedUnits.push_back(unitID_unit.first);
+		}
+	}
+	
 
 }
 

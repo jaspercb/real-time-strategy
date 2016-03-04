@@ -80,7 +80,7 @@ int main() {
 			int tID = g.createTeam();
 		}
 		t1.loadUnitTemplate("../conf/units/townhall");
-		t1.loadUnitTemplate("../conf/units/bomber");
+		t1.loadUnitTemplate("../conf/units/ground-dummy");
 
 		t2.loadUnitTemplate("../conf/units/ground-dummy");
 		
@@ -92,7 +92,7 @@ int main() {
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
 				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID1, "../conf/units/bomber", Coordinate(2500*i, 2500*j));
+				g.createUnit(tID1, "../conf/units/ground-dummy", Coordinate(2500*i, 2500*j));
 			}
 		}
 		
