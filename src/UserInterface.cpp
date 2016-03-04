@@ -222,7 +222,7 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 }
 
 void UserInterface::renderAll( SDL_Renderer* renderer ) {
-	SDL_SetRenderDrawColor(renderer, 128, 128, 128, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
 
 	this->game.terrain.render(renderer, this);
@@ -236,7 +236,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	Coordinate screenCorner1 = Coordinate(-500, -500);
 	Coordinate screenCorner2 = Coordinate(SCREEN_WIDTH+500, SCREEN_HEIGHT+500);
 
-	std::vector<Unit*> visiblevisibleUnitsInDrawOrder;
+	std::vector<Unit*> visibleUnitsInDrawOrder;
 	for (auto &i : this->game.unitsByID)
 		if (this->game.inhabitedGrid.unitIsVisibleToTeam(i.second, this->teamID))
 			visibleUnitsInDrawOrder.push_back(&i.second);
