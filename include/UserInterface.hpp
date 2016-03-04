@@ -50,6 +50,7 @@ private:
 	Coordinate selectionBoxCorner1;
 	Coordinate selectionBoxCorner2;
 	std::vector<UnitID> selectedUnits;
+	std::vector<UnitID> previousSelectedUnits;
 	int cameraVx, cameraVy;
 	int viewCenterMaxSpeed;
 

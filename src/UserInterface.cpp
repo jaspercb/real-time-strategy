@@ -149,7 +149,10 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 }
 
 void UserInterface::updateSelectedUnits() {
-	this->selectedUnits.clear();
+	if (!this->shiftHeld()) {
+		this->previousSelectedUnits = this->selectedUnits;
+		this->selectedUnits.clear();
+	}
 
 	int diff = std::abs(this->selectionBoxCorner1.first-this->selectionBoxCorner2.first) + std::abs(this->selectionBoxCorner1.second-this->selectionBoxCorner2.second);
 	if (diff < 10) {
@@ -163,7 +166,22 @@ void UserInterface::updateSelectedUnits() {
 			}
 		}
 
-		if (closestUnitID){
+		if (this->previousSelectedUnits.size() == 1 && this->previousSelectedUnits[0]==closestUnitID) {
+			// double-clicking a unit selects all visible units with the same type
+			UnitID prevUnitID = this->previousSelectedUnits[0];
+			UnitTemplateID prevUnitTemplateID = this->game.getUnit(prevUnitID).getUnitTemplate().name;
+			TeamID prevTeamID = this->game.getUnit(prevUnitID).teamID;
+			this->previousSelectedUnits.clear();
+			this->selectedUnits.clear();
+			for (auto &i : this->game.unitsByID) {
+				if (coordInRect(this->screenCoordinateFromObjective(i.second.xy), Coordinate(0, 0), Coordinate(SCREEN_WIDTH, SCREEN_HEIGHT))
+				&& i.second.teamID == prevTeamID
+				&& i.second.teamID == prevTeamID )
+					this->selectedUnits.push_back(i.first);
+			}
+		}
+
+		else if (closestUnitID){
 			this->selectedUnits.push_back(closestUnitID);
 		}
 	}
