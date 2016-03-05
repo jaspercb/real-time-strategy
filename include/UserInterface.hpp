@@ -34,6 +34,8 @@ public:
 
 	void issueAttackMoveCmd(Coordinate targetCoord);
 
+	void issueHaltCmd();
+
 	Game& game;
 
 	TeamID teamID;

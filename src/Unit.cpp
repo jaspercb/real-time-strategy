@@ -115,7 +115,10 @@ void Unit::handleCommand(Command command)
 {
 	std::shared_ptr<UnitState> state;
 	
-	if (this->stateQueue_.empty()) {
+	if (command.cmdtype == CMD_HALT){
+		stateQueue_.clear();
+	}
+	else if (this->stateQueue_.empty()) {
 		state = this->idleState->handleCommand(*this, command);
 	}
 	else {
@@ -124,9 +127,6 @@ void Unit::handleCommand(Command command)
 	if (state != NULL) {
 		switch (command.queueSetting) {
 			case QUEUE_OVERWRITE: { // delete state queue and replace with just this command
-				while ( !stateQueue_.empty() ) {
-					stateQueue_.pop_front();
-				}
 				stateQueue_.clear();
 				stateQueue_.push_front(state);
 				break;

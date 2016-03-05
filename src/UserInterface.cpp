@@ -118,6 +118,10 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 					this->cameraVy -= this->viewCenterMaxSpeed;
 					break;
 				}
+
+				case SDLK_s: {
+					this->issueHaltCmd();
+				}
 			}
 		}
 	}
@@ -393,7 +397,7 @@ void UserInterface::issueAttackCmd(UnitID targetID) {
 	game.handleCommand(cmd);
 }
 
-void UserInterface::issueAttackMoveCmd(Coordinate targetCoord){
+void UserInterface::issueAttackMoveCmd(Coordinate targetCoord) {
 	Command cmd(CMD_ATTACKMOVE);
 	cmd.commanded = this->selectedUnits;
 	cmd.queueSetting = this->shiftHeld() ? QUEUE_BACK : QUEUE_OVERWRITE;
@@ -401,5 +405,11 @@ void UserInterface::issueAttackMoveCmd(Coordinate targetCoord){
 	
 	this->animations.insert(newAnimation("attackmove-animation", targetCoord, 1));
 
+	game.handleCommand(cmd);
+}
+
+void UserInterface::issueHaltCmd() {
+	Command cmd(CMD_HALT);
+	cmd.commanded = this->selectedUnits;
 	game.handleCommand(cmd);
 }

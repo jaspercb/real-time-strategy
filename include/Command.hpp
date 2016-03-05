@@ -10,7 +10,8 @@ enum CommandType {
 	CMD_IDLE, 
 	CMD_GOTOCOORD,
 	CMD_ATTACK,
-	CMD_ATTACKMOVE
+	CMD_ATTACKMOVE,
+	CMD_HALT
 };
 
 enum QueueSetting {
@@ -20,12 +21,12 @@ enum QueueSetting {
 };
 
 class Command {
-public:
-	Command();
-	Command(CommandType cmdtype_);
-	CommandType cmdtype;
-	QueueSetting queueSetting;
-	std::vector<UnitID> commanded;
-	UnitID targetID;
-	Coordinate targetCoord;
+	public:
+		Command();
+		Command(CommandType cmdtype_);
+		CommandType cmdtype;
+		QueueSetting queueSetting;
+		std::vector<UnitID> commanded;
+		UnitID targetID;
+		Coordinate targetCoord;
 };
