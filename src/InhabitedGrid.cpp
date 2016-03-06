@@ -66,8 +66,8 @@ bool unitInRectangle(Unit& u, Coordinate b, Coordinate c) {
 
 InhabitedGrid::InhabitedGrid(Game* game):
 	game(game),
-	cellWidth(PIXEL_WIDTH * 66),
-	cellHeight(PIXEL_WIDTH * 66),
+	cellWidth(PIXEL_WIDTH * 64),
+	cellHeight(PIXEL_WIDTH * 64),
 	emptyUnitIDset(std::make_shared<std::set<UnitID> >() )
 	{
 
@@ -75,7 +75,7 @@ InhabitedGrid::InhabitedGrid(Game* game):
 
 Coordinate InhabitedGrid::getCellCoords(Coordinate c) {
 	// takes an objective coordinate, returns the cell coordinates
-	return Coordinate((c.first+cellWidth*0.2)/cellWidth, (c.second+cellHeight*0.25)/cellHeight); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
+	return Coordinate((c.first+cellWidth)/cellWidth, (c.second+cellHeight)/cellHeight); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
 }
 
 const std::shared_ptr<std::set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) {
