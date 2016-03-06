@@ -118,7 +118,7 @@ void Drawer::drawIdle(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coo
 			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->idleCycleStart + frame,
 			drawPos.first,
-			drawPos.second,
+			drawPos.second + dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
@@ -135,7 +135,7 @@ void Drawer::drawWalking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, 
 			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->walkCycleStart + frame,
 			drawPos.first,
-			drawPos.second,
+			drawPos.second +  dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
@@ -152,7 +152,7 @@ void Drawer::drawAttacking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui
 			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->attackCycleStart + frame,
 			drawPos.first,
-			drawPos.second,
+			drawPos.second + dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
