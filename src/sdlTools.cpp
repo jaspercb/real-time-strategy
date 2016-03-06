@@ -77,11 +77,11 @@ void renderEllipse(SDL_Renderer* renderer, Coordinate center, int a, int b, SDL_
 		x++;
 		px += twob2;
 		if (p < 0)
-		p += b2 + px;
+			p += b2 + px;
 		else {
-		y--;
-		py -= twoa2;
-		p += b2 + px - py;
+			y--;
+			py -= twoa2;
+			p += b2 + px - py;
 		}
 		ellipsePlotPoints(renderer, xc, yc, x, y);
 	}
@@ -93,11 +93,11 @@ void renderEllipse(SDL_Renderer* renderer, Coordinate center, int a, int b, SDL_
 		y--;
 		py -= twoa2;
 		if (p > 0)
-		p += a2 - py;
+			p += a2 - py;
 		else {
-		x++;
-		px += twob2;
-		p += a2 - py + px;
+			x++;
+			px += twob2;
+			p += a2 - py + px;
 		}
 		ellipsePlotPoints(renderer, xc, yc, x, y);
 	}
