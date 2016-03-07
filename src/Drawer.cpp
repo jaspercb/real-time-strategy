@@ -183,9 +183,12 @@ void Drawer::drawDying(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Co
 	}
 }
 
-void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coordinate cameraposition */) {
+void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, int alphaMulti /*, Coordinate cameraposition */) {
 	// Draws the unit to the given surface.
 	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);
+	
+	SDL_SetTextureAlphaMod( this->spritesheet->sheet, alphaMulti);
+
 	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
 	dy += (unit.animationState == ANIMSTATE_DYING && unit.dimension.air) ? 0.03*(unit.drawAnimationStep+2)*(unit.drawAnimationStep+2) : 0;
 	dy *= ui->viewMagnification;
@@ -212,9 +215,12 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui /*, Coor
 			this->drawDying(renderer, unit, ui, pos, std::min(this->deathCycleLength -1, std::abs(unit.drawAnimationStep)), dy);
 			break;
 	}
-	if (unit.animationState != ANIMSTATE_DYING) {
-		draw_HP_bar(renderer, unit, pos.first, pos.second, ui->viewMagnification);
-	}
+	//if (unit.animationState != ANIMSTATE_DYING) {
+	//	draw_HP_bar(renderer, unit, pos.first, pos.second, ui->viewMagnification);
+	//}
+
+
+	SDL_SetTextureAlphaMod( this->spritesheet->sheet, alphaMulti);
 }
 
 void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY, const float magnification) {

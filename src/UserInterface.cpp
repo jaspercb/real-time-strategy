@@ -279,7 +279,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 
 	std::vector<Unit*> visibleUnitsInDrawOrder;
 	for (auto &i : this->game.unitsByID)
-		if (this->game.inhabitedGrid.unitIsVisibleToTeam(i.second, this->teamID))
+		if (this->game.inhabitedGrid.getCoordVisibility(i.second.xy, this->teamID))
 			visibleUnitsInDrawOrder.push_back(&i.second);
 
 	auto sortLambda = [this](Unit* a, Unit* b) {

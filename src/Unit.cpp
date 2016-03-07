@@ -12,6 +12,7 @@
 #include "Logging.hpp"
 #include "Command.hpp"
 #include "StateIdle.hpp"
+#include "UserInterface.hpp"
 
 Unit::Unit(Game &g, UnitID uID, TeamID tID, UnitTemplateID utID, Coordinate pos):
 game(g),
@@ -270,8 +271,11 @@ void Unit::attack(Unit& target){
 }
 
 void Unit::draw(SDL_Renderer* renderer, UserInterface* ui) {
-	getUnitTemplate().drawer->draw(renderer, *this, ui);
+	int alpha = ui->game.inhabitedGrid.getCoordVisibility(this->xy, ui->teamID);
+	this->getUnitTemplate().drawer->draw(renderer, *this, ui, alpha);
 }
+
+
 
 std::vector<Coordinate> Unit::getStateWaypoints() {
 	std::vector<Coordinate> ret;

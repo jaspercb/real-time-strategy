@@ -132,12 +132,11 @@ void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord) {
 void InhabitedGrid::tick() {
 	for (auto &i : this->visibilityTimeGrid) {
 		if (this->visibilityGrid[i.first] > 0 ) {
-			if (this->visibilityTimeGrid[i.first]<64)
+			if (this->visibilityTimeGrid[i.first]<16)
 				this->visibilityTimeGrid[i.first]++;
 		}
 		else {
 			auto& visibility = this->visibilityTimeGrid[i.first];
-			visibility*=0.90;
 			visibility = visibility ? visibility-1 : 0;
 		}
 	}
@@ -243,8 +242,12 @@ bool InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) {
 	return  unit.teamID == team || this->coordIsVisibleToTeam(unit.xy, team);
 }
 
-int InhabitedGrid::getTileVisibilityTime(const Coordinate tile, const TeamID team) {
-	return this->visibilityTimeGrid[std::make_pair(tile, team)];
+int InhabitedGrid::getTileVisibility(const Coordinate tile, const TeamID team) {
+	return std::min(255, 64+12*this->visibilityTimeGrid[std::make_pair(tile, team)] );
+}
+
+int InhabitedGrid::getCoordVisibility(const Coordinate coord, const TeamID team) {
+	return std::min(255, 16*this->visibilityTimeGrid[std::make_pair(this->getCellCoords(coord), team)] );
 }
 
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
