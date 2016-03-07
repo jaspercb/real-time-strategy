@@ -29,16 +29,22 @@ class InhabitedGrid {
 		std::vector<UnitID> unitsCollidingWith(Unit& u);
 
 		bool unitOKToMoveTo(Unit&, const Coordinate);
+		
 		void incrementTileVisibility(const Coordinate location, const TeamID team);
 		void decrementTileVisibility(const Coordinate location, const TeamID team);
-		int coordIsVisibleToTeam(const Coordinate location, const TeamID team);
-		int tileIsVisibleToTeam(const Coordinate tile, const TeamID team);
-		int unitIsVisibleToTeam(const Unit& unit, const TeamID team);
+		
+		bool coordIsVisibleToTeam(const Coordinate location, const TeamID team);
+		bool tileIsVisibleToTeam(const Coordinate tile, const TeamID team);
+		bool unitIsVisibleToTeam(const Unit& unit, const TeamID team);
+		
+		int getTileVisibilityTime(const Coordinate tile, const TeamID team);
 
 		void emplace(const Unit &unit);
 		void erase(const Unit &unit);
 		void eraseWithHint(const Unit &unit, const Coordinate oldcoord);
 		void updatePos(const Unit &unit, Coordinate oldcoord);
+
+		void tick();
 
 		Game* game;
 	private:
@@ -50,4 +56,5 @@ class InhabitedGrid {
 		const std::shared_ptr<std::set<UnitID>> emptyUnitIDset;
 		std::map<Coordinate, std::shared_ptr<std::set<UnitID> > > grid;
 		std::map<std::pair<Coordinate, TeamID>, int> visibilityGrid; // For each visible tile and team, contains a count of how many units on that team can see that tile
+		std::map<std::pair<Coordinate, TeamID>, int> visibilityTimeGrid; // For each visible tile and team, contains a count of how long that tile has been visible to units on that team
 };

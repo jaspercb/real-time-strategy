@@ -129,6 +129,20 @@ void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord) {
 	}
 }
 
+void InhabitedGrid::tick() {
+	for (auto &i : this->visibilityTimeGrid) {
+		if (this->visibilityGrid[i.first] > 0 ) {
+			if (this->visibilityTimeGrid[i.first]<64)
+				this->visibilityTimeGrid[i.first]++;
+		}
+		else {
+			auto& visibility = this->visibilityTimeGrid[i.first];
+			visibility*=0.90;
+			visibility = visibility ? visibility-1 : 0;
+		}
+	}
+}
+
 std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) {
 	std::vector<UnitID> ret;
 
@@ -214,19 +228,23 @@ void InhabitedGrid::decrementTileVisibility(const Coordinate location, const Tea
 	}
 }
 
-int InhabitedGrid::coordIsVisibleToTeam(const Coordinate location, const TeamID team) {
+bool InhabitedGrid::coordIsVisibleToTeam(const Coordinate location, const TeamID team) {
 	Coordinate coord = this->getCellCoords(location);
 	auto p = this->visibilityGrid.find(std::make_pair(coord, team));
 	return p==this->visibilityGrid.end() ? 0 : p->second;
 }
 
-int InhabitedGrid::tileIsVisibleToTeam(const Coordinate tile, const TeamID team) {
+bool InhabitedGrid::tileIsVisibleToTeam(const Coordinate tile, const TeamID team) {
 	auto p = this->visibilityGrid.find(std::make_pair(tile, team));
 	return p==this->visibilityGrid.end() ? 0 : p->second;
 }
 
-int InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) {
+bool InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) {
 	return  unit.teamID == team || this->coordIsVisibleToTeam(unit.xy, team);
+}
+
+int InhabitedGrid::getTileVisibilityTime(const Coordinate tile, const TeamID team) {
+	return this->visibilityTimeGrid[std::make_pair(tile, team)];
 }
 
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {

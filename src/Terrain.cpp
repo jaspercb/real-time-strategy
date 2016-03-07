@@ -245,8 +245,9 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 			if (this->drawTiles[i][j]) {
 				Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*(i-1), 64*PIXEL_WIDTH*(j-1) ));
 				if (coordInRect(drawPos, screenCorner1, screenCorner2)) {
-					if (! (ui->game.inhabitedGrid.tileIsVisibleToTeam(std::make_pair(i, j), ui->teamID)))
-						SDL_SetTextureColorMod(this->drawTiles[i][j]->sheet, 128, 128, 128);
+					int timeTileSeen = ui->game.inhabitedGrid.getTileVisibilityTime(std::make_pair(i, j), ui->teamID);
+					int tileColorMod = std::min(255, 64+4*timeTileSeen);
+					SDL_SetTextureColorMod(this->drawTiles[i][j]->sheet, tileColorMod, tileColorMod, tileColorMod);
 
 					this->drawTiles[i][j]->render(renderer, 0, 0, drawPos.first, drawPos.second +  (200-this->drawTiles[i][j]->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
 	

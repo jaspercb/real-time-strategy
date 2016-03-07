@@ -62,6 +62,7 @@ void Game::tick() {
 	}
 
 	this->resolveCollisions();
+	this->inhabitedGrid.tick();
 }
 
 void Game::handleCommand(const Command& cmd){
