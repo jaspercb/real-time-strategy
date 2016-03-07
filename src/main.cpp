@@ -13,7 +13,8 @@
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
-const int FRAMERATE = 30;
+const int FRAMERATE_SIM = 20; // simulation framerate
+const int FRAMERATE_UI = 3; // UI frames per simulation frame
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -119,20 +120,17 @@ int main() {
 
 		//g.getUnit(b).handleCommand(cmd2);
 
+		bool exit;
 
-		for (int i=0; i<2000; i++) {
+		for (int i=0; i<2000 && !exit; i++) {
+			for (int j=0; j<FRAMERATE_UI; j++) {
+				exit=userInterface.handleInputEvents(); // returns 1 if quit command processed
 
-			if (userInterface.handleInputEvents() ) { // returns 1 if quit command processed
-				break;
+				userInterface.tick();
+				userInterface.renderAll( gRenderer );
+				SDL_Delay( 1000/ (FRAMERATE_SIM*FRAMERATE_UI) );
 			}
-
 			g.tick();
-			
-			userInterface.tick();
-
-			userInterface.renderAll( gRenderer );
-			
-			SDL_Delay( 1000/FRAMERATE );
 		}
 	}
 
