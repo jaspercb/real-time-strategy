@@ -226,7 +226,7 @@ int InhabitedGrid::tileIsVisibleToTeam(const Coordinate tile, const TeamID team)
 }
 
 int InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) {
-	return this->coordIsVisibleToTeam(unit.xy, team) || unit.teamID == team;
+	return  unit.teamID == team || this->coordIsVisibleToTeam(unit.xy, team);
 }
 
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
