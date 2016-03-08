@@ -66,24 +66,32 @@ bool unitInRectangle(Unit& u, Coordinate b, Coordinate c) {
 
 InhabitedGrid::InhabitedGrid(Game* game):
 	game(game),
-	cellWidth(PIXEL_WIDTH * 64),
-	cellHeight(PIXEL_WIDTH * 64),
-	emptyUnitIDset(std::make_shared<std::set<UnitID> >() )
+	cellWidth(3 * PIXEL_WIDTH * 64),
+	tileWidth(PIXEL_WIDTH * 64),
+	emptyUnitIDset(std::make_shared<std::set<UnitID> >())
 	{
 
 	}
 
-Coordinate InhabitedGrid::getCellCoords(Coordinate c) {
-	// takes an objective coordinate, returns the cell coordinates
-	return Coordinate((c.first+cellWidth)/cellWidth, (c.second+cellHeight)/cellHeight); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
+Coordinate InhabitedGrid::getTileCoords(Coordinate c) const {
+	return Coordinate((c.first+tileWidth)/tileWidth, (c.second+tileWidth)/tileWidth); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
 }
 
-const std::shared_ptr<std::set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) {
+Coordinate InhabitedGrid::getCellCoords(Coordinate c) const { 
+	return Coordinate(c.first/cellWidth, c.second/cellWidth);
+}
+
+const std::shared_ptr<std::set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) const {
 	auto found = this->grid.find(c);
 	if (found != this->grid.end()){
 		return found->second;
 	}
 	return this->emptyUnitIDset;
+}
+
+void InhabitedGrid::startTrackingVisibility(const Unit &unit) {
+	// must be called ONCE
+	this->incrementTileVisibility( this->getTileCoords(unit.xy), unit.teamID );
 }
 
 void InhabitedGrid::emplace(const Unit &unit) {
@@ -94,8 +102,6 @@ void InhabitedGrid::emplace(const Unit &unit) {
 		grid.emplace(pos, std::shared_ptr<std::set<UnitID> > (new std::set<UnitID>()));
 	}
 	grid[pos]->emplace(unit.unitID);
-
-	this->incrementTileVisibility(unit.xy, unit.teamID);
 }
 
 void InhabitedGrid::erase(const Unit &unit) {
@@ -117,32 +123,37 @@ void InhabitedGrid::eraseWithHint(const Unit &unit, const Coordinate oldcoord) {
 }
 
 void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord) {
-	Coordinate oldpos, newpos;
-	oldpos = getCellCoords(oldcoord);
-	newpos = getCellCoords(unit.xy);
-	if (oldpos==newpos){
-		return;
-	}
-	else{
+	Coordinate oldcell = this->getCellCoords(oldcoord);
+	Coordinate newcell = this->getCellCoords(unit.xy);
+
+	if (oldcell != newcell){
 		this->eraseWithHint(unit, oldcoord);
 		this->emplace(unit);
+	}
+
+	Coordinate oldtile = this->getTileCoords(oldcoord);
+	Coordinate newtile = this->getTileCoords(unit.xy);
+	
+	if (oldtile != newtile) {
+		this->decrementTileVisibility(oldtile, unit.teamID);
+		this->incrementTileVisibility(newtile, unit.teamID);
 	}
 }
 
 void InhabitedGrid::tick() {
-	for (auto &i : this->visibilityTimeGrid) {
-		if (this->visibilityGrid[i.first] > 0 ) {
-			if (this->visibilityTimeGrid[i.first]<16)
+	for (auto& i : this->visibilityGrid) {
+		if ( i.second > 0 ) {
+			if ( this->visibilityTimeGrid[i.first] < 16 )
 				this->visibilityTimeGrid[i.first]++;
 		}
 		else {
-			auto& visibility = this->visibilityTimeGrid[i.first];
+			auto visibility = this->visibilityTimeGrid[i.first];
 			visibility = visibility ? visibility-1 : 0;
 		}
 	}
 }
 
-std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) {
+std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) const {
 	std::vector<UnitID> ret;
 
 	Coordinate ga = getCellCoords(a);
@@ -165,15 +176,15 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) 
 	return ret;
 }
 
-std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) {
+std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) const {
 	// Returns units that clip the given circle, (center & radius provided)
 	std::vector<UnitID> ret;
 
 	Coordinate gc = getCellCoords(c);
 	int startX = gc.first - 1 - radius/cellWidth;
 	int endX = gc.first + 1 + radius/cellWidth;
-	int startY = gc.second - 1 - radius/cellHeight;
-	int endY = gc.second + 1 + radius/cellHeight;
+	int startY = gc.second - 1 - radius/cellWidth;
+	int endY = gc.second + 1 + radius/cellWidth;
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
@@ -188,9 +199,9 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) 
 	return ret;
 }
 
-std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit& u) {
+std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit& u) const {
 	std::vector<UnitID> ret;
-	for (auto &unitID : this->unitsInCircle(u.xy, u.getUnitTemplate().radius())) {
+	for (auto& unitID : this->unitsInCircle(u.xy, u.getUnitTemplate().radius())) {
 		Unit& other = this->game->getUnit(unitID);
 		if (other.unitID != u.unitID && other.dimension.overlaps(u.dimension)) {
 			ret.push_back(unitID);
@@ -199,10 +210,7 @@ std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit& u) {
 	return ret;
 }
 
-void InhabitedGrid::incrementTileVisibility(const Coordinate location, const TeamID team) {
-	Coordinate center = this->getCellCoords(location);
-	auto key_pair = std::make_pair(center, team);
-
+void InhabitedGrid::incrementTileVisibility(const Coordinate center, const TeamID team) {
 	for (int i = -visibilityRadius ; i<=visibilityRadius ; i++ ) {
 		for (int j = -visibilityRadius ; j<=visibilityRadius ; j++ ) {
 			Coordinate coord(center.first+i, center.second+j);
@@ -213,10 +221,7 @@ void InhabitedGrid::incrementTileVisibility(const Coordinate location, const Tea
 	}
 }
 
-void InhabitedGrid::decrementTileVisibility(const Coordinate location, const TeamID team) {
-	Coordinate center = this->getCellCoords(location);
-	auto key_pair = std::make_pair(center, team);
-
+void InhabitedGrid::decrementTileVisibility(const Coordinate center, const TeamID team) {
 	for (int i = -visibilityRadius ; i<=visibilityRadius ; i++ ) {
 		for (int j = -visibilityRadius ; j<=visibilityRadius ; j++ ) {
 			Coordinate coord(center.first+i, center.second+j);
@@ -227,27 +232,32 @@ void InhabitedGrid::decrementTileVisibility(const Coordinate location, const Tea
 	}
 }
 
-bool InhabitedGrid::coordIsVisibleToTeam(const Coordinate location, const TeamID team) {
-	Coordinate coord = this->getCellCoords(location);
+bool InhabitedGrid::coordIsVisibleToTeam(const Coordinate location, const TeamID team) const {
+	Coordinate coord = this->getTileCoords(location);
 	auto p = this->visibilityGrid.find(std::make_pair(coord, team));
-	return p==this->visibilityGrid.end() ? 0 : p->second;
+	return p != this->visibilityGrid.end() ? p->second : false;
 }
 
-bool InhabitedGrid::tileIsVisibleToTeam(const Coordinate tile, const TeamID team) {
+bool InhabitedGrid::tileIsVisibleToTeam(const Coordinate tile, const TeamID team) const {
 	auto p = this->visibilityGrid.find(std::make_pair(tile, team));
-	return p==this->visibilityGrid.end() ? 0 : p->second;
+	return p != this->visibilityGrid.end() ? p->second : false;
 }
 
-bool InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) {
+bool InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) const {
 	return  unit.teamID == team || this->coordIsVisibleToTeam(unit.xy, team);
 }
 
-int InhabitedGrid::getTileVisibility(const Coordinate tile, const TeamID team) {
-	return std::min(255, 64+12*this->visibilityTimeGrid[std::make_pair(tile, team)] );
+int InhabitedGrid::getTileVisibility(const Coordinate tile, const TeamID team) const {
+	auto f = this->visibilityTimeGrid.find(std::make_pair(tile, team));
+	int a = f != this->visibilityTimeGrid.end() ? f->second : 0;
+	return std::min(255, 64+12*a);
 }
 
-int InhabitedGrid::getCoordVisibility(const Coordinate coord, const TeamID team) {
-	return std::min(255, 16*this->visibilityTimeGrid[std::make_pair(this->getCellCoords(coord), team)] );
+int InhabitedGrid::getCoordVisibility(const Coordinate coord, const TeamID team) const {
+	auto f = this->visibilityTimeGrid.find(std::make_pair(this->getTileCoords(coord), team));
+	int a = f != this->visibilityTimeGrid.end() ? f->second : 0;
+	return std::min(255, 16*a);
+	//return std::min(255, 16*this->visibilityTimeGrid.at(std::make_pair(this->getTileCoords(coord), team)) );
 }
 
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
@@ -263,7 +273,7 @@ bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 	
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
-			const auto &unitSubset = unitsInCell(Coordinate(x,y));
+			const auto& unitSubset = unitsInCell(Coordinate(x,y));
 			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
 				Unit& other = game->getUnit(*it);
 				if (u.unitID != other.unitID && unitInCircle(other, location, radius) && u.dimension.overlaps(other.dimension)) {

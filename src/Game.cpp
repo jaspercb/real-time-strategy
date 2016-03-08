@@ -25,6 +25,7 @@ UnitID Game::createUnit(TeamID teamID, UnitTemplateID unitTemplateID, Coordinate
 	UnitID id = this->smallestUnusedUnitID();
 	this->unitsByID.emplace(id, Unit(*this, id, teamID, unitTemplateID, pos));
 	this->inhabitedGrid.emplace(this->getUnit(id));
+	this->inhabitedGrid.startTrackingVisibility(this->getUnit(id));
 
 	return id;
 }
