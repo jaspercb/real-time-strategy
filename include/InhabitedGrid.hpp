@@ -23,7 +23,10 @@ class InhabitedGrid {
 	// Handles collision and visibility.
 	// Unit collision currently assumes all units have a diameter of less than 192 pixels.
 	public:
-		InhabitedGrid(Game* game);
+		InhabitedGrid();
+		InhabitedGrid(Game* game, int w, int h, int numTeams);
+		
+		~InhabitedGrid();
 
 		const std::shared_ptr<std::set<UnitID> > &unitsInCell(Coordinate c) const;
 		std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b) const;
@@ -55,12 +58,27 @@ class InhabitedGrid {
 	private:
 		static const int visibilityRadius = 5; // the visibility radius for units
 
+		int w, h, numTeams;
+
+		int* visibilityGrid;
+		int* visibilityTimeGrid;
+
 		Coordinate getTileCoords(Coordinate c) const; // tiles correspond to visibility
 		Coordinate getCellCoords(Coordinate c) const; // cells correspond to the collision grid
 		const int cellWidth;
 		const int tileWidth;
 		const std::shared_ptr<std::set<UnitID>> emptyUnitIDset;
 		std::map<Coordinate, std::shared_ptr<std::set<UnitID> > > grid;
-		std::map<std::pair<Coordinate, TeamID>, int> visibilityGrid; // For each visible tile and team, contains a count of how many units on that team can see that tile
-		std::map<std::pair<Coordinate, TeamID>, int> visibilityTimeGrid; // For each visible tile and team, contains a count of how long that tile has been visible to units on that team
+
+		int inline getTileIndex(Coordinate tile, int team) const {
+			int x = tile.first;
+			int y = tile.second;
+			int k = team*h*w + x*h + y;
+			if (k<0 || k>=numTeams*h*w)
+				return -1;
+			return k;
+		}
+
+		//std::map<std::pair<Coordinate, TeamID>, int> visibilityGrid; // For each visible tile and team, contains a count of how many units on that team can see that tile
+		//std::map<std::pair<Coordinate, TeamID>, int> visibilityTimeGrid; // For each visible tile and team, contains a count of how long that tile has been visible to units on that team
 };

@@ -64,14 +64,25 @@ bool unitInRectangle(Unit& u, Coordinate b, Coordinate c) {
 	return coordInRect(u.xy, b, c);
 }
 
-InhabitedGrid::InhabitedGrid(Game* game):
+InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int numTeams):
 	game(game),
 	cellWidth(3 * PIXEL_WIDTH * 64),
 	tileWidth(PIXEL_WIDTH * 64),
-	emptyUnitIDset(std::make_shared<std::set<UnitID> >())
+	emptyUnitIDset(std::make_shared<std::set<UnitID> >()),
+	w(w),
+	h(h),
+	numTeams(numTeams)
 	{
-
+		visibilityGrid = new int[w*h*numTeams];
+		memset(visibilityGrid, 0, w*h*numTeams);
+		visibilityTimeGrid = new int[w*h*numTeams];
+		memset(visibilityTimeGrid, 0, w*h*numTeams);
 	}
+
+InhabitedGrid::~InhabitedGrid() {
+	delete[] visibilityGrid;
+	delete[] visibilityTimeGrid;
+}
 
 Coordinate InhabitedGrid::getTileCoords(Coordinate c) const {
 	return Coordinate((c.first+tileWidth)/tileWidth, (c.second+tileWidth)/tileWidth); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
@@ -141,14 +152,12 @@ void InhabitedGrid::updatePos(const Unit &unit, Coordinate oldcoord) {
 }
 
 void InhabitedGrid::tick() {
-	for (auto& i : this->visibilityGrid) {
-		if ( i.second > 0 ) {
-			if ( this->visibilityTimeGrid[i.first] < 16 )
-				this->visibilityTimeGrid[i.first]++;
+	for (int i=0; i<w*h*numTeams; i++) {
+		if (this->visibilityGrid[i]) {
+			this->visibilityTimeGrid[i] = std::min(this->visibilityTimeGrid[i]+1, 16);
 		}
 		else {
-			auto visibility = this->visibilityTimeGrid[i.first];
-			visibility = visibility ? visibility-1 : 0;
+			this->visibilityTimeGrid[i] -= this->visibilityTimeGrid[i] ? 1 : 0;
 		}
 	}
 }
@@ -215,7 +224,9 @@ void InhabitedGrid::incrementTileVisibility(const Coordinate center, const TeamI
 		for (int j = -visibilityRadius ; j<=visibilityRadius ; j++ ) {
 			Coordinate coord(center.first+i, center.second+j);
 			if (pythagoreanDistanceLessThan(center, coord, InhabitedGrid::visibilityRadius)) {
-				this->visibilityGrid[make_pair(coord, team)]++;
+				int k = getTileIndex(coord, team);
+				if (k>0) // if on board
+					this->visibilityGrid[k]++;
 			}
 		}
 	}
@@ -226,21 +237,25 @@ void InhabitedGrid::decrementTileVisibility(const Coordinate center, const TeamI
 		for (int j = -visibilityRadius ; j<=visibilityRadius ; j++ ) {
 			Coordinate coord(center.first+i, center.second+j);
 			if (pythagoreanDistanceLessThan(center, coord, InhabitedGrid::visibilityRadius)) {
-				this->visibilityGrid[make_pair(coord, team)]--;
+				int k = getTileIndex(coord, team);
+				if (k>0) // if on board
+					this->visibilityGrid[k]--;
 			}
 		}
 	}
 }
 
 bool InhabitedGrid::coordIsVisibleToTeam(const Coordinate location, const TeamID team) const {
-	Coordinate coord = this->getTileCoords(location);
-	auto p = this->visibilityGrid.find(std::make_pair(coord, team));
-	return p != this->visibilityGrid.end() ? p->second : false;
+	Coordinate tile = this->getTileCoords(location);
+	int k = getTileIndex(tile, team);
+	if (k<0) return false;
+	else return (bool)this->visibilityTimeGrid[k];
 }
 
 bool InhabitedGrid::tileIsVisibleToTeam(const Coordinate tile, const TeamID team) const {
-	auto p = this->visibilityGrid.find(std::make_pair(tile, team));
-	return p != this->visibilityGrid.end() ? p->second : false;
+	int k = getTileIndex(tile, team);
+	if (k<0) return false;
+	else return (bool)this->visibilityTimeGrid[team*w*h + tile.first*h + tile.second];
 }
 
 bool InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) const {
@@ -248,14 +263,15 @@ bool InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) con
 }
 
 int InhabitedGrid::getTileVisibility(const Coordinate tile, const TeamID team) const {
-	auto f = this->visibilityTimeGrid.find(std::make_pair(tile, team));
-	int a = f != this->visibilityTimeGrid.end() ? f->second : 0;
+	int k = getTileIndex(tile, team);
+	int a = k<0 ? 0 : this->visibilityTimeGrid[team*w*h + tile.first*h + tile.second];
 	return std::min(255, 64+12*a);
 }
 
 int InhabitedGrid::getCoordVisibility(const Coordinate coord, const TeamID team) const {
-	auto f = this->visibilityTimeGrid.find(std::make_pair(this->getTileCoords(coord), team));
-	int a = f != this->visibilityTimeGrid.end() ? f->second : 0;
+	Coordinate tile = this->getTileCoords(coord);
+	int k = getTileIndex(tile, team);
+	int a = k<0 ?  0 : this->visibilityTimeGrid[k];
 	return std::min(255, 16*a);
 	//return std::min(255, 16*this->visibilityTimeGrid.at(std::make_pair(this->getTileCoords(coord), team)) );
 }
