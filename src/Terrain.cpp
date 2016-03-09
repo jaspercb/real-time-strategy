@@ -256,7 +256,7 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 		}
 	}
 	
-	SDL_Color gridLineColor{0, 0, 0, 186.0*std::min(ui->viewMagnification*2, 1.0f)};
+	SDL_Color gridLineColor{0, 0, 0, (unsigned char) (186.0*std::min(ui->viewMagnification*2, 1.0f) )};
 	for (int i=-1; i<this->width; i++) {
 		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, -64*PIXEL_WIDTH)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*(this->width-1))), gridLineColor );
 	}

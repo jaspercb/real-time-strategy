@@ -110,11 +110,17 @@ void renderCircle(SDL_Renderer* renderer, Coordinate center, int r, SDL_Color co
 SDL_Color Uint32toSDL_Color(Uint32 int_color) {
 	//Change from an "int color" to an SDL_Color
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-		SDL_Color color={(int_color & 0x00ff0000)/0x10000,(int_color &
-		0x0000ff00)/0x100,(int_color & 0x000000ff), (int_color & 0xff000000) / 0x1000000};
+		SDL_Color color = {
+			(Uint8)((int_color & 0x00ff0000)/0x10000),
+			(Uint8)((int_color & 0x0000ff00)/0x100),
+			(Uint8)((int_color & 0x000000ff)),
+			(Uint8)((int_color & 0xff000000)/0x1000000)};
 	#else
-		SDL_Color color={(int_color & 0x000000ff),(int_color &
-		0x0000ff00)/0x100,(int_color & 0x00ff0000)/0x10000, (int_color & 0xff000000) / 0x1000000};
+		SDL_Color color = {
+			(Uint8)((int_color & 0x000000ff)),
+			(Uint8)((int_color & 0x0000ff00)/0x100),
+			(Uint8)((int_color & 0x00ff0000)/0x10000),
+			(Uint8)((int_color & 0xff000000)/0x1000000)};
 	#endif
 	return color;
 }

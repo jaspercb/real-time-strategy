@@ -6,7 +6,6 @@
 #include <memory>
 
 #include "typedefs.hpp"
-#include "FogOfWarManager.hpp"
 
 class Unit; //forward declaration
 class Game;
