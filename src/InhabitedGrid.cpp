@@ -73,9 +73,9 @@ InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int numTeams):
 	h(h),
 	numTeams(numTeams)
 	{
-		visibilityGrid = new int[w*h*numTeams];
+		visibilityGrid = new uint16_t[w*h*numTeams];
 		memset(visibilityGrid, 0, w*h*numTeams);
-		visibilityTimeGrid = new int[w*h*numTeams];
+		visibilityTimeGrid = new uint16_t[w*h*numTeams];
 		memset(visibilityTimeGrid, 0, w*h*numTeams);
 	}
 
@@ -299,4 +299,13 @@ bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 		}
 	}
 	return true;
+}
+
+int InhabitedGrid::getTileIndex(Coordinate tile, int team) const {
+	int x = tile.first;
+	int y = tile.second;
+	int k = team*h*w + x*h + y;
+	if ( 0<= team && team<numTeams && 0<=x && x<w && 0<=y && y<h)
+		return team*h*w + x*h + y;
+	return -1;
 }

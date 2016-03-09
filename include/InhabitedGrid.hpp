@@ -60,8 +60,8 @@ class InhabitedGrid {
 
 		int w, h, numTeams;
 
-		int* visibilityGrid;
-		int* visibilityTimeGrid;
+		uint16_t* visibilityGrid;
+		uint16_t* visibilityTimeGrid;
 
 		Coordinate getTileCoords(Coordinate c) const; // tiles correspond to visibility
 		Coordinate getCellCoords(Coordinate c) const; // cells correspond to the collision grid
@@ -70,15 +70,7 @@ class InhabitedGrid {
 		const std::shared_ptr<std::set<UnitID>> emptyUnitIDset;
 		std::map<Coordinate, std::shared_ptr<std::set<UnitID> > > grid;
 
-		int inline getTileIndex(Coordinate tile, int team) const {
-			int x = tile.first;
-			int y = tile.second;
-			int k = team*h*w + x*h + y;
-			if (k<0 || k>=numTeams*h*w)
-				return -1;
-			return k;
-		}
-
+		int getTileIndex(Coordinate tile, int team) const;
 		//std::map<std::pair<Coordinate, TeamID>, int> visibilityGrid; // For each visible tile and team, contains a count of how many units on that team can see that tile
 		//std::map<std::pair<Coordinate, TeamID>, int> visibilityTimeGrid; // For each visible tile and team, contains a count of how long that tile has been visible to units on that team
 };
