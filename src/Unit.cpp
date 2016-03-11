@@ -36,6 +36,8 @@ attackTargetID(0)
 	}
 
 	this->idleState = std::shared_ptr<UnitState>( new StateIdle() );
+
+	this->buildables.emplace("bomber");
 }
 
 Unit::Unit(Unit &&u) : 

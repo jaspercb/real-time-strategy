@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <deque>
 #include <vector>
+#include <set>
 #include <memory>
 
 #include "typedefs.hpp"
@@ -72,4 +73,8 @@ private:
 	TeamID lastAttackingTeamID;
 	UnitID lastAttackingUnitID;
 	std::shared_ptr<UnitState> idleState;
+
+	std::set<UnitTemplateID> morphables;
+	std::set<UnitTemplateID> buildables;
+	std::deque<std::pair<UnitTemplateID, int> > buildingQueue;
 };

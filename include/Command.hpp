@@ -11,7 +11,8 @@ enum CommandType {
 	CMD_GOTOCOORD,
 	CMD_ATTACK,
 	CMD_ATTACKMOVE,
-	CMD_HALT
+	CMD_HALT,
+	CMD_BUILD
 };
 
 enum QueueSetting {
