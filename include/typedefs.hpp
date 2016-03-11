@@ -33,19 +33,19 @@ public:
 		return *this;
 	}
 	
-	vec2 operator+(vec2& v) {
+	vec2 operator+(const vec2& v) const {
 		return vec2(x + v.x, y + v.y);
 	}
-	vec2 operator-(vec2& v) {
+	vec2 operator-(const vec2& v) const {
 		return vec2(x - v.x, y - v.y);
 	}
 	
-	vec2& operator+=(vec2& v) {
+	vec2& operator+=(const vec2& v) {
 		x += v.x;
 		y += v.y;
 		return *this;
 	}
-	vec2& operator-=(vec2& v) {
+	vec2& operator-=(const vec2& v) {
 		x -= v.x;
 		y -= v.y;
 		return *this;
@@ -59,16 +59,16 @@ public:
 		return x!=other.x || y!=other.y;
 	}
 	
-	vec2 operator+(double s) {
+	vec2 operator+(const double s) const {
 		return vec2(x + s, y + s);
 	}
-	vec2 operator-(double s) {
+	vec2 operator-(const double s) const {
 		return vec2(x - s, y - s);
 	}
-	vec2 operator*(double s) {
+	vec2 operator*(const double s) const {
 		return vec2(x * s, y * s);
 	}
-	vec2 operator/(double s) {
+	vec2 operator/(const double s) const {
 		return vec2(x / s, y / s);
 	}
 	
@@ -122,6 +122,13 @@ public:
 	float length() const {
 		return std::sqrt(x * x + y * y);
 	}
+
+	void setLength(double s) {
+		double l = length();
+		x *= s/l;
+		y *= s/l;
+	}
+
 	void truncate(double length) {
 		double angle = atan2f(y, x);
 		x = length * cos(angle);

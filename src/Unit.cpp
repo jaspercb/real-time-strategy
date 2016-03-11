@@ -200,9 +200,7 @@ void Unit::move_towards(const Coordinate c) {
 	}
 	// Speed-limited movement, with collision handling
 	if (animationState!=ANIMSTATE_DYING) {
-		Distance dx = c.x - xy.x;
-		Distance dy = c.y - xy.y;
-		Distance dr = pythagoreanDistance(xy, c);
+		Coordinate dr = c-xy;
 		Distance spd = this->getUnitTemplate().speed();
 
 		if (pythagoreanDistance(xy, c)<=spd) {
@@ -211,14 +209,13 @@ void Unit::move_towards(const Coordinate c) {
 			}
 		}
 		else {
-			int factor = 1.4;
-			Coordinate target = Coordinate( xy.x + factor*spd*dx/dr , xy.y + factor*spd*dy/dr);
+			dr.setLength(spd);
+			Coordinate target = xy + dr;
 			for (int i=0; i<8; i++) {
-				target = Coordinate( this->xy.x + (target.x - this->xy.x)/factor, this->xy.y + (target.y - this->xy.y)/factor);
 				if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)) {
 					this->move(target);
 					this->animationState = ANIMSTATE_WALKING;
-					this->drawFacingAngle = (180/M_PI) * std::atan2(dy, dx);
+					this->drawFacingAngle = (180/M_PI) * std::atan2(dr.y, dr.x);
 					//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
 					//debugLog("setting drawFacingAngle to:");
 					//debugLog((int)drawFacingAngle);
