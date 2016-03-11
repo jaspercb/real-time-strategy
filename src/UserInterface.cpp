@@ -81,8 +81,8 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 	else if (event.type == SDL_MOUSEMOTION) {
 		if (SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(2)) { // if middle mouse button is being held down
 			Coordinate newViewCenter = this->screenCoordinateFromObjective(this->viewCenter);
-			newViewCenter.first -= event.motion.xrel;
-			newViewCenter.second -= event.motion.yrel;
+			newViewCenter.x -= event.motion.xrel;
+			newViewCenter.y -= event.motion.yrel;
 			this->viewCenter = this->objectiveCoordinateFromScreen(newViewCenter);
 		}
 		if (this->drawSelectionBox && SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)) { // if left mouse button is being held down
@@ -158,7 +158,7 @@ void UserInterface::updateSelectedUnits() {
 		this->selectedUnits.clear();
 	}
 
-	int diff = std::abs(this->selectionBoxCorner1.first-this->selectionBoxCorner2.first) + std::abs(this->selectionBoxCorner1.second-this->selectionBoxCorner2.second);
+	int diff = std::abs(this->selectionBoxCorner1.x-this->selectionBoxCorner2.x) + std::abs(this->selectionBoxCorner1.y-this->selectionBoxCorner2.y);
 	if (diff < 10) {
 		auto center = this->objectiveCoordinateFromScreen(this->selectionBoxCorner1);
 		Distance closestDistance = MAX_DISTANCE;
@@ -246,7 +246,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 
 		if (u.dimension.air) {
 			Coordinate airborneCenter = drawCenter;
-			airborneCenter.second -= AIRBORNE_RENDER_HEIGHT * this->viewMagnification;
+			airborneCenter.y -= AIRBORNE_RENDER_HEIGHT * this->viewMagnification;
 			renderLine(renderer, drawCenter, airborneCenter, selectionColor);
 		}
 	}
@@ -283,7 +283,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 			visibleUnitsInDrawOrder.push_back(&i.second);
 
 	auto sortLambda = [this](Unit* a, Unit* b) {
-		return (this->screenCoordinateFromObjective(a->xy).second) < (this->screenCoordinateFromObjective(b->xy).second);
+		return (this->screenCoordinateFromObjective(a->xy).y) < (this->screenCoordinateFromObjective(b->xy).y);
 	};
 
 	std::sort(visibleUnitsInDrawOrder.begin(), visibleUnitsInDrawOrder.end(), sortLambda);
@@ -333,8 +333,8 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 void UserInterface::tick() {
 	this->frame++;
 
-	this->viewCenter.first += this->cameraVx;
-	this->viewCenter.second += this->cameraVy;
+	this->viewCenter.x += this->cameraVx;
+	this->viewCenter.y += this->cameraVy;
 
 	for (auto &animation : this->animations){
 		if (STATUS_REMOVE == animation->tick())
@@ -361,15 +361,15 @@ Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c) {
 
 	//return Coordinate(	PIXEL_WIDTH/this->viewMagnification*c.first + this->viewCenter.first,
 	//					PIXEL_HEIGHT/this->viewMagnification*c.second + this->viewCenter.second );
-	Distance x = PIXEL_WIDTH/this->viewMagnification*(c.first - SCREEN_WIDTH/2);
-	Distance y = PIXEL_WIDTH/this->viewMagnification*(c.second - SCREEN_HEIGHT/2);
-	return Coordinate(	(2*y + x)/2  + this->viewCenter.first,
-						(2*y - x)/2  + this->viewCenter.second);
+	Distance x = PIXEL_WIDTH/this->viewMagnification*(c.x - SCREEN_WIDTH/2);
+	Distance y = PIXEL_WIDTH/this->viewMagnification*(c.y - SCREEN_HEIGHT/2);
+	return Coordinate(	(2*y + x)/2  + this->viewCenter.x,
+						(2*y - x)/2  + this->viewCenter.y);
 }
 
 Coordinate UserInterface::screenCoordinateFromObjective(const Coordinate c) {
-	Distance x = (c.first-this->viewCenter.first)*this->viewMagnification/PIXEL_WIDTH;
-	Distance y = (c.second-this->viewCenter.second)*this->viewMagnification/PIXEL_WIDTH;
+	Distance x = (c.x-this->viewCenter.x)*this->viewMagnification/PIXEL_WIDTH;
+	Distance y = (c.y-this->viewCenter.y)*this->viewMagnification/PIXEL_WIDTH;
 	return Coordinate(	(x-y) + SCREEN_WIDTH/2,
 						(x+y)/2 + SCREEN_HEIGHT/2);
 }

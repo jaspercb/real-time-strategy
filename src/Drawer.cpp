@@ -117,15 +117,15 @@ void Drawer::drawIdle(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coo
 		shadowsheet->render(renderer,
 			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->idleCycleStart + frame,
-			drawPos.first,
-			drawPos.second + dy,
+			drawPos.x,
+			drawPos.y + dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
 			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			idleCycleStart + frame,
-			drawPos.first,
-			drawPos.second + dy,
+			drawPos.x,
+			drawPos.y + dy,
 			ui->viewMagnification);
 }
 
@@ -134,15 +134,15 @@ void Drawer::drawWalking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, 
 		shadowsheet->render(renderer,
 			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->walkCycleStart + frame,
-			drawPos.first,
-			drawPos.second +  dy,
+			drawPos.x,
+			drawPos.y +  dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
 			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->walkCycleStart + frame,
-			drawPos.first,
-			drawPos.second + dy,
+			drawPos.x,
+			drawPos.y + dy,
 			ui->viewMagnification);
 }
 
@@ -151,15 +151,15 @@ void Drawer::drawAttacking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui
 		shadowsheet->render(renderer,
 			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->attackCycleStart + frame,
-			drawPos.first,
-			drawPos.second + dy,
+			drawPos.x,
+			drawPos.y + dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
 			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->attackCycleStart + frame,
-			drawPos.first,
-			drawPos.second + dy,
+			drawPos.x,
+			drawPos.y + dy,
 			ui->viewMagnification);
 }
 
@@ -169,23 +169,23 @@ void Drawer::drawDying(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Co
 			spritesheet->render(renderer,
 				( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 				this->deathCycleStart + frame,
-				drawPos.first,
-				drawPos.second + dy,
+				drawPos.x,
+				drawPos.y + dy,
 				ui->viewMagnification);
 	} else {
 		if (NULL != spritesheet)
 			spritesheet->render(renderer,
 				frame,
 				this->deathCycleStart,
-				drawPos.first,
-				drawPos.second + dy,
+				drawPos.x,
+				drawPos.y + dy,
 				ui->viewMagnification);
 	}
 }
 
 void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, int alphaMulti /*, Coordinate cameraposition */) {
 	// Draws the unit to the given surface.
-	//spritesheet->render(renderer, 0, 0 , unit.xy.first, unit.xy.second);
+	//spritesheet->render(renderer, 0, 0 , unit.xy.x, unit.xy.y);
 	
 	SDL_SetTextureAlphaMod( this->spritesheet->sheet, alphaMulti);
 
@@ -216,7 +216,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, int alp
 			break;
 	}
 	//if (unit.animationState != ANIMSTATE_DYING) {
-	//	draw_HP_bar(renderer, unit, pos.first, pos.second, ui->viewMagnification);
+	//	draw_HP_bar(renderer, unit, pos.x, pos.y, ui->viewMagnification);
 	//}
 
 

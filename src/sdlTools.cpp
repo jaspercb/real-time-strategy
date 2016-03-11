@@ -26,10 +26,10 @@ void SetRenderDrawColor(SDL_Renderer* renderer, SDL_Color color) {
 void renderRectBorder(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color) {
 	SDL_Rect drawRect;
 	
-	drawRect.x = a.first;
-	drawRect.y = a.second;
-	drawRect.w = b.first-a.first;
-	drawRect.h = b.second-a.second;
+	drawRect.x = a.x;
+	drawRect.y = a.y;
+	drawRect.w = b.x-a.x;
+	drawRect.h = b.y-a.y;
 
 	SetRenderDrawColor(renderer, color);
 
@@ -41,7 +41,7 @@ void renderLine(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color co
 	
 	SetRenderDrawColor(renderer, color);
 
-	SDL_RenderDrawLine(renderer, a.first, a.second, b.first, b.second);
+	SDL_RenderDrawLine(renderer, a.x, a.y, b.x, b.y);
 }
 
 
@@ -56,8 +56,8 @@ void ellipsePlotPoints (SDL_Renderer* renderer, int xc, int yc, int x, int y) {
 void renderEllipse(SDL_Renderer* renderer, Coordinate center, int a, int b, SDL_Color color) {
 	SetRenderDrawColor(renderer, color);
 
-	int xc = center.first;
-	int yc = center.second;
+	int xc = center.x;
+	int yc = center.y;
 	int a2 = a * a;
 	int b2 = b * b;
 	int twoa2 = 2 * a2;

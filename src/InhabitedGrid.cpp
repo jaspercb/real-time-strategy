@@ -8,24 +8,24 @@
 #include "globals.hpp"
 
 Distance pythagoreanDistance(Coordinate a, Coordinate b) {
-	return pow( (a.first-b.first)*(a.first-b.first) + (a.second-b.second)*(a.second-b.second), 0.5);
+	return pow( (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y), 0.5);
 }
 
 bool pythagoreanDistanceLessThan(Coordinate a, Coordinate b, Distance r) {
-	return ((float)a.first - (float)b.first) * ((float)a.first - (float)b.first) + ((float)a.second - (float)b.second)*((float)a.second - (float)b.second) < (float)r*(float)r;
+	return ((float)a.x - (float)b.x) * ((float)a.x - (float)b.x) + ((float)a.y - (float)b.y)*((float)a.y - (float)b.y) < (float)r*(float)r;
 }
 
 bool pythagoreanDistanceLessEqThan(Coordinate a, Coordinate b, Distance r) {
-	return ((float)a.first - (float)b.first) * ((float)a.first - (float)b.first) + ((float)a.second - (float)b.second)*((float)a.second - (float)b.second) <= (float)r*(float)r;
+	return ((float)a.x - (float)b.x) * ((float)a.x - (float)b.x) + ((float)a.y - (float)b.y)*((float)a.y - (float)b.y) <= (float)r*(float)r;
 }
 
 bool coordInRect(Coordinate a, Coordinate b, Coordinate c) {
 	// returns whether a is in the rectangle formed by b and c
-	Distance bx = std::min(c.first, b.first);
-	Distance by = std::min(c.second, b.second);
-	Distance cx = std::max(c.first, b.first);
-	Distance cy = std::max(c.second, b.second);
-	return (bx<=a.first) && (a.first<=cx) && (by<=a.second) && (a.second<=cy);
+	Distance bx = std::min(c.x, b.x);
+	Distance by = std::min(c.y, b.y);
+	Distance cx = std::max(c.x, b.x);
+	Distance cy = std::max(c.y, b.y);
+	return (bx<=a.x) && (a.x<=cx) && (by<=a.y) && (a.y<=cy);
 }
 
 bool coordInCircle(Coordinate a, Coordinate c, int r) {
@@ -41,22 +41,22 @@ bool unitInCircle(Unit& u, Coordinate c, int r) {
 bool unitInRectangle(Unit& u, Coordinate b, Coordinate c) {
 	//make rect bigger
 	Distance radius = u.getUnitTemplate().radius();
-	if (b.first < c.first) {
-		b.first -= radius;
-		c.first += radius;
+	if (b.x < c.x) {
+		b.x -= radius;
+		c.x += radius;
 	}
 	else {
-		b.first += radius;
-		c.first -= radius;
+		b.x += radius;
+		c.x -= radius;
 	}
 
-	if (b.second < c.second) {
-		b.second -= radius;
-		c.second += radius;
+	if (b.y < c.y) {
+		b.y -= radius;
+		c.y += radius;
 	}
 	else {
-		b.second += radius;
-		c.second -= radius;
+		b.y += radius;
+		c.y -= radius;
 	}
 
 
@@ -85,11 +85,11 @@ InhabitedGrid::~InhabitedGrid() {
 }
 
 Coordinate InhabitedGrid::getTileCoords(Coordinate c) const {
-	return Coordinate((c.first+tileWidth)/tileWidth, (c.second+tileWidth)/tileWidth); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
+	return Coordinate((c.x+tileWidth)/tileWidth, (c.y+tileWidth)/tileWidth); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
 }
 
 Coordinate InhabitedGrid::getCellCoords(Coordinate c) const { 
-	return Coordinate(c.first/cellWidth, c.second/cellWidth);
+	return Coordinate(c.x/cellWidth, c.y/cellWidth);
 }
 
 const std::shared_ptr<std::set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) const {
@@ -167,10 +167,10 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) 
 
 	Coordinate ga = getCellCoords(a);
 	Coordinate gb = getCellCoords(b);
-	int startX = std::min(ga.first, gb.first);
-	int endX = std::max(ga.first, gb.first);
-	int startY = std::min(ga.second, gb.second);
-	int endY = std::max(ga.second, gb.second);
+	int startX = std::min(ga.x, gb.x);
+	int endX = std::max(ga.x, gb.x);
+	int startY = std::min(ga.y, gb.y);
+	int endY = std::max(ga.y, gb.y);
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
@@ -190,10 +190,10 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) 
 	std::vector<UnitID> ret;
 
 	Coordinate gc = getCellCoords(c);
-	int startX = gc.first - 1 - radius/cellWidth;
-	int endX = gc.first + 1 + radius/cellWidth;
-	int startY = gc.second - 1 - radius/cellWidth;
-	int endY = gc.second + 1 + radius/cellWidth;
+	int startX = gc.x - 1 - radius/cellWidth;
+	int endX = gc.x + 1 + radius/cellWidth;
+	int startY = gc.y - 1 - radius/cellWidth;
+	int endY = gc.y + 1 + radius/cellWidth;
 
 	for (int x=startX; x<=endX; x++){
 		for (int y=startY; y<=endY; y++){
@@ -222,7 +222,7 @@ std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit& u) const {
 void InhabitedGrid::incrementTileVisibility(const Coordinate center, const TeamID team) {
 	for (int i = -visibilityRadius ; i<=visibilityRadius ; i++ ) {
 		for (int j = -visibilityRadius ; j<=visibilityRadius ; j++ ) {
-			Coordinate coord(center.first+i, center.second+j);
+			Coordinate coord(center.x+i, center.y+j);
 			if (pythagoreanDistanceLessThan(center, coord, InhabitedGrid::visibilityRadius)) {
 				int k = getTileIndex(coord, team);
 				if (k>0) // if on board
@@ -235,7 +235,7 @@ void InhabitedGrid::incrementTileVisibility(const Coordinate center, const TeamI
 void InhabitedGrid::decrementTileVisibility(const Coordinate center, const TeamID team) {
 	for (int i = -visibilityRadius ; i<=visibilityRadius ; i++ ) {
 		for (int j = -visibilityRadius ; j<=visibilityRadius ; j++ ) {
-			Coordinate coord(center.first+i, center.second+j);
+			Coordinate coord(center.x+i, center.y+j);
 			if (pythagoreanDistanceLessThan(center, coord, InhabitedGrid::visibilityRadius)) {
 				int k = getTileIndex(coord, team);
 				if (k>0) // if on board
@@ -255,7 +255,7 @@ bool InhabitedGrid::coordIsVisibleToTeam(const Coordinate location, const TeamID
 bool InhabitedGrid::tileIsVisibleToTeam(const Coordinate tile, const TeamID team) const {
 	int k = getTileIndex(tile, team);
 	if (k<0) return false;
-	else return (bool)this->visibilityTimeGrid[team*w*h + tile.first*h + tile.second];
+	else return (bool)this->visibilityTimeGrid[team*w*h + tile.x*h + tile.y];
 }
 
 bool InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) const {
@@ -264,7 +264,7 @@ bool InhabitedGrid::unitIsVisibleToTeam(const Unit& unit, const TeamID team) con
 
 int InhabitedGrid::getTileVisibility(const Coordinate tile, const TeamID team) const {
 	int k = getTileIndex(tile, team);
-	int a = k<0 ? 0 : this->visibilityTimeGrid[team*w*h + tile.first*h + tile.second];
+	int a = k<0 ? 0 : this->visibilityTimeGrid[team*w*h + tile.x*h + tile.y];
 	return std::min(255, 64+12*a);
 }
 
@@ -279,10 +279,10 @@ int InhabitedGrid::getCoordVisibility(const Coordinate coord, const TeamID team)
 bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 	return true; // testing soft collisions
 	Coordinate gc = getCellCoords(location);
-	int startX = gc.first - 1;
-	int endX = gc.first + 1;
-	int startY = gc.second - 1;
-	int endY = gc.second + 1;
+	int startX = gc.x - 1;
+	int endX = gc.x + 1;
+	int startY = gc.y - 1;
+	int endY = gc.y + 1;
 
 	//const int radius = u.getUnitTemplate().radius() / 500;
 	const int radius = 0;
@@ -302,8 +302,8 @@ bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 }
 
 int InhabitedGrid::getTileIndex(Coordinate tile, int team) const {
-	int x = tile.first;
-	int y = tile.second;
+	int x = tile.x;
+	int y = tile.y;
 	int k = team*h*w + x*h + y;
 	if ( 0<= team && team<numTeams && 0<=x && x<w && 0<=y && y<h)
 		return team*h*w + x*h + y;

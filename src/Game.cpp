@@ -85,29 +85,29 @@ void Game::resolveCollisions() {
 
 			else if (unit.xy == other.xy) {
 				other.move_towards( Coordinate(
-					other.xy.first + (
-						( (other.unitID+other.xy.first) % 2 == 0) ? 5 :
+					other.xy.x + (
+						( (other.unitID+other.xy.x) % 2 == 0) ? 5 :
 																	-5 ),
-					other.xy.second + (
-						( (other.unitID+other.xy.second) % 3 == 0) ? 5 :
-						( (other.unitID+other.xy.second) % 3 == 1) ? 0 :
+					other.xy.y + (
+						( (other.unitID+other.xy.y) % 3 == 0) ? 5 :
+						( (other.unitID+other.xy.y) % 3 == 1) ? 0 :
 																	-5 ) ) );
 			}
 			else if (unit.animationState != ANIMSTATE_DYING && (other.animationState == ANIMSTATE_IDLE || other.animationState == ANIMSTATE_ATTACKING) ) { // 
-				Distance dx = other.xy.first - unit.xy.first;
-				Distance dy = other.xy.second - unit.xy.second;
+				Distance dx = other.xy.x - unit.xy.x;
+				Distance dy = other.xy.y - unit.xy.y;
 				//dx = dx ? 10000/dx : 0;
 				//dy = dy ? 10000/dy : 1;
 				dx/=3; // scale down for smoother movement
 				dy/=3;
-				other.move_towards( Coordinate(other.xy.first+dx, other.xy.second+dy) );
+				other.move_towards( Coordinate(other.xy.x+dx, other.xy.y+dy) );
 			}
 /*			else if ( (unit.animationState != ANIMSTATE_IDLE && other.animationState != ANIMSTATE_WALKING) ) {
-				Distance dx = other.xy.first - unit.xy.first;
+				Distance dx = other.xy.x - unit.xy.x;
 				Distance dy = other.xy.second - unit.xy.second;
-				dx = dx ? ((Distance)10000000/dx) : 20000*((unit.xy.first+unit.unitID)%2? 1 : -1);
+				dx = dx ? ((Distance)10000000/dx) : 20000*((unit.xy.x+unit.unitID)%2? 1 : -1);
 				dy = dy ? ((Distance)10000000/dy) : 20000*((unit.xy.second+unit.unitID)%2? 1 : -1);
-				other.move_towards(Coordinate(other.xy.first+dx, other.xy.second+dy));
+				other.move_towards(Coordinate(other.xy.x+dx, other.xy.second+dy));
 			}
 */
 		}

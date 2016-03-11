@@ -17,7 +17,7 @@ Animation::Animation(int numFrames, int ticksPerFrame, Coordinate coord, std::sh
 void Animation::draw(SDL_Renderer* renderer, UserInterface* ui){
 	this->screenCoord = ui->screenCoordinateFromObjective(this->objectiveCoord);
 
-	this->spritesheet->render(renderer, this->frame, 0, this->screenCoord.first, this->screenCoord.second, ui->viewMagnification);
+	this->spritesheet->render(renderer, this->frame, 0, this->screenCoord.x, this->screenCoord.y, ui->viewMagnification);
 }
 
 UpdateStatus Animation::tick(){

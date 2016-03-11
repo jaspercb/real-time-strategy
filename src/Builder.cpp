@@ -25,7 +25,7 @@ void Builder::cancelBuilding() {
 }
 
 void Builder::tick() {
-	if (this->buildables.size()) {
+	if (not this->buildables.empty()) {
 		if (this->building.front().second <= 0) {
 			this->game.createUnit(this->parent->teamID, this->building.front().first, this->parent->xy);
 			this->building.pop_front();

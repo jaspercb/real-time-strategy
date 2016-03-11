@@ -200,8 +200,8 @@ void Unit::move_towards(const Coordinate c) {
 	}
 	// Speed-limited movement, with collision handling
 	if (animationState!=ANIMSTATE_DYING) {
-		Distance dx = c.first - xy.first;
-		Distance dy = c.second - xy.second;
+		Distance dx = c.x - xy.x;
+		Distance dy = c.y - xy.y;
 		Distance dr = pythagoreanDistance(xy, c);
 		Distance spd = this->getUnitTemplate().speed();
 
@@ -212,9 +212,9 @@ void Unit::move_towards(const Coordinate c) {
 		}
 		else {
 			int factor = 1.4;
-			Coordinate target = Coordinate( xy.first + factor*spd*dx/dr , xy.second + factor*spd*dy/dr);
+			Coordinate target = Coordinate( xy.x + factor*spd*dx/dr , xy.y + factor*spd*dy/dr);
 			for (int i=0; i<8; i++) {
-				target = Coordinate( this->xy.first + (target.first - this->xy.first)/factor, this->xy.second + (target.second - this->xy.second)/factor);
+				target = Coordinate( this->xy.x + (target.x - this->xy.x)/factor, this->xy.y + (target.y - this->xy.y)/factor);
 				if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)) {
 					this->move(target);
 					this->animationState = ANIMSTATE_WALKING;
@@ -246,10 +246,10 @@ void Unit::attack(Unit& target){
 			if (target.unitID == this->attackTargetID) { // to ensure a player can't start targeting one unit, then instantly switch to another
 				//debugLog(this->drawAnimationStep+1);
 				if (this->drawAnimationStep < unitTemplate.drawer->attackCycleLength) {
-					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.second-this->xy.second, target.xy.first-this->xy.first); // turn to face target
+					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.y-this->xy.y, target.xy.x-this->xy.x); // turn to face target
 				}
 				else if (this->drawAnimationStep >= unitTemplate.drawer->attackCycleLength) {
-					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.second-this->xy.second, target.xy.first-this->xy.first); // turn to face target
+					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.y-this->xy.y, target.xy.x-this->xy.x); // turn to face target
 					for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
 						it->fire(target);
 					}
