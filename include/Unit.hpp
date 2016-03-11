@@ -3,7 +3,6 @@
 #include <SDL2/SDL.h>
 #include <deque>
 #include <vector>
-#include <set>
 #include <memory>
 
 #include "typedefs.hpp"
@@ -13,6 +12,7 @@
 #include "Drawer.hpp"
 #include "Command.hpp"
 #include "UnitState.hpp"
+#include "Builder.hpp"
 
 class Team;
 class UnitTemplate;
@@ -34,12 +34,12 @@ enum UpdateStatus {
 
 class Unit {
 public:
-
+	friend Builder;
 	//Unit();
 	Unit(Game&, UnitID, TeamID, UnitTemplateID, Coordinate);
 	Unit(Unit &&u);
 	UnitTemplate& getUnitTemplate() const;
-	UpdateStatus update(); //returns 1 if should be destroyed, 0 otherwise
+	UpdateStatus tick(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command);
 	void move(const Coordinate);
 	void damage(const int, const DamageType, Unit& attackedBy);
@@ -74,7 +74,6 @@ private:
 	UnitID lastAttackingUnitID;
 	std::shared_ptr<UnitState> idleState;
 
-	std::set<UnitTemplateID> morphables;
-	std::set<UnitTemplateID> buildables;
+	std::vector<Builder> builders;
 	std::deque<std::pair<UnitTemplateID, int> > buildingQueue;
 };

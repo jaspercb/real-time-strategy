@@ -13,6 +13,7 @@
 #include "Command.hpp"
 #include "StateIdle.hpp"
 #include "UserInterface.hpp"
+#include "Builder.hpp"
 
 Unit::Unit(Game &g, UnitID uID, TeamID tID, UnitTemplateID utID, Coordinate pos):
 game(g),
@@ -36,8 +37,6 @@ attackTargetID(0)
 	}
 
 	this->idleState = std::shared_ptr<UnitState>( new StateIdle() );
-
-	this->buildables.emplace("bomber");
 }
 
 Unit::Unit(Unit &&u) : 
@@ -67,50 +66,46 @@ UnitTemplate& Unit::getUnitTemplate() const{
 	return game.getTeam(teamID).unitTemplates.at(unitTemplateID);
 }
 
-UpdateStatus Unit::update()
+UpdateStatus Unit::tick()
 {
 	UnitTemplate &unitTemplate = getUnitTemplate();
 
 	drawAnimationStep++;
 	
-	switch (animationState){
-		case (ANIMSTATE_DYING): {
-			if (drawAnimationStep>20){
+	if (animationState == ANIMSTATE_DYING) {
+		if (drawAnimationStep>20){
+			return STATUS_REMOVE;
+		}
+		return STATUS_OK;
+	}
+	
+	else {
+		for (auto &builder : this->builders) {
+			builder.tick();
+		}
+
+		if (hp<=0) {
+			if (unitTemplate.drawer->deathCycleLength == 0)
 				return STATUS_REMOVE;
-			}
+			animationState = ANIMSTATE_DYING;
+			drawAnimationStep = 0;
 			return STATUS_OK;
 		}
 
-		case (ANIMSTATE_ATTACKING): {
+		this->hp = std::min(unitTemplate.maxHP(), hp+unitTemplate.regHP());
+		this->es = std::min(unitTemplate.maxES(), es+unitTemplate.regES());
 
+		for (auto &weapon : this->weapons_) {
+			weapon.update();
 		}
 
+		if (stateQueue_.empty() )
+			this->idleState->update(*this);
 
-		//case (ANIMSTATE_WALKING):
-
-
-		default:
-			if (hp<=0) {
-				if (unitTemplate.drawer->deathCycleLength == 0)
-					return STATUS_REMOVE;
-				animationState = ANIMSTATE_DYING;
-				drawAnimationStep = 0;
-				return STATUS_OK;
-			}
-
-			this->hp = std::min(unitTemplate.maxHP(), hp+unitTemplate.regHP());
-			this->es = std::min(unitTemplate.maxES(), es+unitTemplate.regES());
-
-			for (auto i = this->weapons_.begin(); i != this->weapons_.end(); i++)
-				i->update();
-
-			if (stateQueue_.empty() )
-				this->idleState->update(*this);
-
-			while (stateQueue_.size() && STATE_EXIT_COMPLETE == stateQueue_.front()->update(*this)) {
-				stateQueue_.pop_front();
-			}
-	}
+		while (stateQueue_.size() && STATE_EXIT_COMPLETE == stateQueue_.front()->update(*this)) {
+			stateQueue_.pop_front();
+		}
+}
 	return STATUS_OK;
 }
 

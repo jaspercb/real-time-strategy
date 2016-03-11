@@ -7,7 +7,6 @@ Builder::Builder(Unit* parent):
 	parent(parent),
 	game(parent->game),
 	team(parent->game.getTeam(parent->teamID)) {
-
 }
 
 const std::set<UnitTemplateID> Builder::getBuildables() const {
@@ -27,7 +26,8 @@ void Builder::cancelBuilding() {
 void Builder::tick() {
 	if (not this->buildables.empty()) {
 		if (this->building.front().second <= 0) {
-			this->game.createUnit(this->parent->teamID, this->building.front().first, this->parent->xy);
+			UnitID id = this->game.createUnit(this->parent->teamID, this->building.front().first, this->parent->xy);
+			this->game.getUnit(id).stateQueue_ = this->parent->stateQueue_; // copy by value
 			this->building.pop_front();
 		}
 		else {
