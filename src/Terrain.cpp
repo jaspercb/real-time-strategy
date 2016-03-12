@@ -58,14 +58,14 @@ Terrain::Terrain(std::string mapName) {
 }
 
 TerrainType Terrain::getTerrainAt(int x, int y) {
-	if (x<0 || y < 0 || x >= this->width || x>= this->height)
+	if (x<0 || y < 0 || x >= this->width || y>= this->height)
 		return NONE;
 	else
 		return this->tiles[x][y];
 }
 
 void Terrain::updateDrawTile(int x, int y) {
-	if (x<0 || y < 0 || x >= this->width || x>= this->height) {
+	if (x<0 || y < 0 || x >= this->width || y>= this->height) {
 		throw;
 	}
 
@@ -149,7 +149,7 @@ void Terrain::updateDrawTile(int x, int y) {
 
 	else if (center == ROAD) {
 		if (n == ROAD && s == ROAD && e == ROAD && w == ROAD
-		&& nw == ROAD && ne == ROAD && sw == ROAD && se == ROAD)
+		&& ( (int(nw == ROAD) + (int)(ne == ROAD) + (int)(sw == ROAD) + (int)(se == ROAD)) >=3 ) )
 			resource = "tile-road";
 
 		else if (n == ROAD && s == ROAD && e == ROAD && w == ROAD
