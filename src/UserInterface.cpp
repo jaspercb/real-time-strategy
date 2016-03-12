@@ -121,6 +121,12 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 
 				case SDLK_s: {
 					this->issueHaltCmd();
+					break;
+				}
+
+				case SDLK_q: {
+					this->issueBuildCmd("../conf/units/bomber");
+					break;
 				}
 			}
 		}
@@ -411,5 +417,12 @@ void UserInterface::issueAttackMoveCmd(Coordinate targetCoord) {
 void UserInterface::issueHaltCmd() {
 	Command cmd(CMD_HALT);
 	cmd.commanded = this->selectedUnits;
+	game.handleCommand(cmd);
+}
+
+void UserInterface::issueBuildCmd(UnitTemplateID id) {
+	Command cmd(CMD_BUILD);
+	cmd.commanded = this->selectedUnits;
+	cmd.unitTemplateID = id;
 	game.handleCommand(cmd);
 }

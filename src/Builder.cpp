@@ -2,20 +2,25 @@
 
 #include "Unit.hpp"
 #include "Game.hpp"
+#include "Logging.hpp"
 
 Builder::Builder(Unit* parent):
-	parent(parent),
-	game(parent->game),
-	team(parent->game.getTeam(parent->teamID)) {
+	parentID(parent->unitID),
+	game(parent->game) {
 }
 
 const std::set<UnitTemplateID> Builder::getBuildables() const {
 	return buildables;
 }
 
+bool Builder::canBuild(UnitTemplateID) const {
+	return true;
+}
+
 void Builder::startBuilding(UnitTemplateID prodID) {
-	if (this->buildables.count(prodID))
-		this->building.push_back({prodID, 1});
+	//if (this->buildables.count(prodID))
+	debugLog("building a thing");
+	this->building.push_back({prodID, 1});
 }
 
 void Builder::cancelBuilding() {
@@ -24,10 +29,11 @@ void Builder::cancelBuilding() {
 }
 
 void Builder::tick() {
-	if (not this->buildables.empty()) {
+	if (not this->building.empty()) {
 		if (this->building.front().second <= 0) {
-			UnitID id = this->game.createUnit(this->parent->teamID, this->building.front().first, this->parent->xy);
-			this->game.getUnit(id).stateQueue_ = this->parent->stateQueue_; // copy by value
+			Unit& parent = game.getUnit(parentID);
+			UnitID id = this->game.createUnit(parent.teamID, this->building.front().first, parent.xy);
+			this->game.getUnit(id).stateQueue_ = parent.stateQueue_; // copy by value
 			this->building.pop_front();
 		}
 		else {

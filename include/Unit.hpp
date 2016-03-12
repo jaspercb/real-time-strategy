@@ -48,6 +48,8 @@ public:
 	void move_towards(const Coordinate c);
 	void attack(Unit& target);
 
+	void tryToBuild(UnitTemplateID unitTemplateID);
+
 	void draw(SDL_Renderer*, UserInterface*);
 
 	std::vector<Coordinate> getStateWaypoints(); // returns an ordered list of the coordinate targets of the unit's state queue

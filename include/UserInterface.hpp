@@ -36,6 +36,8 @@ public:
 
 	void issueHaltCmd();
 
+	void issueBuildCmd(UnitTemplateID s);
+
 	Game& game;
 
 	TeamID teamID;

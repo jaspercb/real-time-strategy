@@ -37,6 +37,8 @@ attackTargetID(0)
 	}
 
 	this->idleState = std::shared_ptr<UnitState>( new StateIdle() );
+
+	this->builders.push_back(Builder(this));
 }
 
 Unit::Unit(Unit &&u) : 
@@ -53,7 +55,8 @@ drawAnimationStep(u.drawAnimationStep),
 drawFacingAngle(u.drawFacingAngle),
 attackTargetID(u.attackTargetID),
 stateQueue_(u.stateQueue_),
-idleState(u.idleState)
+idleState(u.idleState),
+builders(u.builders)
 {
 	for(Weapon &w : u.weapons_) {
 		weapons_.push_back(Weapon(w, *this));
@@ -105,7 +108,7 @@ UpdateStatus Unit::tick()
 		while (stateQueue_.size() && STATE_EXIT_COMPLETE == stateQueue_.front()->update(*this)) {
 			stateQueue_.pop_front();
 		}
-}
+	}
 	return STATUS_OK;
 }
 
@@ -262,6 +265,16 @@ void Unit::attack(Unit& target){
 			}
 		}
 	}
+}
+
+void Unit::tryToBuild(UnitTemplateID unitTemplateID) {
+	if (builders.empty()) throw;
+
+	for (auto &builder : builders)
+		if (builder.canBuild(unitTemplateID)) {
+			builder.startBuilding(unitTemplateID);
+			break;
+		}
 }
 
 void Unit::draw(SDL_Renderer* renderer, UserInterface* ui) {

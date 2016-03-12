@@ -30,4 +30,5 @@ class Command {
 		std::vector<UnitID> commanded;
 		UnitID targetID;
 		Coordinate targetCoord;
+		UnitTemplateID unitTemplateID;
 };
