@@ -38,6 +38,7 @@ public:
 	//Unit();
 	Unit(Game&, UnitID, TeamID, UnitTemplateID, Coordinate);
 	Unit(Unit &&u);
+	~Unit();
 	UnitTemplate& getUnitTemplate() const;
 	UpdateStatus tick(); //returns 1 if should be destroyed, 0 otherwise
 	void handleCommand(Command);
@@ -76,6 +77,6 @@ private:
 	UnitID lastAttackingUnitID;
 	std::shared_ptr<UnitState> idleState;
 
-	std::vector<Builder> builders;
+	Builder* builder;
 	std::deque<std::pair<UnitTemplateID, int> > buildingQueue;
 };

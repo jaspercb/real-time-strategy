@@ -26,6 +26,8 @@ drawAnimationStep(0),
 drawFacingAngle(0),
 attackTargetID(0)
 {
+	this->builder = new Builder(this, 1);
+
 	UnitTemplate& unitTemplate = getUnitTemplate();
 	
 	this->hp = unitTemplate.maxHP();
@@ -37,8 +39,6 @@ attackTargetID(0)
 	}
 
 	this->idleState = std::shared_ptr<UnitState>( new StateIdle() );
-
-	this->builders.push_back(Builder(this));
 }
 
 Unit::Unit(Unit &&u) : 
@@ -56,13 +56,17 @@ drawFacingAngle(u.drawFacingAngle),
 attackTargetID(u.attackTargetID),
 stateQueue_(u.stateQueue_),
 idleState(u.idleState),
-builders(u.builders)
+builder(new Builder(*u.builder)) // this is terrible
 {
 	for(Weapon &w : u.weapons_) {
 		weapons_.push_back(Weapon(w, *this));
 	}
 
 	u.weapons_.clear();
+}
+
+Unit::~Unit() {
+	delete builder;
 }
 
 UnitTemplate& Unit::getUnitTemplate() const{
@@ -83,9 +87,7 @@ UpdateStatus Unit::tick()
 	}
 	
 	else {
-		for (auto &builder : this->builders) {
-			builder.tick();
-		}
+		this->builder->tick();
 
 		if (hp<=0) {
 			if (unitTemplate.drawer->deathCycleLength == 0)
@@ -268,13 +270,10 @@ void Unit::attack(Unit& target){
 }
 
 void Unit::tryToBuild(UnitTemplateID unitTemplateID) {
-	if (builders.empty()) throw;
-
-	for (auto &builder : builders)
-		if (builder.canBuild(unitTemplateID)) {
-			builder.startBuilding(unitTemplateID);
-			break;
-		}
+	if (builder)
+		builder->startBuilding(unitTemplateID, 5);
+	else
+		debugLog("Unit::tryToBuild called on unit with no building component!");
 }
 
 void Unit::draw(SDL_Renderer* renderer, UserInterface* ui) {

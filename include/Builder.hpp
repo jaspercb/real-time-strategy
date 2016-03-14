@@ -1,6 +1,6 @@
 #pragma once
 
-#include <set>
+#include <vector>
 #include <deque>
 
 #include "typedefs.hpp"
@@ -11,15 +11,14 @@ class Game;
 class Builder {
 	// Handles all unit production and yadda yadda yadda
 	public:
-		Builder(Unit* parent);
-		const std::set<UnitTemplateID> getBuildables() const;
-		bool canBuild(UnitTemplateID) const;
-		void startBuilding(UnitTemplateID);
+		Builder(Unit* parent, int slots);
+		void startBuilding(UnitTemplateID, int time);
 		void cancelBuilding();
 		void tick();
 	private:
-		UnitID parentID;
+		static int ticksUntilDone(const std::deque<std::pair<UnitTemplateID, int> >&);
+
+		const UnitID parentID;
 		Game& game;
-		std::set<UnitTemplateID> buildables;
-		std::deque<std::pair<UnitTemplateID, int> > building;
+		std::vector< std::deque<std::pair<UnitTemplateID, int> > > building;
 };
