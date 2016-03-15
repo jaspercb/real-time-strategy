@@ -50,7 +50,9 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 
 		if (event.button.button == SDL_BUTTON_RIGHT) {
 			for ( auto &id : game.inhabitedGrid.unitsInCircle(clickedCoord, (Distance)1000) ) { // hackish way of handling targeting selection
-				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(id).teamID) && this->selectedUnits.size()) {
+				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(id).teamID)
+				&& this->selectedUnits.size()
+				&& this->game.inhabitedGrid.unitIsVisibleToTeam(game.getUnit(id), this->teamID)) {
 					this->issueAttackCmd(id);
 					return;
 				}
