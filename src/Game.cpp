@@ -78,29 +78,24 @@ void Game::resolveCollisions() {
 		UnitID id = id_unit_pair.first;
 		Unit& unit = id_unit_pair.second;
 		for ( auto &otherid : this->inhabitedGrid.unitsCollidingWith(unit) ) {
-			Unit& other = this->getUnit(otherid);
-			if (unit.unitID == other.unitID) {
+			if (unit.unitID == otherid) {
 				continue;
 			}
 
-			else if (unit.xy == other.xy) {
-				other.move_towards( Coordinate(
-					other.xy.x + (
-						( (other.unitID+other.xy.x) % 2 == 0) ? 5 :
-																	-5 ),
-					other.xy.y + (
-						( (other.unitID+other.xy.y) % 3 == 0) ? 5 :
-						( (other.unitID+other.xy.y) % 3 == 1) ? 0 :
-																	-5 ) ) );
+			Unit& other = this->getUnit(otherid);
+
+			if (unit.xy == other.xy) {					// Deterministic location offset keeps game in lockstep.
+				other.move_towards( other.xy + Coordinate(
+							( (other.unitID+other.xy.x) % 2 == 0) ?  5 :
+																	-5 ,
+						( (other.unitID+other.xy.y) % 3 == 0) ?  5 :
+						( (other.unitID+other.xy.y) % 3 == 1) ?  0 :
+																-5 ) );
 			}
 			else if (unit.animationState != ANIMSTATE_DYING && (other.animationState == ANIMSTATE_IDLE || other.animationState == ANIMSTATE_ATTACKING) ) { // 
-				Distance dx = other.xy.x - unit.xy.x;
-				Distance dy = other.xy.y - unit.xy.y;
-				//dx = dx ? 10000/dx : 0;
-				//dy = dy ? 10000/dy : 1;
-				dx/=3; // scale down for smoother movement
-				dy/=3;
-				other.move_towards( Coordinate(other.xy.x+dx, other.xy.y+dy) );
+				Coordinate c = other.xy - unit.xy;
+				c.setLength(other.getUnitTemplate().radius() + unit.getUnitTemplate().radius() - c.length());
+				other.move_towards( other.xy + c );
 			}
 /*			else if ( (unit.animationState != ANIMSTATE_IDLE && other.animationState != ANIMSTATE_WALKING) ) {
 				Distance dx = other.xy.x - unit.xy.x;
