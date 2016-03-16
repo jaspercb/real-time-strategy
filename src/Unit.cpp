@@ -215,10 +215,18 @@ void Unit::move_towards(const Coordinate c) {
 				if (this->game.inhabitedGrid.unitOKToMoveTo(*this, target)) {
 					this->move(target);
 					this->animationState = ANIMSTATE_WALKING;
-					this->drawFacingAngle = (180/M_PI) * std::atan2(dr.y, dr.x);
-					//drawFacingAngle = (18+((int)(std::atan2(dy, dx)*(9/M_PI)) + 4 ))%18;
-					//debugLog("setting drawFacingAngle to:");
-					//debugLog((int)drawFacingAngle);
+					
+					int target_angle = (180/M_PI) * std::atan2(dr.y, dr.x);
+					int dTheta = target_angle-this->drawFacingAngle;
+					if (std::abs(dTheta)%360 < 10 || 120 < dTheta || -120 > dTheta ) {
+						this->drawFacingAngle = target_angle;
+					}
+					else if ( dTheta < 0) {
+						this->drawFacingAngle = (this->drawFacingAngle-12)%360;
+					}
+					else {
+						this->drawFacingAngle = (this->drawFacingAngle+12)%360;
+					}
 					break;
 				}
 			}
