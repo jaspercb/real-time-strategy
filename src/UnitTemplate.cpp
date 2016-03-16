@@ -13,7 +13,9 @@ UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _maxES, int _speed
 		dimension(_dimension),
 		weaponTemplates(_weaponTemplates) {debugLog("you probably shouldn't be using this constructor for UnitTemplate, but making:"+_name);}
 
-UnitTemplate::UnitTemplate(std::ifstream is, TeamColor teamColor){
+UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamColor):
+	unitTemplateID(id)
+{
 	maxHP_ = 0;
 	regHP_ = 0;
 	maxES_ = 0;
@@ -71,7 +73,7 @@ UnitTemplate::UnitTemplate(std::ifstream is, TeamColor teamColor){
 }
 
 UnitTemplate::UnitTemplate(std::string s, TeamColor teamColor):
-	UnitTemplate(std::ifstream("../conf/units/"+s), teamColor)
+	UnitTemplate("../conf/units/"+s, std::ifstream("../conf/units/"+s), teamColor)
 	{}
 
 

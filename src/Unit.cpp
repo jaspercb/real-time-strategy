@@ -269,9 +269,18 @@ void Unit::attack(Unit& target){
 	}
 }
 
-void Unit::tryToBuild(UnitTemplateID unitTemplateID) {
-	if (builder)
-		builder->startBuilding(unitTemplateID, 5);
+void Unit::startBuilding(UnitTemplateID unitTemplateID) {
+	if (builder) {
+		for (auto& i : this->getUnitTemplate().spawnables) {
+			if (i == unitTemplateID) {
+				builder->startBuilding(unitTemplateID, 5);
+				return;
+			}
+		}
+		debugLog(("Error: Unit::tryToBuild called on invalid pair"));
+		debugLog(("    Unit #" + std::to_string(this->unitID) + (", an instance of \"" + this->getUnitTemplate().unitTemplateID) + "\""));
+		debugLog(("    attempted to build an instance of \"" + unitTemplateID + "\""));
+	}
 	else
 		debugLog("Unit::tryToBuild called on unit with no building component!");
 }

@@ -26,7 +26,7 @@ std::shared_ptr<UnitState> UnitState::handleCommand(Unit& unit, Command command)
 			return std::shared_ptr<UnitState>(new StateAttackMove(command.targetCoord));
 		}
 		case CMD_BUILD: {
-			unit.tryToBuild(command.unitTemplateID);
+			unit.startBuilding(command.unitTemplateID);
 		}
 	}
 	return NULL;

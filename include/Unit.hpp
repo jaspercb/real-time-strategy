@@ -49,7 +49,7 @@ public:
 	void move_towards(const Coordinate c);
 	void attack(Unit& target);
 
-	void tryToBuild(UnitTemplateID unitTemplateID);
+	void startBuilding(UnitTemplateID unitTemplateID);
 
 	void draw(SDL_Renderer*, UserInterface*);
 

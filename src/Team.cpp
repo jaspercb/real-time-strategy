@@ -14,5 +14,5 @@ teamID(tID)
 
 
 void Team::loadUnitTemplate( std::string filename ){
-	unitTemplates.emplace( filename, UnitTemplate(std::ifstream(filename), (TeamColor)teamID) );
+	unitTemplates.emplace( filename, UnitTemplate(filename, std::ifstream(filename), (TeamColor)teamID) );
 };

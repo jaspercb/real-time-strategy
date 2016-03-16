@@ -21,7 +21,7 @@ public:
 			int _radius,
 			EnvironmentSpec _dimension,
 			std::vector<WeaponTemplate> _weaponTemplates);
-	UnitTemplate(std::ifstream, TeamColor teamColor);
+	UnitTemplate(UnitTemplateID id, std::ifstream, TeamColor teamColor);
 	UnitTemplate(std::string, TeamColor teamColor);
 	int maxHP();
 	int regHP(){return regHP_;}
@@ -34,6 +34,8 @@ public:
 	float getDamageEffectivenessVsHP(DamageType);
 	float getDamageEffectivenessVsES(DamageType);
 
+	const UnitTemplateID unitTemplateID;
+	
 	std::string name;
 	std::vector<WeaponTemplate> weaponTemplates;
 	EnvironmentSpec dimension;
