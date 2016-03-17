@@ -27,13 +27,13 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamCo
 
 	std::string s;
 
-	while (is>>s){
-		if (s=="name"){
+	while (is>>s) {
+		if (s=="name") {
 			char c;
 			is.get(c); //to strip out space
 			getline(is, name);
 		}
-		else if (s=="#"){
+		else if (s=="#") {
 			getline(is, s); // this is a comment. we ignore comments.
 		}
 		else if (s=="maxHP")
@@ -50,23 +50,31 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamCo
 			is>>speed_;
 		else if (s=="radius")
 			is>>radius_;
-		else if (s=="dimension"){
+		else if (s=="dimension") {
 			int a, b, c, d;
 			is>>a>>b>>c>>d;
 			dimension = EnvironmentSpec(a, b, c, d);
 		}
-		else if (s=="drawer"){
+		else if (s=="drawer") {
 			is>>s; // to clean out the brace
 			drawer = new Drawer(is, teamColor);
 		}
-		else if (s=="weapon"){
+		else if (s=="weapon") {
 			is>>s; // to get rid of the trailing {
 			weaponTemplates.push_back(WeaponTemplate(is));
 		}
-		else if (s=="weapon{"){
+		else if (s=="weapon{") {
 			weaponTemplates.push_back(WeaponTemplate(is));
 		}
-		else if (s=="}"){
+		else if (s=="canspawn") {
+			is>>s;
+			this->spawnables.push_back(s);
+		}
+		else if (s=="canmorph") {
+			is>>s;
+			this->morphables.push_back(s);
+		}
+		else if (s=="}") {
 			return;
 		}
 	}
@@ -77,7 +85,7 @@ UnitTemplate::UnitTemplate(std::string s, TeamColor teamColor):
 	{}
 
 float UnitTemplate::getDamageEffectivenessVsHP(DamageType dmgtype) const {
-	switch (dmgtype){
+	switch (dmgtype) {
 		case DMG_ELECTRO:
 			return 0.5;
 		case DMG_THERMAL:
@@ -90,7 +98,7 @@ float UnitTemplate::getDamageEffectivenessVsHP(DamageType dmgtype) const {
 }
 
 float UnitTemplate::getDamageEffectivenessVsES(DamageType dmgtype) const {
-	switch (dmgtype){
+	switch (dmgtype) {
 		case DMG_ELECTRO:
 			return 1.5;
 		case DMG_THERMAL:
