@@ -74,6 +74,9 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamCo
 			is>>s;
 			this->morphables.push_back(s);
 		}
+		else if (s=="buildtime") {
+			is>>buildtime_;
+		}
 		else if (s=="}") {
 			return;
 		}

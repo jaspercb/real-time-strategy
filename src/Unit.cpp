@@ -281,7 +281,7 @@ void Unit::startBuilding(UnitTemplateID unitTemplateID) {
 	if (builder) {
 		for (auto& i : this->getUnitTemplate().spawnables) {
 			if (i == unitTemplateID) {
-				builder->startBuilding(unitTemplateID, 5);
+				builder->startBuilding(unitTemplateID, game.getTeam(this->teamID).unitTemplates.at(unitTemplateID).buildtime() );
 				return;
 			}
 		}

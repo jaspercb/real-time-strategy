@@ -3,6 +3,9 @@ maxHP 50
 speed 600
 radius 800
 dimension 0 0 0 1
+
+buildtime 100;
+
 weapon {
 	name Bomber Bomb
 	damageType DMG_EXPLOSIVE
