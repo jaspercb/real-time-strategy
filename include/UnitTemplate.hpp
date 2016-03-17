@@ -23,16 +23,16 @@ public:
 			std::vector<WeaponTemplate> _weaponTemplates);
 	UnitTemplate(UnitTemplateID id, std::ifstream, TeamColor teamColor);
 	UnitTemplate(std::string, TeamColor teamColor);
-	int maxHP();
-	int regHP(){return regHP_;}
-	int maxES();
-	int regES(){return regES_;}
-	int armor();
-	int speed();
-	int radius();
-	int buildtime();
-	float getDamageEffectivenessVsHP(DamageType);
-	float getDamageEffectivenessVsES(DamageType);
+	inline int maxHP() const { return maxHP_;};
+	inline int regHP() const {return regHP_;};
+	inline int maxES() const {return maxES_;} ;
+	inline int regES() const {return regES_;};
+	inline int armor() const {return armor_;};
+	inline int speed() const {return speed_;};
+	inline int radius() const {return radius_;};
+	inline int buildtime() const {return buildtime_;};
+	float getDamageEffectivenessVsHP(DamageType) const;
+	float getDamageEffectivenessVsES(DamageType) const;
 
 	const UnitTemplateID unitTemplateID;
 	
@@ -41,14 +41,14 @@ public:
 	EnvironmentSpec dimension;
 	Drawer* drawer;
 
-	std::vector<UnitTemplateID> spawnables; // for spawning separate units
-	std::vector<UnitTemplateID> morphables; // for morphing into a unit
+	std::vector<UnitTemplateID> spawnables; // units this unit can spawn
+	std::vector<UnitTemplateID> morphables; // units this unit can morph into
 
 private:
 	int maxHP_;
-	int regHP_;
+	int regHP_; // HP regen per game tick
 	int maxES_;
-	int regES_;
+	int regES_; // ES regen per game tick
 
 	int armor_;
 	int speed_;

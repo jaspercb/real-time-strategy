@@ -76,32 +76,7 @@ UnitTemplate::UnitTemplate(std::string s, TeamColor teamColor):
 	UnitTemplate("../conf/units/"+s, std::ifstream("../conf/units/"+s), teamColor)
 	{}
 
-
-int UnitTemplate::maxHP(){
-	return maxHP_;
-}
-
-int UnitTemplate::maxES(){
-	return maxES_;
-}
-
-int UnitTemplate::armor(){
-	return armor_;
-}
-
-int UnitTemplate::speed(){
-	return speed_;
-}
-
-int UnitTemplate::radius(){
-	return radius_;
-}
-
-int UnitTemplate::buildtime(){
-	return buildtime_;
-}
-
-float UnitTemplate::getDamageEffectivenessVsHP(DamageType dmgtype){
+float UnitTemplate::getDamageEffectivenessVsHP(DamageType dmgtype) const {
 	switch (dmgtype){
 		case DMG_ELECTRO:
 			return 0.5;
@@ -114,7 +89,7 @@ float UnitTemplate::getDamageEffectivenessVsHP(DamageType dmgtype){
 	}
 }
 
-float UnitTemplate::getDamageEffectivenessVsES(DamageType dmgtype){
+float UnitTemplate::getDamageEffectivenessVsES(DamageType dmgtype) const {
 	switch (dmgtype){
 		case DMG_ELECTRO:
 			return 1.5;
