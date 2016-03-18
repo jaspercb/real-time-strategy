@@ -53,14 +53,18 @@ Team& Game::getTeam(TeamID i) {
 
 void Game::tick() {
 	std::vector<UnitID> toDelete;
-	for (auto u = this->unitsByID.begin(); u!=this->unitsByID.end(); u++){
-		if (u->second.tick() == STATUS_REMOVE){
-			toDelete.push_back(u->first);
+	for (auto &u : this->unitsByID)
+		u.second.tick();
+
+	for (const auto &u : this->unitsByID) {
+		if (u.second.shouldDelete()) {
+			toDelete.push_back(u.first);
 		}
 	}
-	for (auto u = toDelete.begin(); u!=toDelete.end(); u++){
-		this->deleteUnit(*u);
-	}
+
+	for (auto &u : toDelete)
+		this->deleteUnit(u);
+
 
 	this->resolveCollisions();
 	this->inhabitedGrid.tick();

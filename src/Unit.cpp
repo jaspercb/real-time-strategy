@@ -73,29 +73,14 @@ UnitTemplate& Unit::getUnitTemplate() const{
 	return game.getTeam(teamID).unitTemplates.at(unitTemplateID);
 }
 
-UpdateStatus Unit::tick()
+void Unit::tick()
 {
 	UnitTemplate &unitTemplate = getUnitTemplate();
-
+	
 	drawAnimationStep++;
-	
-	if (animationState == ANIMSTATE_DYING) {
-		if (drawAnimationStep>20){
-			return STATUS_REMOVE;
-		}
-		return STATUS_OK;
-	}
-	
-	else {
-		this->builder->tick();
 
-		if (hp<=0) {
-			if (unitTemplate.drawer->deathCycleLength == 0)
-				return STATUS_REMOVE;
-			animationState = ANIMSTATE_DYING;
-			drawAnimationStep = 0;
-			return STATUS_OK;
-		}
+	if (!this->isDead()) {
+		this->builder->tick();
 
 		this->hp = std::min(unitTemplate.maxHP(), hp+unitTemplate.regHP());
 		this->es = std::min(unitTemplate.maxES(), es+unitTemplate.regES());
@@ -111,7 +96,10 @@ UpdateStatus Unit::tick()
 			stateQueue_.pop_front();
 		}
 	}
-	return STATUS_OK;
+	else if (this->animationState != ANIMSTATE_DYING) {
+		this->animationState = ANIMSTATE_DYING;
+		this->drawAnimationStep = 0;
+	}
 }
 
 void Unit::handleCommand(Command command)
@@ -298,7 +286,13 @@ void Unit::draw(SDL_Renderer* renderer, UserInterface* ui) {
 	this->getUnitTemplate().drawer->draw(renderer, *this, ui, alpha);
 }
 
+bool Unit::isDead() const {
+	return this->hp <= 0 || this->animationState == ANIMSTATE_DYING;
+}
 
+bool Unit::shouldDelete() const {
+	return (this->animationState == ANIMSTATE_DYING) && (this->drawAnimationStep > 20);
+}
 
 std::vector<Coordinate> Unit::getStateWaypoints() {
 	std::vector<Coordinate> ret;

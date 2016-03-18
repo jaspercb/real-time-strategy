@@ -41,7 +41,7 @@ public:
 	Unit(Unit &&u);
 	~Unit();
 	UnitTemplate& getUnitTemplate() const;
-	UpdateStatus tick(); //returns 1 if should be destroyed, 0 otherwise
+	void tick();
 	void handleCommand(Command);
 	void move(const Coordinate);
 	void damage(const int, const DamageType, Unit& attackedBy);
@@ -53,6 +53,9 @@ public:
 	void startBuilding(UnitTemplateID unitTemplateID);
 
 	void draw(SDL_Renderer*, UserInterface*);
+
+	bool isDead() const;
+	bool shouldDelete() const;
 
 	std::vector<Coordinate> getStateWaypoints(); // returns an ordered list of the coordinate targets of the unit's state queue
 
