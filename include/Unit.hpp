@@ -16,9 +16,8 @@
 
 class Team;
 class UnitTemplate;
-class Command;
-class UnitState;
 class Game;
+class UserInterface;
 
 enum AnimationState {
 	ANIMSTATE_IDLE,
@@ -35,6 +34,8 @@ enum UpdateStatus {
 class Unit {
 public:
 	friend Builder;
+	friend UserInterface;
+
 	//Unit();
 	Unit(Game&, UnitID, TeamID, UnitTemplateID, Coordinate);
 	Unit(Unit &&u);
@@ -70,8 +71,8 @@ public:
 	
 	UnitID attackTargetID;
 	Game& game;
-	std::vector<Weapon> weapons_;
 private:
+	std::vector<Weapon> weapons_;
 	std::deque<std::shared_ptr<UnitState> > stateQueue_;
 	TeamID lastAttackingTeamID;
 	UnitID lastAttackingUnitID;
