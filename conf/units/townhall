@@ -4,6 +4,7 @@ speed 0
 radius 10000
 dimension 1 0 0 1
 
+buildslots 1
 canspawn ../conf/units/bomber
 
 drawer {

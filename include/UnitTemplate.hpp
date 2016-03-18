@@ -31,6 +31,7 @@ public:
 	inline int speed() const {return speed_;};
 	inline int radius() const {return radius_;};
 	inline int buildtime() const {return buildtime_;};
+	inline int buildslots() const {return buildslots_;};
 	float getDamageEffectivenessVsHP(DamageType) const;
 	float getDamageEffectivenessVsES(DamageType) const;
 
@@ -54,4 +55,6 @@ private:
 	int speed_;
 	int radius_;
 	int buildtime_;
+	
+	int buildslots_;
 };

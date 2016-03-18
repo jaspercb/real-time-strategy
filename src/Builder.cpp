@@ -13,6 +13,8 @@ Builder::Builder(Unit* parent, int slots):
 
 void Builder::startBuilding(UnitTemplateID prodID, int time) {
 	//if (this->buildables.count(prodID))
+	if (this->building.size() == 0)
+		return;
 	debugLog( ("Building a \"" + prodID + '"' ));
 	auto& min = this->building.at(0);
 	int t = 99999999;

@@ -7,8 +7,10 @@
 
 class Unit;
 class Game;
+class UserInterface;
 
 class Builder {
+	friend UserInterface;
 	// Handles all unit production and yadda yadda yadda
 	public:
 		Builder(Unit* parent, int slots);

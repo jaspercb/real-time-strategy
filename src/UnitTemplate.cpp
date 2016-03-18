@@ -25,6 +25,8 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamCo
 	radius_ = 0;
 	dimension = EnvironmentSpec(0, 0, 0, 0);
 
+	buildslots_ = 0;
+
 	std::string s;
 
 	while (is>>s) {
@@ -76,6 +78,9 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamCo
 		}
 		else if (s=="buildtime") {
 			is>>buildtime_;
+		}
+		else if (s=="buildslots") {
+			is>>buildslots_;
 		}
 		else if (s=="}") {
 			return;

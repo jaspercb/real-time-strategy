@@ -26,10 +26,10 @@ drawAnimationStep(0),
 drawFacingAngle(0),
 attackTargetID(0)
 {
-	this->builder = new Builder(this, 1);
 
 	UnitTemplate& unitTemplate = getUnitTemplate();
-	
+
+	this->builder = new Builder(this, unitTemplate.buildslots());	
 	this->hp = unitTemplate.maxHP();
 	this->es = unitTemplate.maxES();
 	this->dimension = unitTemplate.dimension;
