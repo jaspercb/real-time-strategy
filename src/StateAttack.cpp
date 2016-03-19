@@ -3,6 +3,7 @@
 #include "InhabitedGrid.hpp"
 #include "Game.hpp"
 #include "Logging.hpp"
+#include "globals.hpp"
 
 StateAttack::StateAttack(UnitID targ):
 	targetID(targ)
@@ -33,8 +34,8 @@ StateExitCode StateAttack::update(Unit& unit) {
 	}
 }
 
-/*
+
 std::vector<Coordinate> StateAttack::getStateWaypoints() {
-	// this needs to wait until the shared_ptr refactoring
+	Unit& u = game->getUnit(this->targetID);
+	return std::vector<Coordinate>{u.xy};
 }
-*/

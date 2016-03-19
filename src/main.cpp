@@ -20,6 +20,7 @@ SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 ResourceManager* gResourceManager = NULL;
 FontManager* gFontManager = NULL;
+Game* game = NULL;
 
 bool init() {
 	//Initialization flag
@@ -48,37 +49,38 @@ bool init() {
 	gResourceManager = new ResourceManager();
 	gFontManager = new FontManager();
 
+	game = new Game();
+
 	return success;
 }
 
 void cleanup_SDL() {
 	delete gResourceManager;
 	delete gFontManager;
+	delete game;
 
 	SDL_DestroyWindow( gWindow );
 	SDL_Quit();
 }
 
 int main() {
-	debugLog(" Testing...");
+	debugLog(" Testingame->..");
 
 	//Start up SDL and create window
 	if( !init() ) {
 		printf( "Failed to initialize!\n" );
 	}
 	else {
-		Game g = Game();
+		TeamID tID1 = game->createTeam();
+		TeamID tID2 = game->createTeam();
 
-		TeamID tID1 = g.createTeam();
-		TeamID tID2 = g.createTeam();
+		UserInterface userInterface = UserInterface(*game, tID1);
 
-		UserInterface userInterface = UserInterface(g, tID1);
-
-		Team& t1 = g.getTeam(tID1);
-		Team& t2 = g.getTeam(tID2);
+		Team& t1 = game->getTeam(tID1);
+		Team& t2 = game->getTeam(tID2);
 		
 		for (int i=0; i<10; i++) {
-			int tID = g.createTeam();
+			int tID = game->createTeam();
 		}
 		t1.loadUnitTemplate("../conf/units/townhall");
 		t1.loadUnitTemplate("../conf/units/bomber");
@@ -88,37 +90,37 @@ int main() {
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
-		g.createUnit(tID1, "../conf/units/townhall", Coordinate(200000, 200000));
+		game->createUnit(tID1, "../conf/units/townhall", Coordinate(200000, 200000));
 		
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
-				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID1, "../conf/units/bomber", Coordinate(2500*i, 2500*j));
+				//game->createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
+				game->createUnit(tID1, "../conf/units/bomber", Coordinate(2500*i, 2500*j));
 			}
 		}
 		
 
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
-				//g.createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
-				g.createUnit(tID2, "../conf/units/ground-dummy", Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
+				//game->createUnit(tID2, (UnitTemplateID)3, Coordinate(50*i, 50*j));
+				game->createUnit(tID2, "../conf/units/ground-dummy", Coordinate(2500*16 + 2500*i, 2500*16 + 2500*j));
 			}
 		}
 
-		g.createUnit(tID2, "../conf/units/ground-dummy", Coordinate(0, 0));
+		game->createUnit(tID2, "../conf/units/ground-dummy", Coordinate(0, 0));
 
 		//Command cmd1(CMD_GOTOCOORD);
 		//cmd1.targetID = b;
 
 		//cmd1.queueSetting=QUEUE_OVERWRITE;
 
-		//g.getUnit(a).handleCommand(cmd1);
+		//game->getUnit(a).handleCommand(cmd1);
 
 		//Command cmd2(CMD_GOTOCOORD);
 		//cmd2.targetCoord = Coordinate(300, 300);
 		//cmd2.queueSetting=QUEUE_OVERWRITE;
 
-		//g.getUnit(b).handleCommand(cmd2);
+		//game->getUnit(b).handleCommand(cmd2);
 
 		bool exit;
 
@@ -130,14 +132,14 @@ int main() {
 				userInterface.renderAll( gRenderer );
 				SDL_Delay( 1000/ (FRAMERATE_SIM*FRAMERATE_UI) );
 			}
-			g.tick();
+			game->tick();
 		}
 	}
 
 	//Free resources and close SDL
 	cleanup_SDL();
 
-	debugLog(" Done testing.");
+	debugLog(" Done testingame->");
 	
 	return 0;
 }

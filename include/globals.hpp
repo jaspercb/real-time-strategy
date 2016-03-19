@@ -4,6 +4,7 @@
 
 class ResourceManager;
 class FontManager;
+class Game;
 
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
@@ -17,3 +18,4 @@ extern const int SCREEN_WIDTH;
 
 extern ResourceManager* gResourceManager;
 extern FontManager* gFontManager;
+extern Game* game;
