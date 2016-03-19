@@ -60,3 +60,13 @@ bool StateAttackMove::updateTarget(Unit& unit) {
 		return false;
 	}
 }
+
+std::vector<Coordinate> StateAttackMove::getStateWaypoints() {
+	if (attacking) {
+		std::vector<Coordinate> ret = this->atkstate.getStateWaypoints();
+		std::vector<Coordinate> finalwaypoint = this->gotostate.getStateWaypoints();
+		ret.insert(ret.end(), finalwaypoint.begin(), finalwaypoint.end());
+		return ret;
+	}
+	return this->gotostate.getStateWaypoints();
+}
