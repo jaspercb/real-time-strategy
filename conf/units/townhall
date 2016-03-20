@@ -1,7 +1,7 @@
 name Townhall
 maxHP 500
 speed 0
-radius 10000
+radius 9000
 dimension 1 0 0 1
 
 buildslots 1

@@ -64,7 +64,7 @@ void cleanup_SDL() {
 }
 
 int main() {
-	debugLog(" Testingame->..");
+	debugLog(" Testing...");
 
 	//Start up SDL and create window
 	if( !init() ) {
@@ -90,7 +90,7 @@ int main() {
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
-		game->createUnit(tID1, "../conf/units/townhall", Coordinate(200000, 200000));
+		game->createUnit(tID1, "../conf/units/townhall", Coordinate(2*64*PIXEL_WIDTH, 2*64*PIXEL_WIDTH));
 		
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {
@@ -107,7 +107,7 @@ int main() {
 			}
 		}
 
-		game->createUnit(tID2, "../conf/units/ground-dummy", Coordinate(0, 0));
+		//game->createUnit(tID2, "../conf/units/ground-dummy", Coordinate(0, 0));
 
 		//Command cmd1(CMD_GOTOCOORD);
 		//cmd1.targetID = b;
@@ -139,7 +139,7 @@ int main() {
 	//Free resources and close SDL
 	cleanup_SDL();
 
-	debugLog(" Done testingame->");
+	debugLog(" Done testing");
 	
 	return 0;
 }

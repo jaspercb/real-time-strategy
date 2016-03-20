@@ -85,7 +85,7 @@ InhabitedGrid::~InhabitedGrid() {
 }
 
 Coordinate InhabitedGrid::getTileCoords(Coordinate c) const {
-	return Coordinate((c.x+tileWidth)/tileWidth, (c.y+tileWidth)/tileWidth); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
+	return Coordinate((c.x)/tileWidth, (c.y)/tileWidth); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
 }
 
 Coordinate InhabitedGrid::getCellCoords(Coordinate c) const { 

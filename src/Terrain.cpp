@@ -243,7 +243,7 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 	for (int i=0; i<this->width; i++) {
 		for (int j=0; j<this->height; j++) {
 			if (this->drawTiles[i][j]) {
-				Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*(i-1), 64*PIXEL_WIDTH*(j-1) ));
+				Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*j ));
 				if (coordInRect(drawPos, screenCorner1, screenCorner2)) {
 					int tileColorMod = ui->game.inhabitedGrid.getTileVisibility(Coordinate(i, j), ui->teamID);
 					SDL_SetTextureColorMod(this->drawTiles[i][j]->sheet, tileColorMod, tileColorMod, tileColorMod);
@@ -256,13 +256,15 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 		}
 	}
 	
+	
 	SDL_Color gridLineColor{0, 0, 0, (unsigned char) (186.0*std::min(ui->viewMagnification*2, 1.0f) )};
-	for (int i=-1; i<this->width; i++) {
-		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, -64*PIXEL_WIDTH)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*(this->width-1))), gridLineColor );
+	for (int i=0; i<=this->width; i++) {
+		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, -64*PIXEL_WIDTH)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*(this->width))), gridLineColor );
 	}
-	for (int j=-1; j<this->height; j++) {
-		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(-64*PIXEL_WIDTH, 64*PIXEL_WIDTH*j)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*(this->width-1), 64*PIXEL_WIDTH*j)), gridLineColor );
+	for (int j=0; j<=this->height; j++) {
+		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(-64*PIXEL_WIDTH, 64*PIXEL_WIDTH*j)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*(this->width), 64*PIXEL_WIDTH*j)), gridLineColor );
 	}
+	
 }
 
 void Terrain::renderMinimap(SDL_Renderer* renderer, UserInterface* ui) {

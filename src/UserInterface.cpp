@@ -17,7 +17,7 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	drawSelectionBox(false),
 	game(g),
 	teamID(teamID),
-	viewCenter(Coordinate(5000, 5000)),
+	viewCenter(Coordinate(0, 0)),
 	viewMagnification(1.0),
 	cameraVy(0),
 	cameraVx(0),
