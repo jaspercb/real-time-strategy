@@ -2,7 +2,7 @@ name Townhall
 maxHP 500
 speed 0
 radius 9000
-dimension 1 0 0 1
+dimension 1 0 0 0
 
 buildslots 1
 canspawn ../conf/units/bomber

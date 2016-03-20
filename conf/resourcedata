@@ -140,7 +140,7 @@ bomber-spritesheet {
 
 townhall-spritesheet {
 	filepath 	../svgs/townhall.png
-	size 196 196
+	size 260 220
 	sheetsize 1 1
 	shouldApplyTeamColor 1
 }
