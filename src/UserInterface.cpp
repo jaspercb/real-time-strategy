@@ -323,7 +323,17 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 		if (selectedUnit.weapons_.size())
 			infostream << "WEAPON: "<< std::to_string(selectedUnit.weapons_[0].ticksUntilCanFire) << "/" << std::to_string(selectedUnit.weapons_[0].weaponTemplate.reloadTime()) << std::endl;
 		else
-			infostream << "UNARMED" << std::endl;
+			infostream << "NO WEAPON" << std::endl;
+		infostream<<std::endl;
+		
+		for (auto &i : selectedUnit.builder->building) {
+			if (Builder::ticksUntilDone(i)) {
+				infostream<<"BUILDING "<<i[0].first<<", "<<i[0].second<<std::endl;
+			}
+			else{
+				infostream<<"EMPTY BUILDING SLOT"<<std::endl;
+			}
+		}
 
 		gFontManager->renderMultipleLines(infostream.str(), 320, 750, SDL_Colors::WHITE);
 
