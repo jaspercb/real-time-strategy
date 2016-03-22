@@ -3,7 +3,7 @@
 #include <vector>
 #include <deque>
 
-#include "typedefs.hpp"
+#include "BuildData.hpp"
 
 class Unit;
 class Game;
@@ -18,9 +18,9 @@ class Builder {
 		void cancelBuilding();
 		void tick();
 	private:
-		static int ticksUntilDone(const std::deque<std::pair<UnitTemplateID, int> >&);
+		static int ticksUntilDone(const std::deque<BuildData>&);
 
 		const UnitID parentID;
 		Game& game;
-		std::vector< std::deque<std::pair<UnitTemplateID, int> > > building;
+		std::vector< std::deque<BuildData> > building;
 };

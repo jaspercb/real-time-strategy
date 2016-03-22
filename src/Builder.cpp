@@ -23,7 +23,7 @@ void Builder::startBuilding(UnitTemplateID prodID, int time) {
 			t = Builder::ticksUntilDone(i);
 			min = i;
 		}
-	min.push_back({prodID, time});
+	min.push_back({prodID, time, time});
 }
 
 void Builder::cancelBuilding() {
@@ -35,22 +35,22 @@ void Builder::tick() {
 	Unit& parent = game.getUnit(parentID);
 	for (auto &q : this->building) {
 		if (not q.empty()) {
-			if (q.front().second <= 0) {
-				UnitID id = this->game.createUnit(parent.teamID, q.front().first, parent.xy);
+			if (q.front().ticksUntilDone <= 0) {
+				UnitID id = this->game.createUnit(parent.teamID, q.front().unitTemplateID, parent.xy);
 				this->game.getUnit(id).stateQueue_ = parent.stateQueue_; // copy by value
 				q.pop_front();
 			}
 			else {
-				q.front().second--;
+				q.front().ticksUntilDone--;
 			}
 		}
 	}
 }
 
-int Builder::ticksUntilDone(const std::deque<std::pair<UnitTemplateID, int> > &q) {
+int Builder::ticksUntilDone(const std::deque<BuildData> &q) {
 	int tot = 0;
 	for (auto &i : q)
-		tot += i.second;
+		tot += i.ticksUntilDone;
 	return tot;
 }
 

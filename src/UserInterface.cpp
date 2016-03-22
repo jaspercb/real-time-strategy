@@ -328,7 +328,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 		
 		for (auto &i : selectedUnit.builder->building) {
 			if (Builder::ticksUntilDone(i)) {
-				infostream<<"BUILDING "<<i[0].first<<", "<<i[0].second<<std::endl;
+				infostream<<"BUILDING "<<i.front().unitTemplateID<<", "<<i.front().totalTicks-i.front().ticksUntilDone<<"/"<<i.front().totalTicks<<std::endl;
 			}
 			else{
 				infostream<<"EMPTY BUILDING SLOT"<<std::endl;
