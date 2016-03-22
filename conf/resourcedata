@@ -483,3 +483,9 @@ tile-road-grass-straightE {
 	size 132 99
 	sheetsize 1 1
 }
+
+explosion-animation {
+	filepath ../resources/explosion-animation.png
+	size 256 128
+	sheetsize 3 4
+}

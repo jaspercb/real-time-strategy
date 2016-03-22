@@ -34,5 +34,5 @@ UpdateStatus Animation::tick(){
 }
 
 std::unique_ptr<Animation> newAnimation(std::string animationname, Coordinate coord, int ticksPerFrame) {
-	return std::unique_ptr<Animation> (new Animation(gResourceManager->getSpritesX(animationname), ticksPerFrame, coord, gResourceManager->get(animationname) ));
+	return std::unique_ptr<Animation> (new Animation(gResourceManager->getSpritesX(animationname)*gResourceManager->getSpritesY(animationname), ticksPerFrame, coord, gResourceManager->get(animationname) ));
 }
