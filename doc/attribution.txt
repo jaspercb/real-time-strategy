@@ -2,3 +2,4 @@ FILE										FROM
 resources/gotocoord-animation.png			http://opengameart.org/content/teleport-rune
 resources/attackmove-animation.png			http://opengameart.org/content/teleport-rune (colors modified from green to red)
 resources/explosion-animation.png			http://opengameart.org/content/fire-spell-explosion
+resources/new-landscape-tiles.png 			http://opengameart.org/content/isometric-64x64-outside-tileset

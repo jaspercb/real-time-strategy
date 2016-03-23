@@ -15,6 +15,15 @@ enum TerrainType {
 	ROAD
 };
 
+struct TileData {
+	TerrainType terraintype;
+	std::shared_ptr<Spritesheet> spritesheet;
+	int bottomX;
+	int bottomY;
+	int topX;
+	int topY;
+};
+
 class Terrain {
 	public:
 		Terrain(std::string filename="map-default");
@@ -23,10 +32,9 @@ class Terrain {
 		void updateDrawTile(int x, int y);
 		TerrainType getTerrainAt(int x, int y);
 
-		std::vector< std::vector< TerrainType> > tiles;
+		std::vector< std::vector< TileData> > tiles;
 
 	private:
 		int height, width;
-		std::vector< std::vector< std::shared_ptr<Spritesheet> > > drawTiles;
 		std::shared_ptr<Spritesheet> minimap;
 };

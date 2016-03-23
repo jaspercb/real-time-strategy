@@ -489,3 +489,9 @@ explosion-animation {
 	size 256 128
 	sheetsize 3 4
 }
+
+new-landscape-tiles {
+	filepath ../resources/iso-64x64-outside.png
+	size 64 64
+	sheetsize 10 17
+}

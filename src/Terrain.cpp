@@ -21,10 +21,8 @@ Terrain::Terrain(std::string mapName) {
 	this->height = image->h;
 
 	this->tiles.resize(this->width);
-	this->drawTiles.resize(this->width);
 	for (int i=0; i<this->width; i++) {
 		this->tiles[i].resize(this->height);
-		this->drawTiles[i].resize(this->height);
 		for (int j=0; j<this->height; j++) {
 			
 			TerrainType tile = NONE;
@@ -36,19 +34,18 @@ Terrain::Terrain(std::string mapName) {
 					tile = GRASS;
 					break;
 				case -8355712:
-					tile = ROAD;
+					tile = GRASS; // tile = ROAD;
 					break;
 				default:
 					tile = NONE;
 					debugLog("in Terrain::Terrain(), encountered weird pixel value: ");
 					debugLog(pixels[i*height + (height-j-1)]);
 			}
-			this->tiles[i][j] = tile;
+			this->tiles[i][j].terraintype = tile;
 		}
 	}
 
 	for (int i=0; i<this->width; i++) {
-		this->drawTiles[i].resize(this->height);
 		for (int j=0; j<this->height; j++) {
 			this->updateDrawTile(i, j);
 		}
@@ -61,7 +58,7 @@ TerrainType Terrain::getTerrainAt(int x, int y) {
 	if (x<0 || y < 0 || x >= this->width || y>= this->height)
 		return NONE;
 	else
-		return this->tiles[x][y];
+		return this->tiles[x][y].terraintype;
 }
 
 void Terrain::updateDrawTile(int x, int y) {
@@ -89,17 +86,20 @@ void Terrain::updateDrawTile(int x, int y) {
 	s = (s!=NONE) ? s : center;
 	se = (se!=NONE) ? se : center;
 
-
-	std::string resource;
-
-	if (center == GRASS)
-		resource = "tile-grass";
+	int bottomX, bottomY, topX, topY;
+	bottomX = -1; // if bottomX is still -1 by the end of this program, it shouldn't be drawn
+	topX = -1; // same
 	
+	if (center == GRASS) {
+		bottomX = 2, bottomY = 0;
+	}
+
 	else if (center == WATER) {
-		if (n == WATER && w == WATER && s == WATER && e == WATER
+		bottomX = 5, bottomY=8;
+/*		if (n == WATER && w == WATER && s == WATER && e == WATER
 		&& nw == WATER && ne == WATER && sw == WATER && se == WATER)
-			resource = "tile-ocean";
-		
+			bottomX = 5, bottomY = 8;
+
 		else if (n == WATER && e == WATER && w != WATER && s != WATER
 		&& ne != WATER )
 			resource = "tile-river-grass-bendNE";
@@ -230,11 +230,14 @@ void Terrain::updateDrawTile(int x, int y) {
 
 		else
 			resource = "tile-road";
-
-
+	*/
 	}
 
-	this->drawTiles[x][y] = gResourceManager->get(resource);
+	this->tiles[x][y].spritesheet = gResourceManager->get("new-landscape-tiles");
+	this->tiles[x][y].bottomX = bottomX;
+	this->tiles[x][y].bottomY = bottomY;
+	this->tiles[x][y].topX = topX;
+	this->tiles[x][y].topY = topY;
 }
 
 void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
@@ -242,16 +245,18 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 	Coordinate screenCorner2(SCREEN_WIDTH+100*ui->viewMagnification, SCREEN_HEIGHT+100*ui->viewMagnification);
 	for (int i=0; i<this->width; i++) {
 		for (int j=0; j<this->height; j++) {
-			if (this->drawTiles[i][j]) {
-				Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*j ));
-				if (coordInRect(drawPos, screenCorner1, screenCorner2)) {
-					int tileColorMod = ui->game.inhabitedGrid.getTileVisibility(Coordinate(i, j), ui->teamID);
-					SDL_SetTextureColorMod(this->drawTiles[i][j]->sheet, tileColorMod, tileColorMod, tileColorMod);
+			Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(32*PIXEL_WIDTH*i, 32*PIXEL_WIDTH*j ));
+			if (coordInRect(drawPos, screenCorner1, screenCorner2)) {
+				int tileColorMod = ui->game.inhabitedGrid.getTileVisibility(Coordinate(i, j), ui->teamID);
+				SDL_SetTextureColorMod(this->tiles[i][j].spritesheet->sheet, tileColorMod, tileColorMod, tileColorMod);
 
-					this->drawTiles[i][j]->render(renderer, 0, 0, drawPos.x, drawPos.y +  (200-this->drawTiles[i][j]->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
-	
-					SDL_SetTextureColorMod(this->drawTiles[i][j]->sheet, 255, 255, 255); // resetting color key for safety reasons
-				}
+				if (this->tiles[i][j].bottomX != -1)
+					this->tiles[i][j].spritesheet->render(renderer, tiles[i][j].bottomX, tiles[i][j].bottomY, drawPos.x, drawPos.y +  (64-this->tiles[i][j].spritesheet->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
+				
+				if (this->tiles[i][j].topX != -1)
+					this->tiles[i][j].spritesheet->render(renderer, tiles[i][j].topX, tiles[i][j].topY, drawPos.x, drawPos.y +  (64-this->tiles[i][j].spritesheet->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
+
+				SDL_SetTextureColorMod(this->tiles[i][j].spritesheet->sheet, 255, 255, 255); // resetting color key for safety reasons
 			}
 		}
 	}
