@@ -9,6 +9,7 @@
 class EnvironmentSpec;
 class Weapon;
 class Unit;
+class UserInterface;
 
 enum DamageType{
 	DMG_ELECTRO,	// good against shields, shit against armor
@@ -24,8 +25,7 @@ enum ResourceType{
 	RESOURCE_NUM
 };
 
-class WeaponTemplate
-{
+class WeaponTemplate {
 public:
 	WeaponTemplate();
 	WeaponTemplate(std::string _name,
@@ -49,6 +49,7 @@ public:
 	virtual bool canAttack(const Unit& target) const; // returns whether the weapon is theoretically capable of hitting the target, IGNORING COOLDOWN
 	virtual void fire(Weapon& weapon, Unit& target);
 	virtual void fire(Weapon& weapon, Coordinate& target);
+	virtual void playHitAnimation(UserInterface*, Coordinate& target);
 protected:
 	std::string name_;
 	DamageType damageType_;
@@ -59,4 +60,5 @@ protected:
 	int weaponVelocity_;
 	int aoeRadius_;
 	EnvironmentSpec dimensions_;
+	std::string hitAnimation_;
 };

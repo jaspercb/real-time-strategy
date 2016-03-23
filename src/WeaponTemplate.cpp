@@ -4,6 +4,8 @@
 #include "InhabitedGrid.hpp"
 #include "Unit.hpp"
 #include "Game.hpp"
+#include "Animation.hpp"
+#include "UserInterface.hpp"
 
 #include "Logging.hpp"
 
@@ -74,6 +76,8 @@ WeaponTemplate::WeaponTemplate(std::ifstream &is)
 			is>>a>>b>>c>>d;
 			dimensions_ = EnvironmentSpec(a, b, c, d);
 		}
+		else if (s=="hitAnimation")
+			is>>hitAnimation_;
 		else if (s=="}"){
 			return;
 		}
@@ -115,7 +119,8 @@ void WeaponTemplate::fire(Weapon& weapon, Unit& target)
 		else{
 			target.damage(damage(), damageType_, weapon.owner);
 		}
-		
+
+		this->playHitAnimation(gUserInterface, target.xy);
 		weapon.ticksUntilCanFire = reloadTime();
 	}
 }
@@ -126,7 +131,7 @@ void WeaponTemplate::fire(Weapon& weapon, Coordinate& target)
 	(pythagoreanDistance(weapon.owner.xy, target)<=range()) &&
 	(aoeRadius() > 0) ) //only works for AOE weapons
 	{
-		if (aoeRadius()){
+		if (aoeRadius()) {
 			std::vector<UnitID> p = weapon.owner.game.inhabitedGrid.unitsInCircle(target, aoeRadius());
 			for (UnitID &targetID : p){
 				Unit& potentialTarget = weapon.owner.game.getUnit(targetID);
@@ -137,7 +142,11 @@ void WeaponTemplate::fire(Weapon& weapon, Coordinate& target)
 				}
 			}
 		}
-		
+		this->playHitAnimation(gUserInterface, target);
 		weapon.ticksUntilCanFire = reloadTime();
 	}
+}
+
+void WeaponTemplate::playHitAnimation(UserInterface* ui, Coordinate& target) {
+	ui->playAnimation(hitAnimation_, target, 3);
 }

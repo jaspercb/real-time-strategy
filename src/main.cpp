@@ -20,6 +20,8 @@ SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 ResourceManager* gResourceManager = NULL;
 FontManager* gFontManager = NULL;
+UserInterface* gUserInterface = NULL;
+
 Game* game = NULL;
 
 bool init() {
@@ -57,6 +59,7 @@ bool init() {
 void cleanup_SDL() {
 	delete gResourceManager;
 	delete gFontManager;
+	delete gUserInterface;
 	delete game;
 
 	SDL_DestroyWindow( gWindow );
@@ -74,7 +77,7 @@ int main() {
 		TeamID tID1 = game->createTeam();
 		TeamID tID2 = game->createTeam();
 
-		UserInterface userInterface = UserInterface(*game, tID1);
+		gUserInterface = new UserInterface(*game, tID1);
 
 		Team& t1 = game->getTeam(tID1);
 		Team& t2 = game->getTeam(tID2);
@@ -126,10 +129,10 @@ int main() {
 
 		for (int i=0; i<2000 && !exit; i++) {
 			for (int j=0; j<FRAMERATE_UI; j++) {
-				exit=userInterface.handleInputEvents(); // returns 1 if quit command processed
+				exit=gUserInterface->handleInputEvents(); // returns 1 if quit command processed
 
-				userInterface.tick();
-				userInterface.renderAll( gRenderer );
+				gUserInterface->tick();
+				gUserInterface->renderAll( gRenderer );
 				SDL_Delay( 1000/ (FRAMERATE_SIM*FRAMERATE_UI) );
 			}
 			game->tick();

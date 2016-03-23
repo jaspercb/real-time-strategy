@@ -15,6 +15,7 @@ weapon {
 	weaponVelocity 0
 	aoeRadius 2000
 	dimensions 1 0 0 0
+	hitAnimation explosion-animation
 }
 
 drawer {

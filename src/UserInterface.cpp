@@ -276,10 +276,6 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 
 	this->game.terrain.render(renderer, this);
 
-	for (auto &animation : this->animations){
-		animation->draw(renderer, this);
-	}
-
 	this->renderSelection( renderer );
 
 	Coordinate screenCorner1 = Coordinate(-500, -500);
@@ -301,6 +297,11 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2)
 		&& u->dimension.overlaps(GROUND_ONLY) )
 			u->draw( renderer, this );
+	}
+
+	// draw misc. animations n stuff
+	for (auto &animation : this->animations){
+		animation->draw(renderer, this);
 	}
 
 	// draw air units
@@ -399,7 +400,7 @@ void UserInterface::issueGotoCoordCmd(Coordinate targetCoord) {
 	cmd.queueSetting = this->shiftHeld() ? QUEUE_BACK : QUEUE_OVERWRITE;
 	cmd.targetCoord = targetCoord;
 	
-	this->animations.insert(newAnimation("gotocoord-animation", targetCoord, 1));
+	this->playAnimation("gotocoord-animation", targetCoord, 3);
 
 	game.handleCommand(cmd);
 }
@@ -410,7 +411,7 @@ void UserInterface::issueAttackCmd(UnitID targetID) {
 	cmd.queueSetting = this->shiftHeld() ? QUEUE_BACK : QUEUE_OVERWRITE;
 	cmd.targetID = targetID;
 	
-	this->animations.insert(newAnimation("attackmove-animation", this->game.getUnit(targetID).xy, 1));
+	this->playAnimation("attackmove-animation", this->game.getUnit(targetID).xy, 3);
 
 	game.handleCommand(cmd);
 }
@@ -421,7 +422,7 @@ void UserInterface::issueAttackMoveCmd(Coordinate targetCoord) {
 	cmd.queueSetting = this->shiftHeld() ? QUEUE_BACK : QUEUE_OVERWRITE;
 	cmd.targetCoord = targetCoord;
 	
-	this->animations.insert(newAnimation("attackmove-animation", targetCoord, 1));
+	this->playAnimation("attackmove-animation", targetCoord, 3);
 
 	game.handleCommand(cmd);
 }
@@ -437,4 +438,8 @@ void UserInterface::issueBuildCmd(UnitTemplateID id) {
 	cmd.commanded = this->selectedUnits;
 	cmd.unitTemplateID = id;
 	game.handleCommand(cmd);
+}
+
+void UserInterface::playAnimation(std::string animationName, Coordinate pos, int tickTime) {
+	this->animations.insert(newAnimation(animationName, pos, tickTime));
 }

@@ -38,13 +38,13 @@ public:
 
 	void issueBuildCmd(UnitTemplateID s);
 
+	void playAnimation(std::string animation, Coordinate pos, int tickTime);
+
 	Game& game;
 
 	TeamID teamID;
-	
-	float viewMagnification;
 
-	std::set<std::unique_ptr<Animation> > animations;
+	float viewMagnification;
 
 	Coordinate viewCenter;
 private:
@@ -59,6 +59,7 @@ private:
 	int viewCenterMaxSpeed;
 
 	std::shared_ptr<Spritesheet> uiWireframe;
+	std::set<std::unique_ptr<Animation> > animations;
 
 	int frame;
 
