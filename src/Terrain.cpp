@@ -91,60 +91,69 @@ void Terrain::updateDrawTile(int x, int y) {
 	topX = -1; // same
 	
 	if (center == GRASS) {
-		bottomX = 2, bottomY = 0;
+		bottomX = 2+(x+y)%2, bottomY = 0;
 	}
 
 	else if (center == WATER) {
-		bottomX = 5, bottomY=8;
-/*		if (n == WATER && w == WATER && s == WATER && e == WATER
-		&& nw == WATER && ne == WATER && sw == WATER && se == WATER)
+		int surroundingWaterCount = (int)(n==WATER) + (int)(w==WATER) + (int)(s==WATER) + (int)(e==WATER) + (int)(nw==WATER) + (int)(ne==WATER) + (int)(sw==WATER) + (int)(se==WATER);
+		
+		if (surroundingWaterCount == 8)
 			bottomX = 5, bottomY = 8;
+		else {
+			bottomX = 0, bottomY = 2;
 
-		else if (n == WATER && e == WATER && w != WATER && s != WATER
-		&& ne != WATER )
-			resource = "tile-river-grass-bendNE";
-		else if (n == WATER && e != WATER && w == WATER && s != WATER
-		&& nw != WATER )
-			resource = "tile-river-grass-bendNW";
-		else if (n != WATER && e == WATER && w != WATER && s == WATER
-		&& se != WATER )
-			resource = "tile-river-grass-bendSE";
-		else if (n != WATER && e != WATER && w == WATER && s == WATER
-		&& sw != WATER )
-			resource = "tile-river-grass-bendSW";
+			if (surroundingWaterCount == 7) {
+				if (ne != WATER)
+					topX = 6, topY = 9;
+				else if (se != WATER)
+					topX = 7, topY = 9;
+				else if (nw != WATER)
+					topX = 8, topY = 9;
+				else if (sw != WATER)
+					topX = 9, topY = 9;
+			}
 
-		else if (n == WATER && s == WATER && e != WATER && w != WATER)
-			resource = "tile-river-grass-straightN";
-		else if (n != WATER && s != WATER && e == WATER && w == WATER)
-			resource = "tile-river-grass-straightE";
+			else if (surroundingWaterCount == 4 && n != WATER && w != WATER && s != WATER && e != WATER) 
+				topX=2, topY=10;
 
-		else if (n == GRASS && w == GRASS)
-			resource = "tile-ocean-grass-NW";
-		else if (n == GRASS && e == GRASS)
-			resource = "tile-ocean-grass-NE";
-		else if (s == GRASS && w == GRASS)
-			resource = "tile-ocean-grass-SW";
-		else if (s == GRASS && e == GRASS)
-			resource = "tile-ocean-grass-SE";
-		else if (n == GRASS)
-			resource = "tile-ocean-grass-N";
-		else if (e == GRASS)
-			resource = "tile-ocean-grass-E";
-		else if (s == GRASS)
-			resource = "tile-ocean-grass-S";
-		else if (w == GRASS)
-			resource = "tile-ocean-grass-W";
-		else if (nw == GRASS)
-			resource = "tile-ocean-grass-cornerNW";
-		else if (ne == GRASS)
-			resource = "tile-ocean-grass-cornerNE";
-		else if (sw == GRASS)
-			resource = "tile-ocean-grass-cornerSW";
-		else if (se == GRASS)
-			resource = "tile-ocean-grass-cornerSE";
-		else{
-			resource = "tile-ocean";
+			else if (n == WATER && e == WATER && w != WATER && s != WATER
+			&& ne != WATER )
+				topX = 0, topY = 9;
+			else if (n == WATER && e != WATER && w == WATER && s != WATER
+			&& nw != WATER )
+				topX=4, topY=9;
+			else if (n != WATER && e == WATER && w != WATER && s == WATER
+			&& se != WATER )
+				topX=3, topY=9;
+			else if (n != WATER && e != WATER && w == WATER && s == WATER
+			&& sw != WATER )
+				topX=5, topY=9;
+
+			else if (n == WATER && s == WATER && e != WATER && w != WATER)
+				topX=1, topY=9;
+			else if (n != WATER && s != WATER && e == WATER && w == WATER)
+				topX=2, topY=9;
+
+			else if (n != WATER && nw != WATER && w != WATER)
+				topX=3, topY=8; //resource = "tile-ocean-grass-NW";
+			else if (n != WATER && ne != WATER && e != WATER)
+				topX=9, topY=8; //resource = "tile-ocean-grass-NE";
+			else if (s != WATER && sw != WATER && w != WATER)
+				topX=0, topY=8; //resource = "tile-ocean-grass-SW";
+			else if (s != WATER && se != WATER && e != WATER)
+				topX=6, topY=8; //resource = "tile-ocean-grass-SE";
+
+			else if (n != WATER)
+				topX=7, topY=8;//resource = "tile-ocean-grass-N";
+			else if (e != WATER)
+				topX=8, topY=8;//resource = "tile-ocean-grass-E";
+			else if (s != WATER)
+				topX=2, topY=8;//resource = "tile-ocean-grass-S";
+			else if (w != WATER)
+				topX=1, topY=8;//resource = "tile-ocean-grass-W";
+
 		}
+		/*
 	}
 
 	else if (center == ROAD) {
