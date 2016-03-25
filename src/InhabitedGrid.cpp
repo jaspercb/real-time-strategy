@@ -66,7 +66,7 @@ bool unitInRectangle(Unit& u, Coordinate b, Coordinate c) {
 
 InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int numTeams):
 	game(game),
-	cellWidth(3 * PIXEL_WIDTH * 32),
+	cellWidth(6 * PIXEL_WIDTH * 32),
 	tileWidth(PIXEL_WIDTH * 32),
 	emptyUnitIDset(std::make_shared<std::set<UnitID> >()),
 	w(w),
