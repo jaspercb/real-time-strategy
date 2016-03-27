@@ -27,6 +27,8 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamCo
 
 	buildslots_ = 0;
 
+	selectable_ = true;
+
 	std::string s;
 
 	while (is>>s) {
@@ -82,6 +84,11 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamCo
 		else if (s=="buildslots") {
 			is>>buildslots_;
 		}
+
+		else if (s=="selectable") {
+			is>>selectable_;
+		}
+
 		else if (s=="}") {
 			return;
 		}

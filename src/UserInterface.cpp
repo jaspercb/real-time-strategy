@@ -173,7 +173,9 @@ void UserInterface::updateSelectedUnits() {
 		UnitID closestUnitID = 0;
 		for (auto &i : this->game.inhabitedGrid.unitsInCircle(center, 2000) ) {
 			const Unit& unit = this->game.getUnit(i);
-			if (unit.teamID == this->teamID && pythagoreanDistanceLessThan(unit.xy, center, std::min(closestDistance, (Distance)unit.getUnitTemplate().radius()+500 ))) {
+			if (unit.teamID == this->teamID
+				&& pythagoreanDistanceLessThan(unit.xy, center, std::min(closestDistance, (Distance)unit.getUnitTemplate().radius()+500 ))
+				&& unit.getUnitTemplate().isSelectable() ) {
 				closestUnitID = i;
 			}
 		}
@@ -199,7 +201,7 @@ void UserInterface::updateSelectedUnits() {
 	}
 	else{
 		auto lambda = [this](Unit& u) {
-			return coordInRect(this->screenCoordinateFromObjective(u.xy) , this->selectionBoxCorner1, this->selectionBoxCorner2) && this->game.teamsAreFriendly(this->teamID, u.teamID);
+			return u.getUnitTemplate().isSelectable() && coordInRect(this->screenCoordinateFromObjective(u.xy) , this->selectionBoxCorner1, this->selectionBoxCorner2) && this->game.teamsAreFriendly(this->teamID, u.teamID);
 		};
 
 		for (auto& unitID_unit : this->game.unitsByID) {

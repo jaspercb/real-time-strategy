@@ -32,6 +32,7 @@ public:
 	inline int radius() const {return radius_;};
 	inline int buildtime() const {return buildtime_;};
 	inline int buildslots() const {return buildslots_;};
+	inline bool isSelectable() const {return selectable_;};
 	float getDamageEffectivenessVsHP(DamageType) const;
 	float getDamageEffectivenessVsES(DamageType) const;
 
@@ -57,4 +58,6 @@ private:
 	int buildtime_;
 	
 	int buildslots_;
+
+	bool selectable_;
 };
