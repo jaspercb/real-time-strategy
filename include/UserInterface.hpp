@@ -53,8 +53,8 @@ private:
 	bool drawSelectionBox;
 	Coordinate selectionBoxCorner1;
 	Coordinate selectionBoxCorner2;
-	std::vector<UnitID> selectedUnits;
-	std::vector<UnitID> previousSelectedUnits;
+	std::set<UnitID> selectedUnits;
+	std::set<UnitID> previousSelectedUnits;
 	int cameraVx, cameraVy;
 	int viewCenterMaxSpeed;
 
@@ -64,7 +64,7 @@ private:
 
 	int frame;
 
-	std::array<std::vector<UnitID>, 10> controlGroups;
+	std::array<std::set<UnitID>, 10> controlGroups;
 
 	const Uint8 *keyDown;
 

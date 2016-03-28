@@ -207,9 +207,9 @@ void UserInterface::updateSelectedUnits() {
 			}
 		}
 
-		if (this->previousSelectedUnits.size() == 1 && this->previousSelectedUnits[0]==closestUnitID) {
+		if (this->previousSelectedUnits.size() == 1 && *this->previousSelectedUnits.begin()==closestUnitID) {
 			// double-clicking a unit selects all visible units with the same type
-			UnitID prevUnitID = this->previousSelectedUnits[0];
+			UnitID prevUnitID = *this->previousSelectedUnits.begin();
 			UnitTemplateID prevUnitTemplateID = this->game.getUnit(prevUnitID).getUnitTemplate().name;
 			TeamID prevTeamID = this->game.getUnit(prevUnitID).teamID;
 			this->previousSelectedUnits.clear();
@@ -218,12 +218,12 @@ void UserInterface::updateSelectedUnits() {
 				if (coordInRect(this->screenCoordinateFromObjective(i.second.xy), Coordinate(0, 0), Coordinate(SCREEN_WIDTH, SCREEN_HEIGHT))
 				&& i.second.teamID == prevTeamID
 				&& i.second.teamID == prevTeamID )
-					this->selectedUnits.push_back(i.first);
+					this->selectedUnits.insert(i.first);
 			}
 		}
 
 		else if (closestUnitID){
-			this->selectedUnits.push_back(closestUnitID);
+			this->selectedUnits.insert(closestUnitID);
 		}
 	}
 	else{
@@ -233,7 +233,7 @@ void UserInterface::updateSelectedUnits() {
 
 		for (auto& unitID_unit : this->game.unitsByID) {
 			if (lambda(unitID_unit.second))
-				this->selectedUnits.push_back(unitID_unit.first);
+				this->selectedUnits.insert(unitID_unit.first);
 		}
 	}
 	
@@ -248,7 +248,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	SDL_Color waypointColor = {255, 255, 255, (Uint8) (10*std::abs( (this->frame % 18) - 9) + 64) };
 
 	// Draw paths
-	for (UnitID &i : this->selectedUnits) {
+	for (UnitID i : this->selectedUnits) {
 		Unit& u = this->game.getUnit(i);
 		std::vector<Coordinate> path = u.getStateWaypoints();
 		int numWaypoints = path.size() + 1;
@@ -270,7 +270,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	}
 
 	// Draw a little individual green selection box for each selected unit
-	for (UnitID &i : this->selectedUnits) {
+	for (UnitID i : this->selectedUnits) {
 		Unit& u = this->game.getUnit(i);
 		UnitTemplate& uTemplate = u.getUnitTemplate();
 		
@@ -354,7 +354,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 
 	int numSelectedUnits = this->selectedUnits.size();
 	if (numSelectedUnits == 1) {
-		Unit& selectedUnit = this->game.getUnit(this->selectedUnits[0]);
+		Unit& selectedUnit = this->game.getUnit(*this->selectedUnits.begin());
 		std::stringstream infostream;
 		
 		infostream<<"HP: "<<std::to_string(selectedUnit.hp)<<"/"<<std::to_string(selectedUnit.getUnitTemplate().maxHP())<<std::endl;
@@ -487,5 +487,8 @@ void UserInterface::setControlGroup(int ctrlGroupIndex) {
 }
 
 void UserInterface::switchToControlGroup(int ctrlGroupIndex) {
-	this->selectedUnits = this->controlGroups[ctrlGroupIndex];
+	if (this->shiftHeld())
+		this->selectedUnits.insert(this->controlGroups[ctrlGroupIndex].begin(), this->controlGroups[ctrlGroupIndex].end());
+	else
+		this->selectedUnits = this->controlGroups[ctrlGroupIndex];
 }

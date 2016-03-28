@@ -2,7 +2,7 @@
 
 #include "typedefs.hpp"
 
-#include <vector>
+#include <set>
 
 class Unit;
 
@@ -27,7 +27,7 @@ class Command {
 		Command(CommandType cmdtype_);
 		CommandType cmdtype;
 		QueueSetting queueSetting;
-		std::vector<UnitID> commanded;
+		std::set<UnitID> commanded;
 		UnitID targetID;
 		Coordinate targetCoord;
 		UnitTemplateID unitTemplateID;
