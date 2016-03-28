@@ -5,6 +5,10 @@ SRCDIR := src
 BUILDDIR := build
 TARGET := bin/rts
 
+ccred=$(shell echo "\033[0;31m")
+ccbold=$(shell echo "\033[1m")
+ccend=$(shell echo "\033[0m")
+
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
@@ -13,12 +17,11 @@ LIB := -lSDL2 -lSDL2_image -lSDL2_ttf
 INC := -I include
 
 $(TARGET): $(OBJECTS)
-	@echo " Linking..."
-	@echo " $(CC) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB);
+	@echo "    Linking... $(ccbold)$(TARGET)$(ccend)"; $(CC) $^ -o $(TARGET) $(LIB);
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
-	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<;"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<;
+	@echo "    Compiling  $(ccbold)$<$(ccend)"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<;
 
 clean:
 	@echo " Cleaning..."; 
