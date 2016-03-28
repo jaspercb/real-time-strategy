@@ -100,6 +100,39 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 	else if (event.type == SDL_KEYDOWN) {
 		if (!event.key.repeat) {
 			switch(event.key.keysym.sym) {
+				
+				case SDLK_1: {
+					if (this->ctrlHeld())
+						this->hotkeyGroups[0] = this->selectedUnits;
+					else
+						this->selectedUnits = this->hotkeyGroups[0];
+					break;
+				}
+
+				case SDLK_2: {
+					if (this->ctrlHeld())
+						this->hotkeyGroups[1] = this->selectedUnits;
+					else
+						this->selectedUnits = this->hotkeyGroups[1];
+					break;
+				}
+
+				case SDLK_3: {
+					if (this->ctrlHeld())
+						this->hotkeyGroups[2] = this->selectedUnits;
+					else
+						this->selectedUnits = this->hotkeyGroups[2];
+					break;
+				}
+
+				case SDLK_4: {
+					if (this->ctrlHeld())
+						this->hotkeyGroups[3] = this->selectedUnits;
+					else
+						this->selectedUnits = this->hotkeyGroups[3];
+					break;
+				}
+
 				case SDLK_UP: {
 					this->cameraVy -= this->viewCenterMaxSpeed;
 					this->cameraVx -= this->viewCenterMaxSpeed;
