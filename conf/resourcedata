@@ -123,6 +123,11 @@ ui-mockup {
 	sheetsize 1 1
 }
 
+ui-ctrlgroup-bar {
+	filepath ../svgs/ui-ctrlgroup-bar.png
+	size 60 40
+	sheetsize 1 1
+}
 
 scout-spritesheet {
 	filepath 	../svgs/scout.png
@@ -152,12 +157,6 @@ ground-dummy-spritesheet {
 	shouldApplyTeamColor 1
 }
 
-inconsolata-font {
-	filepath 	../resources/inconsolata-font.png
-	size 19 40
-	sheetsize 32 8
-}
-
 hpbar-full {
 	filepath ../resources/hpbar-full.png
 	size 108 9
@@ -169,8 +168,6 @@ hpbar-empty {
 	size 108 9
 	sheetsize 1 1
 }
-
-
 
 map-default {
 	filepath ../spike/map-test.png

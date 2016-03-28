@@ -59,6 +59,7 @@ private:
 	int viewCenterMaxSpeed;
 
 	std::shared_ptr<Spritesheet> uiWireframe;
+	std::shared_ptr<Spritesheet> uiControlGroupTab;
 	std::set<std::unique_ptr<Animation> > animations;
 
 	int frame;

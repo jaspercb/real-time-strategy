@@ -24,6 +24,7 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 	viewCenterMaxSpeed(2500),
 	keyDown( SDL_GetKeyboardState(NULL) ),
 	uiWireframe(gResourceManager->get("ui-mockup")),
+	uiControlGroupTab(gResourceManager->get("ui-ctrlgroup-bar")),
 	frame(0)
 {
 	
@@ -296,18 +297,21 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 }
 
 void UserInterface::renderHUD( SDL_Renderer* renderer ) {
+	int cx = 0;
+	for (auto &i : this->controlGroups) {
+		cx += 55;
+		if (i.size()) {
+			this->uiControlGroupTab->render(gRenderer, 0, 0, 290+cx, 720, 1.0);
+			gFontManager->renderLine(std::to_string(i.size()), 280+cx, 700, SDL_Colors::WHITE);
+		}
+	}
+
 	if (this->drawSelectionBox) {
 		SDL_Rect selectionBox;
 		renderRectBorder(renderer, selectionBoxCorner1, selectionBoxCorner2, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
 	}
 
 	this->uiWireframe->render(gRenderer, 0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1.0);
-
-	int cx = 0;
-	for (auto &i : this->controlGroups) {
-		cx += 40;
-		gFontManager->renderLine(std::to_string(i.size()), 320+cx, 700, SDL_Colors::WHITE);
-	}
 
 }
 
