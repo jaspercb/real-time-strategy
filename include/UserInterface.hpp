@@ -64,6 +64,8 @@ private:
 
 	int frame;
 
+	std::array<std::vector<UnitID>, 10> controlGroups;
+
 	const Uint8 *keyDown;
 
 	bool shiftHeld() {
@@ -74,5 +76,6 @@ private:
 		return this->keyDown[SDL_SCANCODE_LCTRL] || this->keyDown[SDL_SCANCODE_RCTRL];
 	}
 
-	std::array<std::vector<UnitID>, 10> controlGroups;
+	void setControlGroup(int ctrlGroupIndex);
+	void switchToControlGroup(int ctrlGroupIndex);
 };

@@ -102,37 +102,30 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 		if (!event.key.repeat) {
 			switch(event.key.keysym.sym) {
 				
-				case SDLK_1: {
-					if (this->ctrlHeld())
-						this->controlGroups[0] = this->selectedUnits;
-					else
-						this->selectedUnits = this->controlGroups[0];
-					break;
-				}
+				#define CtrlGroupLogic(x) if (this->ctrlHeld()) this->setControlGroup(x); else this->switchToControlGroup(x); break;
 
-				case SDLK_2: {
-					if (this->ctrlHeld())
-						this->controlGroups[1] = this->selectedUnits;
-					else
-						this->selectedUnits = this->controlGroups[1];
-					break;
-				}
+				case SDLK_1:
+					CtrlGroupLogic(0);
+				case SDLK_2:
+					CtrlGroupLogic(1);
+				case SDLK_3:
+					CtrlGroupLogic(2);
+				case SDLK_4:
+					CtrlGroupLogic(3);
+				case SDLK_5:
+					CtrlGroupLogic(4);
+				case SDLK_6:
+					CtrlGroupLogic(5);
+				case SDLK_7:
+					CtrlGroupLogic(6);
+				case SDLK_8:
+					CtrlGroupLogic(7);
+				case SDLK_9:
+					CtrlGroupLogic(8);
+				case SDLK_0:
+					CtrlGroupLogic(9);
 
-				case SDLK_3: {
-					if (this->ctrlHeld())
-						this->controlGroups[2] = this->selectedUnits;
-					else
-						this->selectedUnits = this->controlGroups[2];
-					break;
-				}
-
-				case SDLK_4: {
-					if (this->ctrlHeld())
-						this->controlGroups[3] = this->selectedUnits;
-					else
-						this->selectedUnits = this->controlGroups[3];
-					break;
-				}
+				#undef CtrlGroupLogic
 
 				case SDLK_UP: {
 					this->cameraVy -= this->viewCenterMaxSpeed;
@@ -487,4 +480,12 @@ void UserInterface::issueBuildCmd(UnitTemplateID id) {
 
 void UserInterface::playAnimation(std::string animationName, Coordinate pos, int tickTime) {
 	this->animations.insert(newAnimation(animationName, pos, tickTime));
+}
+
+void UserInterface::setControlGroup(int ctrlGroupIndex) {
+	this->controlGroups[ctrlGroupIndex] = this->selectedUnits;
+}
+
+void UserInterface::switchToControlGroup(int ctrlGroupIndex) {
+	this->selectedUnits = this->controlGroups[ctrlGroupIndex];
 }
