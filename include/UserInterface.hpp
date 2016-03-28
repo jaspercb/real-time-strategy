@@ -73,5 +73,5 @@ private:
 		return this->keyDown[SDL_SCANCODE_LCTRL] || this->keyDown[SDL_SCANCODE_RCTRL];
 	}
 
-	std::array<std::vector<UnitID>, 10> hotkeyGroups;
+	std::array<std::vector<UnitID>, 10> controlGroups;
 };

@@ -103,33 +103,33 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 				
 				case SDLK_1: {
 					if (this->ctrlHeld())
-						this->hotkeyGroups[0] = this->selectedUnits;
+						this->controlGroups[0] = this->selectedUnits;
 					else
-						this->selectedUnits = this->hotkeyGroups[0];
+						this->selectedUnits = this->controlGroups[0];
 					break;
 				}
 
 				case SDLK_2: {
 					if (this->ctrlHeld())
-						this->hotkeyGroups[1] = this->selectedUnits;
+						this->controlGroups[1] = this->selectedUnits;
 					else
-						this->selectedUnits = this->hotkeyGroups[1];
+						this->selectedUnits = this->controlGroups[1];
 					break;
 				}
 
 				case SDLK_3: {
 					if (this->ctrlHeld())
-						this->hotkeyGroups[2] = this->selectedUnits;
+						this->controlGroups[2] = this->selectedUnits;
 					else
-						this->selectedUnits = this->hotkeyGroups[2];
+						this->selectedUnits = this->controlGroups[2];
 					break;
 				}
 
 				case SDLK_4: {
 					if (this->ctrlHeld())
-						this->hotkeyGroups[3] = this->selectedUnits;
+						this->controlGroups[3] = this->selectedUnits;
 					else
-						this->selectedUnits = this->hotkeyGroups[3];
+						this->selectedUnits = this->controlGroups[3];
 					break;
 				}
 
@@ -302,6 +302,12 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 	}
 
 	this->uiWireframe->render(gRenderer, 0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1.0);
+
+	int cx = 0;
+	for (auto &i : this->controlGroups) {
+		cx += 40;
+		gFontManager->renderLine(std::to_string(i.size()), 320+cx, 700, SDL_Colors::WHITE);
+	}
 
 }
 
