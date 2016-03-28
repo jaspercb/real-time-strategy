@@ -68,5 +68,10 @@ private:
 	bool shiftHeld() {
 		return this->keyDown[SDL_SCANCODE_LSHIFT] || this->keyDown[SDL_SCANCODE_RSHIFT];
 	}
-};
 
+	bool ctrlHeld() {
+		return this->keyDown[SDL_SCANCODE_LCTRL] || this->keyDown[SDL_SCANCODE_RCTRL];
+	}
+
+	std::array<std::vector<UnitID>, 10> hotkeyGroups;
+};
