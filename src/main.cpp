@@ -62,6 +62,7 @@ void cleanup_SDL() {
 	delete gUserInterface;
 	delete game;
 
+	SDL_DestroyRenderer(gRenderer);
 	SDL_DestroyWindow( gWindow );
 	SDL_Quit();
 }

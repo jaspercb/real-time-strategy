@@ -31,8 +31,6 @@ UserInterface::UserInterface(Game& g, TeamID teamID):
 }
 
 int UserInterface::handleInputEvents(){
-	SDL_PumpEvents();
-	
 	SDL_Event event;
 
 	while(SDL_PollEvent(&event)) {

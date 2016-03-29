@@ -21,6 +21,11 @@ FontManager::FontManager() {
 
 }
 
+FontManager::~FontManager() {
+	TTF_CloseFont(this->font);
+	this->font = NULL; // just to be safe
+}
+
 int FontManager::renderLine(std::string line, int x, int y, SDL_Color color) {
 	// Returns the height of the line of text, in pixels
 	SDL_Surface* surfaceMessage = TTF_RenderText_Blended(this->font, line.c_str(), color);
