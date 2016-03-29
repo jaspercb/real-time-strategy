@@ -219,23 +219,32 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, int alp
 			this->drawDying(renderer, unit.drawFacingAngle, ui, pos, std::min(this->deathCycleLength -1, std::abs(unit.drawAnimationStep)), dy);
 			break;
 	}
-	//if (unit.animationState != ANIMSTATE_DYING) {
-	//	draw_HP_bar(renderer, unit, pos.x, pos.y, ui->viewMagnification);
-	//}
-
 
 	SDL_SetTextureAlphaMod( this->spritesheet->sheet, alphaMulti);
 }
 
-void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY, const float magnification) {
-	// Draws an HP bar centered at (renderX, renderY)
-	const int granularity = 50;
-	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
+int Drawer::spriteXFromAngle(int drawFacingAngle) {
+	// Why is this so complicated? Because spritesheets only give 180 degrees of imagery.
+	// Because of the above, instead of taking the angle and modding by (2*numFacingDirections), we want to take the
+	// angle, mod by (2*numFacingDirections - 2), then add an offset to avoid double-counting the 180 degree image
+	if (this->numFacingDirections==1) {
+		return 0;
+	} else{
+		int x = (int)std::round(((drawFacingAngle+135+360)*(2*numFacingDirections-2)/360.0)) % (2*numFacingDirections - 2);
+		if (x>=numFacingDirections)
+			x++;
+		return x;
+	}
+}
 
-	int HP = unit.hp;
-	int maxHP = unit.getUnitTemplate().maxHP();
+void drawHPbar(SDL_Renderer* renderer, int HP, int maxHP, const Coordinate renderLocation, const float magnification, int dy /* = 0 */) {
+	// Draws an HP bar centered at (renderX, renderY+dy)
+	const int granularity = 50;
 
 	SDL_Rect fullclip, emptyclip, tclip;
+
+	int renderX = renderLocation.x;
+	int renderY = renderLocation.y;
 
 	int barlength = 5+6*maxHP/granularity;
 
@@ -243,7 +252,7 @@ void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const in
 	fullclip.h = 10;
 	fullclip.x = 0;
 	fullclip.y = 0;
-	
+
 	emptyclip.w = barlength-fullclip.w;
 	emptyclip.h = 10;
 	emptyclip.x = 107-emptyclip.w;
@@ -260,13 +269,9 @@ void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const in
 	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-empty", COLOR_NULL)->sheet, &emptyclip, &tclip);
 }
 
-int Drawer::spriteXFromAngle(int drawFacingAngle) {
-	if (this->numFacingDirections==1) {
-		return 0;
-	} else{
-		int x = (int)std::round(((drawFacingAngle+135+360)*(2*numFacingDirections-2)/360.0)) % (2*numFacingDirections - 2);
-		if (x>=numFacingDirections)
-			x++;
-		return x;
+void drawHPbar(SDL_Renderer* renderer, const Unit& unit, UserInterface* ui) {
+	if (unit.animationState != ANIMSTATE_DYING) {
+		int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
+		drawHPbar(renderer, unit.hp, unit.getUnitTemplate().maxHP(), ui->screenCoordinateFromObjective(unit.xy), ui->viewMagnification, dy);
 	}
 }

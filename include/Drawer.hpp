@@ -44,4 +44,5 @@ class Drawer {
 		int spriteXFromAngle(int drawFacingAngle);
 };
 
-void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY, const float magnification);
+void drawHPbar(SDL_Renderer* renderer, int HP, int maxHP, const Coordinate renderLocation, const float magnification, int dy=0);
+void drawHPbar(SDL_Renderer* renderer, const Unit& unit, UserInterface* ui);
