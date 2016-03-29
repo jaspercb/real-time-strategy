@@ -51,7 +51,7 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamCo
 		}
 		else if (s=="drawer") {
 			is>>s; // to clean out the brace
-			drawer = new Drawer(is, teamColor);
+			drawer = Drawer(is, teamColor);
 		}
 		else if (s=="weapon") {
 			is>>s; // to get rid of the trailing {

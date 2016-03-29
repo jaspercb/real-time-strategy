@@ -19,6 +19,10 @@ int positiveRemainder(int a, int b) {
 	return ((a%b)+b)%b;
 }
 
+Drawer::Drawer() {
+	
+}
+
 Drawer::Drawer(std::shared_ptr<Spritesheet> sp):
 	spritesheet(sp)
 	{

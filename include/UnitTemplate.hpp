@@ -6,12 +6,10 @@
 
 #include "EnvironmentSpec.hpp"
 #include "WeaponTemplate.hpp"
+#include "Drawer.hpp"
 #include "enums.hpp"
 
-class Drawer;
-
-class UnitTemplate
-{
+class UnitTemplate {
 public:
 	UnitTemplate();
 	UnitTemplate(UnitTemplateID id, std::ifstream, TeamColor teamColor);
@@ -34,7 +32,7 @@ public:
 	std::string name;
 	std::vector<WeaponTemplate> weaponTemplates;
 	EnvironmentSpec dimension;
-	Drawer* drawer;
+	Drawer drawer;
 
 	std::vector<UnitTemplateID> spawnables; // units this unit can spawn
 	std::vector<UnitTemplateID> morphables; // units this unit can morph into

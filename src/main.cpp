@@ -81,10 +81,7 @@ int main() {
 
 		Team& t1 = game->getTeam(tID1);
 		Team& t2 = game->getTeam(tID2);
-		
-		for (int i=0; i<10; i++) {
-			/*TeamID tID = */game->createTeam();
-		}
+
 		t1.loadUnitTemplate("../conf/units/townhall");
 		t1.loadUnitTemplate("../conf/units/bomber");
 

@@ -227,7 +227,7 @@ void Unit::attack(Unit& target){
 	// If the attacking animation has completed, fires all weapons.
 	UnitTemplate& unitTemplate = this->getUnitTemplate();
 	int ticksUntilCanFire = this->weapons_[0].ticksUntilCanFire;
-	int mainWeaponAnimationLength = unitTemplate.drawer->attackCycleLength;
+	int mainWeaponAnimationLength = unitTemplate.drawer.attackCycleLength;
 
 
 	switch (this->animationState){
@@ -238,10 +238,10 @@ void Unit::attack(Unit& target){
 		case ANIMSTATE_ATTACKING: {
 			if (target.unitID == this->attackTargetID) { // to ensure a player can't start targeting one unit, then instantly switch to another
 				//debugLog(this->drawAnimationStep+1);
-				if (this->drawAnimationStep < unitTemplate.drawer->attackCycleLength) {
+				if (this->drawAnimationStep < unitTemplate.drawer.attackCycleLength) {
 					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.y-this->xy.y, target.xy.x-this->xy.x); // turn to face target
 				}
-				else if (this->drawAnimationStep >= unitTemplate.drawer->attackCycleLength) {
+				else if (this->drawAnimationStep >= unitTemplate.drawer.attackCycleLength) {
 					this->drawFacingAngle = (180/M_PI) * std::atan2(target.xy.y-this->xy.y, target.xy.x-this->xy.x); // turn to face target
 					for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
 						it->fire(target);
@@ -283,7 +283,7 @@ void Unit::startBuilding(UnitTemplateID unitTemplateID) {
 
 void Unit::draw(SDL_Renderer* renderer, UserInterface* ui) {
 	int alpha = ui->game.inhabitedGrid.getCoordVisibility(this->xy, ui->teamID);
-	this->getUnitTemplate().drawer->draw(renderer, *this, ui, alpha);
+	this->getUnitTemplate().drawer.draw(renderer, *this, ui, alpha);
 }
 
 bool Unit::isDead() const {

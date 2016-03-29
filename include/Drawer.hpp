@@ -12,6 +12,7 @@ class UserInterface;
 class Drawer {
 	// Class that attaches to a Unit and manages all the data that is only relevant to drawing
 	public:
+		Drawer();
 		Drawer(std::shared_ptr<Spritesheet> sp);
 		Drawer(std::ifstream&, TeamColor teamColor);
 		~Drawer();
