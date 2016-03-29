@@ -261,5 +261,12 @@ void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const in
 }
 
 int Drawer::spriteXFromAngle(int drawFacingAngle) {
-	return ( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections);
+	if (this->numFacingDirections==1) {
+		return 0;
+	} else{
+		int x = (int)std::round(((drawFacingAngle+135+360)*(2*numFacingDirections-2)/360.0)) % (2*numFacingDirections - 2);
+		if (x>=numFacingDirections)
+			x++;
+		return x;
+	}
 }
