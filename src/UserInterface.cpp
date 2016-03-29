@@ -372,7 +372,11 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 
 		gFontManager->renderMultipleLines(infostream.str(), 320, 750, SDL_Colors::WHITE);
 
-
+		for (auto &i : selectedUnit.builder->building) {
+			if (Builder::ticksUntilDone(i)) {
+				this->game.getTeam(this->teamID).unitTemplates.at(i.front().unitTemplateID).drawer.drawIdle(gRenderer, (frame*3)%360, this, Coordinate{650, 800}, 0, 0);
+			}
+		}
 	}
 	else if (numSelectedUnits > 1) {
 		int text = this->selectedUnits.size();

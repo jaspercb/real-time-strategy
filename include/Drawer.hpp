@@ -40,6 +40,8 @@ class Drawer {
 
 	private:
 		std::shared_ptr<Spritesheet> spritesheet, shadowsheet;
+
+		int spriteXFromAngle(int drawFacingAngle);
 };
 
 void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const int renderY, const float magnification);

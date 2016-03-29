@@ -20,7 +20,7 @@ int positiveRemainder(int a, int b) {
 }
 
 Drawer::Drawer() {
-	
+
 }
 
 Drawer::Drawer(std::shared_ptr<Spritesheet> sp):
@@ -119,14 +119,14 @@ Drawer::~Drawer() {
 void Drawer::drawIdle(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
 	if (NULL != shadowsheet)
 		shadowsheet->render(renderer,
-			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			spriteXFromAngle(drawFacingAngle),
 			this->idleCycleStart + frame,
 			drawPos.x,
 			drawPos.y + dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
-			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			spriteXFromAngle(drawFacingAngle),
 			idleCycleStart + frame,
 			drawPos.x,
 			drawPos.y + dy,
@@ -136,14 +136,14 @@ void Drawer::drawIdle(SDL_Renderer* renderer, int drawFacingAngle, UserInterface
 void Drawer::drawWalking(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
 	if (NULL != shadowsheet)
 		shadowsheet->render(renderer,
-			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			spriteXFromAngle(drawFacingAngle),
 			this->walkCycleStart + frame,
 			drawPos.x,
 			drawPos.y +  dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
-			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			spriteXFromAngle(drawFacingAngle),
 			this->walkCycleStart + frame,
 			drawPos.x,
 			drawPos.y + dy,
@@ -153,14 +153,14 @@ void Drawer::drawWalking(SDL_Renderer* renderer, int drawFacingAngle, UserInterf
 void Drawer::drawAttacking(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
 	if (NULL != shadowsheet)
 		shadowsheet->render(renderer,
-			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			spriteXFromAngle(drawFacingAngle),
 			this->attackCycleStart + frame,
 			drawPos.x,
 			drawPos.y + dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
-			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			spriteXFromAngle(drawFacingAngle),
 			this->attackCycleStart + frame,
 			drawPos.x,
 			drawPos.y + dy,
@@ -171,7 +171,7 @@ void Drawer::drawDying(SDL_Renderer* renderer, int drawFacingAngle, UserInterfac
 	if (this->deathCycleVertical) {
 		if (NULL != spritesheet)
 			spritesheet->render(renderer,
-				( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+				spriteXFromAngle(drawFacingAngle),
 				this->deathCycleStart + frame,
 				drawPos.x,
 				drawPos.y + dy,
@@ -258,4 +258,8 @@ void draw_HP_bar(SDL_Renderer* renderer, Unit& unit, const int renderX, const in
 	tclip.x += magnification*fullclip.w;
 	tclip.w = magnification*emptyclip.w;
 	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-empty", COLOR_NULL)->sheet, &emptyclip, &tclip);
+}
+
+int Drawer::spriteXFromAngle(int drawFacingAngle) {
+	return ( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections);
 }
