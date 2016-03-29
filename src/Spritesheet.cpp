@@ -142,13 +142,12 @@ void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int r
 	assert(spriteX>=0);
 	assert(spriteY>=0);
 
-	this->tclip.x = renderX - magnification*this->spriteW/2;
-	this->tclip.y = renderY - magnification*this->spriteH/2;
+	this->tclip.x = renderX - magnification*this->spriteW/2 -1;
+	this->tclip.y = renderY - magnification*this->spriteH/2 -1;
 
-	this->tclip.w = magnification*this->clip.w;
-	this->tclip.h = magnification*this->clip.h;
+	this->tclip.w = std::ceil(magnification*(this->clip.w))+2;
+	this->tclip.h = std::ceil(magnification*(this->clip.h))+2;
 
-	this->clip.x = offsetX + spriteX*(spriteW+gapX);
 	this->clip.y = offsetY + spriteY*(spriteH+gapY);
 
 	if (spriteX>=2*spritesX) {
