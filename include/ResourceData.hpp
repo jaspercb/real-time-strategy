@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 struct ResourceData{
 	std::string filepath;
 	int spriteW, spriteH;

@@ -245,7 +245,7 @@ void rotateColorOfSurface(SDL_Surface* surface, float radians) {
 			}
 		}
 		SDL_SetPaletteColors(surface->format->palette, colors, 0, surface->format->palette->ncolors);
-		delete colors;
+		delete[] colors;
 	}
 }
 

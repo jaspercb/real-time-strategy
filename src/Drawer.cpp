@@ -112,62 +112,62 @@ Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 Drawer::~Drawer() {
 }
 
-void Drawer::drawIdle(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
+void Drawer::drawIdle(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
 	if (NULL != shadowsheet)
 		shadowsheet->render(renderer,
-			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->idleCycleStart + frame,
 			drawPos.x,
 			drawPos.y + dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
-			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			idleCycleStart + frame,
 			drawPos.x,
 			drawPos.y + dy,
 			ui->viewMagnification);
 }
 
-void Drawer::drawWalking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
+void Drawer::drawWalking(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
 	if (NULL != shadowsheet)
 		shadowsheet->render(renderer,
-			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->walkCycleStart + frame,
 			drawPos.x,
 			drawPos.y +  dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
-			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->walkCycleStart + frame,
 			drawPos.x,
 			drawPos.y + dy,
 			ui->viewMagnification);
 }
 
-void Drawer::drawAttacking(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
+void Drawer::drawAttacking(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
 	if (NULL != shadowsheet)
 		shadowsheet->render(renderer,
-			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->attackCycleStart + frame,
 			drawPos.x,
 			drawPos.y + dy,
 			ui->viewMagnification);
 	if (NULL != spritesheet)
 		spritesheet->render(renderer,
-			( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+			( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 			this->attackCycleStart + frame,
 			drawPos.x,
 			drawPos.y + dy,
 			ui->viewMagnification);
 }
 
-void Drawer::drawDying(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
+void Drawer::drawDying(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
 	if (this->deathCycleVertical) {
 		if (NULL != spritesheet)
 			spritesheet->render(renderer,
-				( (unit.drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
+				( (drawFacingAngle+135+360)*2*this->numFacingDirections/360) % (2*this->numFacingDirections),
 				this->deathCycleStart + frame,
 				drawPos.x,
 				drawPos.y + dy,
@@ -197,22 +197,22 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, int alp
 
 	switch (unit.animationState) {
 		case ANIMSTATE_IDLE: {
-			this->drawIdle(renderer, unit, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
+			this->drawIdle(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
 			break;
 		}
 		case ANIMSTATE_WALKING: {
-			this->drawWalking(renderer, unit, ui, pos, positiveRemainder(unit.drawAnimationStep, this->walkCycleLength), dy);
+			this->drawWalking(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->walkCycleLength), dy);
 			break;
 		}
 		case ANIMSTATE_ATTACKING:
 			if (unit.drawAnimationStep < 0)
-				this->drawIdle(renderer, unit, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
+				this->drawIdle(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
 			else
-				this->drawAttacking(renderer, unit, ui, pos, std::max(0, positiveRemainder(unit.drawAnimationStep, this->attackCycleLength) ), dy);
+				this->drawAttacking(renderer, unit.drawFacingAngle, ui, pos, std::max(0, positiveRemainder(unit.drawAnimationStep, this->attackCycleLength) ), dy);
 			break;
 
 		case ANIMSTATE_DYING:
-			this->drawDying(renderer, unit, ui, pos, std::min(this->deathCycleLength -1, std::abs(unit.drawAnimationStep)), dy);
+			this->drawDying(renderer, unit.drawFacingAngle, ui, pos, std::min(this->deathCycleLength -1, std::abs(unit.drawAnimationStep)), dy);
 			break;
 	}
 	//if (unit.animationState != ANIMSTATE_DYING) {
