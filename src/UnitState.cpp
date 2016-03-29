@@ -28,8 +28,10 @@ std::shared_ptr<UnitState> UnitState::handleCommand(Unit& unit, Command command)
 		case CMD_BUILD: {
 			unit.startBuilding(command.unitTemplateID);
 		}
+		default: {
+			return NULL;
+		}
 	}
-	return NULL;
 }
 
 std::shared_ptr<UnitState> UnitState::handleEvent(Unit& unit, Event event)

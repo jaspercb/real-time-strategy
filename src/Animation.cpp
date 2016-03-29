@@ -4,12 +4,12 @@
 #include "UserInterface.hpp"
 
 Animation::Animation(int numFrames, int ticksPerFrame, Coordinate coord, std::shared_ptr<Spritesheet> spritesheet) :
+	objectiveCoord(coord),
+	frame(0),
 	numFrames(numFrames),
 	ticksPerFrame(ticksPerFrame),
-	frame(0),
 	ticksSinceLastFrameUpdate(0),
-	spritesheet(spritesheet),
-	objectiveCoord(coord)
+	spritesheet(spritesheet)
 {
 
 }

@@ -27,8 +27,8 @@ class Spritesheet {
 
 		SDL_Texture* sheet;
 
-		const int spritesX, spritesY; // the number of sprites wide and high
 		const int spriteW, spriteH; // the height and width of an individual sprite
+		const int spritesX, spritesY; // the number of sprites wide and high
 		const int offsetX, offsetY; // the gap between the top-left pixel of the image and the top-left pixel of the first sprite
 		const int gapX, gapY; // the gap between successive sprites
 

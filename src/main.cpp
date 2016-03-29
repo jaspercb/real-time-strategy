@@ -83,7 +83,7 @@ int main() {
 		Team& t2 = game->getTeam(tID2);
 		
 		for (int i=0; i<10; i++) {
-			int tID = game->createTeam();
+			/*TeamID tID = */game->createTeam();
 		}
 		t1.loadUnitTemplate("../conf/units/townhall");
 		t1.loadUnitTemplate("../conf/units/bomber");

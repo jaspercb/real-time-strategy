@@ -66,12 +66,12 @@ bool unitInRectangle(Unit& u, Coordinate b, Coordinate c) {
 
 InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int numTeams):
 	game(game),
-	cellWidth(6 * PIXEL_WIDTH * 32),
-	tileWidth(PIXEL_WIDTH * 32),
-	emptyUnitIDset(std::make_shared<std::set<UnitID> >()),
 	w(w),
 	h(h),
-	numTeams(numTeams)
+	numTeams(numTeams),
+	cellWidth(6 * PIXEL_WIDTH * 32),
+	tileWidth(PIXEL_WIDTH * 32),
+	emptyUnitIDset(std::make_shared<std::set<UnitID> >())
 	{
 		visibilityGrid = new uint16_t[w*h*numTeams];
 		memset(visibilityGrid, 0, w*h*numTeams);
@@ -304,7 +304,6 @@ bool InhabitedGrid::unitOKToMoveTo(Unit &u, const Coordinate location) {
 int InhabitedGrid::getTileIndex(Coordinate tile, int team) const {
 	int x = tile.x;
 	int y = tile.y;
-	int k = team*h*w + x*h + y;
 	if ( 0<= team && team<numTeams && 0<=x && x<w && 0<=y && y<h)
 		return team*h*w + x*h + y;
 	return -1;

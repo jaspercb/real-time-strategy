@@ -67,7 +67,7 @@ class InhabitedGrid {
 		Coordinate getCellCoords(Coordinate c) const; // cells correspond to the collision grid
 		const int cellWidth;
 		const int tileWidth;
-		const std::shared_ptr<std::set<UnitID>> emptyUnitIDset;
+		const std::shared_ptr<std::set<UnitID> > emptyUnitIDset;
 		std::map<Coordinate, std::shared_ptr<std::set<UnitID> > > grid;
 
 		int getTileIndex(Coordinate tile, int team) const;

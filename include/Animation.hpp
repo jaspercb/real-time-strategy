@@ -23,11 +23,11 @@ class Animation {
 		Coordinate screenCoord;
 
 	private:
-		std::shared_ptr<Spritesheet> spritesheet;
 		int frame;
 		int numFrames;
 		int ticksPerFrame;
 		int ticksSinceLastFrameUpdate;
+		std::shared_ptr<Spritesheet> spritesheet;
 };
 
 std::unique_ptr<Animation> newAnimation(std::string animationname, Coordinate coord, int ticksPerFrame);
