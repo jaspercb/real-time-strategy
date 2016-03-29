@@ -59,6 +59,8 @@ public:
 
 	std::vector<Coordinate> getStateWaypoints(); // returns an ordered list of the coordinate targets of the unit's state queue
 
+	Game& game;
+	
 	const TeamID teamID;
 	const UnitID unitID;
 	const UnitTemplateID unitTemplateID;
@@ -73,7 +75,6 @@ public:
 	int drawAnimationStep, drawFacingAngle;
 	
 	UnitID attackTargetID;
-	Game& game;
 private:
 	std::vector<Weapon> weapons_;
 	std::deque<std::shared_ptr<UnitState> > stateQueue_;

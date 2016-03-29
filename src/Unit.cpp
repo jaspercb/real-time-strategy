@@ -17,8 +17,8 @@
 
 Unit::Unit(Game &g, UnitID uID, TeamID tID, UnitTemplateID utID, Coordinate pos):
 game(g),
-unitID(uID),
 teamID(tID),
+unitID(uID),
 unitTemplateID(utID),
 xy(pos),
 animationState(ANIMSTATE_IDLE),
@@ -42,6 +42,7 @@ attackTargetID(0)
 }
 
 Unit::Unit(Unit &&u) : 
+game(u.game),
 teamID(u.teamID),
 unitID(u.unitID),
 unitTemplateID(u.unitTemplateID),
@@ -49,7 +50,6 @@ xy(u.xy),
 dimension(u.dimension),
 hp(u.hp),
 es(u.es),
-game(u.game),
 animationState(u.animationState),
 drawAnimationStep(u.drawAnimationStep),
 drawFacingAngle(u.drawFacingAngle),
