@@ -88,8 +88,9 @@ void Terrain::updateDrawTile(int x, int y) {
 
 	int bottomX, bottomY, topX, topY;
 	bottomX = -1; // if bottomX is still -1 by the end of this program, it shouldn't be drawn
+	bottomY = -1;
 	topX = -1; // same
-	
+	topY = -1;
 	if (center == GRASS) {
 		bottomX = 2+(x+y)%2, bottomY = 0;
 	}

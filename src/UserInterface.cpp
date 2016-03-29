@@ -13,19 +13,19 @@
 #include "InhabitedGrid.hpp"
 
 UserInterface::UserInterface(Game& g, TeamID teamID):
-	quit(false),
-	drawSelectionBox(false),
 	game(g),
 	teamID(teamID),
-	viewCenter(Coordinate(0, 0)),
 	viewMagnification(1.0),
-	cameraVy(0),
+	viewCenter(Coordinate(0, 0)),
+	quit(false),
+	drawSelectionBox(false),
 	cameraVx(0),
+	cameraVy(0),
 	viewCenterMaxSpeed(2500),
-	keyDown( SDL_GetKeyboardState(NULL) ),
 	uiWireframe(gResourceManager->get("ui-mockup")),
 	uiControlGroupTab(gResourceManager->get("ui-ctrlgroup-bar")),
-	frame(0)
+	frame(0),
+	keyDown( SDL_GetKeyboardState(NULL) )
 {
 	
 }
@@ -242,8 +242,7 @@ void UserInterface::updateSelectedUnits() {
 
 void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-	
-	SDL_Rect drawRect;
+
 	SDL_Color selectionColor = {0, 255, 0, SDL_ALPHA_OPAQUE};
 	SDL_Color waypointColor = {255, 255, 255, (Uint8) (10*std::abs( (this->frame % 18) - 9) + 64) };
 
@@ -300,7 +299,6 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 	}
 
 	if (this->drawSelectionBox) {
-		SDL_Rect selectionBox;
 		renderRectBorder(renderer, selectionBoxCorner1, selectionBoxCorner2, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
 	}
 

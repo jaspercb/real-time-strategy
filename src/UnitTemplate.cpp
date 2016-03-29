@@ -3,16 +3,6 @@
 #include "Logging.hpp"
 #include "Drawer.hpp"
 
-UnitTemplate::UnitTemplate(std::string _name, int _maxHP, int _maxES, int _speed, int _radius,
-	EnvironmentSpec _dimension, std::vector<WeaponTemplate> _weaponTemplates ) :
-		name(_name),
-		maxHP_(_maxHP),
-		maxES_(_maxES),
-		speed_(_speed),
-		radius_(_radius),
-		dimension(_dimension),
-		weaponTemplates(_weaponTemplates) {debugLog("you probably shouldn't be using this constructor for UnitTemplate, but making:"+_name);}
-
 UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamColor):
 	unitTemplateID(id)
 {
@@ -109,6 +99,8 @@ float UnitTemplate::getDamageEffectivenessVsHP(DamageType dmgtype) const {
 			return 1.25;
 		case DMG_EXPLOSIVE:
 			return 1.5;
+		default:
+			return 1.0;
 	}
 }
 
@@ -122,5 +114,7 @@ float UnitTemplate::getDamageEffectivenessVsES(DamageType dmgtype) const {
 			return 0.75;
 		case DMG_EXPLOSIVE:
 			return 0.5;
+		default:
+			return 1.0;
 	}
 }

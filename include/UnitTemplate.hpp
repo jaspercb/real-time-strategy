@@ -14,13 +14,6 @@ class UnitTemplate
 {
 public:
 	UnitTemplate();
-	UnitTemplate(std::string _name,
-			int _maxHP,
-			int _maxES,
-			int _speed,
-			int _radius,
-			EnvironmentSpec _dimension,
-			std::vector<WeaponTemplate> _weaponTemplates);
 	UnitTemplate(UnitTemplateID id, std::ifstream, TeamColor teamColor);
 	UnitTemplate(std::string, TeamColor teamColor);
 	inline int maxHP() const { return maxHP_;};

@@ -6,9 +6,9 @@
 #include "Logging.hpp"
 
 Game::Game():
-	smallestUnusedUnitID_(1),
+	inhabitedGrid(InhabitedGrid(this, 64, 64, 10)),  // Currently hard coded
 	smallestUnusedTeamID_(2),
-	inhabitedGrid(InhabitedGrid(this, 64, 64, 10)) // Currently hard coded
+	smallestUnusedUnitID_(1)
 	{
 		//inhabitedGrid = InhabitedGrid(this, 100, 100, 10, 10);
 	}
@@ -48,6 +48,7 @@ Team& Game::getTeam(TeamID i) {
 		debugLog("Game::getTeam(TeamID) called with invalid TeamID: ");
 		debugLog(i);
 		debugLog(e.what());
+		throw;
 	}
 }
 
@@ -79,7 +80,7 @@ void Game::handleCommand(const Command& cmd){
 void Game::resolveCollisions() {
 	// Resolves any soft collisions between units.
 	for (auto &id_unit_pair : this->unitsByID){
-		UnitID id = id_unit_pair.first;
+		//UnitID id = id_unit_pair.first;
 		Unit& unit = id_unit_pair.second;
 		for ( auto &otherid : this->inhabitedGrid.unitsCollidingWith(unit) ) {
 			if (unit.unitID == otherid) {

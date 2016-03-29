@@ -37,8 +37,6 @@ void renderRectBorder(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Co
 }
 
 void renderLine(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color) {
-	SDL_Rect drawRect;
-	
 	SetRenderDrawColor(renderer, color);
 
 	SDL_RenderDrawLine(renderer, a.x, a.y, b.x, b.y);
