@@ -162,3 +162,11 @@ void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int r
 		SDL_RenderCopyEx( renderer, sheet, &this->clip, &this->tclip, 0 /*angle*/, NULL /*center*/, SDL_FLIP_HORIZONTAL /*flip parameter*/ );
 	}
 }
+
+void Spritesheet::setColorMod(Uint8 r, Uint8 g, Uint8 b) {
+	SDL_SetTextureColorMod(this->sheet, r, g, b);
+}
+
+void Spritesheet::resetColorMod() {
+	SDL_SetTextureColorMod(this->sheet, 255, 255, 255);
+}

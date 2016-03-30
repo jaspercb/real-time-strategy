@@ -25,6 +25,9 @@ class Spritesheet {
 
 		void render(SDL_Renderer* renderer, int spriteX, int spriteY, int renderX, int renderY, float magnification);
 
+		void setColorMod(Uint8 r, Uint8 g, Uint8 b);
+		void resetColorMod();
+
 		SDL_Texture* sheet;
 
 		const int spriteW, spriteH; // the height and width of an individual sprite
