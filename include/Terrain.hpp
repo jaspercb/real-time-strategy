@@ -25,6 +25,7 @@ struct TileData {
 };
 
 class Terrain {
+	friend UserInterface;
 	public:
 		Terrain(std::string filename="map-default");
 		void render(SDL_Renderer* renderer, UserInterface* ui);

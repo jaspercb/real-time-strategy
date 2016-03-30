@@ -12,6 +12,9 @@
 #include "sdlTools.hpp"
 #include "InhabitedGrid.hpp"
 
+#define max(a, b) ((a>b) ? a : b)
+#define min(a, b) ((a<b) ? a : b)
+
 UserInterface::UserInterface(Game& g, TeamID teamID):
 	game(g),
 	teamID(teamID),
@@ -199,7 +202,7 @@ void UserInterface::updateSelectedUnits() {
 		for (auto &i : this->game.inhabitedGrid.unitsInCircle(center, 2000) ) {
 			const Unit& unit = this->game.getUnit(i);
 			if (unit.teamID == this->teamID
-				&& pythagoreanDistanceLessThan(unit.xy, center, std::min(closestDistance, (Distance)unit.getUnitTemplate().radius()+500 ))
+				&& pythagoreanDistanceLessThan(unit.xy, center, min(closestDistance, (Distance)unit.getUnitTemplate().radius()+500 ))
 				&& unit.getUnitTemplate().isSelectable() ) {
 				closestUnitID = i;
 			}
@@ -302,6 +305,63 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 
 	this->uiWireframe->render(gRenderer, 0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1.0);
 
+	this->game.terrain.renderMinimap(renderer, this);
+
+	int numSelectedUnits = this->selectedUnits.size();
+	if (numSelectedUnits == 1) {
+		Unit& selectedUnit = this->game.getUnit(*this->selectedUnits.begin());
+		std::stringstream infostream;
+		
+		infostream<<"HP: "<<std::to_string(selectedUnit.hp)<<"/"<<std::to_string(selectedUnit.getUnitTemplate().maxHP())<<std::endl;
+		
+		if (selectedUnit.weapons_.size())
+			infostream << "WEAPON: "<< std::to_string(selectedUnit.weapons_[0].ticksUntilCanFire) << "/" << std::to_string(selectedUnit.weapons_[0].weaponTemplate.reloadTime()) << std::endl;
+		else
+			infostream << "NO WEAPON" << std::endl;
+		infostream<<std::endl;
+		
+		for (auto &i : selectedUnit.builder->building) {
+			if (Builder::ticksUntilDone(i)) {
+				infostream<<"BUILDING "<<i.front().unitTemplateID<<", "<<i.front().totalTicks-i.front().ticksUntilDone<<"/"<<i.front().totalTicks<<std::endl;
+			}
+			else{
+				infostream<<"EMPTY BUILDING SLOT"<<std::endl;
+			}
+		}
+
+		gFontManager->renderMultipleLines(infostream.str(), 320, 750, SDL_Colors::WHITE);
+
+		for (auto &i : selectedUnit.builder->building) {
+			if (Builder::ticksUntilDone(i)) {
+				this->game.getTeam(this->teamID).unitTemplates.at(i.front().unitTemplateID).drawer.drawWireframe(gRenderer, Coordinate{650, 800});
+			}
+		}
+	}
+	else if (numSelectedUnits > 1) {
+		int text = this->selectedUnits.size();
+
+		gFontManager->renderLine("UNITS SELECTED: "+std::to_string(text), 320, 750, SDL_Colors::WHITE);
+	}
+
+	// Draw dope shit
+	int mapwidth = 2 * (game.terrain.width);
+	float xTilesOnScreen = SCREEN_WIDTH/(32*viewMagnification);
+	Coordinate center = {150 + (viewCenter.x - viewCenter.y)/(16*PIXEL_WIDTH), 620 + (viewCenter.x+viewCenter.y)/(16*PIXEL_WIDTH)};
+	Coordinate d = { (Distance)(280*xTilesOnScreen/mapwidth), (Distance)(280*2*SCREEN_HEIGHT*xTilesOnScreen)/(SCREEN_WIDTH*mapwidth) };
+	
+	Coordinate corner1 = center - d/2;
+	corner1.x = max(corner1.x, 10);
+	corner1.y = max(corner1.y, 610);
+	corner1.x = min(corner1.x, 290);
+	corner1.y = min(corner1.y, 890);
+
+	Coordinate corner2 = center + d/2;
+	corner2.x = max(corner2.x, 10);
+	corner2.y = max(corner2.y, 610);
+	corner2.x = min(corner2.x, 290);
+	corner2.y = min(corner2.y, 890);
+	
+	renderRectBorder(renderer, corner1, corner2, SDL_Colors::WHITE);
 }
 
 void UserInterface::renderAll( SDL_Renderer* renderer ) {
@@ -350,43 +410,6 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	}
 
 	this->renderHUD( renderer );
-	this->game.terrain.renderMinimap(renderer, this);
-
-	int numSelectedUnits = this->selectedUnits.size();
-	if (numSelectedUnits == 1) {
-		Unit& selectedUnit = this->game.getUnit(*this->selectedUnits.begin());
-		std::stringstream infostream;
-		
-		infostream<<"HP: "<<std::to_string(selectedUnit.hp)<<"/"<<std::to_string(selectedUnit.getUnitTemplate().maxHP())<<std::endl;
-		
-		if (selectedUnit.weapons_.size())
-			infostream << "WEAPON: "<< std::to_string(selectedUnit.weapons_[0].ticksUntilCanFire) << "/" << std::to_string(selectedUnit.weapons_[0].weaponTemplate.reloadTime()) << std::endl;
-		else
-			infostream << "NO WEAPON" << std::endl;
-		infostream<<std::endl;
-		
-		for (auto &i : selectedUnit.builder->building) {
-			if (Builder::ticksUntilDone(i)) {
-				infostream<<"BUILDING "<<i.front().unitTemplateID<<", "<<i.front().totalTicks-i.front().ticksUntilDone<<"/"<<i.front().totalTicks<<std::endl;
-			}
-			else{
-				infostream<<"EMPTY BUILDING SLOT"<<std::endl;
-			}
-		}
-
-		gFontManager->renderMultipleLines(infostream.str(), 320, 750, SDL_Colors::WHITE);
-
-		for (auto &i : selectedUnit.builder->building) {
-			if (Builder::ticksUntilDone(i)) {
-				this->game.getTeam(this->teamID).unitTemplates.at(i.front().unitTemplateID).drawer.drawWireframe(gRenderer, Coordinate{650, 800});
-			}
-		}
-	}
-	else if (numSelectedUnits > 1) {
-		int text = this->selectedUnits.size();
-
-		gFontManager->renderLine("UNITS SELECTED: "+std::to_string(text), 320, 750, SDL_Colors::WHITE);
-	}
 
 	SDL_RenderPresent( renderer );
 }
