@@ -258,7 +258,7 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 			Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(32*PIXEL_WIDTH*i, 32*PIXEL_WIDTH*j ));
 			if (coordInRect(drawPos, screenCorner1, screenCorner2)) {
 				int tileColorMod = ui->game.inhabitedGrid.getTileVisibility(Coordinate(i, j), ui->teamID);
-				SDL_SetTextureColorMod(this->tiles[i][j].spritesheet->sheet, tileColorMod, tileColorMod, tileColorMod);
+				this->tiles[i][j].spritesheet->setColorMod(tileColorMod, tileColorMod, tileColorMod);
 
 				if (this->tiles[i][j].bottomX != -1)
 					this->tiles[i][j].spritesheet->render(renderer, tiles[i][j].bottomX, tiles[i][j].bottomY, drawPos.x, drawPos.y +  (64-this->tiles[i][j].spritesheet->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
@@ -266,8 +266,7 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 				if (this->tiles[i][j].topX != -1)
 					this->tiles[i][j].spritesheet->render(renderer, tiles[i][j].topX, tiles[i][j].topY, drawPos.x, drawPos.y +  (64-this->tiles[i][j].spritesheet->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
 
-				SDL_SetTextureColorMod(this->tiles[i][j].spritesheet->sheet, 255, 255, 255); // resetting color key for safety reasons
-			}
+				this->tiles[i][j].spritesheet->resetColorMod();			}
 		}
 	}
 	

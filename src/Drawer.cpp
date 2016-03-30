@@ -127,7 +127,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, int alp
 	// Draws the unit to the given surface.
 	//spritesheet->render(renderer, 0, 0 , unit.xy.x, unit.xy.y);
 	
-	SDL_SetTextureAlphaMod( this->spritesheet->sheet, alphaMulti);
+	this->spritesheet->setAlphaMod(alphaMulti);
 
 	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
 	dy += (unit.animationState == ANIMSTATE_DYING && unit.dimension.air) ? 0.03*(unit.drawAnimationStep+2)*(unit.drawAnimationStep+2) : 0;
@@ -156,7 +156,7 @@ void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, int alp
 			break;
 	}
 
-	SDL_SetTextureAlphaMod( this->spritesheet->sheet, alphaMulti);
+	this->spritesheet->resetAlphaMod();
 }
 
 void Drawer::drawIdle(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
