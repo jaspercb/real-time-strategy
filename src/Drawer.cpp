@@ -38,6 +38,8 @@ Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 	deathCycleStart(0),
 	deathCycleLength(0),
 	deathCycleVertical(false),
+	wireframeX(0),
+	wireframeY(0),
 	spritesheet(NULL),
 	shadowsheet(NULL)
 {
@@ -59,6 +61,11 @@ Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 			hasShadowsheet=true;
 		}
 		
+		else if (s=="wireframe") {
+			is>>wireframeX;
+			is>>wireframeY;
+		}
+
 		else if (s=="numFacingDirections") {
 			is>>numFacingDirections;
 		}
@@ -114,6 +121,42 @@ Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 }
 
 Drawer::~Drawer() {
+}
+
+void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, int alphaMulti /*, Coordinate cameraposition */) {
+	// Draws the unit to the given surface.
+	//spritesheet->render(renderer, 0, 0 , unit.xy.x, unit.xy.y);
+	
+	SDL_SetTextureAlphaMod( this->spritesheet->sheet, alphaMulti);
+
+	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
+	dy += (unit.animationState == ANIMSTATE_DYING && unit.dimension.air) ? 0.03*(unit.drawAnimationStep+2)*(unit.drawAnimationStep+2) : 0;
+	dy *= ui->viewMagnification;
+	
+	Coordinate pos = ui->screenCoordinateFromObjective(unit.xy);
+
+	switch (unit.animationState) {
+		case ANIMSTATE_IDLE: {
+			this->drawIdle(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
+			break;
+		}
+		case ANIMSTATE_WALKING: {
+			this->drawWalking(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->walkCycleLength), dy);
+			break;
+		}
+		case ANIMSTATE_ATTACKING:
+			if (unit.drawAnimationStep < 0)
+				this->drawIdle(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
+			else
+				this->drawAttacking(renderer, unit.drawFacingAngle, ui, pos, std::max(0, positiveRemainder(unit.drawAnimationStep, this->attackCycleLength) ), dy);
+			break;
+
+		case ANIMSTATE_DYING:
+			this->drawDying(renderer, unit.drawFacingAngle, ui, pos, std::min(this->deathCycleLength -1, std::abs(unit.drawAnimationStep)), dy);
+			break;
+	}
+
+	SDL_SetTextureAlphaMod( this->spritesheet->sheet, alphaMulti);
 }
 
 void Drawer::drawIdle(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy) {
@@ -187,40 +230,14 @@ void Drawer::drawDying(SDL_Renderer* renderer, int drawFacingAngle, UserInterfac
 	}
 }
 
-void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, int alphaMulti /*, Coordinate cameraposition */) {
-	// Draws the unit to the given surface.
-	//spritesheet->render(renderer, 0, 0 , unit.xy.x, unit.xy.y);
-	
-	SDL_SetTextureAlphaMod( this->spritesheet->sheet, alphaMulti);
-
-	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
-	dy += (unit.animationState == ANIMSTATE_DYING && unit.dimension.air) ? 0.03*(unit.drawAnimationStep+2)*(unit.drawAnimationStep+2) : 0;
-	dy *= ui->viewMagnification;
-	
-	Coordinate pos = ui->screenCoordinateFromObjective(unit.xy);
-
-	switch (unit.animationState) {
-		case ANIMSTATE_IDLE: {
-			this->drawIdle(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
-			break;
-		}
-		case ANIMSTATE_WALKING: {
-			this->drawWalking(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->walkCycleLength), dy);
-			break;
-		}
-		case ANIMSTATE_ATTACKING:
-			if (unit.drawAnimationStep < 0)
-				this->drawIdle(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
-			else
-				this->drawAttacking(renderer, unit.drawFacingAngle, ui, pos, std::max(0, positiveRemainder(unit.drawAnimationStep, this->attackCycleLength) ), dy);
-			break;
-
-		case ANIMSTATE_DYING:
-			this->drawDying(renderer, unit.drawFacingAngle, ui, pos, std::min(this->deathCycleLength -1, std::abs(unit.drawAnimationStep)), dy);
-			break;
-	}
-
-	SDL_SetTextureAlphaMod( this->spritesheet->sheet, alphaMulti);
+void Drawer::drawWireframe(SDL_Renderer* renderer, Coordinate drawPos) {
+	if (NULL != spritesheet)
+		spritesheet->render(renderer,
+			wireframeX,
+			wireframeY,
+			drawPos.x,
+			drawPos.y,
+			1.0);
 }
 
 int Drawer::spriteXFromAngle(int drawFacingAngle) {

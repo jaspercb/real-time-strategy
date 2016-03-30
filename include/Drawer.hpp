@@ -23,6 +23,8 @@ class Drawer {
 		void drawAttacking(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy);
 		void drawDying(SDL_Renderer* renderer, int drawFacingAngle, UserInterface* ui, Coordinate drawPos, int frame, int dy);
 
+		void drawWireframe(SDL_Renderer* renderer, Coordinate drawPos);
+		
 		int idleCycleStart;
 		int idleCycleLength;
 
@@ -35,6 +37,9 @@ class Drawer {
 		int deathCycleStart;
 		int deathCycleLength;
 		bool deathCycleVertical;
+
+		int wireframeX;
+		int wireframeY;
 
 		int numFacingDirections;
 

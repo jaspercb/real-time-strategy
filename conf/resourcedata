@@ -139,7 +139,7 @@ scout-spritesheet {
 bomber-spritesheet {
 	filepath 	../svgs/bomber.png
 	size 64 64
-	sheetsize 9 2
+	sheetsize 9 3
 	shouldApplyTeamColor 1
 }
 

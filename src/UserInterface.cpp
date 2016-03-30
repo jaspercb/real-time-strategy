@@ -378,7 +378,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 
 		for (auto &i : selectedUnit.builder->building) {
 			if (Builder::ticksUntilDone(i)) {
-				this->game.getTeam(this->teamID).unitTemplates.at(i.front().unitTemplateID).drawer.drawIdle(gRenderer, (frame*3)%360, this, Coordinate{650, 800}, 0, 0);
+				this->game.getTeam(this->teamID).unitTemplates.at(i.front().unitTemplateID).drawer.drawWireframe(gRenderer, Coordinate{650, 800});
 			}
 		}
 	}

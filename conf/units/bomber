@@ -29,4 +29,6 @@ drawer {
 	attackCycleLength 1
 	deathCycleStart 1
 	deathCycleLength 9
+
+	wireframe 0 2
 }
