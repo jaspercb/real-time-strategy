@@ -168,5 +168,13 @@ void Spritesheet::setColorMod(Uint8 r, Uint8 g, Uint8 b) {
 }
 
 void Spritesheet::resetColorMod() {
-	SDL_SetTextureColorMod(this->sheet, 255, 255, 255);
+	this->setColorMod(255, 255, 255);
+}
+
+void Spritesheet::setAlphaMod(Uint8 a) {
+	SDL_SetTextureAlphaMod(this->sheet, a);
+}
+
+void Spritesheet::resetAlphaMod() {
+	this->setAlphaMod(255);
 }

@@ -27,6 +27,8 @@ class Spritesheet {
 
 		void setColorMod(Uint8 r, Uint8 g, Uint8 b);
 		void resetColorMod();
+		void setAlphaMod(Uint8 a);
+		void resetAlphaMod();
 
 		SDL_Texture* sheet;
 
