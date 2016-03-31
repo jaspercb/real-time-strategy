@@ -17,11 +17,12 @@ class Command;
 class Game {
 public:
 	Game();
+	virtual ~Game();
 	TeamID createTeam();
 	UnitID createUnit(TeamID team, UnitTemplateID unitTemplateID, Coordinate pos);
 	void deleteUnit(UnitID);
-	Unit& getUnit(UnitID i);
-	Team& getTeam(TeamID i);
+	Unit* getUnit(UnitID i);
+	Team* getTeam(TeamID i);
 
 	void handleCommand(const Command&);
 	void tick();
@@ -32,8 +33,8 @@ public:
 	InhabitedGrid inhabitedGrid;
 	Terrain terrain;
 
-	std::map<TeamID, Team> teamsByID;
-	std::map<UnitID, Unit> unitsByID;
+	std::map<TeamID, Team*> teamsByID;
+	std::map<UnitID, Unit*> unitsByID;
 
 private:
 	void resolveCollisions();

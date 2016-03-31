@@ -4,7 +4,7 @@
 #include "Unit.hpp"
 #include "Logging.hpp"
 
-Weapon::Weapon(WeaponTemplate &_weaponTemplate, Unit &_owner):
+Weapon::Weapon(WeaponTemplate *_weaponTemplate, Unit*_owner):
 	weaponTemplate(_weaponTemplate),
 	owner(_owner),
 	ticksUntilCanFire(0)
@@ -13,24 +13,17 @@ Weapon::Weapon(WeaponTemplate &_weaponTemplate, Unit &_owner):
 		//debugLog(owner);
 	}
 
-Weapon::Weapon(Weapon &w, Unit &u):
-	weaponTemplate(w.weaponTemplate),
-	owner(u),
-	ticksUntilCanFire(w.ticksUntilCanFire)
-	{}
-
-
 bool Weapon::canFire() const{
-	return weaponTemplate.canFire(*this);
+	return weaponTemplate->canFire(this);
 }
 
-bool Weapon::canAttack(Unit& u) const{
-	return weaponTemplate.canAttack(u);
+bool Weapon::canAttack(Unit* u) const{
+	return weaponTemplate->canAttack(u);
 }
 
-void Weapon::fire(Unit& target){
+void Weapon::fire(Unit* target){
 	//debugLog("firing weapon");
-	weaponTemplate.fire(*this, target);
+	weaponTemplate->fire(this, target);
 }
 
 void Weapon::update(){

@@ -11,7 +11,7 @@ StateAttackMove::StateAttackMove(Coordinate destination):
 	attacking(false)
 	{}
 
-StateExitCode StateAttackMove::update(Unit& unit) {
+StateExitCode StateAttackMove::update(Unit* unit) {
 	// If we're already targeting someone, behave like we're attacking them
 	// If we're in attacking range of an enemy, behave like we're attacking them
 	// Otherwise, behave like we're walking
@@ -26,25 +26,25 @@ StateExitCode StateAttackMove::update(Unit& unit) {
 		StateExitCode ret = this->atkstate.update(unit);
 		if (ret == STATE_EXIT_COMPLETE){
 			this->attacking = false;
-			unit.animationState = ANIMSTATE_IDLE;
+			unit->animationState = ANIMSTATE_IDLE;
 		}
 		return STATE_EXIT_INCOMPLETE;
 	}
 	else {
 		//debugLog("walkstate");
-		unit.animationState = ANIMSTATE_WALKING;
+		unit->animationState = ANIMSTATE_WALKING;
 		return this->gotostate.update(unit);
 	}
 }
 
-bool StateAttackMove::updateTarget(Unit& unit) {
-	auto potentialIDs = unit.game.inhabitedGrid.unitsInCircle(unit.xy, unit.getAttackRange());
+bool StateAttackMove::updateTarget(Unit* unit) {
+	auto potentialIDs = unit->game->inhabitedGrid.unitsInCircle(unit->xy, unit->getAttackRange());
 	UnitID closestTargetID = 0;
 	Distance closestTargetDistance = MAX_DISTANCE;
 	for (auto &i : potentialIDs){
-		Unit& potentialUnit = unit.game.getUnit(i);
-		Distance r = pythagoreanDistance(unit.xy, potentialUnit.xy);
-		if (unit.canAttack(potentialUnit) && r<closestTargetDistance ) {
+		Unit* potentialUnit = unit->game->getUnit(i);
+		Distance r = pythagoreanDistance(unit->xy, potentialUnit->xy);
+		if (unit->canAttack(potentialUnit) && r<closestTargetDistance ) {
 			closestTargetID = i;
 			closestTargetDistance = r;
 		}

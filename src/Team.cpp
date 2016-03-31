@@ -13,16 +13,21 @@ teamID(tID)
 	//unitTemplates.emplace(1, new UnitTemplate("testUnit", 100, 20, 20, GROUND_ONLY, WEAPONTEMPLATEVECTOR_GOHERE);
 };
 
-
-void Team::loadUnitTemplate ( std::string filename ){
-	unitTemplates.emplace( filename, UnitTemplate(filename, std::ifstream(filename), (TeamColor)teamID) );
-};
-
-void Team::onUnitBirth ( Unit& unit ) {
-	this->activeUnitTemplateCount[unit.unitTemplateID]++;
+Team::~Team() {
+	for (auto &i : unitTemplates) {
+		delete i.second;
+	}
 }
 
-void Team::onUnitDeath ( Unit& unit ) {
-	this->activeUnitTemplateCount[unit.unitTemplateID]--;
-	debugLog(this->activeUnitTemplateCount[unit.unitTemplateID]);
+void Team::loadUnitTemplate ( std::string filename ){
+	unitTemplates.emplace( filename, new UnitTemplate(filename, std::ifstream(filename), (TeamColor)teamID));
+};
+
+void Team::onUnitBirth ( Unit* unit ) {
+	this->activeUnitTemplateCount[unit->unitTemplateID]++;
+}
+
+void Team::onUnitDeath ( Unit* unit ) {
+	this->activeUnitTemplateCount[unit->unitTemplateID]--;
+	debugLog(this->activeUnitTemplateCount[unit->unitTemplateID]);
 }

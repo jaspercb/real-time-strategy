@@ -13,7 +13,7 @@ class Game;
 
 class UserInterface {
 public:
-	UserInterface(Game& g, TeamID t);
+	UserInterface(Game* g, TeamID t);
 	int handleInputEvents(); // returns 1 if should quit
 	void handleInputEvent(const SDL_Event& event);
 	void updateSelectedUnits();
@@ -40,7 +40,7 @@ public:
 
 	void playAnimation(std::string animation, Coordinate pos, int tickTime);
 
-	Game& game;
+	Game* game;
 
 	TeamID teamID;
 

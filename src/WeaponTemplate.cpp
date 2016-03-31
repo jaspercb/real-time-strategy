@@ -90,63 +90,63 @@ WeaponTemplate::WeaponTemplate(std::string s):
 	{debugLog("swag");}
 */
 
-bool WeaponTemplate::canFire(const Weapon& weapon) const
+bool WeaponTemplate::canFire(const Weapon* weapon) const
 {
-	return weapon.ticksUntilCanFire <= 0;
+	return weapon->ticksUntilCanFire <= 0;
 }
 
-bool WeaponTemplate::canAttack(const Unit& target) const{
-	return dimensions_.overlaps(target.dimension);
+bool WeaponTemplate::canAttack(const Unit* target) const{
+	return dimensions_.overlaps(target->dimension);
 } // returns whether the weapon is theoretically capable of hitting the target, IGNORING COOLDOWN
 
-void WeaponTemplate::fire(Weapon& weapon, Unit& target)
+void WeaponTemplate::fire(Weapon* weapon, Unit* target)
 {
 	if (canFire(weapon) &&
-	pythagoreanDistance(weapon.owner.xy, target.xy)<=range() &&
+	pythagoreanDistance(weapon->owner->xy, target->xy)<=range() &&
 	this->canAttack(target) )
 	{
 		if (aoeRadius()){
-			std::vector<UnitID> p = target.game.inhabitedGrid.unitsInCircle(target.xy, aoeRadius());
+			std::vector<UnitID> p = target->game->inhabitedGrid.unitsInCircle(target->xy, aoeRadius());
 			for (UnitID &targetID : p){
-				Unit& potentialTarget = target.game.getUnit(targetID);
-				if (!target.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID) &&
+				Unit* potentialTarget = target->game->getUnit(targetID);
+				if (!target->game->teamsAreFriendly(weapon->owner->teamID, potentialTarget->teamID) &&
 				this->canAttack(potentialTarget) )
 				{
-					potentialTarget.damage(damage(), damageType_, weapon.owner);
+					potentialTarget->damage(damage(), damageType_, weapon->owner);
 				}
 			}
 		}
 		else{
-			target.damage(damage(), damageType_, weapon.owner);
+			target->damage(damage(), damageType_, weapon->owner);
 		}
 
-		this->playHitAnimation(gUserInterface, target.xy);
-		weapon.ticksUntilCanFire = reloadTime();
+		this->playHitAnimation(gUserInterface, target->xy);
+		weapon->ticksUntilCanFire = reloadTime();
 	}
 }
 
-void WeaponTemplate::fire(Weapon& weapon, Coordinate& target)
+void WeaponTemplate::fire(Weapon* weapon, const Coordinate& target)
 {
 	if (canFire(weapon) &&
-	(pythagoreanDistance(weapon.owner.xy, target)<=range()) &&
+	(pythagoreanDistance(weapon->owner->xy, target)<=range()) &&
 	(aoeRadius() > 0) ) //only works for AOE weapons
 	{
 		if (aoeRadius()) {
-			std::vector<UnitID> p = weapon.owner.game.inhabitedGrid.unitsInCircle(target, aoeRadius());
+			std::vector<UnitID> p = weapon->owner->game->inhabitedGrid.unitsInCircle(target, aoeRadius());
 			for (UnitID &targetID : p){
-				Unit& potentialTarget = weapon.owner.game.getUnit(targetID);
-				if (!weapon.owner.game.teamsAreFriendly(weapon.owner.teamID, potentialTarget.teamID) &&
+				Unit* potentialTarget = weapon->owner->game->getUnit(targetID);
+				if (!weapon->owner->game->teamsAreFriendly(weapon->owner->teamID, potentialTarget->teamID) &&
 				this->canAttack(potentialTarget) )
 				{
-					potentialTarget.damage(damage(), damageType_, weapon.owner);
+					potentialTarget->damage(damage(), damageType_, weapon->owner);
 				}
 			}
 		}
 		this->playHitAnimation(gUserInterface, target);
-		weapon.ticksUntilCanFire = reloadTime();
+		weapon->ticksUntilCanFire = reloadTime();
 	}
 }
 
-void WeaponTemplate::playHitAnimation(UserInterface* ui, Coordinate& target) {
+void WeaponTemplate::playHitAnimation(UserInterface* ui, const Coordinate& target) {
 	ui->playAnimation(hitAnimation_, target, 3);
 }

@@ -8,7 +8,7 @@ class StateGotoCoordinate : public UnitState
 
 public:
 	StateGotoCoordinate(Coordinate c);
-	virtual StateExitCode update(Unit& unit);
+	virtual StateExitCode update(Unit* unit);
 	std::vector<Coordinate> getStateWaypoints();
 protected:
 	Coordinate targetCoord;

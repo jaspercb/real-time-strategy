@@ -78,15 +78,15 @@ int main() {
 		TeamID tID1 = game->createTeam();
 		TeamID tID2 = game->createTeam();
 
-		gUserInterface = new UserInterface(*game, tID1);
+		gUserInterface = new UserInterface(game, tID1);
 
-		Team& t1 = game->getTeam(tID1);
-		Team& t2 = game->getTeam(tID2);
+		Team* t1 = game->getTeam(tID1);
+		Team* t2 = game->getTeam(tID2);
 
-		t1.loadUnitTemplate("../conf/units/townhall");
-		t1.loadUnitTemplate("../conf/units/bomber");
+		t1->loadUnitTemplate("../conf/units/townhall");
+		t1->loadUnitTemplate("../conf/units/bomber");
 
-		t2.loadUnitTemplate("../conf/units/ground-dummy");
+		t2->loadUnitTemplate("../conf/units/ground-dummy");
 		
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;

@@ -3,5 +3,5 @@
 class StateIdle : public UnitState
 {
 public:
-	StateExitCode update(Unit& unit);
+	StateExitCode update(Unit* unit);
 };

@@ -14,18 +14,18 @@ class Team
 public:
 	//Team();
 	Team(Game& _game, TeamID id);
-
+	virtual ~Team();
 	// Creates and sets up a new unit, linked to the templateID from 
 
 	void loadUnitTemplate( std::string s );
 
-	void onUnitBirth( Unit& unit );
-	void onUnitDeath( Unit& unit );
+	void onUnitBirth( Unit* unit );
+	void onUnitDeath( Unit* unit );
 
 	Game& game;
 	const TeamID teamID;
 
-	std::map<UnitTemplateID, UnitTemplate> unitTemplates;
+	std::map<UnitTemplateID, UnitTemplate*> unitTemplates;
 
 protected:
 	std::vector<int> resources;

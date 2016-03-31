@@ -123,36 +123,36 @@ Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
 Drawer::~Drawer() {
 }
 
-void Drawer::draw(SDL_Renderer* renderer, Unit& unit, UserInterface* ui, int alphaMulti /*, Coordinate cameraposition */) {
+void Drawer::draw(SDL_Renderer* renderer, Unit* unit, UserInterface* ui, int alphaMulti /*, Coordinate cameraposition */) {
 	// Draws the unit to the given surface.
-	//spritesheet->render(renderer, 0, 0 , unit.xy.x, unit.xy.y);
+	//spritesheet->render(renderer, 0, 0 , unit->xy.x, unit->xy.y);
 	
 	this->spritesheet->setAlphaMod(alphaMulti);
 
-	int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
-	dy += (unit.animationState == ANIMSTATE_DYING && unit.dimension.air) ? 0.03*(unit.drawAnimationStep+2)*(unit.drawAnimationStep+2) : 0;
+	int dy = unit->dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
+	dy += (unit->animationState == ANIMSTATE_DYING && unit->dimension.air) ? 0.03*(unit->drawAnimationStep+2)*(unit->drawAnimationStep+2) : 0;
 	dy *= ui->viewMagnification;
 	
-	Coordinate pos = ui->screenCoordinateFromObjective(unit.xy);
+	Coordinate pos = ui->screenCoordinateFromObjective(unit->xy);
 
-	switch (unit.animationState) {
+	switch (unit->animationState) {
 		case ANIMSTATE_IDLE: {
-			this->drawIdle(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
+			this->drawIdle(renderer, unit->drawFacingAngle, ui, pos, positiveRemainder(unit->drawAnimationStep, this->idleCycleLength), dy);
 			break;
 		}
 		case ANIMSTATE_WALKING: {
-			this->drawWalking(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->walkCycleLength), dy);
+			this->drawWalking(renderer, unit->drawFacingAngle, ui, pos, positiveRemainder(unit->drawAnimationStep, this->walkCycleLength), dy);
 			break;
 		}
 		case ANIMSTATE_ATTACKING:
-			if (unit.drawAnimationStep < 0)
-				this->drawIdle(renderer, unit.drawFacingAngle, ui, pos, positiveRemainder(unit.drawAnimationStep, this->idleCycleLength), dy);
+			if (unit->drawAnimationStep < 0)
+				this->drawIdle(renderer, unit->drawFacingAngle, ui, pos, positiveRemainder(unit->drawAnimationStep, this->idleCycleLength), dy);
 			else
-				this->drawAttacking(renderer, unit.drawFacingAngle, ui, pos, std::max(0, positiveRemainder(unit.drawAnimationStep, this->attackCycleLength) ), dy);
+				this->drawAttacking(renderer, unit->drawFacingAngle, ui, pos, std::max(0, positiveRemainder(unit->drawAnimationStep, this->attackCycleLength) ), dy);
 			break;
 
 		case ANIMSTATE_DYING:
-			this->drawDying(renderer, unit.drawFacingAngle, ui, pos, std::min(this->deathCycleLength -1, std::abs(unit.drawAnimationStep)), dy);
+			this->drawDying(renderer, unit->drawFacingAngle, ui, pos, std::min(this->deathCycleLength -1, std::abs(unit->drawAnimationStep)), dy);
 			break;
 	}
 
@@ -286,9 +286,9 @@ void drawHPbar(SDL_Renderer* renderer, int HP, int maxHP, const Coordinate rende
 	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-empty", COLOR_NULL)->sheet, &emptyclip, &tclip);
 }
 
-void drawHPbar(SDL_Renderer* renderer, const Unit& unit, UserInterface* ui) {
-	if (unit.animationState != ANIMSTATE_DYING) {
-		int dy = unit.dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
-		drawHPbar(renderer, unit.hp, unit.getUnitTemplate().maxHP(), ui->screenCoordinateFromObjective(unit.xy), ui->viewMagnification, dy);
+void drawHPbar(SDL_Renderer* renderer, const Unit* unit, UserInterface* ui) {
+	if (unit->animationState != ANIMSTATE_DYING) {
+		int dy = unit->dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
+		drawHPbar(renderer, unit->hp, unit->getUnitTemplate()->maxHP(), ui->screenCoordinateFromObjective(unit->xy), ui->viewMagnification, dy);
 	}
 }

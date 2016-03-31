@@ -10,7 +10,7 @@
 #include "StateAttackMove.hpp"
 #include "Logging.hpp"
 
-std::shared_ptr<UnitState> UnitState::handleCommand(Unit& unit, Command command)
+std::shared_ptr<UnitState> UnitState::handleCommand(Unit* unit, Command command)
 {
 	switch (command.cmdtype){
 		case CMD_IDLE: {
@@ -26,7 +26,7 @@ std::shared_ptr<UnitState> UnitState::handleCommand(Unit& unit, Command command)
 			return std::shared_ptr<UnitState>(new StateAttackMove(command.targetCoord));
 		}
 		case CMD_BUILD: {
-			unit.startBuilding(command.unitTemplateID);
+			unit->startBuilding(command.unitTemplateID);
 		}
 		default: {
 			return NULL;
@@ -34,12 +34,12 @@ std::shared_ptr<UnitState> UnitState::handleCommand(Unit& unit, Command command)
 	}
 }
 
-std::shared_ptr<UnitState> UnitState::handleEvent(Unit& unit, Event event)
+std::shared_ptr<UnitState> UnitState::handleEvent(Unit* unit, Event event)
 {
 	return NULL;
 }
 
-StateExitCode UnitState::update(Unit& unit) {
+StateExitCode UnitState::update(Unit* unit) {
 	return STATE_EXIT_INCOMPLETE;
 }
 

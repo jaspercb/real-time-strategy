@@ -21,6 +21,6 @@ class Builder {
 		static int ticksUntilDone(const std::deque<BuildData>&);
 
 		const UnitID parentID;
-		Game& game;
+		Game* game;
 		std::vector< std::deque<BuildData> > building;
 };

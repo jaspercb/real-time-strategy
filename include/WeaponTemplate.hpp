@@ -45,11 +45,11 @@ public:
 	virtual int range() const {return range_;};
 	virtual int aoeRadius() const {return aoeRadius_;}
 	virtual int weaponVelocity() const {return weaponVelocity_;};
-	virtual bool canFire(const Weapon& weapon) const;
-	virtual bool canAttack(const Unit& target) const; // returns whether the weapon is theoretically capable of hitting the target, IGNORING COOLDOWN
-	virtual void fire(Weapon& weapon, Unit& target);
-	virtual void fire(Weapon& weapon, Coordinate& target);
-	virtual void playHitAnimation(UserInterface*, Coordinate& target);
+	virtual bool canFire(const Weapon* weapon) const;
+	virtual bool canAttack(const Unit* target) const; // returns whether the weapon is theoretically capable of hitting the target, IGNORING COOLDOWN
+	virtual void fire(Weapon* weapon, Unit* target);
+	virtual void fire(Weapon* weapon, const Coordinate& target);
+	virtual void playHitAnimation(UserInterface*, const Coordinate& target);
 protected:
 	std::string name_;
 	DamageType damageType_;

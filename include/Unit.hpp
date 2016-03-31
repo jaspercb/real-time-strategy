@@ -37,18 +37,18 @@ public:
 	friend UserInterface;
 
 	//Unit();
-	Unit(Game&, UnitID, TeamID, UnitTemplateID, Coordinate);
-	Unit(Unit &&u);
+	Unit(Game*, UnitID, TeamID, UnitTemplateID, Coordinate);
+	//Unit(Unit*&u);
 	~Unit();
-	UnitTemplate& getUnitTemplate() const;
+	UnitTemplate* getUnitTemplate() const;
 	void tick();
 	void handleCommand(Command);
 	void move(const Coordinate);
-	void damage(const int, const DamageType, Unit& attackedBy);
+	void damage(const int, const DamageType, Unit* attackedBy);
 	Distance getAttackRange(); // returns the range of the first weapon
-	bool canAttack(Unit& u) const;
+	bool canAttack(Unit* u) const;
 	void move_towards(const Coordinate c);
-	void attack(Unit& target);
+	void attack(Unit* target);
 
 	void startBuilding(UnitTemplateID unitTemplateID);
 
@@ -59,7 +59,7 @@ public:
 
 	std::vector<Coordinate> getStateWaypoints(); // returns an ordered list of the coordinate targets of the unit's state queue
 
-	Game& game;
+	Game* game;
 	
 	const TeamID teamID;
 	const UnitID unitID;

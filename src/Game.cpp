@@ -13,9 +13,18 @@ Game::Game():
 		//inhabitedGrid = InhabitedGrid(this, 100, 100, 10, 10);
 	}
 
+Game::~Game() {
+	for (auto &u : this->unitsByID) {
+		delete u.second;
+	}
+	for (auto &i : this->teamsByID) {
+		delete i.second;
+	}
+}
+
 TeamID Game::createTeam() {
 	TeamID id = smallestUnusedTeamID();
-	Team t = Team(*this, id);
+	Team* t = new Team(*this, id);
 	this->teamsByID.emplace(id, t);
 
 	return id;
@@ -23,7 +32,7 @@ TeamID Game::createTeam() {
 
 UnitID Game::createUnit(TeamID teamID, UnitTemplateID unitTemplateID, Coordinate pos) {
 	UnitID id = this->smallestUnusedUnitID();
-	this->unitsByID.emplace(id, Unit(*this, id, teamID, unitTemplateID, pos));
+	this->unitsByID.emplace(id, new Unit(this, id, teamID, unitTemplateID, pos));
 	this->inhabitedGrid.emplace(this->getUnit(id));
 	this->inhabitedGrid.startTrackingVisibility(this->getUnit(id));
 
@@ -31,16 +40,17 @@ UnitID Game::createUnit(TeamID teamID, UnitTemplateID unitTemplateID, Coordinate
 }
 
 void Game::deleteUnit(UnitID id) {
-	Unit& u = this->getUnit(id);
+	Unit* u = this->getUnit(id);
 	this->inhabitedGrid.erase(u);
 	this->unitsByID.erase(id);
+	delete u;
 }
 
-Unit& Game::getUnit(UnitID i) {
+Unit* Game::getUnit(UnitID i) {
 	return unitsByID.at(i);
 }
 
-Team& Game::getTeam(TeamID i) {
+Team* Game::getTeam(TeamID i) {
 	try{
 		return teamsByID.at(i);
 	}
@@ -55,10 +65,10 @@ Team& Game::getTeam(TeamID i) {
 void Game::tick() {
 	std::vector<UnitID> toDelete;
 	for (auto &u : this->unitsByID)
-		u.second.tick();
+		u.second->tick();
 
 	for (const auto &u : this->unitsByID) {
-		if (u.second.shouldDelete()) {
+		if (u.second->shouldDelete()) {
 			toDelete.push_back(u.first);
 		}
 	}
@@ -73,34 +83,34 @@ void Game::tick() {
 
 void Game::handleCommand(const Command& cmd){
 	for (const UnitID &unitID : cmd.commanded){
-		this->getUnit(unitID).handleCommand(cmd);
+		this->getUnit(unitID)->handleCommand(cmd);
 	}
 }
 
 void Game::resolveCollisions() {
 	// Resolves any soft collisions between units.
-	for (auto &id_unit_pair : this->unitsByID){
+	for (auto const &id_unit_pair : this->unitsByID){
 		//UnitID id = id_unit_pair.first;
-		Unit& unit = id_unit_pair.second;
+		Unit* unit = id_unit_pair.second;
 		for ( auto &otherid : this->inhabitedGrid.unitsCollidingWith(unit) ) {
-			if (unit.unitID == otherid) {
+			if (unit->unitID == otherid) {
 				continue;
 			}
 
-			Unit& other = this->getUnit(otherid);
+			Unit* other = this->getUnit(otherid);
 
-			if (unit.xy == other.xy) {					// Deterministic location offset keeps game in lockstep.
-				other.move_towards( other.xy + Coordinate(
-							( (other.unitID+other.xy.x) % 2 == 0) ?  5 :
+			if (unit->xy == other->xy) {					// Deterministic location offset keeps game in lockstep.
+				other->move_towards( other->xy + Coordinate(
+							( (other->unitID+other->xy.x) % 2 == 0) ?  5 :
 																	-5 ,
-						( (other.unitID+other.xy.y) % 3 == 0) ?  5 :
-						( (other.unitID+other.xy.y) % 3 == 1) ?  0 :
+						( (other->unitID+other->xy.y) % 3 == 0) ?  5 :
+						( (other->unitID+other->xy.y) % 3 == 1) ?  0 :
 																-5 ) );
 			}
-			else if (unit.animationState != ANIMSTATE_DYING && (other.animationState == ANIMSTATE_IDLE || other.animationState == ANIMSTATE_ATTACKING) ) { // 
-				Coordinate c = other.xy - unit.xy;
-				c.setLength(other.getUnitTemplate().radius() + unit.getUnitTemplate().radius() - c.length());
-				other.move_towards( other.xy + c );
+			else if (unit->animationState != ANIMSTATE_DYING && (other->animationState == ANIMSTATE_IDLE || other->animationState == ANIMSTATE_ATTACKING) ) { // 
+				Coordinate c = other->xy - unit->xy;
+				c.setLength(other->getUnitTemplate()->radius() + unit->getUnitTemplate()->radius() - c.length());
+				other->move_towards( other->xy + c );
 			}
 /*			else if ( (unit.animationState != ANIMSTATE_IDLE && other.animationState != ANIMSTATE_WALKING) ) {
 				Distance dx = other.xy.x - unit.xy.x;
@@ -127,6 +137,5 @@ bool Game::teamsAreFriendly(TeamID a, TeamID b) {
 }
 
 bool Game::unitsAreFriendly(UnitID a, UnitID b) {
-	return this->teamsAreFriendly(this->getUnit(a).teamID, this->getUnit(b).teamID);
+	return this->teamsAreFriendly(this->getUnit(a)->teamID, this->getUnit(b)->teamID);
 }
-

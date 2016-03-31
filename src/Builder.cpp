@@ -32,12 +32,12 @@ void Builder::cancelBuilding() {
 }
 
 void Builder::tick() {
-	Unit& parent = game.getUnit(parentID);
+	Unit* parent = game->getUnit(parentID);
 	for (auto &q : this->building) {
 		if (not q.empty()) {
 			if (q.front().ticksUntilDone <= 0) {
-				UnitID id = this->game.createUnit(parent.teamID, q.front().unitTemplateID, parent.xy);
-				this->game.getUnit(id).stateQueue_ = parent.stateQueue_; // copy by value
+				UnitID id = this->game->createUnit(parent->teamID, q.front().unitTemplateID, parent->xy);
+				this->game->getUnit(id)->stateQueue_ = parent->stateQueue_; // copy by value
 				q.pop_front();
 			}
 			else {

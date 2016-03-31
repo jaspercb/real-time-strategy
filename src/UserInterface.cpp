@@ -15,7 +15,7 @@
 #define max(a, b) ((a>b) ? a : b)
 #define min(a, b) ((a<b) ? a : b)
 
-UserInterface::UserInterface(Game& g, TeamID teamID):
+UserInterface::UserInterface(Game* g, TeamID teamID):
 	game(g),
 	teamID(teamID),
 	viewMagnification(1.0),
@@ -51,10 +51,10 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 		Coordinate clickedCoord = objectiveCoordinateFromScreen( Coordinate(event.button.x, event.button.y) );
 
 		if (event.button.button == SDL_BUTTON_RIGHT) {
-			for ( auto &id : game.inhabitedGrid.unitsInCircle(clickedCoord, (Distance)1000) ) { // hackish way of handling targeting selection
-				if (!game.teamsAreFriendly(this->teamID, this->game.getUnit(id).teamID)
+			for ( auto &id : game->inhabitedGrid.unitsInCircle(clickedCoord, (Distance)1000) ) { // hackish way of handling targeting selection
+				if (!game->teamsAreFriendly(this->teamID, this->game->getUnit(id)->teamID)
 				&& this->selectedUnits.size()
-				&& this->game.inhabitedGrid.unitIsVisibleToTeam(game.getUnit(id), this->teamID)) {
+				&& this->game->inhabitedGrid.unitIsVisibleToTeam(game->getUnit(id), this->teamID)) {
 					this->issueAttackCmd(id);
 					return;
 				}
@@ -199,11 +199,11 @@ void UserInterface::updateSelectedUnits() {
 		auto center = this->objectiveCoordinateFromScreen(this->selectionBoxCorner1);
 		Distance closestDistance = MAX_DISTANCE;
 		UnitID closestUnitID = 0;
-		for (auto &i : this->game.inhabitedGrid.unitsInCircle(center, 2000) ) {
-			const Unit& unit = this->game.getUnit(i);
-			if (unit.teamID == this->teamID
-				&& pythagoreanDistanceLessThan(unit.xy, center, min(closestDistance, (Distance)unit.getUnitTemplate().radius()+500 ))
-				&& unit.getUnitTemplate().isSelectable() ) {
+		for (auto &i : this->game->inhabitedGrid.unitsInCircle(center, 2000) ) {
+			const Unit* unit = this->game->getUnit(i);
+			if (unit->teamID == this->teamID
+				&& pythagoreanDistanceLessThan(unit->xy, center, min(closestDistance, (Distance)unit->getUnitTemplate()->radius()+500 ))
+				&& unit->getUnitTemplate()->isSelectable() ) {
 				closestUnitID = i;
 			}
 		}
@@ -211,14 +211,14 @@ void UserInterface::updateSelectedUnits() {
 		if (this->previousSelectedUnits.size() == 1 && *this->previousSelectedUnits.begin()==closestUnitID) {
 			// double-clicking a unit selects all visible units with the same type
 			UnitID prevUnitID = *this->previousSelectedUnits.begin();
-			UnitTemplateID prevUnitTemplateID = this->game.getUnit(prevUnitID).getUnitTemplate().name;
-			TeamID prevTeamID = this->game.getUnit(prevUnitID).teamID;
+			UnitTemplateID prevUnitTemplateID = this->game->getUnit(prevUnitID)->getUnitTemplate()->name;
+			TeamID prevTeamID = this->game->getUnit(prevUnitID)->teamID;
 			this->previousSelectedUnits.clear();
 			this->selectedUnits.clear();
-			for (auto &i : this->game.unitsByID) {
-				if (coordInRect(this->screenCoordinateFromObjective(i.second.xy), Coordinate(0, 0), Coordinate(SCREEN_WIDTH, SCREEN_HEIGHT))
-				&& i.second.teamID == prevTeamID
-				&& i.second.teamID == prevTeamID )
+			for (auto &i : this->game->unitsByID) {
+				if (coordInRect(this->screenCoordinateFromObjective(i.second->xy), Coordinate(0, 0), Coordinate(SCREEN_WIDTH, SCREEN_HEIGHT))
+				&& i.second->teamID == prevTeamID
+				&& i.second->teamID == prevTeamID )
 					this->selectedUnits.insert(i.first);
 			}
 		}
@@ -228,11 +228,11 @@ void UserInterface::updateSelectedUnits() {
 		}
 	}
 	else{
-		auto lambda = [this](Unit& u) {
-			return u.getUnitTemplate().isSelectable() && coordInRect(this->screenCoordinateFromObjective(u.xy) , this->selectionBoxCorner1, this->selectionBoxCorner2) && this->game.teamsAreFriendly(this->teamID, u.teamID);
+		auto lambda = [this](Unit*u) {
+			return u->getUnitTemplate()->isSelectable() && coordInRect(this->screenCoordinateFromObjective(u->xy) , this->selectionBoxCorner1, this->selectionBoxCorner2) && this->game->teamsAreFriendly(this->teamID, u->teamID);
 		};
 
-		for (auto& unitID_unit : this->game.unitsByID) {
+		for (auto& unitID_unit : this->game->unitsByID) {
 			if (lambda(unitID_unit.second))
 				this->selectedUnits.insert(unitID_unit.first);
 		}
@@ -249,11 +249,11 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 
 	// Draw paths
 	for (UnitID i : this->selectedUnits) {
-		Unit& u = this->game.getUnit(i);
-		std::vector<Coordinate> path = u.getStateWaypoints();
+		Unit* u = this->game->getUnit(i);
+		std::vector<Coordinate> path = u->getStateWaypoints();
 		int numWaypoints = path.size() + 1;
 		if ( numWaypoints >= 2 ) {
-			renderLine(renderer, this->screenCoordinateFromObjective(u.xy), this->screenCoordinateFromObjective(path[0]), waypointColor);
+			renderLine(renderer, this->screenCoordinateFromObjective(u->xy), this->screenCoordinateFromObjective(path[0]), waypointColor);
 			for (int i=0; i<numWaypoints-1; i++) {
 				int size = 800;
 				renderEllipse(renderer,
@@ -271,17 +271,17 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 
 	// Draw a little individual green selection box for each selected unit
 	for (UnitID i : this->selectedUnits) {
-		Unit& u = this->game.getUnit(i);
-		UnitTemplate& uTemplate = u.getUnitTemplate();
+		Unit* u = this->game->getUnit(i);
+		UnitTemplate* uTemplate = u->getUnitTemplate();
 		
-		Coordinate drawCenter = this->screenCoordinateFromObjective(u.xy);
+		Coordinate drawCenter = this->screenCoordinateFromObjective(u->xy);
 		
-		int rw = uTemplate.radius()/PIXEL_WIDTH * this->viewMagnification;
-		int rh = uTemplate.radius()/PIXEL_HEIGHT * this->viewMagnification;
+		int rw = uTemplate->radius()/PIXEL_WIDTH * this->viewMagnification;
+		int rh = uTemplate->radius()/PIXEL_HEIGHT * this->viewMagnification;
 
 		renderEllipse(renderer, drawCenter, rw, rh, selectionColor);
 
-		if (u.dimension.air) {
+		if (u->dimension.air) {
 			Coordinate airborneCenter = drawCenter;
 			airborneCenter.y -= AIRBORNE_RENDER_HEIGHT * this->viewMagnification;
 			renderLine(renderer, drawCenter, airborneCenter, selectionColor);
@@ -305,22 +305,22 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 
 	this->uiWireframe->render(gRenderer, 0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1.0);
 
-	this->game.terrain.renderMinimap(renderer, this);
+	this->game->terrain.renderMinimap(renderer, this);
 
 	int numSelectedUnits = this->selectedUnits.size();
 	if (numSelectedUnits == 1) {
-		Unit& selectedUnit = this->game.getUnit(*this->selectedUnits.begin());
+		Unit* selectedUnit = this->game->getUnit(*this->selectedUnits.begin());
 		std::stringstream infostream;
 		
-		infostream<<"HP: "<<std::to_string(selectedUnit.hp)<<"/"<<std::to_string(selectedUnit.getUnitTemplate().maxHP())<<std::endl;
+		infostream<<"HP: "<<std::to_string(selectedUnit->hp)<<"/"<<std::to_string(selectedUnit->getUnitTemplate()->maxHP())<<std::endl;
 		
-		if (selectedUnit.weapons_.size())
-			infostream << "WEAPON: "<< std::to_string(selectedUnit.weapons_[0].ticksUntilCanFire) << "/" << std::to_string(selectedUnit.weapons_[0].weaponTemplate.reloadTime()) << std::endl;
+		if (selectedUnit->weapons_.size())
+			infostream << "WEAPON: "<< std::to_string(selectedUnit->weapons_[0].ticksUntilCanFire) << "/" << std::to_string(selectedUnit->weapons_[0].weaponTemplate->reloadTime()) << std::endl;
 		else
 			infostream << "NO WEAPON" << std::endl;
 		infostream<<std::endl;
 		
-		for (auto &i : selectedUnit.builder->building) {
+		for (auto &i : selectedUnit->builder->building) {
 			if (Builder::ticksUntilDone(i)) {
 				infostream<<"BUILDING "<<i.front().unitTemplateID<<", "<<i.front().totalTicks-i.front().ticksUntilDone<<"/"<<i.front().totalTicks<<std::endl;
 			}
@@ -331,9 +331,9 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 
 		gFontManager->renderMultipleLines(infostream.str(), 320, 750, SDL_Colors::WHITE);
 
-		for (auto &i : selectedUnit.builder->building) {
+		for (auto &i : selectedUnit->builder->building) {
 			if (Builder::ticksUntilDone(i)) {
-				this->game.getTeam(this->teamID).unitTemplates.at(i.front().unitTemplateID).drawer.drawWireframe(gRenderer, Coordinate{650, 800});
+				this->game->getTeam(this->teamID)->unitTemplates.at(i.front().unitTemplateID)->drawer.drawWireframe(gRenderer, Coordinate{650, 800});
 			}
 		}
 	}
@@ -344,7 +344,7 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 	}
 
 	// Draw dope shit
-	int mapwidth = 2 * (game.terrain.width);
+	int mapwidth = 2 * (game->terrain.width);
 	float xTilesOnScreen = SCREEN_WIDTH/(32*viewMagnification);
 	Coordinate center = {150 + (viewCenter.x - viewCenter.y)/(16*PIXEL_WIDTH), 620 + (viewCenter.x+viewCenter.y)/(16*PIXEL_WIDTH)};
 	Coordinate d = { (Distance)(280*xTilesOnScreen/mapwidth), (Distance)(280*2*SCREEN_HEIGHT*xTilesOnScreen)/(SCREEN_WIDTH*mapwidth) };
@@ -368,7 +368,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
 
-	this->game.terrain.render(renderer, this);
+	this->game->terrain.render(renderer, this);
 
 	this->renderSelection( renderer );
 
@@ -376,9 +376,9 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	Coordinate screenCorner2 = Coordinate(SCREEN_WIDTH+500, SCREEN_HEIGHT+500);
 
 	std::vector<Unit*> visibleUnitsInDrawOrder;
-	for (auto &i : this->game.unitsByID)
-		if (this->game.inhabitedGrid.getCoordVisibility(i.second.xy, this->teamID))
-			visibleUnitsInDrawOrder.push_back(&i.second);
+	for (auto &i : this->game->unitsByID)
+		if (this->game->inhabitedGrid.getCoordVisibility(i.second->xy, this->teamID))
+			visibleUnitsInDrawOrder.push_back(i.second);
 
 	auto sortLambda = [this](Unit* a, Unit* b) {
 		return (this->screenCoordinateFromObjective(a->xy).y) < (this->screenCoordinateFromObjective(b->xy).y);
@@ -391,7 +391,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2)
 		&& u->dimension.overlaps(GROUND_ONLY) ) {
 			u->draw( renderer, this );
-			drawHPbar(gRenderer, *u, gUserInterface);
+			drawHPbar(gRenderer, u, gUserInterface);
 		}
 	}
 
@@ -405,7 +405,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2)
 		&& !u->dimension.overlaps(GROUND_ONLY) ) {
 			u->draw( renderer, this );
-			drawHPbar(gRenderer, *u, gUserInterface);
+			drawHPbar(gRenderer, u, gUserInterface);
 		}
 	}
 
@@ -467,7 +467,7 @@ void UserInterface::issueGotoCoordCmd(Coordinate targetCoord) {
 	
 	this->playAnimation("gotocoord-animation", targetCoord, 3);
 
-	game.handleCommand(cmd);
+	game->handleCommand(cmd);
 }
 
 void UserInterface::issueAttackCmd(UnitID targetID) {
@@ -476,9 +476,9 @@ void UserInterface::issueAttackCmd(UnitID targetID) {
 	cmd.queueSetting = this->shiftHeld() ? QUEUE_BACK : QUEUE_OVERWRITE;
 	cmd.targetID = targetID;
 	
-	this->playAnimation("attackmove-animation", this->game.getUnit(targetID).xy, 3);
+	this->playAnimation("attackmove-animation", this->game->getUnit(targetID)->xy, 3);
 
-	game.handleCommand(cmd);
+	game->handleCommand(cmd);
 }
 
 void UserInterface::issueAttackMoveCmd(Coordinate targetCoord) {
@@ -489,20 +489,20 @@ void UserInterface::issueAttackMoveCmd(Coordinate targetCoord) {
 	
 	this->playAnimation("attackmove-animation", targetCoord, 3);
 
-	game.handleCommand(cmd);
+	game->handleCommand(cmd);
 }
 
 void UserInterface::issueHaltCmd() {
 	Command cmd(CMD_HALT);
 	cmd.commanded = this->selectedUnits;
-	game.handleCommand(cmd);
+	game->handleCommand(cmd);
 }
 
 void UserInterface::issueBuildCmd(UnitTemplateID id) {
 	Command cmd(CMD_BUILD);
 	cmd.commanded = this->selectedUnits;
 	cmd.unitTemplateID = id;
-	game.handleCommand(cmd);
+	game->handleCommand(cmd);
 }
 
 void UserInterface::playAnimation(std::string animationName, Coordinate pos, int tickTime) {

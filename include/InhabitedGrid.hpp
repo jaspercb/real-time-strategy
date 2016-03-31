@@ -16,8 +16,8 @@ bool pythagoreanDistanceLessEqThan(Coordinate a, Coordinate b, Distance r);
 bool coordInRect(Coordinate a, Coordinate b, Coordinate c);
 bool coordInCircle(Coordinate a, Coordinate c, int r);
 
-bool unitInCircle(Unit& u, Coordinate c, int r);
-bool unitInRectangle(Unit& u, Coordinate b, Coordinate c);
+bool unitInCircle(Unit* u, Coordinate c, int r);
+bool unitInRectangle(Unit* u, Coordinate b, Coordinate c);
 
 class InhabitedGrid {
 	// Handles collision and visibility.
@@ -31,26 +31,26 @@ class InhabitedGrid {
 		const std::shared_ptr<std::set<UnitID> > &unitsInCell(Coordinate c) const;
 		std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b) const;
 		std::vector<UnitID> unitsInCircle(Coordinate c, Distance radius) const;
-		std::vector<UnitID> unitsCollidingWith(Unit& u) const;
+		std::vector<UnitID> unitsCollidingWith(Unit* u) const;
 
-		bool unitOKToMoveTo(Unit&, const Coordinate);
+		bool unitOKToMoveTo(Unit*, const Coordinate);
 		
-		void startTrackingVisibility(const Unit&);
+		void startTrackingVisibility(const Unit* unit);
 
 		void incrementTileVisibility(const Coordinate center, const TeamID team);
 		void decrementTileVisibility(const Coordinate center, const TeamID team);
 		
 		bool coordIsVisibleToTeam(const Coordinate location, const TeamID team) const;
 		bool tileIsVisibleToTeam(const Coordinate tile, const TeamID team) const;
-		bool unitIsVisibleToTeam(const Unit& unit, const TeamID team) const;
+		bool unitIsVisibleToTeam(const Unit* unit, const TeamID team) const;
 		
 		int getCoordVisibility(const Coordinate tile, const TeamID team) const;
 		int getTileVisibility(const Coordinate tile, const TeamID team) const;
 
-		void emplace(const Unit &unit);
-		void erase(const Unit &unit);
-		void eraseWithHint(const Unit &unit, const Coordinate oldcoord);
-		void updatePos(const Unit &unit, Coordinate oldcoord);
+		void emplace(const Unit *unit);
+		void erase(const Unit *unit);
+		void eraseWithHint(const Unit *unit, const Coordinate oldcoord);
+		void updatePos(const Unit *unit, Coordinate oldcoord);
 
 		void tick();
 
