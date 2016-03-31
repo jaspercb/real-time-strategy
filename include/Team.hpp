@@ -19,6 +19,9 @@ public:
 
 	void loadUnitTemplate( std::string s );
 
+	void onUnitBirth( Unit& unit );
+	void onUnitDeath( Unit& unit );
+
 	Game& game;
 	const TeamID teamID;
 
@@ -26,4 +29,5 @@ public:
 
 protected:
 	std::vector<int> resources;
+	std::map<UnitTemplateID, int> activeUnitTemplateCount;
 };

@@ -39,6 +39,7 @@ attackTargetID(0)
 	}
 
 	this->idleState = std::shared_ptr<UnitState>( new StateIdle() );
+	game.getTeam(teamID).onUnitBirth(*this);
 }
 
 Unit::Unit(Unit &&u) : 
@@ -66,6 +67,7 @@ builder(new Builder(*u.builder)) // this is terrible
 }
 
 Unit::~Unit() {
+	game.getTeam(teamID).onUnitDeath(*this);
 	delete builder;
 }
 

@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <vector>
@@ -31,8 +32,8 @@ public:
 	InhabitedGrid inhabitedGrid;
 	Terrain terrain;
 
-	std::map<UnitID, Unit> unitsByID;
 	std::map<TeamID, Team> teamsByID;
+	std::map<UnitID, Unit> unitsByID;
 
 private:
 	void resolveCollisions();
