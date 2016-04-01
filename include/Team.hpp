@@ -9,8 +9,7 @@
 
 class Game;
 
-class Team
-{
+class Team {
 public:
 	//Team();
 	Team(Game& _game, TeamID id);
@@ -21,6 +20,7 @@ public:
 
 	void onUnitBirth( Unit* unit );
 	void onUnitDeath( Unit* unit );
+	int countActiveUnits( UnitTemplateID );
 
 	Game& game;
 	const TeamID teamID;

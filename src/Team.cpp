@@ -19,8 +19,9 @@ Team::~Team() {
 	}
 }
 
-void Team::loadUnitTemplate ( std::string filename ){
+void Team::loadUnitTemplate ( std::string filename ) { // filename doubles as unit template ID
 	unitTemplates.emplace( filename, new UnitTemplate(filename, std::ifstream(filename), (TeamColor)teamID));
+	this->activeUnitTemplateCount[filename];
 };
 
 void Team::onUnitBirth ( Unit* unit ) {
@@ -29,5 +30,8 @@ void Team::onUnitBirth ( Unit* unit ) {
 
 void Team::onUnitDeath ( Unit* unit ) {
 	this->activeUnitTemplateCount[unit->unitTemplateID]--;
-	debugLog(this->activeUnitTemplateCount[unit->unitTemplateID]);
+}
+
+int Team::countActiveUnits ( UnitTemplateID unitTemplateID) {
+	return this->activeUnitTemplateCount[unitTemplateID];
 }
