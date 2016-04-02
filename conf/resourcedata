@@ -150,6 +150,20 @@ townhall-spritesheet {
 	shouldApplyTeamColor 1
 }
 
+arcology-spritesheet {
+	filepath 	../svgs/arcology.png
+	size 260 260
+	sheetsize 1 1
+	shouldApplyTeamColor 1
+}
+
+buildings-spritesheet {
+	filepath 	../svgs/buildings.png
+	size 132 260
+	sheetsize 8 1
+	shouldApplyTeamColor 1
+}
+
 ground-dummy-spritesheet {
 	filepath ../svgs/ground-dummy.png
 	size 64 64
