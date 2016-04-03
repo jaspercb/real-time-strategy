@@ -83,7 +83,7 @@ int main() {
 		Team* t1 = game->getTeam(tID1);
 		Team* t2 = game->getTeam(tID2);
 
-		t1->loadUnitTemplate("../conf/units/townhall");
+		t1->loadUnitTemplate("../conf/units/arcology");
 		t1->loadUnitTemplate("../conf/units/bomber");
 
 		t2->loadUnitTemplate("../conf/units/ground-dummy");
@@ -91,7 +91,7 @@ int main() {
 		//UnitTemplate& p1 = t1.unitTemplates.begin()->second;
 		//UnitTemplate& p2 = t2.unitTemplates.begin()->second;
 
-		game->createUnit(tID1, "../conf/units/townhall", Coordinate(2*32*PIXEL_WIDTH, 2*32*PIXEL_WIDTH));
+		game->createUnit(tID1, "../conf/units/arcology", Coordinate(2*32*PIXEL_WIDTH, 2*32*PIXEL_WIDTH));
 		
 		for (int i=5; i<15; i++) {
 			for (int j=5; j<15; j++) {

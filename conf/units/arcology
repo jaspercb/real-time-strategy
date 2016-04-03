@@ -1,0 +1,19 @@
+name Arcology
+maxHP 500
+speed 0
+radius 9000
+dimension 1 0 0 0
+
+buildslots 1
+canspawn ../conf/units/bomber
+
+drawer {
+	spritesheet arcology-spritesheet
+
+	numFacingDirections 1
+
+	walkCycleStart 0
+	walkCycleLength 1
+	deathCycleStart 0
+	deathCycleLength 1
+}
