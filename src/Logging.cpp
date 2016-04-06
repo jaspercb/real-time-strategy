@@ -3,14 +3,6 @@
 #include "UnitTemplate.hpp"
 #include "Weapon.hpp"
 
-void debugLog(std::string s) {
-	std::cout<<s<<std::endl;
-}
-
-void debugLog(int s) {
-	std::cout<<s<<std::endl;
-}
-
 void debugLog(Unit* u) {
 	std::cout<<"LOGGING UNIT>> unitTemplate.name: "<<u->getUnitTemplate()->name<<std::endl;
 	std::cout<<"  unitID: "<<u->unitID;

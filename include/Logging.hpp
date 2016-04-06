@@ -6,7 +6,9 @@
 class Unit;
 class Weapon;
 
-void debugLog(std::string s);
-void debugLog(int s);
+template<typename T> inline void debugLog(const T s) {
+	std::cout<<s<<std::endl;
+}
+
 void debugLog(Unit* u);
 void debugLog(Weapon& w);
