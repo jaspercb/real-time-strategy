@@ -18,6 +18,8 @@ public:
 
 	void loadUnitTemplate( std::string s );
 
+	bool canBuild( UnitTemplateID unitTemplateID ) const;
+
 	void onUnitBirth( Unit* unit );
 	void onUnitDeath( Unit* unit );
 	int countActiveUnits( UnitTemplateID );
@@ -26,6 +28,8 @@ public:
 	const TeamID teamID;
 
 	std::map<UnitTemplateID, UnitTemplate*> unitTemplates;
+
+	const TeamColor teamColor;
 
 protected:
 	std::vector<int> resources;

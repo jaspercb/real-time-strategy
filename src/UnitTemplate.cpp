@@ -1,9 +1,10 @@
 #include "UnitTemplate.hpp"
 
+#include "Team.hpp"
 #include "Logging.hpp"
 #include "Drawer.hpp"
 
-UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamColor):
+UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, Team* team):
 	unitTemplateID(id)
 {
 	maxHP_ = 0;
@@ -51,7 +52,7 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamCo
 		}
 		else if (s=="drawer") {
 			is>>s; // to clean out the brace
-			drawer = Drawer(is, teamColor);
+			drawer = Drawer(is, team->teamColor);
 		}
 		else if (s=="weapon") {
 			is>>s; // to get rid of the trailing {
@@ -85,8 +86,8 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, TeamColor teamCo
 	}
 }
 
-UnitTemplate::UnitTemplate(std::string s, TeamColor teamColor):
-	UnitTemplate("../conf/units/"+s, std::ifstream("../conf/units/"+s), teamColor)
+UnitTemplate::UnitTemplate(std::string s, Team* team):
+	UnitTemplate("../conf/units/"+s, std::ifstream("../conf/units/"+s), team)
 	{}
 
 float UnitTemplate::getDamageEffectivenessVsHP(DamageType dmgtype) const {

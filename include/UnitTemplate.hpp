@@ -9,11 +9,13 @@
 #include "Drawer.hpp"
 #include "enums.hpp"
 
+class Team;
+
 class UnitTemplate {
 public:
 	UnitTemplate();
-	UnitTemplate(UnitTemplateID id, std::ifstream, TeamColor teamColor);
-	UnitTemplate(std::string, TeamColor teamColor);
+	UnitTemplate(UnitTemplateID id, std::ifstream, Team* team);
+	UnitTemplate(std::string, Team* team);
 	inline int maxHP() const { return maxHP_;};
 	inline int regHP() const {return regHP_;};
 	inline int maxES() const {return maxES_;} ;
@@ -26,6 +28,8 @@ public:
 	inline bool isSelectable() const {return selectable_;};
 	float getDamageEffectivenessVsHP(DamageType) const;
 	float getDamageEffectivenessVsES(DamageType) const;
+
+	inline bool isBuildable(const Team* const team) const {return true;} ; // This would be where unit prereqs go (ex. "Armory must be built")
 
 	const UnitTemplateID unitTemplateID;
 	

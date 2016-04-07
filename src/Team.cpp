@@ -7,7 +7,8 @@
 
 Team::Team(Game& _game, TeamID tID):
 game(_game),
-teamID(tID)
+teamID(tID),
+teamColor((TeamColor)tID)
 {
 	//for testing
 	//unitTemplates.emplace(1, new UnitTemplate("testUnit", 100, 20, 20, GROUND_ONLY, WEAPONTEMPLATEVECTOR_GOHERE);
@@ -20,9 +21,13 @@ Team::~Team() {
 }
 
 void Team::loadUnitTemplate ( std::string filename ) { // filename doubles as unit template ID
-	unitTemplates.emplace( filename, new UnitTemplate(filename, std::ifstream(filename), (TeamColor)teamID));
+	unitTemplates.emplace( filename, new UnitTemplate(filename, std::ifstream(filename), this));
 	this->activeUnitTemplateCount[filename];
 };
+
+bool Team::canBuild( UnitTemplateID unitTemplateID ) const {
+	return unitTemplates.at(unitTemplateID)->isBuildable(this);
+}
 
 void Team::onUnitBirth ( Unit* unit ) {
 	this->activeUnitTemplateCount[unit->unitTemplateID]++;

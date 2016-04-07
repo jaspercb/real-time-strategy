@@ -245,6 +245,10 @@ void Unit::attack(Unit* target){
 }
 
 void Unit::startBuilding(UnitTemplateID unitTemplateID) {
+	if (!game->getTeam(teamID)->canBuild(unitTemplateID)) {
+		debugLog("Error: Unit::tryToBuild called, but UnitTemplate::isBuildable=false. uTemplateID: "+unitTemplateID);
+		return;
+	}
 	if (builder) {
 		for (auto& i : this->getUnitTemplate()->spawnables) {
 			if (i == unitTemplateID) {
