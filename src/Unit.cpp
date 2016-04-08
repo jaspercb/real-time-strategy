@@ -40,11 +40,9 @@ attackTargetID(0)
 	}
 
 	this->idleState = std::shared_ptr<UnitState>( new StateIdle() );
-	game->getTeam(teamID)->onUnitBirth(this);
 }
 
 Unit::~Unit() {
-	game->getTeam(teamID)->onUnitDeath(this);
 	delete builder;
 }
 
