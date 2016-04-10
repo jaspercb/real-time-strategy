@@ -295,7 +295,7 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 		cx += 55;
 		if (i.size()) {
 			this->uiControlGroupTab->render(gRenderer, 0, 0, 290+cx, 720, 1.0);
-			gFontManager->renderLine(std::to_string(i.size()), 280+cx, 700, SDL_Colors::WHITE);
+			gFontManager->renderLine(std::to_string(i.size()), {280+cx, 700}, SDL_Colors::WHITE);
 		}
 	}
 
@@ -329,7 +329,7 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 			}
 		}
 
-		gFontManager->renderMultipleLines(infostream.str(), 320, 750, SDL_Colors::WHITE);
+		gFontManager->renderMultipleLines(infostream.str(), {320, 750}, SDL_Colors::WHITE);
 
 		for (auto &i : selectedUnit->builder->building) {
 			if (Builder::ticksUntilDone(i)) {
@@ -340,7 +340,7 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 	else if (numSelectedUnits > 1) {
 		int text = this->selectedUnits.size();
 
-		gFontManager->renderLine("UNITS SELECTED: "+std::to_string(text), 320, 750, SDL_Colors::WHITE);
+		gFontManager->renderLine("UNITS SELECTED: "+std::to_string(text), {320, 750}, SDL_Colors::WHITE);
 	}
 
 	// Draw dope shit
@@ -411,7 +411,20 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 
 	this->renderHUD( renderer );
 
+	//this->renderTextbox(gRenderer, std::vector<std::string>(1,"I continue to test, test, test!"),  {800, 100});
+
 	SDL_RenderPresent( renderer );
+}
+
+void UserInterface::renderTextbox( SDL_Renderer* renderer, std::vector<std::string> lines, Coordinate screenpos ) {
+	// Renders an opaque text box. 'screenpos' gives the screen coordinates of the bottom-right corner
+	long int maxwidth = 0;
+	for (const auto &line : lines) {
+		maxwidth = max(maxwidth, (long int)line.size());
+	}
+	Coordinate topLeft = screenpos-Coordinate(maxwidth*8, lines.size()*20);
+	renderRectBorder(gRenderer, screenpos, topLeft, SDL_Colors::WHITE);
+	gFontManager->renderVector( lines, topLeft+Coordinate(10,0));
 }
 
 void UserInterface::tick() {

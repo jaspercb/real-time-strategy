@@ -21,6 +21,8 @@ public:
 	void renderHUD( SDL_Renderer* renderer );
 	void renderAll( SDL_Renderer* renderer );
 
+	void renderTextbox( SDL_Renderer* renderer, std::vector<std::string> lines, Coordinate screenpos );
+
 	void tick();
 
 	void zoom(int dy);
