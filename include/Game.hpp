@@ -18,11 +18,14 @@ class Game {
 public:
 	Game();
 	virtual ~Game();
+
 	TeamID createTeam();
-	UnitID createUnit(TeamID team, UnitTemplateID unitTemplateID, Coordinate pos);
-	void deleteUnit(UnitID);
-	Unit* getUnit(UnitID i);
 	Team* getTeam(TeamID i);
+
+	UnitID createUnit(TeamID team, UnitTemplateID unitTemplateID, Coordinate pos);
+	bool existsUnit(UnitID id) const;
+	Unit* getUnit(UnitID id);
+	void deleteUnit(UnitID id);
 
 	void handleCommand(const Command&);
 	void tick();

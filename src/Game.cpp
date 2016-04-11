@@ -30,28 +30,6 @@ TeamID Game::createTeam() {
 	return id;
 }
 
-UnitID Game::createUnit(TeamID teamID, UnitTemplateID unitTemplateID, Coordinate pos) {
-	UnitID id = this->smallestUnusedUnitID();
-	Unit* unitPtr = new Unit(this, id, teamID, unitTemplateID, pos);
-	this->unitsByID.emplace(id, unitPtr);
-	this->inhabitedGrid.emplace(unitPtr);
-	this->inhabitedGrid.startTrackingVisibility(unitPtr);
-	this->getTeam(unitPtr->teamID)->onUnitDeath(unitPtr);
-	return id;
-}
-
-void Game::deleteUnit(UnitID id) {
-	Unit* unitPtr = this->getUnit(id);
-	this->inhabitedGrid.erase(unitPtr);
-	this->unitsByID.erase(id);
-	this->getTeam(unitPtr->teamID)->onUnitDeath(unitPtr);
-	delete unitPtr;
-}
-
-Unit* Game::getUnit(UnitID i) {
-	return unitsByID.at(i);
-}
-
 Team* Game::getTeam(TeamID i) {
 	try{
 		return teamsByID.at(i);
@@ -62,6 +40,32 @@ Team* Game::getTeam(TeamID i) {
 		debugLog(e.what());
 		throw;
 	}
+}
+
+UnitID Game::createUnit(TeamID teamID, UnitTemplateID unitTemplateID, Coordinate pos) {
+	UnitID id = this->smallestUnusedUnitID();
+	Unit* unitPtr = new Unit(this, id, teamID, unitTemplateID, pos);
+	this->unitsByID.emplace(id, unitPtr);
+	this->inhabitedGrid.emplace(unitPtr);
+	this->inhabitedGrid.startTrackingVisibility(unitPtr);
+	this->getTeam(unitPtr->teamID)->onUnitDeath(unitPtr);
+	return id;
+}
+
+Unit* Game::getUnit(UnitID id) {
+	return unitsByID.at(id);
+}
+
+bool Game::existsUnit(UnitID id) const {
+	return unitsByID.count(id);
+}
+
+void Game::deleteUnit(UnitID id) {
+	Unit* unitPtr = this->getUnit(id);
+	this->inhabitedGrid.erase(unitPtr);
+	this->unitsByID.erase(id);
+	this->getTeam(unitPtr->teamID)->onUnitDeath(unitPtr);
+	delete unitPtr;
 }
 
 void Game::tick() {
