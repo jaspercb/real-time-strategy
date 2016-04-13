@@ -356,8 +356,15 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 	corner2.y = max(corner2.y, 610);
 	corner2.x = min(corner2.x, 290);
 	corner2.y = min(corner2.y, 890);
-	
+
+	Coordinate corner3 = minimapCoordinateFromScreen({SCREEN_WIDTH, 750});
+	corner3.x = max(corner3.x, 10);
+	corner3.y = max(corner3.y, 610);
+	corner3.x = min(corner3.x, 290);
+	corner3.y = min(corner3.y, 890);
+
 	renderRectBorder(renderer, corner1, corner2, SDL_Colors::WHITE);
+	renderRectBorder(renderer, corner1, corner3, SDL_Colors::RED);
 }
 
 void UserInterface::renderAll( SDL_Renderer* renderer ) {

@@ -278,14 +278,13 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 	for (int j=0; j<=this->height; j++) {
 		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(-64*PIXEL_WIDTH, 64*PIXEL_WIDTH*j)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*(this->width), 64*PIXEL_WIDTH*j)), gridLineColor );
 	}
-	
 }
 
 void Terrain::renderMinimap(SDL_Renderer* renderer, UserInterface* ui) {
 	SDL_Rect target;
-	target.x = 10+40;
-	target.y = 610+40;
 	target.w = 280/sqrt(2);
 	target.h = 280/sqrt(2);
+	target.x = 150-target.w/2;
+	target.y = 750-target.h/2;
 	SDL_RenderCopyEx(renderer, this->minimap->sheet, NULL, &target, -45, NULL, SDL_FLIP_NONE);
 }
