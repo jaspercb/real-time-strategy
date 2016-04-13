@@ -25,9 +25,7 @@ animationState(ANIMSTATE_IDLE),
 drawAnimationStep(0),
 drawFacingAngle(0),
 
-attackTargetID(0)
-{
-
+attackTargetID(0) {
 	UnitTemplate* unitTemplate = getUnitTemplate();
 
 	this->builder = new Builder(this, unitTemplate->buildslots());	

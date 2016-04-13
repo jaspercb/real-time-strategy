@@ -30,6 +30,9 @@ public:
 	Coordinate objectiveCoordinateFromScreen(const Coordinate c);
 	Coordinate screenCoordinateFromObjective(const Coordinate c);
 
+	Coordinate minimapCoordinateFromScreen(const Coordinate c);
+	Coordinate minimapCoordinateFromObjective(const Coordinate c);
+
 	void issueGotoCoordCmd(Coordinate targetCoord);
 
 	void issueAttackCmd(UnitID targetID);

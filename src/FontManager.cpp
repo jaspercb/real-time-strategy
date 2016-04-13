@@ -5,8 +5,6 @@
 #include "globals.hpp"
 #include "Logging.hpp"
 
-#include <SDL2/SDL_ttf.h>
-
 FontManager::FontManager() {
 	if (TTF_Init() != 0){
 		debugLog(SDL_GetError());

@@ -343,19 +343,15 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 		gFontManager->renderLine("UNITS SELECTED: "+std::to_string(text), {320, 750}, SDL_Colors::WHITE);
 	}
 
-	// Draw dope shit
-	int mapwidth = 2 * (game->terrain.width);
-	float xTilesOnScreen = SCREEN_WIDTH/(32*viewMagnification);
-	Coordinate center = {150 + (viewCenter.x - viewCenter.y)/(16*PIXEL_WIDTH), 620 + (viewCenter.x+viewCenter.y)/(16*PIXEL_WIDTH)};
-	Coordinate d = { (Distance)(280*xTilesOnScreen/mapwidth), (Distance)(280*2*SCREEN_HEIGHT*xTilesOnScreen)/(SCREEN_WIDTH*mapwidth) };
-	
-	Coordinate corner1 = center - d/2;
+	// Draw minimap
+
+	Coordinate corner1 = minimapCoordinateFromScreen({0, 0});
 	corner1.x = max(corner1.x, 10);
 	corner1.y = max(corner1.y, 610);
 	corner1.x = min(corner1.x, 290);
 	corner1.y = min(corner1.y, 890);
 
-	Coordinate corner2 = center + d/2;
+	Coordinate corner2 = minimapCoordinateFromScreen({SCREEN_WIDTH, SCREEN_HEIGHT});
 	corner2.x = max(corner2.x, 10);
 	corner2.y = max(corner2.y, 610);
 	corner2.x = min(corner2.x, 290);
@@ -458,19 +454,27 @@ Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c) {
 
 	//return Coordinate(	PIXEL_WIDTH/this->viewMagnification*c.first + this->viewCenter.first,
 	//					PIXEL_HEIGHT/this->viewMagnification*c.second + this->viewCenter.second );
-	Distance x = PIXEL_WIDTH/this->viewMagnification*(c.x - SCREEN_WIDTH/2);
-	Distance y = PIXEL_WIDTH/this->viewMagnification*(c.y - SCREEN_HEIGHT/2);
-	return Coordinate(	(2*y + x)/2  + this->viewCenter.x,
-						(2*y - x)/2  + this->viewCenter.y);
+	Distance x = PIXEL_WIDTH/viewMagnification*(c.x - SCREEN_WIDTH/2);
+	Distance y = PIXEL_WIDTH/viewMagnification*(c.y - SCREEN_HEIGHT/2);
+	return Coordinate( (2*y + x)/2  + viewCenter.x,
+	                   (2*y - x)/2  + viewCenter.y );
 }
 
 Coordinate UserInterface::screenCoordinateFromObjective(const Coordinate c) {
-	Distance x = (c.x-this->viewCenter.x)*this->viewMagnification/PIXEL_WIDTH;
-	Distance y = (c.y-this->viewCenter.y)*this->viewMagnification/PIXEL_WIDTH;
-	return Coordinate(	(x-y) + SCREEN_WIDTH/2,
-						(x+y)/2 + SCREEN_HEIGHT/2);
+	Distance x = (c.x-viewCenter.x)*viewMagnification/PIXEL_WIDTH;
+	Distance y = (c.y-viewCenter.y)*viewMagnification/PIXEL_WIDTH;
+	return Coordinate( (x-y) + SCREEN_WIDTH/2,
+	                   (x+y)/2 + SCREEN_HEIGHT/2);
 }
 
+Coordinate UserInterface::minimapCoordinateFromScreen(const Coordinate c) {
+	return minimapCoordinateFromObjective(objectiveCoordinateFromScreen(c));
+}
+
+Coordinate UserInterface::minimapCoordinateFromObjective(const Coordinate c) {
+	return Coordinate( 150 + (c.x - c.y)/(16*PIXEL_WIDTH),
+	                   600 + (c.x + c.y)/(16*PIXEL_WIDTH) );
+}
 
 void UserInterface::issueGotoCoordCmd(Coordinate targetCoord) {
 	Command cmd(CMD_GOTOCOORD);
