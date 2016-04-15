@@ -5,6 +5,30 @@
 
 #include "globals.hpp"
 
+CoordinateOrUnit::CoordinateOrUnit() {
+	this->_isUnit = false;
+	this->data.coordinate = {0,0};
+}
+
+CoordinateOrUnit::CoordinateOrUnit(const Coordinate c) {
+	*this = c;
+}
+
+CoordinateOrUnit::CoordinateOrUnit(const UnitID uid) {
+	this->_isUnit = true;
+	this->data.unitID = uid;
+}
+
+CoordinateOrUnit::CoordinateOrUnit(const Unit &u) {
+	*this = u;
+}
+
+CoordinateOrUnit::CoordinateOrUnit(const CoordinateOrUnit& c) {
+	_isUnit = c._isUnit;
+	data.coordinate = c.data.coordinate;
+	data.unitID = c.data.unitID;
+}
+
 CoordinateOrUnit& CoordinateOrUnit::operator=(Unit unit) {
 	this->_isUnit = true;
 	this->data.unitID = unit.unitID;
@@ -15,6 +39,10 @@ CoordinateOrUnit& CoordinateOrUnit::operator=(Coordinate coordinate) {
 	this->_isUnit = false;
 	this->data.coordinate = coordinate;
 	return *this;
+}
+
+bool CoordinateOrUnit::isValid() const {
+	return isCoordinate() || game->existsUnit(this->data.unitID);
 }
 
 bool CoordinateOrUnit::isUnit() const {

@@ -6,10 +6,17 @@ class Unit; // forward declaration
 
 class CoordinateOrUnit {
 public:
-	CoordinateOrUnit(UnitID);
+	CoordinateOrUnit();
+	CoordinateOrUnit(const Coordinate c);
+	CoordinateOrUnit(const UnitID uid);
+	CoordinateOrUnit(const Unit &u);
+
+	CoordinateOrUnit(const CoordinateOrUnit& c); // copy constructor
 
 	CoordinateOrUnit &operator=(Unit unit);
 	CoordinateOrUnit &operator=(Coordinate pos);
+
+	bool isValid() const;
 
 	bool isUnit() const;
 	bool isCoordinate() const;
@@ -19,7 +26,8 @@ public:
 
 private:
 	bool _isUnit;
-	union {
+	union U {
+		U() : coordinate(0,0) {};
 		UnitID unitID;
 		Coordinate coordinate;
 	} data;
