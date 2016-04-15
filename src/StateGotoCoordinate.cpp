@@ -4,8 +4,8 @@
 #include "Logging.hpp"
 #include "UnitTemplate.hpp"
 
-StateGotoCoordinate::StateGotoCoordinate(Coordinate targ):
-	targetCoord(targ),
+StateGotoCoordinate::StateGotoCoordinate(CoordinateOrUnit targ):
+	target(targ),
 	last5FramesDistance(100000)
 	{
 		for (int i=0; i<5; i++){
@@ -13,9 +13,17 @@ StateGotoCoordinate::StateGotoCoordinate(Coordinate targ):
 		}
 	}
 
+StateGotoCoordinate::StateGotoCoordinate(Coordinate c): StateGotoCoordinate(CoordinateOrUnit(c)) {};
+StateGotoCoordinate::StateGotoCoordinate(const Unit& u): StateGotoCoordinate(CoordinateOrUnit(u)) {};
+
 StateExitCode StateGotoCoordinate::update(Unit* unit){
 	// if we're not at the target, move towards the target
 	// otherwise we're done
+	if (!target.isValid()) {
+		return STATE_EXIT_COMPLETE;
+	}
+
+	Coordinate targetCoord = target.getCoordinate();
 	if (pythagoreanDistanceLessThan(unit->xy, targetCoord, 50)) {
 		unit->animationState = ANIMSTATE_IDLE;
 		return STATE_EXIT_COMPLETE;
@@ -30,7 +38,7 @@ StateExitCode StateGotoCoordinate::update(Unit* unit){
 		last5distances[4] = pythagoreanDistance(oldC, unit->xy);
 		last5FramesDistance += last5distances[4];
 
-		if (pythagoreanDistanceLessThan(unit->xy, this->targetCoord, 15000) && last5FramesDistance < 600){
+		if (pythagoreanDistanceLessThan(unit->xy, targetCoord, 15000) && last5FramesDistance < 600){
 			unit->animationState = ANIMSTATE_IDLE;
 			return STATE_EXIT_COMPLETE;
 		}
@@ -40,5 +48,8 @@ StateExitCode StateGotoCoordinate::update(Unit* unit){
 }
 
 std::vector<Coordinate> StateGotoCoordinate::getStateWaypoints() {
-	return std::vector<Coordinate>{this->targetCoord};
+	if (target.isValid())
+		return std::vector<Coordinate>{this->target.getCoordinate()};
+	else
+		return std::vector<Coordinate>();
 }
