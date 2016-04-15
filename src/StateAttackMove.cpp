@@ -6,7 +6,7 @@
 #include "Logging.hpp"
 
 StateAttackMove::StateAttackMove(Coordinate destination):
-	gotostate(StateGotoCoordinate(destination)),
+	gotostate(StateGoto(destination)),
 	atkstate(StateAttack(0)),
 	attacking(false)
 	{}

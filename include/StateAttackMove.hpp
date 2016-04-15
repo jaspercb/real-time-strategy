@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StateGotoCoordinate.hpp"
+#include "StateGoto.hpp"
 #include "StateAttack.hpp"
 
 class StateAttackMove : public UnitState
@@ -11,7 +11,7 @@ public:
 	std::vector<Coordinate> getStateWaypoints();
 protected:
 	bool updateTarget(Unit* unit); // returns True if a valid target is found within range
-	StateGotoCoordinate gotostate;
+	StateGoto gotostate;
 	StateAttack atkstate;
 private:
 	bool attacking;
