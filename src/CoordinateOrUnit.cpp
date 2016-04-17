@@ -52,6 +52,11 @@ CoordinateOrUnit& CoordinateOrUnit::operator=(Coordinate coordinate) {
 	return *this;
 }
 
+/*! 
+ * Returns whether the object is valid.
+ * The object is valid when it refers to a Coordinate or a living Unit.
+ * The object is invalid when it refers to a Unit that has died.
+ */
 bool CoordinateOrUnit::isValid() const {
 	return isCoordinate() || game->existsUnit(this->data.unitID);
 }
@@ -71,7 +76,12 @@ Unit* CoordinateOrUnit::getUnit() const {
 		throw;
 }
 
+/*! 
+ * Returns either the contained Coordinate or the position of the contained 
+ * Unit. Will throw if invalid.
+ */
 Coordinate CoordinateOrUnit::getCoordinate() const {
+	if (!isValid()) throw;
 	if (isUnit())
 		return this->getUnit()->xy;
 	else

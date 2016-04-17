@@ -1,3 +1,15 @@
+/**
+ * \class CoordinateOrUnit
+ *
+ * \brief Either a coordinate or a unitID.
+ *
+ * Roughly equivalent to "Either a Coordinate or a UnitID".
+ * Used to prevent duplicate code when a function needs
+ * to handle both Coordinate and Unit arguments.
+ * ::isValid() should be called before use in case the
+ * unit has died since this object was constructed.
+*/
+
 #pragma once
 
 #include "typedefs.hpp"
