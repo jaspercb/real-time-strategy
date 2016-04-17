@@ -18,6 +18,7 @@ class Team;
 class UnitTemplate;
 class Game;
 class UserInterface;
+class CoordinateOrUnit;
 
 enum AnimationState {
 	ANIMSTATE_IDLE,
@@ -40,6 +41,7 @@ public:
 	Unit(Game*, UnitID, TeamID, UnitTemplateID, Coordinate);
 	//Unit(Unit*&u);
 	~Unit();
+
 	UnitTemplate* getUnitTemplate() const;
 	void tick();
 	void handleCommand(Command);
@@ -47,7 +49,7 @@ public:
 	void damage(const int, const DamageType, Unit* attackedBy);
 	Distance getAttackRange(); // returns the range of the first weapon
 	bool canAttack(Unit* u) const;
-	void move_towards(const Coordinate c);
+	void move_towards(const CoordinateOrUnit dest);
 	void attack(Unit* target);
 
 	void startBuilding(UnitTemplateID unitTemplateID);

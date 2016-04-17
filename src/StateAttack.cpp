@@ -3,6 +3,7 @@
 #include "InhabitedGrid.hpp"
 #include "Game.hpp"
 #include "Logging.hpp"
+#include "CoordinateOrUnit.hpp"
 #include "globals.hpp"
 
 StateAttack::StateAttack(UnitID targ):
@@ -20,7 +21,7 @@ StateExitCode StateAttack::update(Unit* unit) {
 		}
 		else{
 			if (pythagoreanDistance(unit->xy, target->xy) > unit->getAttackRange()) {
-				unit->move_towards(target->xy);
+				unit->move_towards(target);
 				return STATE_EXIT_INCOMPLETE;
 			}
 			else{

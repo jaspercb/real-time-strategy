@@ -10,10 +10,12 @@ public:
 	CoordinateOrUnit(const Coordinate c);
 	CoordinateOrUnit(const UnitID uid);
 	CoordinateOrUnit(const Unit &u);
+	CoordinateOrUnit(const Unit *u);
 
 	CoordinateOrUnit(const CoordinateOrUnit& c); // copy constructor
 
 	CoordinateOrUnit &operator=(Unit unit);
+	CoordinateOrUnit &operator=(Unit *unit);
 	CoordinateOrUnit &operator=(Coordinate pos);
 
 	bool isValid() const;

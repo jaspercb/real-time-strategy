@@ -2,6 +2,7 @@
 
 #include "Unit.hpp"
 #include "InhabitedGrid.hpp"
+#include "CoordinateOrUnit.hpp"
 
 #include "Logging.hpp"
 

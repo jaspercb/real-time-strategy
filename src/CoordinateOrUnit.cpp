@@ -23,6 +23,11 @@ CoordinateOrUnit::CoordinateOrUnit(const Unit &u) {
 	*this = u;
 }
 
+CoordinateOrUnit::CoordinateOrUnit(const Unit *u) {
+	this->_isUnit = true;
+	this->data.unitID = u->unitID;
+}
+
 CoordinateOrUnit::CoordinateOrUnit(const CoordinateOrUnit& c) {
 	_isUnit = c._isUnit;
 	data.coordinate = c.data.coordinate;
@@ -32,6 +37,12 @@ CoordinateOrUnit::CoordinateOrUnit(const CoordinateOrUnit& c) {
 CoordinateOrUnit& CoordinateOrUnit::operator=(Unit unit) {
 	this->_isUnit = true;
 	this->data.unitID = unit.unitID;
+	return *this;
+}
+
+CoordinateOrUnit& CoordinateOrUnit::operator=(Unit *unit) {
+	this->_isUnit = true;
+	this->data.unitID = unit->unitID;
 	return *this;
 }
 

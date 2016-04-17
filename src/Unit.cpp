@@ -14,6 +14,7 @@
 #include "StateIdle.hpp"
 #include "UserInterface.hpp"
 #include "Builder.hpp"
+#include "CoordinateOrUnit.hpp"
 
 Unit::Unit(Game *g, UnitID uID, TeamID tID, UnitTemplateID utID, Coordinate pos):
 game(g),
@@ -157,10 +158,16 @@ bool Unit::canAttack(Unit* u) const {
 	return false;
 }
 
-void Unit::move_towards(const Coordinate c) {
-	if (this->getUnitTemplate()->speed() == 0) {
+void Unit::move_towards(const CoordinateOrUnit dest) {
+	if (this->getUnitTemplate()->speed() == 0)
 		return;
-	}
+
+	if (!dest.isValid())
+		return;
+
+	Coordinate c = dest.getCoordinate();
+
+
 	// Speed-limited movement, with collision handling
 	if (animationState!=ANIMSTATE_DYING) {
 		Coordinate dr = c-xy;
