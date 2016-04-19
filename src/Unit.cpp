@@ -204,9 +204,11 @@ void Unit::move_towards(const CoordinateOrUnit dest) {
 	}
 }
 
+/*! 
+ * Starts or continues the unit's attacking state. 
+ * If the attacking animation has completed, fires all off-cooldown weapons.
+ */
 void Unit::attack(Unit* target){
-	// Starts or continues the unit's attacking state.
-	// If the attacking animation has completed, fires all weapons.
 	UnitTemplate* unitTemplate = this->getUnitTemplate();
 	int ticksUntilCanFire = this->weapons_[0].ticksUntilCanFire;
 	int mainWeaponAnimationLength = unitTemplate->drawer.attackCycleLength;

@@ -1,3 +1,12 @@
+/*! 
+ * \class Animation
+
+ * \brief Instantiated to play a single animation.
+
+ * Contains information about a single animation (speed, duration, the number
+ * of frames, the source image, etc.)
+ */
+
 #pragma once
 
 #include <memory>

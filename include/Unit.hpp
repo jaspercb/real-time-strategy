@@ -1,3 +1,13 @@
+/**
+ * \class Unit
+ *
+ * \brief Base unit class.
+ *
+ * A Unit instance contains information about a unit's type, team, position,
+ * weapons, and state.
+*/
+
+
 #pragma once
 
 #include <SDL2/SDL.h>
