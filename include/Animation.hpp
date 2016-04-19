@@ -1,7 +1,7 @@
 /*! 
  * \class Animation
 
- * \brief Instantiated to play a single animation.
+ * \brief Alternate wrapper for a spritesheet that plays exactly one animation, exactly once.
 
  * Contains information about a single animation (speed, duration, the number
  * of frames, the source image, etc.)
@@ -21,10 +21,8 @@ class Spritesheet;
 class UserInterface;
 
 class Animation {
-	// Alternate wrapper for a spritesheet that plays exactly one animation, exactly once
-	// If you want to play this in a specific screen location.
 	public:
-		Animation(int frames, int ticksPerFrame, Coordinate coord, std::shared_ptr<Spritesheet> spritesheet);
+		static std::unique_ptr<Animation> create(std::string animationname, Coordinate coord, int ticksPerFrame);
 		void draw(SDL_Renderer* renderer, UserInterface* ui);
 		UpdateStatus::Enum tick();
 
@@ -32,11 +30,10 @@ class Animation {
 		Coordinate screenCoord;
 
 	private:
+		Animation(int frames, int ticksPerFrame, Coordinate coord, std::shared_ptr<Spritesheet> spritesheet);
 		int frame;
 		int numFrames;
 		int ticksPerFrame;
 		int ticksSinceLastFrameUpdate;
 		std::shared_ptr<Spritesheet> spritesheet;
 };
-
-std::unique_ptr<Animation> newAnimation(std::string animationname, Coordinate coord, int ticksPerFrame);

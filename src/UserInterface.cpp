@@ -530,7 +530,7 @@ void UserInterface::issueBuildCmd(UnitTemplateID id) {
 }
 
 void UserInterface::playAnimation(std::string animationName, Coordinate pos, int tickTime) {
-	this->animations.insert(newAnimation(animationName, pos, tickTime));
+	this->animations.insert(Animation::create(animationName, pos, tickTime));
 }
 
 void UserInterface::setControlGroup(int ctrlGroupIndex) {

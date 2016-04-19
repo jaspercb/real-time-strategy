@@ -3,6 +3,10 @@
 #include "Spritesheet.hpp"
 #include "UserInterface.hpp"
 
+std::unique_ptr<Animation> Animation::create(std::string animationname, Coordinate coord, int ticksPerFrame) {
+	return std::unique_ptr<Animation> (new Animation(gResourceManager->getSpritesX(animationname)*gResourceManager->getSpritesY(animationname), ticksPerFrame, coord, gResourceManager->get(animationname) ));
+}
+
 Animation::Animation(int numFrames, int ticksPerFrame, Coordinate coord, std::shared_ptr<Spritesheet> spritesheet) :
 	objectiveCoord(coord),
 	frame(0),
@@ -31,8 +35,4 @@ UpdateStatus::Enum Animation::tick(){
 	}
 
 	return UpdateStatus::OK;
-}
-
-std::unique_ptr<Animation> newAnimation(std::string animationname, Coordinate coord, int ticksPerFrame) {
-	return std::unique_ptr<Animation> (new Animation(gResourceManager->getSpritesX(animationname)*gResourceManager->getSpritesY(animationname), ticksPerFrame, coord, gResourceManager->get(animationname) ));
 }
