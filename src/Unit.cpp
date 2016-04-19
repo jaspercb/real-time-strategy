@@ -204,7 +204,7 @@ void Unit::move_towards(const CoordinateOrUnit dest) {
 	}
 }
 
-/*! 
+/*!
  * Starts or continues the unit's attacking state. 
  * If the attacking animation has completed, fires all off-cooldown weapons.
  */

@@ -430,6 +430,9 @@ void UserInterface::renderTextbox( SDL_Renderer* renderer, std::vector<std::stri
 	gFontManager->renderVector( lines, topLeft+Coordinate(10,0));
 }
 
+/* 
+ * Advances all animations by one frame.
+*/
 void UserInterface::tick() {
 	this->frame++;
 
@@ -442,10 +445,13 @@ void UserInterface::tick() {
 	}
 }
 
+/* 
+ * Zooms in the current viewing pane. positive argument => zoom in, negative => zoom out.
+*/
 void UserInterface::zoom(int dy) {
 	//this->viewCenter.first += SCREEN_WIDTH * PIXEL_WIDTH/this->viewMagnification/2;
 	//this->viewCenter.second += SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
-	
+
 	if (dy > 0)
 		this->viewMagnification *= 1.1;
 	else if (dy < 0) {
