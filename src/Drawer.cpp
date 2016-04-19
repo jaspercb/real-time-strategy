@@ -130,28 +130,28 @@ void Drawer::draw(SDL_Renderer* renderer, Unit* unit, UserInterface* ui, int alp
 	this->spritesheet->setAlphaMod(alphaMulti);
 
 	int dy = unit->dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
-	dy += (unit->animationState == ANIMSTATE_DYING && unit->dimension.air) ? 0.03*(unit->drawAnimationStep+2)*(unit->drawAnimationStep+2) : 0;
+	dy += (unit->animationState == AnimationState::Dying && unit->dimension.air) ? 0.03*(unit->drawAnimationStep+2)*(unit->drawAnimationStep+2) : 0;
 	dy *= ui->viewMagnification;
 	
 	Coordinate pos = ui->screenCoordinateFromObjective(unit->xy);
 
 	switch (unit->animationState) {
-		case ANIMSTATE_IDLE: {
+		case AnimationState::Idle: {
 			this->drawIdle(renderer, unit->drawFacingAngle, ui, pos, positiveRemainder(unit->drawAnimationStep, this->idleCycleLength), dy);
 			break;
 		}
-		case ANIMSTATE_WALKING: {
+		case AnimationState::Walking: {
 			this->drawWalking(renderer, unit->drawFacingAngle, ui, pos, positiveRemainder(unit->drawAnimationStep, this->walkCycleLength), dy);
 			break;
 		}
-		case ANIMSTATE_ATTACKING:
+		case AnimationState::Attacking:
 			if (unit->drawAnimationStep < 0)
 				this->drawIdle(renderer, unit->drawFacingAngle, ui, pos, positiveRemainder(unit->drawAnimationStep, this->idleCycleLength), dy);
 			else
 				this->drawAttacking(renderer, unit->drawFacingAngle, ui, pos, std::max(0, positiveRemainder(unit->drawAnimationStep, this->attackCycleLength) ), dy);
 			break;
 
-		case ANIMSTATE_DYING:
+		case AnimationState::Dying:
 			this->drawDying(renderer, unit->drawFacingAngle, ui, pos, std::min(this->deathCycleLength -1, std::abs(unit->drawAnimationStep)), dy);
 			break;
 	}
@@ -287,7 +287,7 @@ void drawHPbar(SDL_Renderer* renderer, int HP, int maxHP, const Coordinate rende
 }
 
 void drawHPbar(SDL_Renderer* renderer, const Unit* unit, UserInterface* ui) {
-	if (unit->animationState != ANIMSTATE_DYING) {
+	if (unit->animationState != AnimationState::Dying) {
 		int dy = unit->dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
 		drawHPbar(renderer, unit->hp, unit->getUnitTemplate()->maxHP(), ui->screenCoordinateFromObjective(unit->xy), ui->viewMagnification, dy);
 	}

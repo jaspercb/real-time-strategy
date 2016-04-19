@@ -20,16 +20,20 @@ class Game;
 class UserInterface;
 class CoordinateOrUnit;
 
-enum AnimationState {
-	ANIMSTATE_IDLE,
-	ANIMSTATE_WALKING,
-	ANIMSTATE_ATTACKING,
-	ANIMSTATE_DYING
+namespace AnimationState {
+	enum Enum {
+		Idle,
+		Walking,
+		Attacking,
+		Dying
+	};
 };
 
-enum UpdateStatus {
-	STATUS_OK,
-	STATUS_REMOVE
+namespace UpdateStatus {
+	enum Enum {
+		OK,
+		Remove
+	};
 };
 
 class Unit {
@@ -73,7 +77,7 @@ public:
 	int es;
 	int dim;
 
-	AnimationState animationState;
+	AnimationState::Enum animationState;
 	int drawAnimationStep, drawFacingAngle;
 	
 	UnitID attackTargetID;

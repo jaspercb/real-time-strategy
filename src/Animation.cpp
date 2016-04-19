@@ -20,17 +20,17 @@ void Animation::draw(SDL_Renderer* renderer, UserInterface* ui){
 	this->spritesheet->render(renderer, frame%spritesheet->spritesX, frame/spritesheet->spritesX, this->screenCoord.x, this->screenCoord.y, ui->viewMagnification);
 }
 
-UpdateStatus Animation::tick(){
+UpdateStatus::Enum Animation::tick(){
 	this->ticksSinceLastFrameUpdate++;
 	if (this->ticksSinceLastFrameUpdate >= this->ticksPerFrame){
 		this->ticksSinceLastFrameUpdate = 0;
 		this->frame++;
 	}
 	if (this->frame >= this->numFrames){
-		return STATUS_REMOVE;
+		return UpdateStatus::Remove;
 	}
 
-	return STATUS_OK;
+	return UpdateStatus::OK;
 }
 
 std::unique_ptr<Animation> newAnimation(std::string animationname, Coordinate coord, int ticksPerFrame) {

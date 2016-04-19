@@ -22,7 +22,7 @@ teamID(tID),
 unitID(uID),
 unitTemplateID(utID),
 xy(pos),
-animationState(ANIMSTATE_IDLE),
+animationState(AnimationState::Idle),
 drawAnimationStep(0),
 drawFacingAngle(0),
 
@@ -72,8 +72,8 @@ void Unit::tick()
 			stateQueue_.pop_front();
 		}
 	}
-	else if (this->animationState != ANIMSTATE_DYING) {
-		this->animationState = ANIMSTATE_DYING;
+	else if (this->animationState != AnimationState::Dying) {
+		this->animationState = AnimationState::Dying;
 		this->drawAnimationStep = 0;
 	}
 }
@@ -148,7 +148,7 @@ Distance Unit::getAttackRange() {
 }
 
 bool Unit::canAttack(Unit* u) const {
-	if (this->game->unitsAreFriendly(u->unitID,this->unitID) || u->animationState == ANIMSTATE_DYING) {
+	if (this->game->unitsAreFriendly(u->unitID,this->unitID) || u->animationState == AnimationState::Dying) {
 		return false;
 	}
 	for (auto &w : this->weapons_) {
@@ -169,7 +169,7 @@ void Unit::move_towards(const CoordinateOrUnit dest) {
 
 
 	// Speed-limited movement, with collision handling
-	if (animationState!=ANIMSTATE_DYING) {
+	if (animationState!=AnimationState::Dying) {
 		Coordinate dr = c-xy;
 		Distance spd = this->getUnitTemplate()->speed();
 
@@ -184,7 +184,7 @@ void Unit::move_towards(const CoordinateOrUnit dest) {
 			for (int i=0; i<8; i++) {
 				if (this->game->inhabitedGrid.unitOKToMoveTo(this, target)) {
 					this->move(target);
-					this->animationState = ANIMSTATE_WALKING;
+					this->animationState = AnimationState::Walking;
 					
 					int target_angle = (180/M_PI) * std::atan2(dr.y, dr.x);
 					int dTheta = target_angle-this->drawFacingAngle;
@@ -213,11 +213,11 @@ void Unit::attack(Unit* target){
 
 
 	switch (this->animationState){
-		case ANIMSTATE_DYING:{
+		case AnimationState::Dying:{
 			this->attackTargetID = 0;
 			return;
 		}
-		case ANIMSTATE_ATTACKING: {
+		case AnimationState::Attacking: {
 			if (target->unitID == this->attackTargetID) { // to ensure a player can't start targeting one unit, then instantly switch to another
 				//debugLog(this->drawAnimationStep+1);
 				if (this->drawAnimationStep < unitTemplate->drawer.attackCycleLength) {
@@ -239,7 +239,7 @@ void Unit::attack(Unit* target){
 		}
 		default: {
 			if (!game->teamsAreFriendly(teamID, target->teamID) && pythagoreanDistance(this->xy, target->xy) <= this->getAttackRange() ) {
-				this->animationState = ANIMSTATE_ATTACKING;
+				this->animationState = AnimationState::Attacking;
 				this->drawAnimationStep = mainWeaponAnimationLength - ticksUntilCanFire;
 				this->attackTargetID = target->unitID;
 			}
@@ -273,11 +273,11 @@ void Unit::draw(SDL_Renderer* renderer, UserInterface* ui) {
 }
 
 bool Unit::isDead() const {
-	return this->hp <= 0 || this->animationState == ANIMSTATE_DYING;
+	return this->hp <= 0 || this->animationState == AnimationState::Dying;
 }
 
 bool Unit::shouldDelete() const {
-	return (this->animationState == ANIMSTATE_DYING) && (this->drawAnimationStep > 20);
+	return (this->animationState == AnimationState::Dying) && (this->drawAnimationStep > 20);
 }
 
 std::vector<Coordinate> Unit::getStateWaypoints() {

@@ -17,7 +17,7 @@ class Animation {
 	public:
 		Animation(int frames, int ticksPerFrame, Coordinate coord, std::shared_ptr<Spritesheet> spritesheet);
 		void draw(SDL_Renderer* renderer, UserInterface* ui);
-		UpdateStatus tick();
+		UpdateStatus::Enum tick();
 
 		Coordinate objectiveCoord;
 		Coordinate screenCoord;

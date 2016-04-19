@@ -437,7 +437,7 @@ void UserInterface::tick() {
 	this->viewCenter.y += this->cameraVy;
 
 	for (auto &animation : this->animations){
-		if (STATUS_REMOVE == animation->tick())
+		if (UpdateStatus::Remove == animation->tick())
 			this->animations.erase(animation);
 	}
 }

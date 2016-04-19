@@ -15,8 +15,8 @@ StateExitCode StateAttack::update(Unit* unit) {
 	// otherwise do nothing
 	try{
 		Unit* target = unit->game->getUnit(targetID);
-		if (target->animationState == ANIMSTATE_DYING) {
-			unit->animationState = ANIMSTATE_IDLE;
+		if (target->animationState == AnimationState::Dying) {
+			unit->animationState = AnimationState::Idle;
 			return STATE_EXIT_COMPLETE;
 		}
 		else{

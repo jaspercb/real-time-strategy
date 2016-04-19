@@ -114,7 +114,7 @@ void Game::resolveCollisions() {
 						( (other->unitID+other->xy.y) % 3 == 1) ?  0 :
 																-5 ) );
 			}
-			else if (unit->animationState != ANIMSTATE_DYING && (other->animationState == ANIMSTATE_IDLE || other->animationState == ANIMSTATE_ATTACKING) ) { // 
+			else if (unit->animationState != AnimationState::Dying && (other->animationState == AnimationState::Idle || other->animationState == AnimationState::Attacking) ) { // 
 				Coordinate c = other->xy - unit->xy;
 				c.setLength(other->getUnitTemplate()->radius() + unit->getUnitTemplate()->radius() - c.length());
 				other->move_towards( other->xy + c );

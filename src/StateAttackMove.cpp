@@ -26,13 +26,13 @@ StateExitCode StateAttackMove::update(Unit* unit) {
 		StateExitCode ret = this->atkstate.update(unit);
 		if (ret == STATE_EXIT_COMPLETE){
 			this->attacking = false;
-			unit->animationState = ANIMSTATE_IDLE;
+			unit->animationState = AnimationState::Idle;
 		}
 		return STATE_EXIT_INCOMPLETE;
 	}
 	else {
 		//debugLog("walkstate");
-		unit->animationState = ANIMSTATE_WALKING;
+		unit->animationState = AnimationState::Walking;
 		return this->gotostate.update(unit);
 	}
 }

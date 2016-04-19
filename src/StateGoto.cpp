@@ -25,7 +25,7 @@ StateExitCode StateGoto::update(Unit* unit){
 
 	Coordinate targetCoord = target.getCoordinate();
 	if (pythagoreanDistanceLessThan(unit->xy, targetCoord, 50)) {
-		unit->animationState = ANIMSTATE_IDLE;
+		unit->animationState = AnimationState::Idle;
 		return STATE_EXIT_COMPLETE;
 	}
 	else{
@@ -39,7 +39,7 @@ StateExitCode StateGoto::update(Unit* unit){
 		last5FramesDistance += last5distances[4];
 
 		if (pythagoreanDistanceLessThan(unit->xy, targetCoord, 15000) && last5FramesDistance < 600){
-			unit->animationState = ANIMSTATE_IDLE;
+			unit->animationState = AnimationState::Idle;
 			return STATE_EXIT_COMPLETE;
 		}
 
