@@ -109,10 +109,10 @@ void Game::resolveCollisions() {
 			if (unit->xy == other->xy) {					// Deterministic location offset keeps game in lockstep.
 				other->move_towards( other->xy + Coordinate(
 							( (other->unitID+other->xy.x) % 2 == 0) ?  5 :
-																	-5 ,
-						( (other->unitID+other->xy.y) % 3 == 0) ?  5 :
-						( (other->unitID+other->xy.y) % 3 == 1) ?  0 :
-																-5 ) );
+							                                          -5 ,
+							( (other->unitID+other->xy.y) % 3 == 0) ?  5 :
+							( (other->unitID+other->xy.y) % 3 == 1) ?  0 :
+							                                          -5 ) );
 			}
 			else if (unit->animationState != AnimationState::Dying && (other->animationState == AnimationState::Idle || other->animationState == AnimationState::Attacking) ) { // 
 				Coordinate c = other->xy - unit->xy;
