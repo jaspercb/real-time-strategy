@@ -158,7 +158,7 @@ bool Unit::canAttack(Unit* u) const {
 	return false;
 }
 
-void Unit::move_towards(const CoordinateOrUnit dest) {
+void Unit::moveTowards(const CoordinateOrUnit dest) {
 	if (this->getUnitTemplate()->speed() == 0)
 		return;
 

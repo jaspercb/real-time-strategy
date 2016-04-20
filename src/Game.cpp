@@ -107,7 +107,7 @@ void Game::resolveCollisions() {
 			Unit* other = this->getUnit(otherid);
 
 			if (unit->xy == other->xy) {					// Deterministic location offset keeps game in lockstep.
-				other->move_towards( other->xy + Coordinate(
+				other->moveTowards( other->xy + Coordinate(
 							( (other->unitID+other->xy.x) % 2 == 0) ?  5 :
 							                                          -5 ,
 							( (other->unitID+other->xy.y) % 3 == 0) ?  5 :
@@ -117,14 +117,14 @@ void Game::resolveCollisions() {
 			else if (unit->animationState != AnimationState::Dying && (other->animationState == AnimationState::Idle || other->animationState == AnimationState::Attacking) ) { // 
 				Coordinate c = other->xy - unit->xy;
 				c.setLength(other->getUnitTemplate()->radius() + unit->getUnitTemplate()->radius() - c.length());
-				other->move_towards( other->xy + c );
+				other->moveTowards( other->xy + c );
 			}
 /*			else if ( (unit.animationState != ANIMSTATE_IDLE && other.animationState != ANIMSTATE_WALKING) ) {
 				Distance dx = other.xy.x - unit.xy.x;
 				Distance dy = other.xy.second - unit.xy.second;
 				dx = dx ? ((Distance)10000000/dx) : 20000*((unit.xy.x+unit.unitID)%2? 1 : -1);
 				dy = dy ? ((Distance)10000000/dy) : 20000*((unit.xy.second+unit.unitID)%2? 1 : -1);
-				other.move_towards(Coordinate(other.xy.x+dx, other.xy.second+dy));
+				other.moveTowards(Coordinate(other.xy.x+dx, other.xy.second+dy));
 			}
 */
 		}

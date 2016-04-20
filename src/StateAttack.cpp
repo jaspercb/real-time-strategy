@@ -21,7 +21,7 @@ StateExitCode StateAttack::update(Unit* unit) {
 		}
 		else{
 			if (pythagoreanDistance(unit->xy, target->xy) > unit->getAttackRange()) {
-				unit->move_towards(target);
+				unit->moveTowards(target);
 				return STATE_EXIT_INCOMPLETE;
 			}
 			else{

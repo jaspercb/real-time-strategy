@@ -30,7 +30,7 @@ StateExitCode StateGoto::update(Unit* unit){
 	}
 	else{
 		Coordinate oldC = unit->xy;
-		unit->move_towards(targetCoord);
+		unit->moveTowards(targetCoord);
 		last5FramesDistance -= last5distances[0];
 		for (int i=0; i<4; i++){
 			this->last5distances[i]=last5distances[i+1];

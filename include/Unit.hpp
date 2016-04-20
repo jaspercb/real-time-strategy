@@ -65,7 +65,7 @@ public:
 	void damage(const int, const DamageType, Unit* attackedBy);
 	Distance getAttackRange(); // returns the range of the first weapon
 	bool canAttack(Unit* u) const;
-	void move_towards(const CoordinateOrUnit dest);
+	void moveTowards(const CoordinateOrUnit dest);
 	void attack(Unit* target);
 
 	void startBuilding(UnitTemplateID unitTemplateID);
