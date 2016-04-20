@@ -51,10 +51,12 @@ public:
 	friend Builder;
 	friend UserInterface;
 
-	//Unit();
 	Unit(Game*, UnitID, TeamID, UnitTemplateID, Coordinate);
-	//Unit(Unit*&u);
 	~Unit();
+
+	operator UnitID() const {
+		return this->unitID;
+	};
 
 	UnitTemplate* getUnitTemplate() const;
 	void tick();

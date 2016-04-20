@@ -215,7 +215,7 @@ void UserInterface::updateSelectedUnits() {
 			TeamID prevTeamID = this->game->getUnit(prevUnitID)->teamID;
 			this->previousSelectedUnits.clear();
 			this->selectedUnits.clear();
-			for (auto &i : this->game->unitsByID) {
+			for (const auto &i : this->game->unitsByID) {
 				if (coordInRect(this->screenCoordinateFromObjective(i.second->xy), Coordinate(0, 0), Coordinate(SCREEN_WIDTH, SCREEN_HEIGHT))
 				&& i.second->teamID == prevTeamID
 				&& i.second->teamID == prevTeamID )
@@ -237,8 +237,6 @@ void UserInterface::updateSelectedUnits() {
 				this->selectedUnits.insert(unitID_unit.first);
 		}
 	}
-	
-
 }
 
 void UserInterface::renderSelection( SDL_Renderer* renderer ) {
