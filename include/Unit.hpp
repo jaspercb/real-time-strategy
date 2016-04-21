@@ -30,22 +30,6 @@ class Game;
 class UserInterface;
 class CoordinateOrUnit;
 
-namespace AnimationState {
-	enum Enum {
-		Idle,
-		Walking,
-		Attacking,
-		Dying
-	};
-};
-
-namespace UpdateStatus {
-	enum Enum {
-		OK,
-		Remove
-	};
-};
-
 class Unit {
 public:
 	friend Builder;
