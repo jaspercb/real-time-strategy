@@ -8,7 +8,7 @@
 Team::Team(Game& _game, TeamID tID):
 game(_game),
 teamID(tID),
-teamColor((TeamColor)tID)
+teamColor((TeamColor::Enum)tID)
 {
 	//for testing
 	//unitTemplates.emplace(1, new UnitTemplate("testUnit", 100, 20, 20, GROUND_ONLY, WEAPONTEMPLATEVECTOR_GOHERE);

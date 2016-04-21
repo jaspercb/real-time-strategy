@@ -15,9 +15,9 @@ class ResourceManager {
 		
 		ResourceData loadResourceData(std::ifstream& is);
 		
-		std::shared_ptr<Spritesheet> load(std::string resourcename, TeamColor teamColor);
+		std::shared_ptr<Spritesheet> load(std::string resourcename, TeamColor::Enum teamColor);
 		
-		std::shared_ptr<Spritesheet> get(std::string resourcename, TeamColor teamColor = COLOR_NULL);
+		std::shared_ptr<Spritesheet> get(std::string resourcename, TeamColor::Enum teamColor = TeamColor::Enum::Null);
 		
 		int getSpritesX(std::string resourcename);
 
@@ -28,6 +28,6 @@ class ResourceManager {
 		// If given a resource address that doesn't exist, throws.
 
 	private:
-		std::map< std::pair<std::string, TeamColor>, std::shared_ptr<Spritesheet> > resourceTable;
+		std::map< std::pair<std::string, TeamColor::Enum>, std::shared_ptr<Spritesheet> > resourceTable;
 		std::unordered_map<std::string, ResourceData > resourceDataTable;
 };

@@ -5,7 +5,7 @@
 #include "typedefs.hpp"
 #include "enums.hpp"
 
-extern float colorThetas[NUM_TEAMCOLORS];
+extern float colorThetas[TeamColor::Enum::num];
 
 namespace SDL_Colors {
 	static const SDL_Color BLACK = {0, 0, 0, SDL_ALPHA_OPAQUE};
@@ -56,4 +56,4 @@ bool shouldColorKey(Uint32 int_color);
 
 void rotateColorOfSurface(SDL_Surface* surface, float radians);
 
-void teamColorSpritesheet(SDL_Surface *surface, TeamColor color);
+void teamColorSpritesheet(SDL_Surface *surface, TeamColor::Enum color);

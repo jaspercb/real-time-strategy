@@ -28,7 +28,7 @@ Drawer::Drawer(std::shared_ptr<Spritesheet> sp):
 	{
 	}
 
-Drawer::Drawer(std::ifstream& is, TeamColor teamColor):
+Drawer::Drawer(std::ifstream& is, TeamColor::Enum teamColor):
 	idleCycleStart(0),
 	idleCycleLength(1),
 	walkCycleStart(0),
@@ -280,10 +280,10 @@ void drawHPbar(SDL_Renderer* renderer, int HP, int maxHP, const Coordinate rende
 	tclip.x=renderX-(magnification*barlength)/2;
 	tclip.y=renderY+ (dy - 25) * magnification;
 	
-	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-full", COLOR_NULL)->sheet, &fullclip, &tclip);
+	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-full", TeamColor::Enum::Null)->sheet, &fullclip, &tclip);
 	tclip.x += magnification*fullclip.w;
 	tclip.w = magnification*emptyclip.w;
-	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-empty", COLOR_NULL)->sheet, &emptyclip, &tclip);
+	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-empty", TeamColor::Enum::Null)->sheet, &emptyclip, &tclip);
 }
 
 void drawHPbar(SDL_Renderer* renderer, const Unit* unit, UserInterface* ui) {

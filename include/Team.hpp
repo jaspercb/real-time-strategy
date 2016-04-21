@@ -29,7 +29,7 @@ public:
 
 	std::map<UnitTemplateID, UnitTemplate*> unitTemplates;
 
-	const TeamColor teamColor;
+	const TeamColor::Enum teamColor;
 
 protected:
 	std::vector<int> resources;

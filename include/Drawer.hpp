@@ -14,7 +14,7 @@ class Drawer {
 	public:
 		Drawer();
 		Drawer(std::shared_ptr<Spritesheet> sp);
-		Drawer(std::ifstream&, TeamColor teamColor);
+		Drawer(std::ifstream&, TeamColor::Enum teamColor);
 		~Drawer();
 		void draw(SDL_Renderer* renderer, Unit* unit, UserInterface* ui, int colorMulti = 255/*, Coordinate cameraposition */);
 		

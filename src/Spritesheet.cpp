@@ -39,7 +39,7 @@ SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path) {
 	return newTexture;
 }
 
-SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColor color) {
+SDL_Texture* loadSpritesheet( SDL_Renderer* renderer, std::string path, TeamColor::Enum color) {
 	// Loads a spritesheet. Makes palette swaps with respect to TeamColor.
 	SDL_Texture* newTexture = NULL;
 
@@ -107,7 +107,7 @@ Spritesheet::Spritesheet(SDL_Texture *src, int w, int h, int sX, int sY, int off
 		this->tclip.h = h;
 	}
 
-Spritesheet::Spritesheet(SDL_Renderer *renderer, ResourceData resourceData, TeamColor teamColor):
+Spritesheet::Spritesheet(SDL_Renderer *renderer, ResourceData resourceData, TeamColor::Enum teamColor):
 	spriteW(resourceData.spriteW),
 	spriteH(resourceData.spriteH),
 	spritesX(resourceData.spritesX),

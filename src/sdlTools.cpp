@@ -3,7 +3,7 @@
 #include "Spritesheet.hpp"
 #include <cmath>
 
-float colorThetas[NUM_TEAMCOLORS] = {
+float colorThetas[TeamColor::Enum::num] = {
 					0, //null
 					0, //pink
 					0.55, //red
@@ -247,7 +247,7 @@ void rotateColorOfSurface(SDL_Surface* surface, float radians) {
 	}
 }
 
-void teamColorSpritesheet(SDL_Surface *surface, TeamColor color) {
+void teamColorSpritesheet(SDL_Surface *surface, TeamColor::Enum color) {
 	// Changes the color palette, replacing the magenta color key with the specified color. See /resources/graphics/team-colors.png
 
 	/*SDL_Surface* colormapping = loadSurface("../resources/graphics/team-colors.png");

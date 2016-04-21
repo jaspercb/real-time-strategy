@@ -72,14 +72,14 @@ SDL_Surface* ResourceManager::getRawSurface(std::string resourcename) {
 	return loadSurface(this->resourceDataTable[resourcename].filepath);
 }
 
-std::shared_ptr<Spritesheet> ResourceManager::load(std::string resourcename, TeamColor teamColor) {
+std::shared_ptr<Spritesheet> ResourceManager::load(std::string resourcename, TeamColor::Enum teamColor) {
 	return std::shared_ptr<Spritesheet>( new Spritesheet(gRenderer, this->resourceDataTable[resourcename], teamColor) );
 }
 
-std::shared_ptr<Spritesheet> ResourceManager::get(std::string resourcename, TeamColor teamColor) {
+std::shared_ptr<Spritesheet> ResourceManager::get(std::string resourcename, TeamColor::Enum teamColor) {
 
-	std::pair<std::string, TeamColor> key(resourcename,
-								this->resourceDataTable[resourcename].shouldApplyTeamColor ? teamColor : COLOR_NULL);
+	std::pair<std::string, TeamColor::Enum> key(resourcename,
+								this->resourceDataTable[resourcename].shouldApplyTeamColor ? teamColor : TeamColor::Enum::Null);
 
 	auto iter = this->resourceTable.find(key);
 

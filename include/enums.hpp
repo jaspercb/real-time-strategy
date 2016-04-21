@@ -2,19 +2,21 @@
 
 #include "SDL2/SDL.h"
 
-enum TeamColor{
-	COLOR_NULL, // for when we don't want to recolor
-	COLOR_PINK,
-	COLOR_RED,
-	COLOR_BLUE,
-	COLOR_GREEN,
-	COLOR_PURPLE,
-	COLOR_ORANGE,
-	COLOR_BROWN,
-	COLOR_YELLOW,
-	COLOR_TEAL,
-	COLOR_PALE,
-	COLOR_IRIS,
-	COLOR_OLIVE,
-	NUM_TEAMCOLORS
+namespace TeamColor {
+	enum Enum {
+		Null, // for when we don't want to recolor
+		Pink,
+		Red,
+		Blue,
+		Green,
+		Purple,
+		Orange,
+		Brown,
+		Yellow,
+		Teal,
+		Pale,
+		Iris,
+		Olive,
+		num
+	};
 };
