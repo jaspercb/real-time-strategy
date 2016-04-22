@@ -6,10 +6,11 @@
 #include <memory>
 
 #include "typedefs.hpp"
+
 #include "InhabitedGrid.hpp"
-#include "Team.hpp"
 #include "Terrain.hpp"
 
+class Team;
 class Unit;
 class InhabitedGrid;
 class Command;

@@ -4,6 +4,7 @@
 #include "globals.hpp"
 
 #include "Game.hpp"
+
 #include "Animation.hpp"
 #include "UserInterface.hpp"
 #include "Unit.hpp"
@@ -11,6 +12,7 @@
 #include "Drawer.hpp"
 #include "ResourceManager.hpp"
 #include "FontManager.hpp"
+#include "Team.hpp"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;

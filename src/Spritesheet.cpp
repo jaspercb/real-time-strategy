@@ -2,8 +2,9 @@
 #include <cmath>
 #include <string>
 
-#include "Logging.hpp"
 #include "Spritesheet.hpp"
+
+#include "Logging.hpp"
 #include "ResourceData.hpp"
 
 SDL_Surface* loadSurface( std::string path) {

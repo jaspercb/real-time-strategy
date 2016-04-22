@@ -7,6 +7,8 @@
 #include "Game.hpp"
 #include "Command.hpp"
 #include "Unit.hpp"
+#include "UnitTemplate.hpp"
+#include "Team.hpp"
 #include "Logging.hpp"
 #include "Animation.hpp"
 #include "FontManager.hpp"

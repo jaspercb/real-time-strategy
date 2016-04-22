@@ -1,6 +1,8 @@
 #include "Game.hpp"
 
 #include "Unit.hpp"
+#include "UnitTemplate.hpp"
+#include "Team.hpp"
 #include "InhabitedGrid.hpp"
 #include "CoordinateOrUnit.hpp"
 

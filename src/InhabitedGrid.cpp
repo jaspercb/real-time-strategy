@@ -2,7 +2,9 @@
 #include <algorithm>
 
 #include "InhabitedGrid.hpp"
+
 #include "Unit.hpp"
+#include "UnitTemplate.hpp"
 #include "Game.hpp"
 #include "Logging.hpp"
 #include "globals.hpp"
