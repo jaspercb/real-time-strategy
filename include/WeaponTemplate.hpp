@@ -4,32 +4,20 @@
 #include <fstream>
 
 #include "EnvironmentSpec.hpp"
+
 #include "typedefs.hpp"
+#include "enums.hpp"
 
 class EnvironmentSpec;
 class Weapon;
 class Unit;
 class UserInterface;
 
-enum DamageType{
-	DMG_ELECTRO,	// good against shields, shit against armor
-	DMG_THERMAL,	// mediocre against shields and armor
-	DMG_KINETIC,    // bad against shields, pretty good against armor
-	DMG_EXPLOSIVE	// shit against shields, great against armor
-};
-
-enum ResourceType{
-	RESOURCE_METAL,
-	RESOURCE_CRYSTAL,
-	RESOURCE_SUPPLY, // You get supply back when a unit is destroyed
-	RESOURCE_NUM
-};
-
 class WeaponTemplate {
 public:
 	WeaponTemplate();
 	WeaponTemplate(std::string _name,
-			DamageType _damageType,
+			DamageType::Enum _damageType,
 			int _damage,
 			int _reloadTime,
 			int _range,
@@ -39,7 +27,7 @@ public:
 	WeaponTemplate(std::ifstream&);
 	//WeaponTemplate(std::string);
 	virtual std::string name(){return name_;};
-	virtual DamageType damageType(){return damageType_;};
+	virtual DamageType::Enum damageType(){return damageType_;};
 	virtual int damage() const {return damage_;};
 	virtual int reloadTime() const {return reloadTime_;}; //
 	virtual int range() const {return range_;};
@@ -52,7 +40,7 @@ public:
 	virtual void playHitAnimation(UserInterface*, const Coordinate& target);
 protected:
 	std::string name_;
-	DamageType damageType_;
+	DamageType::Enum damageType_;
 	bool targetGround_;
 	int damage_;
 	int reloadTime_;

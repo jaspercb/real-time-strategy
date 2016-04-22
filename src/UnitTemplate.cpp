@@ -3,6 +3,7 @@
 #include "Team.hpp"
 #include "Logging.hpp"
 #include "Drawer.hpp"
+#include "WeaponTemplate.hpp"
 
 UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, Team* team):
 	unitTemplateID(id)
@@ -90,30 +91,30 @@ UnitTemplate::UnitTemplate(std::string s, Team* team):
 	UnitTemplate("../conf/units/"+s, std::ifstream("../conf/units/"+s), team)
 	{}
 
-float UnitTemplate::getDamageEffectivenessVsHP(DamageType dmgtype) const {
+float UnitTemplate::getDamageEffectivenessVsHP(DamageType::Enum dmgtype) const {
 	switch (dmgtype) {
-		case DMG_ELECTRO:
+		case DamageType::Electrical:
 			return 0.5;
-		case DMG_THERMAL:
+		case DamageType::Thermal:
 			return 0.75;
-		case DMG_KINETIC:
+		case DamageType::Kinetic:
 			return 1.25;
-		case DMG_EXPLOSIVE:
+		case DamageType::Explosive:
 			return 1.5;
 		default:
 			return 1.0;
 	}
 }
 
-float UnitTemplate::getDamageEffectivenessVsES(DamageType dmgtype) const {
+float UnitTemplate::getDamageEffectivenessVsES(DamageType::Enum dmgtype) const {
 	switch (dmgtype) {
-		case DMG_ELECTRO:
+		case DamageType::Electrical:
 			return 1.5;
-		case DMG_THERMAL:
+		case DamageType::Thermal:
 			return 1.25;
-		case DMG_KINETIC:
+		case DamageType::Kinetic:
 			return 0.75;
-		case DMG_EXPLOSIVE:
+		case DamageType::Explosive:
 			return 0.5;
 		default:
 			return 1.0;

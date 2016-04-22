@@ -16,8 +16,9 @@
 #include <memory>
 
 #include "typedefs.hpp"
+#include "enums.hpp"
+ 
 #include "Weapon.hpp"
-#include "WeaponTemplate.hpp"
 #include "EnvironmentSpec.hpp"
 #include "Drawer.hpp"
 #include "Command.hpp"
@@ -46,7 +47,7 @@ public:
 	void tick();
 	void handleCommand(Command);
 	void move(const Coordinate);
-	void damage(const int, const DamageType, Unit* attackedBy);
+	void damage(const int, const DamageType::Enum, Unit* attackedBy);
 	Distance getAttackRange(); // returns the range of the first weapon
 	bool canAttack(Unit* u) const;
 	void moveTowards(const CoordinateOrUnit dest);

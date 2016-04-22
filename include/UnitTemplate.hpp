@@ -4,12 +4,13 @@
 #include <fstream>
 #include <string>
 
-#include "EnvironmentSpec.hpp"
-#include "WeaponTemplate.hpp"
-#include "Drawer.hpp"
 #include "enums.hpp"
 
+#include "EnvironmentSpec.hpp"
+#include "Drawer.hpp"
+
 class Team;
+class WeaponTemplate;
 
 class UnitTemplate {
 public:
@@ -26,8 +27,8 @@ public:
 	inline int buildtime() const {return buildtime_;};
 	inline int buildslots() const {return buildslots_;};
 	inline bool isSelectable() const {return selectable_;};
-	float getDamageEffectivenessVsHP(DamageType) const;
-	float getDamageEffectivenessVsES(DamageType) const;
+	float getDamageEffectivenessVsHP(DamageType::Enum) const;
+	float getDamageEffectivenessVsES(DamageType::Enum) const;
 
 	inline bool isBuildable(const Team* const team) const {return true;} ; // This would be where unit prereqs go (ex. "Armory must be built")
 

@@ -6,6 +6,7 @@
 #include "UnitTemplate.hpp"
 #include "Command.hpp"
 #include "Weapon.hpp"
+#include "WeaponTemplate.hpp"
 #include "UnitState.hpp"
 #include "typedefs.hpp"
 #include "Game.hpp"
@@ -117,7 +118,7 @@ void Unit::move(const Coordinate c){
 	game->inhabitedGrid.updatePos(this, oldcoord);
 }
 
-void Unit::damage(const int quant, const DamageType dmgtype, Unit* attackedBy) {
+void Unit::damage(const int quant, const DamageType::Enum dmgtype, Unit* attackedBy) {
 	UnitTemplate* utmpl = getUnitTemplate();
 	if (es>0)
 		es -= quant*utmpl->getDamageEffectivenessVsES(dmgtype);

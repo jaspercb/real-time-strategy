@@ -1,4 +1,5 @@
 #include "WeaponTemplate.hpp"
+
 #include "EnvironmentSpec.hpp"
 #include "Weapon.hpp"
 #include "InhabitedGrid.hpp"
@@ -10,7 +11,7 @@
 #include "Logging.hpp"
 
 WeaponTemplate::WeaponTemplate(std::string _name,
-		DamageType _damageType,
+		DamageType::Enum _damageType,
 		int _damage,
 		int _reloadTime,
 		int _range,
@@ -49,13 +50,13 @@ WeaponTemplate::WeaponTemplate(std::ifstream &is)
 		else if (s=="damageType"){
 			is>>s;
 			if (s=="DMG_ELECTRO")
-				damageType_ = DMG_ELECTRO;
+				damageType_ = DamageType::Electrical;
 			else if (s=="DMG_THERMAL")
-				damageType_ = DMG_THERMAL;
+				damageType_ = DamageType::Thermal;
 			else if (s=="DMG_KINETIC")
-				damageType_ = DMG_KINETIC;
+				damageType_ = DamageType::Kinetic;
 			else if (s=="DMG_EXPLOSIVE")
-				damageType_ = DMG_EXPLOSIVE;
+				damageType_ = DamageType::Explosive;
 			else{
 				debugLog("Error: WeaponTemplate "+name_+" created with invalid damage type: "+s);
 				throw;

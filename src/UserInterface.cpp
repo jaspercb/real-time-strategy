@@ -8,6 +8,7 @@
 #include "Command.hpp"
 #include "Unit.hpp"
 #include "UnitTemplate.hpp"
+#include "WeaponTemplate.hpp"
 #include "Team.hpp"
 #include "Logging.hpp"
 #include "Animation.hpp"

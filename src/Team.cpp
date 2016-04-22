@@ -4,6 +4,7 @@
 #include "Unit.hpp"
 #include "Logging.hpp"
 #include "enums.hpp"
+#include "WeaponTemplate.hpp"
 
 Team::Team(Game& _game, TeamID tID):
 game(_game),
