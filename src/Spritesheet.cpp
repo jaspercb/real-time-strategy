@@ -2,9 +2,9 @@
 #include <cmath>
 #include <string>
 
-#include "typedefs.hpp"
 #include "Logging.hpp"
 #include "Spritesheet.hpp"
+#include "ResourceData.hpp"
 
 SDL_Surface* loadSurface( std::string path) {
 	
@@ -107,7 +107,7 @@ Spritesheet::Spritesheet(SDL_Texture *src, int w, int h, int sX, int sY, int off
 		this->tclip.h = h;
 	}
 
-Spritesheet::Spritesheet(SDL_Renderer *renderer, ResourceData resourceData, TeamColor::Enum teamColor):
+Spritesheet::Spritesheet(SDL_Renderer *renderer, const ResourceData& resourceData, TeamColor::Enum teamColor):
 	spriteW(resourceData.spriteW),
 	spriteH(resourceData.spriteH),
 	spritesX(resourceData.spritesX),

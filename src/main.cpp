@@ -4,6 +4,7 @@
 #include "globals.hpp"
 
 #include "Game.hpp"
+#include "Animation.hpp"
 #include "UserInterface.hpp"
 #include "Unit.hpp"
 #include "Logging.hpp"

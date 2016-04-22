@@ -5,11 +5,13 @@
 #include <set>
 
 #include "typedefs.hpp"
-#include "Animation.hpp"
 
 // Forward declarations
 union SDL_Event;
+class SDL_Renderer;
 class Game;
+class Animation;
+class Spritesheet;
 
 class UserInterface {
 public:

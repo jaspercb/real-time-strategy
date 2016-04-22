@@ -8,6 +8,7 @@
 #include "enums.hpp"
 
 class Spritesheet; // forward declaration
+class SDL_Surface;
 
 class ResourceManager {
 	public:

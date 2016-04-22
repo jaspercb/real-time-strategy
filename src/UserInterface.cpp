@@ -1,9 +1,10 @@
 #include <algorithm>
 #include <sstream>
 
+#include "globals.hpp"
+
 #include "UserInterface.hpp"
 #include "Game.hpp"
-#include "globals.hpp"
 #include "Command.hpp"
 #include "Unit.hpp"
 #include "Logging.hpp"
@@ -11,6 +12,7 @@
 #include "FontManager.hpp"
 #include "sdlTools.hpp"
 #include "InhabitedGrid.hpp"
+#include "Spritesheet.hpp"
 
 #define max(a, b) ((a>b) ? a : b)
 #define min(a, b) ((a<b) ? a : b)

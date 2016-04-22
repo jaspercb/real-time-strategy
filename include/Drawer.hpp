@@ -3,9 +3,11 @@
 #include <fstream>
 #include <memory>
 
-#include "Spritesheet.hpp"
 #include "typedefs.hpp"
+#include "enums.hpp"
 
+class Spritesheet;
+class SDL_Renderer;
 class Unit;
 class UserInterface;
 

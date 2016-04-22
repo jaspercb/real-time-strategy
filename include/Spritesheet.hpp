@@ -4,7 +4,8 @@
 #include <SDL2/SDL_image.h>
 
 #include "enums.hpp"
-#include "ResourceData.hpp"
+
+class ResourceData;
 
 SDL_Surface* loadSurface( std::string path );
 SDL_Texture* loadTexture( SDL_Renderer* renderer, std::string path);
@@ -19,7 +20,7 @@ class Spritesheet {
 	public:
 		Spritesheet(SDL_Texture* src, int w, int h, int sX, int sY, int offX = 0, int offY = 0, int gX = 0, int gY = 0);
 
-		Spritesheet(SDL_Renderer* renderer, ResourceData, TeamColor::Enum teamColor=TeamColor::Enum::Orange);
+		Spritesheet(SDL_Renderer* renderer, const ResourceData&, TeamColor::Enum teamColor=TeamColor::Enum::Orange);
 
 		~Spritesheet();
 
