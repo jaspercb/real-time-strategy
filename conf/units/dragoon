@@ -5,7 +5,7 @@ radius 500
 dimension 1 0 0 0
 weapon{
 	name Dragoon Energy Cannon
-	damageType DMG_ELECTRO
+	damageType electrical
 	damage 25
 	reloadTime 3
 	range 20000

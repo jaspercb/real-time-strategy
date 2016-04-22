@@ -8,7 +8,7 @@ buildtime 100
 
 weapon {
 	name Bomber Bomb
-	damageType DMG_EXPLOSIVE
+	damageType explosive
 	damage 30
 	reloadTime 20
 	range 4000

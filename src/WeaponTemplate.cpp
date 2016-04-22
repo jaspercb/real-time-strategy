@@ -49,13 +49,13 @@ WeaponTemplate::WeaponTemplate(std::ifstream &is)
 		}
 		else if (s=="damageType"){
 			is>>s;
-			if (s=="DMG_ELECTRO")
+			if (s=="electrical")
 				damageType_ = DamageType::Electrical;
-			else if (s=="DMG_THERMAL")
+			else if (s=="thermal")
 				damageType_ = DamageType::Thermal;
-			else if (s=="DMG_KINETIC")
+			else if (s=="kinetic")
 				damageType_ = DamageType::Kinetic;
-			else if (s=="DMG_EXPLOSIVE")
+			else if (s=="explosive")
 				damageType_ = DamageType::Explosive;
 			else{
 				debugLog("Error: WeaponTemplate "+name_+" created with invalid damage type: "+s);

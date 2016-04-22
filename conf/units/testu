@@ -6,7 +6,7 @@ radius 5
 dimension 1 0 0 0
 weapon{
 	name Test Weapon
-	damageType DMG_KINETIC
+	damageType kinetic
 	damage 10
 	reloadTime 3
 	range 5
