@@ -493,9 +493,9 @@ Coordinate UserInterface::minimapCoordinateFromObjective(const Coordinate c) {
 }
 
 void UserInterface::issueGotoCoordCmd(Coordinate targetCoord) {
-	Command cmd(CMD_GOTOCOORD);
+	Command cmd(CommandType::Enum::Gotocoord);
 	cmd.commanded = this->selectedUnits;
-	cmd.queueSetting = this->shiftHeld() ? QUEUE_BACK : QUEUE_OVERWRITE;
+	cmd.queueSetting = this->shiftHeld() ? QueueSetting::Back : QueueSetting::Overwrite;
 	cmd.targetCoord = targetCoord;
 	
 	this->playAnimation("gotocoord-animation", targetCoord, 3);
@@ -504,9 +504,9 @@ void UserInterface::issueGotoCoordCmd(Coordinate targetCoord) {
 }
 
 void UserInterface::issueAttackCmd(UnitID targetID) {
-	Command cmd(CMD_ATTACK);
+	Command cmd(CommandType::Enum::Attack);
 	cmd.commanded = this->selectedUnits;
-	cmd.queueSetting = this->shiftHeld() ? QUEUE_BACK : QUEUE_OVERWRITE;
+	cmd.queueSetting = this->shiftHeld() ? QueueSetting::Back : QueueSetting::Overwrite;
 	cmd.targetID = targetID;
 	
 	this->playAnimation("attackmove-animation", this->game->getUnit(targetID)->xy, 3);
@@ -515,9 +515,9 @@ void UserInterface::issueAttackCmd(UnitID targetID) {
 }
 
 void UserInterface::issueAttackMoveCmd(Coordinate targetCoord) {
-	Command cmd(CMD_ATTACKMOVE);
+	Command cmd(CommandType::Enum::Attackmove);
 	cmd.commanded = this->selectedUnits;
-	cmd.queueSetting = this->shiftHeld() ? QUEUE_BACK : QUEUE_OVERWRITE;
+	cmd.queueSetting = this->shiftHeld() ? QueueSetting::Back : QueueSetting::Overwrite;
 	cmd.targetCoord = targetCoord;
 	
 	this->playAnimation("attackmove-animation", targetCoord, 3);
@@ -526,13 +526,13 @@ void UserInterface::issueAttackMoveCmd(Coordinate targetCoord) {
 }
 
 void UserInterface::issueHaltCmd() {
-	Command cmd(CMD_HALT);
+	Command cmd(CommandType::Enum::Halt);
 	cmd.commanded = this->selectedUnits;
 	game->handleCommand(cmd);
 }
 
 void UserInterface::issueBuildCmd(UnitTemplateID id) {
-	Command cmd(CMD_BUILD);
+	Command cmd(CommandType::Enum::Build);
 	cmd.commanded = this->selectedUnits;
 	cmd.unitTemplateID = id;
 	game->handleCommand(cmd);

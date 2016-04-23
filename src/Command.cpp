@@ -5,6 +5,6 @@
 Command::Command(){	
 }
 
-Command::Command(CommandType cmdtype_):
+Command::Command(CommandType::Enum cmdtype_):
 	cmdtype(cmdtype_)
 	{}

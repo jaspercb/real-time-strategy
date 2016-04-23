@@ -35,7 +35,6 @@ namespace TeamColor {
 	};
 };
 
-
 namespace DamageType {
 	enum Enum {
 	Electrical,	// good against shields, real bad against armor
@@ -52,5 +51,24 @@ namespace ResourceType {
 		Crystal, // consumed on build order
 		Supply, // You get supply back when a unit is destroyed
 		num
+	};
+};
+
+namespace CommandType {
+	enum Enum {
+		Idle, 
+		Gotocoord,
+		Attack,
+		Attackmove,
+		Halt,
+		Build
+	};
+};
+
+namespace QueueSetting {
+	enum Enum {
+		Overwrite,
+		Front,
+		Back
 	};
 };

@@ -83,7 +83,7 @@ void Unit::handleCommand(Command& command)
 {
 	std::shared_ptr<UnitState> state;
 	
-	if (command.cmdtype == CMD_HALT){
+	if (command.cmdtype == CommandType::Halt){
 		stateQueue_.clear();
 	}
 	else if (this->stateQueue_.empty()) {
@@ -94,16 +94,16 @@ void Unit::handleCommand(Command& command)
 	}
 	if (state != NULL) {
 		switch (command.queueSetting) {
-			case QUEUE_OVERWRITE: { // delete state queue and replace with just this command
+			case QueueSetting::Overwrite: { // delete state queue and replace with just this command
 				stateQueue_.clear();
 				stateQueue_.push_front(state);
 				break;
 			}
-			case QUEUE_BACK: { // append to queue, do after other states
+			case QueueSetting::Back: { // append to queue, do after other states
 				stateQueue_.push_back(state);
 				break;
 			}
-			case QUEUE_FRONT: { // prepend to queue, but execute other states after
+			case QueueSetting::Front: { // prepend to queue, but execute other states after
 				stateQueue_.push_front(state);
 				break;
 			}
