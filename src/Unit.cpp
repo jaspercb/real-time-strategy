@@ -79,20 +79,21 @@ void Unit::tick()
 	}
 }
 
-void Unit::handleCommand(Command& command)
-{
-	std::shared_ptr<UnitState> state;
-	
+void Unit::handleCommand(Command& command) {
+	auto& state = command.stateptr;
+
 	if (command.cmdtype == CommandType::Halt){
 		stateQueue_.clear();
 	}
-	else if (this->stateQueue_.empty()) {
-		state = this->idleState->handleCommand(this, command);
+	if (state == nullptr) {
+		if (this->stateQueue_.empty()) {
+			state = this->idleState->handleCommand(this, command);
+		}
+		else {
+			state = this->stateQueue_.front()->handleCommand(this, command);
+		}
 	}
-	else {
-		state = this->stateQueue_.front()->handleCommand(this, command);
-	}
-	if (state != NULL) {
+	if (state != nullptr) {
 		switch (command.queueSetting) {
 			case QueueSetting::Overwrite: { // delete state queue and replace with just this command
 				stateQueue_.clear();
@@ -111,7 +112,7 @@ void Unit::handleCommand(Command& command)
 	}
 }
 
-void Unit::move(const Coordinate& c){
+void Unit::move(const Coordinate& c) {
 	// Unchecked, instant movement to a given point.
 	const Coordinate oldcoord = this->xy;
 	this->xy = c;

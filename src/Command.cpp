@@ -1,10 +1,10 @@
 #include "Command.hpp"
 
-#include "Unit.hpp"
-
-Command::Command(){	
-}
+Command::Command() :
+	stateptr(nullptr)
+	{}
 
 Command::Command(CommandType::Enum cmdtype_):
-	cmdtype(cmdtype_)
+	cmdtype(cmdtype_),
+	stateptr(nullptr)
 	{}

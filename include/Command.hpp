@@ -4,6 +4,9 @@
 #include "enums.hpp"
 
 #include <set>
+#include <memory>
+
+class UnitState;
 
 class Command {
 	public:
@@ -15,4 +18,6 @@ class Command {
 		UnitID targetID;
 		Coordinate targetCoord;
 		UnitTemplateID unitTemplateID;
+
+		std::shared_ptr<UnitState> stateptr;
 };
