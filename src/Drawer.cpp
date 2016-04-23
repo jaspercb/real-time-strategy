@@ -115,7 +115,7 @@ Drawer::Drawer(std::ifstream& is, TeamColor::Enum teamColor):
 			return;
 		}
 		else{
-			debugLog("Error: Drawer constructor ifstream contained unknown token:"+s);
+			Logging::error("Error: Drawer constructor ifstream contained unknown token:"+s);
 		}
 	}
 }

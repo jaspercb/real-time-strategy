@@ -212,7 +212,7 @@ void rotateColorOfSurface(SDL_Surface* surface, float radians) {
 		int npixels = surface->w * surface->h;
 		
 		if (surface->format->BytesPerPixel == 4) {
-			//debugLog("4 byte");
+			//Logging::error("4 byte");
 			Uint32* pixel = (Uint32*)surface->pixels;
 			for (int i = 0; i < npixels; i++) {
 				if (shouldColorKey(*pixel))
@@ -221,11 +221,11 @@ void rotateColorOfSurface(SDL_Surface* surface, float radians) {
 			}
 		}
 		//else if (surface->format->BytesPerPixel == 1) {
-		//	debugLog("1 byte");
+		//	Logging::error("1 byte");
 		//}
 		else {
-			debugLog("Weird bytes per pixel in call to rotateColorOfSurface:");
-			debugLog(surface->format->BytesPerPixel);
+			Logging::error("Weird bytes per pixel in call to rotateColorOfSurface:");
+			Logging::error(surface->format->BytesPerPixel);
 			throw;
 		}
 

@@ -58,7 +58,7 @@ WeaponTemplate::WeaponTemplate(std::ifstream &is)
 			else if (s=="explosive")
 				damageType_ = DamageType::Explosive;
 			else{
-				debugLog("Error: WeaponTemplate "+name_+" created with invalid damage type: "+s);
+				Logging::error("Error: WeaponTemplate "+name_+" created with invalid damage type: "+s);
 				throw;
 			}
 		}
@@ -88,7 +88,7 @@ WeaponTemplate::WeaponTemplate(std::ifstream &is)
 /*
 WeaponTemplate::WeaponTemplate(std::string s):
 	WeaponTemplate(std::ifstream("../conf/weapons/"+s))
-	{debugLog("swag");}
+	{Logging::error("swag");}
 */
 
 bool WeaponTemplate::canFire(const Weapon* weapon) const

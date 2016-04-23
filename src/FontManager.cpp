@@ -7,14 +7,14 @@
 
 FontManager::FontManager() {
 	if (TTF_Init() != 0){
-		debugLog(SDL_GetError());
+		Logging::error(SDL_GetError());
 		SDL_Quit();
 	}
 
 	this->font = TTF_OpenFont("../resources/ClearSans-Regular.ttf", 16);
 	
 	if (NULL == this->font)
-		debugLog((std::string)"Error in FontManager.cpp: "+SDL_GetError());
+		Logging::error((std::string)"Error in FontManager.cpp: "+SDL_GetError());
 
 }
 

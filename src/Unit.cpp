@@ -222,7 +222,7 @@ void Unit::attack(Unit* target){
 		}
 		case AnimationState::Attacking: {
 			if (target->unitID == this->attackTargetID) { // to ensure a player can't start targeting one unit, then instantly switch to another
-				//debugLog(this->drawAnimationStep+1);
+				//Logging::error(this->drawAnimationStep+1);
 				if (this->drawAnimationStep < unitTemplate->drawer.attackCycleLength) {
 					this->drawFacingAngle = (180/M_PI) * std::atan2(target->xy.y-this->xy.y, target->xy.x-this->xy.x); // turn to face target
 				}
@@ -252,7 +252,7 @@ void Unit::attack(Unit* target){
 
 void Unit::startBuilding(UnitTemplateID unitTemplateID) {
 	if (!game->getTeam(teamID)->canBuild(unitTemplateID)) {
-		debugLog("Error: Unit::tryToBuild called, but UnitTemplate::isBuildable=false. uTemplateID: "+unitTemplateID);
+		Logging::error("Error: Unit::tryToBuild called, but UnitTemplate::isBuildable=false. uTemplateID: "+unitTemplateID);
 		return;
 	}
 	if (builder) {
@@ -262,12 +262,12 @@ void Unit::startBuilding(UnitTemplateID unitTemplateID) {
 				return;
 			}
 		}
-		debugLog(("Error: Unit::tryToBuild called on invalid pair"));
-		debugLog(("    Unit #" + std::to_string(this->unitID) + (", an instance of \"" + this->getUnitTemplate()->unitTemplateID) + "\""));
-		debugLog(("    attempted to build an instance of \"" + unitTemplateID + "\""));
+		Logging::error(("Error: Unit::tryToBuild called on invalid pair"));
+		Logging::error(("    Unit #" + std::to_string(this->unitID) + (", an instance of \"" + this->getUnitTemplate()->unitTemplateID) + "\""));
+		Logging::error(("    attempted to build an instance of \"" + unitTemplateID + "\""));
 	}
 	else
-		debugLog("Unit::tryToBuild called on unit with no building component!");
+		Logging::error("Unit::tryToBuild called on unit with no building component!");
 }
 
 void Unit::draw(SDL_Renderer* renderer, UserInterface* ui) {

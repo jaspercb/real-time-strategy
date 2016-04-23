@@ -62,7 +62,7 @@ ResourceData ResourceManager::loadResourceData(std::ifstream& is) {
 			break;
 
 		else
-			debugLog("ResourceManager::loadResourceData passed weird argument: "+s);
+			Logging::error("ResourceManager::loadResourceData passed weird argument: "+s);
 	}
 
 	return ret;

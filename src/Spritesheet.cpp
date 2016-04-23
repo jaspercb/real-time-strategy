@@ -12,9 +12,9 @@ SDL_Surface* loadSurface( std::string path) {
 	if( loadedSurface == NULL )
 		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
 	
-	//debugLog("loading: "+path+". Bits per pixel:");
-	//debugLog(loadedSurface->format->BytesPerPixel);
-	//debugLog(loadedSurface->format->format);
+	//Logging::error("loading: "+path+". Bits per pixel:");
+	//Logging::error(loadedSurface->format->BytesPerPixel);
+	//Logging::error(loadedSurface->format->format);
 
 	return loadedSurface;
 }
@@ -140,12 +140,12 @@ void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int r
 	// draws the spritesheet CENTERED at (renderX, renderY)
 	// 0 <= spriteX < 2*spritesX
 	// 0 <= spriteY < spritesY
-	if (spriteX<0 || spriteX>=2*spritesX) {
-		debugLog("Spritesheet::render out-of-bounds spriteX: " + spriteX);
+	if (spriteX<0 || 2*spritesX <= spriteX) {
+		Logging::error("Spritesheet::render() out-of-bounds spriteX: "+ std::to_string(spriteX));
 		return;
 	}
-	if (spriteY>0 || spriteY>=spritesY) {
-		debugLog("Spritesheet::render out-of-bounds spriteY: " + spriteY);
+	if (spriteY<0 || spritesY <= spriteY) {
+		Logging::error("Spritesheet::render() out-of-bounds spriteY: "+ std::to_string(spriteY));
 		return;		
 	}
 

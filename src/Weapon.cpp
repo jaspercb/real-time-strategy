@@ -9,8 +9,8 @@ Weapon::Weapon(WeaponTemplate *_weaponTemplate, Unit*_owner):
 	owner(_owner),
 	ticksUntilCanFire(0)
 	{
-		//debugLog("from inside Weapon::Weapon():");
-		//debugLog(owner);
+		//Logging::error("from inside Weapon::Weapon():");
+		//Logging::error(owner);
 	}
 
 bool Weapon::canFire() const{
@@ -22,7 +22,7 @@ bool Weapon::canAttack(Unit* u) const{
 }
 
 void Weapon::fire(Unit* target){
-	//debugLog("firing weapon");
+	//Logging::error("firing weapon");
 	weaponTemplate->fire(this, target);
 }
 

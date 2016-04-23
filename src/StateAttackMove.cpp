@@ -22,7 +22,7 @@ StateExitCode StateAttackMove::update(Unit* unit) {
 	}
 
 	if (this->attacking){
-		//debugLog("attackstate");
+		//Logging::error("attackstate");
 		StateExitCode ret = this->atkstate.update(unit);
 		if (ret == STATE_EXIT_COMPLETE){
 			this->attacking = false;
@@ -31,7 +31,7 @@ StateExitCode StateAttackMove::update(Unit* unit) {
 		return STATE_EXIT_INCOMPLETE;
 	}
 	else {
-		//debugLog("walkstate");
+		//Logging::error("walkstate");
 		unit->animationState = AnimationState::Walking;
 		return this->gotostate.update(unit);
 	}
