@@ -1,4 +1,3 @@
-#include <cassert>
 #include <cmath>
 #include <string>
 
@@ -138,9 +137,17 @@ Spritesheet::~Spritesheet() {
 
 
 void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int renderX, int renderY, float magnification) {
-	//draws the spritesheet CENTERED at (renderX, renderY)
-	assert(spriteX>=0);
-	assert(spriteY>=0);
+	// draws the spritesheet CENTERED at (renderX, renderY)
+	// 0 <= spriteX < 2*spritesX
+	// 0 <= spriteY < spritesY
+	if (spriteX<0 || spriteX>=2*spritesX) {
+		debugLog("Spritesheet::render out-of-bounds spriteX: " + spriteX);
+		return;
+	}
+	if (spriteY>0 || spriteY>=spritesY) {
+		debugLog("Spritesheet::render out-of-bounds spriteY: " + spriteY);
+		return;		
+	}
 
 	this->tclip.x = renderX - magnification*this->spriteW/2 -1;
 	this->tclip.y = renderY - magnification*this->spriteH/2 -1;
@@ -150,10 +157,6 @@ void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int r
 
 	this->clip.y = offsetY + spriteY*(spriteH+gapY);
 
-	if (spriteX>=2*spritesX) {
-		debugLog("Spritesheet::render passed weird x-argument: " + spriteX);
-		return;
-	}
 	if (spriteX<spritesX) {
 		this->clip.x = offsetX + spriteX*(spriteW+gapX);
 		SDL_RenderCopy( renderer, sheet, &clip, &tclip );
