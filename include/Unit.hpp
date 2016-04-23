@@ -45,9 +45,9 @@ public:
 
 	UnitTemplate* getUnitTemplate() const;
 	void tick();
-	void handleCommand(Command);
-	void move(const Coordinate);
-	void damage(const int, const DamageType::Enum, Unit* attackedBy);
+	void handleCommand(Command&);
+	void move(const Coordinate&);
+	void damage(const int damage, const DamageType::Enum, Unit* attackedBy);
 	Distance getAttackRange(); // returns the range of the first weapon
 	bool canAttack(Unit* u) const;
 	void moveTowards(const CoordinateOrUnit dest);

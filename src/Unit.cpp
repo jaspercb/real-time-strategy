@@ -79,7 +79,7 @@ void Unit::tick()
 	}
 }
 
-void Unit::handleCommand(Command command)
+void Unit::handleCommand(Command& command)
 {
 	std::shared_ptr<UnitState> state;
 	
@@ -111,7 +111,7 @@ void Unit::handleCommand(Command command)
 	}
 }
 
-void Unit::move(const Coordinate c){
+void Unit::move(const Coordinate& c){
 	// Unchecked, instant movement to a given point.
 	const Coordinate oldcoord = this->xy;
 	this->xy = c;

@@ -27,7 +27,7 @@ public:
 	Unit* getUnit(UnitID id);
 	void deleteUnit(UnitID id);
 
-	void handleCommand(const Command&);
+	void handleCommand(Command&);
 	void tick();
 
 	bool teamsAreFriendly(TeamID, TeamID);

@@ -90,7 +90,7 @@ void Game::tick() {
 	this->inhabitedGrid.tick();
 }
 
-void Game::handleCommand(const Command& cmd){
+void Game::handleCommand(Command& cmd){
 	for (const UnitID &unitID : cmd.commanded){
 		this->getUnit(unitID)->handleCommand(cmd);
 	}

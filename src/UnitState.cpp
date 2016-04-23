@@ -10,8 +10,7 @@
 #include "StateAttackMove.hpp"
 #include "Logging.hpp"
 
-std::shared_ptr<UnitState> UnitState::handleCommand(Unit* unit, Command command)
-{
+std::shared_ptr<UnitState> UnitState::handleCommand(Unit* unit, Command command) {
 	switch (command.cmdtype){
 		case CMD_IDLE: {
 			return std::shared_ptr<UnitState>(new StateIdle());
@@ -34,8 +33,7 @@ std::shared_ptr<UnitState> UnitState::handleCommand(Unit* unit, Command command)
 	}
 }
 
-std::shared_ptr<UnitState> UnitState::handleEvent(Unit* unit, Event event)
-{
+std::shared_ptr<UnitState> UnitState::handleEvent(Unit* unit, Event event) {
 	return NULL;
 }
 
