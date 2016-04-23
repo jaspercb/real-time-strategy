@@ -8,9 +8,8 @@
 #include "ResourceData.hpp"
 
 SDL_Surface* loadSurface( std::string path) {
-	
 	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-	
+
 	if( loadedSurface == NULL )
 		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
 	
@@ -152,7 +151,7 @@ void Spritesheet::render(SDL_Renderer *renderer, int spriteX, int spriteY, int r
 	this->clip.y = offsetY + spriteY*(spriteH+gapY);
 
 	if (spriteX>=2*spritesX) {
-		debugLog(spriteX);
+		debugLog("Spritesheet::render passed weird x-argument: " + spriteX);
 		return;
 	}
 	if (spriteX<spritesX) {

@@ -1,8 +1,8 @@
 #include "StateGoto.hpp"
+
 #include "Unit.hpp"
 #include "InhabitedGrid.hpp"
 #include "Logging.hpp"
-#include "UnitTemplate.hpp"
 
 StateGoto::StateGoto(CoordinateOrUnit targ):
 	target(targ),
