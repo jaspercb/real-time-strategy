@@ -37,19 +37,19 @@ namespace TeamColor {
 
 namespace DamageType {
 	enum Enum {
-	Electrical,	// good against shields, real bad against armor
-	Thermal,	// mediocre against shields and armor
-	Kinetic,    // bad against shields, pretty good against armor
-	Explosive,	// real bad against shields, great against armor
-	num
+		Electrical, // good against shields, real bad against armor
+		Thermal,    // mediocre against shields and armor
+		Kinetic,    // bad against shields, pretty good against armor
+		Explosive,  // real bad against shields, great against armor
+		num
 	};
 };
 
 namespace ResourceType {
 	enum Enum {
-		Metal, // consumed on build order
+		Metal,   // consumed on build order
 		Crystal, // consumed on build order
-		Supply, // You get supply back when a unit is destroyed
+		Supply,  // You get supply back when a unit is destroyed
 		num
 	};
 };
