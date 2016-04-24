@@ -2,13 +2,14 @@
 
 #include <cmath>
 
+#include "typedefs.hpp"
+
 #include "Team.hpp"
 #include "UnitTemplate.hpp"
 #include "Command.hpp"
 #include "Weapon.hpp"
 #include "WeaponTemplate.hpp"
 #include "UnitState.hpp"
-#include "typedefs.hpp"
 #include "Game.hpp"
 #include "Logging.hpp"
 #include "Command.hpp"

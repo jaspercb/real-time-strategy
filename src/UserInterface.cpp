@@ -452,24 +452,15 @@ void UserInterface::tick() {
  * Zooms in the current viewing pane. positive argument => zoom in, negative => zoom out.
 */
 void UserInterface::zoom(int dy) {
-	//this->viewCenter.first += SCREEN_WIDTH * PIXEL_WIDTH/this->viewMagnification/2;
-	//this->viewCenter.second += SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
-
 	if (dy > 0)
 		this->viewMagnification *= 1.1;
 	else if (dy < 0) {
 		this->viewMagnification /= 1.1;
 	}
-
-	//this->viewCenter.first -= SCREEN_WIDTH * PIXEL_WIDTH/this->viewMagnification/2;
-	//this->viewCenter.second -= SCREEN_HEIGHT * PIXEL_HEIGHT/this->viewMagnification/2;
 }
 
 Coordinate UserInterface::objectiveCoordinateFromScreen(const Coordinate c) {
 	// returns an isometric coordinate
-
-	//return Coordinate(	PIXEL_WIDTH/this->viewMagnification*c.first + this->viewCenter.first,
-	//					PIXEL_HEIGHT/this->viewMagnification*c.second + this->viewCenter.second );
 	Distance x = PIXEL_WIDTH/viewMagnification*(c.x - SCREEN_WIDTH/2);
 	Distance y = PIXEL_WIDTH/viewMagnification*(c.y - SCREEN_HEIGHT/2);
 	return Coordinate( (2*y + x)/2  + viewCenter.x,
