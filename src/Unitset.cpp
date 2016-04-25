@@ -2,10 +2,8 @@
 
 #include "Unit.hpp"
 
-Unitset::Unitset() {
+Unitset::Unitset() {}
 
-}
+Unitset::Unitset(const Unitset& other) : set(other.set) {}
 
-Unitset::Unitset(const Unitset&) {
-
-}
+//Unit::handleCommand
