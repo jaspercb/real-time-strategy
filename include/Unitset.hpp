@@ -12,7 +12,12 @@ public:
 	Unitset();
 	Unitset(const Unitset&);
 
-	void handleCommand(Command c);
+	inline size_t size() { return set.size(); };
+	inline bool empty() { return set.empty(); };
+
+	void insert(const UnitID uID);
+	template<typename T> void insert(const T& start, const T& end);
+
 	void startBuilding(UnitTemplateID unitTemplateID);
 
 	// iterator stuff
