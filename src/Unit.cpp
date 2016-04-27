@@ -36,7 +36,7 @@ attackTargetID(0) {
 	this->es = unitTemplate->maxES();
 	this->dimension = unitTemplate->dimension;
 
-	for (auto it = unitTemplate->weaponTemplates.begin(); it!=unitTemplate->weaponTemplates.end(); it++){
+	for (auto it = unitTemplate->weaponTemplates.begin(); it!=unitTemplate->weaponTemplates.end(); it++) {
 		this->weapons_.push_back(Weapon(&(*it), this));
 	}
 
@@ -83,7 +83,7 @@ void Unit::tick()
 void Unit::handleCommand(Command& command) {
 	auto& state = command.stateptr;
 
-	if (command.cmdtype == CommandType::Halt){
+	if (command.cmdtype == CommandType::Halt) {
 		stateQueue_.clear();
 	}
 	if (state == nullptr) {
@@ -211,13 +211,13 @@ void Unit::moveTowards(const CoordinateOrUnit dest) {
  * Starts or continues the unit's attacking state. 
  * If the attacking animation has completed, fires all off-cooldown weapons.
  */
-void Unit::attack(Unit* target){
+void Unit::attack(Unit* target) {
 	UnitTemplate* unitTemplate = this->getUnitTemplate();
 	int ticksUntilCanFire = this->weapons_[0].ticksUntilCanFire;
 	int mainWeaponAnimationLength = unitTemplate->drawer.attackCycleLength;
 
 
-	switch (this->animationState){
+	switch (this->animationState) {
 		case AnimationState::Dying:{
 			this->attackTargetID = 0;
 			return;
