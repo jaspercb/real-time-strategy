@@ -5,6 +5,7 @@
 #include <set>
 
 #include "typedefs.hpp"
+#include "Unitset.hpp"
 
 // Forward declarations
 union SDL_Event;
@@ -60,8 +61,8 @@ private:
 	bool drawSelectionBox;
 	Coordinate selectionBoxCorner1;
 	Coordinate selectionBoxCorner2;
-	std::set<UnitID> selectedUnits;
-	std::set<UnitID> previousSelectedUnits;
+	Unitset selectedUnits;
+	Unitset previousSelectedUnits;
 	int cameraVx, cameraVy;
 	int viewCenterMaxSpeed;
 
@@ -71,7 +72,7 @@ private:
 
 	int frame;
 
-	std::array<std::set<UnitID>, 10> controlGroups;
+	std::array<Unitset, 10> controlGroups;
 
 	const Uint8 *keyDown;
 

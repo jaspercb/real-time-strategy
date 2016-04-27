@@ -539,7 +539,7 @@ void UserInterface::setControlGroup(int ctrlGroupIndex) {
 
 void UserInterface::switchToControlGroup(int ctrlGroupIndex) {
 	if (this->shiftHeld())
-		this->selectedUnits.insert(this->controlGroups[ctrlGroupIndex].begin(), this->controlGroups[ctrlGroupIndex].end());
+		this->selectedUnits.insert(this->controlGroups[ctrlGroupIndex]);
 	else
 		this->selectedUnits = this->controlGroups[ctrlGroupIndex];
 }

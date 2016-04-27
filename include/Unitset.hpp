@@ -14,11 +14,13 @@ public:
 
 	inline size_t size() { return set.size(); };
 	inline bool empty() { return set.empty(); };
+	inline void clear() { set.clear(); };
 
 	void insert(const UnitID uID);
+	void insert(const Unitset& container);
 	template<typename T> void insert(const T& start, const T& end);
 
-	void startBuilding(UnitTemplateID unitTemplateID);
+	void startBuilding(UnitTemplateID unitTemplateID); // builds exactly one
 
 	// iterator stuff
 
