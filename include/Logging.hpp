@@ -28,5 +28,6 @@ namespace Logging {
 	template<typename T> inline void error(const T& s) {
 		std::cerr<<"Error: ";
 		Logging::writeToStream(s, std::cerr);
+		throw;
 	}
 }
