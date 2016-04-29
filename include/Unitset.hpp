@@ -15,6 +15,7 @@ public:
 	inline size_t size() { return set.size(); };
 	inline bool empty() { return set.empty(); };
 	inline void clear() { set.clear(); };
+	inline void erase(UnitID u) { set.erase(u); };
 
 	void insert(const UnitID uID);
 	void insert(const Unitset& container);
