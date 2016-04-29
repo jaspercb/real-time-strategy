@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "typedefs.hpp"
+#include "Unitset.hpp"
 
 class Unit; //forward declaration
 class Game;
@@ -28,7 +29,7 @@ class InhabitedGrid {
 		
 		~InhabitedGrid();
 
-		const std::shared_ptr<std::set<UnitID> > &unitsInCell(Coordinate c) const;
+		const std::shared_ptr<Unitset> &unitsInCell(Coordinate c) const;
 		std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b) const;
 		std::vector<UnitID> unitsInCircle(Coordinate c, Distance radius) const;
 		std::vector<UnitID> unitsCollidingWith(Unit* u) const;
@@ -67,8 +68,8 @@ class InhabitedGrid {
 		Coordinate getCellCoords(Coordinate c) const; // cells correspond to the collision grid
 		const int cellWidth;
 		const int tileWidth;
-		const std::shared_ptr<std::set<UnitID> > emptyUnitIDset;
-		std::map<Coordinate, std::shared_ptr<std::set<UnitID> > > grid;
+		const std::shared_ptr<Unitset> emptyUnitIDset;
+		std::map<Coordinate, std::shared_ptr<Unitset> > grid;
 
 		int getTileIndex(Coordinate tile, int team) const;
 		//std::map<std::pair<Coordinate, TeamID>, int> visibilityGrid; // For each visible tile and team, contains a count of how many units on that team can see that tile

@@ -73,7 +73,7 @@ InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int numTeams):
 	numTeams(numTeams),
 	cellWidth(6 * PIXEL_WIDTH * 32),
 	tileWidth(PIXEL_WIDTH * 32),
-	emptyUnitIDset(std::make_shared<std::set<UnitID> >())
+	emptyUnitIDset(std::make_shared<Unitset>())
 	{
 		visibilityGrid = new uint16_t[w*h*numTeams];
 		memset(visibilityGrid, 0, w*h*numTeams);
@@ -94,7 +94,7 @@ Coordinate InhabitedGrid::getCellCoords(Coordinate c) const {
 	return Coordinate(c.x/cellWidth, c.y/cellWidth);
 }
 
-const std::shared_ptr<std::set<UnitID> > &InhabitedGrid::unitsInCell(Coordinate c) const {
+const std::shared_ptr<Unitset> &InhabitedGrid::unitsInCell(Coordinate c) const {
 	auto found = this->grid.find(c);
 	if (found != this->grid.end()){
 		return found->second;
@@ -112,9 +112,9 @@ void InhabitedGrid::emplace(const Unit *unit) {
 	if (grid.count(pos)){
 	}
 	else{
-		grid.emplace(pos, std::shared_ptr<std::set<UnitID> > (new std::set<UnitID>()));
+		grid.emplace(pos, std::shared_ptr<Unitset> (new Unitset()));
 	}
-	grid[pos]->emplace(unit->unitID);
+	grid[pos]->insert(unit->unitID);
 }
 
 void InhabitedGrid::erase(const Unit *unit) {
