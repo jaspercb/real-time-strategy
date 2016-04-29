@@ -15,7 +15,7 @@ void Builder::startBuilding(UnitTemplateID prodID, int time) {
 	//if (this->buildables.count(prodID))
 	if (this->building.size() == 0)
 		return;
-	Logging::error( ("Building a \"" + prodID + '"' ));
+	Logging::log( ("Building a \"" + prodID + '"' ));
 	auto& min = this->building.at(0);
 	int t = 99999999;
 	for (auto &i : this->building)
