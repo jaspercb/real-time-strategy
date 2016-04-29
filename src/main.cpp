@@ -71,7 +71,7 @@ void cleanup_SDL() {
 }
 
 int main() {
-	Logging::log(" Testing...");
+	Logging::log("Testing...");
 
 	//Start up SDL and create window
 	if( !init() ) {
@@ -143,7 +143,7 @@ int main() {
 	//Free resources and close SDL
 	cleanup_SDL();
 
-	Logging::log(" Done testing");
+	Logging::log("Done testing");
 	
 	return 0;
 }
