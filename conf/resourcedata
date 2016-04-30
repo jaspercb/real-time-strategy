@@ -129,6 +129,12 @@ ui-ctrlgroup-bar {
 	sheetsize 1 1
 }
 
+ui-iconbox {
+	filepath ../svgs/ui-iconbox.png
+	size 33 33
+	sheetsize 1 1
+}
+
 scout-spritesheet {
 	filepath 	../svgs/scout.png
 	size 32 32
