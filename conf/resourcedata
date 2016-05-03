@@ -118,19 +118,19 @@ attackmove-animation {
 }
 
 ui-mockup {
-	filepath ../svgs/ui.png
+	filepath ../resources/ui/ui.png
 	size 1600 900
 	sheetsize 1 1
 }
 
 ui-ctrlgroup-bar {
-	filepath ../svgs/ui-ctrlgroup-bar.png
+	filepath ../resources/ui/ui-ctrlgroup-bar.png
 	size 60 40
 	sheetsize 1 1
 }
 
 ui-iconbox {
-	filepath ../svgs/ui-iconbox.png
+	filepath ../resources/ui/ui-iconbox.png
 	size 33 33
 	sheetsize 1 1
 }
@@ -143,7 +143,7 @@ scout-spritesheet {
 }
 
 bomber-spritesheet {
-	filepath 	../svgs/bomber.png
+	filepath 	../resources/units/bomber.png
 	size 64 64
 	sheetsize 9 3
 	shouldApplyTeamColor 1
@@ -157,21 +157,21 @@ townhall-spritesheet {
 }
 
 arcology-spritesheet {
-	filepath 	../svgs/arcology.png
+	filepath 	../resources/units/arcology.png
 	size 260 260
 	sheetsize 1 1
 	shouldApplyTeamColor 1
 }
 
 buildings-spritesheet {
-	filepath 	../svgs/buildings.png
+	filepath 	../resources/units/buildings.png
 	size 132 260
 	sheetsize 8 1
 	shouldApplyTeamColor 1
 }
 
 ground-dummy-spritesheet {
-	filepath ../svgs/ground-dummy.png
+	filepath ../resources/units/ground-dummy.png
 	size 64 64
 	sheetsize 1 1
 	shouldApplyTeamColor 1
