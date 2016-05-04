@@ -131,7 +131,7 @@ ui-ctrlgroup-bar {
 
 ui-iconbox {
 	filepath ../resources/ui/ui-iconbox.png
-	size 33 33
+	size 49 49
 	sheetsize 1 1
 }
 
@@ -151,7 +151,7 @@ bomber-spritesheet {
 
 bomber-icon {
 	filepath 	../resources/units/bomber-icon.png
-	size 32 32
+	size 48 48
 	sheetsize 1 1
 }
 
