@@ -145,8 +145,14 @@ scout-spritesheet {
 bomber-spritesheet {
 	filepath 	../resources/units/bomber.png
 	size 64 64
-	sheetsize 9 3
+	sheetsize 9 2
 	shouldApplyTeamColor 1
+}
+
+bomber-icon {
+	filepath 	../resources/units/bomber-icon.png
+	size 32 32
+	sheetsize 1 1
 }
 
 townhall-spritesheet {
@@ -161,6 +167,12 @@ arcology-spritesheet {
 	size 260 260
 	sheetsize 1 1
 	shouldApplyTeamColor 1
+}
+
+arcology-icon {
+	filepath 	../resources/units/arcology-icon.png
+	size 48 48
+	sheetsize 1 1
 }
 
 buildings-spritesheet {
