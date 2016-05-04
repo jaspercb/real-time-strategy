@@ -47,12 +47,12 @@ Unit::~Unit() {
 	delete builder;
 }
 
-UnitTemplate* Unit::getUnitTemplate() const{
+UnitTemplate* Unit::getUnitTemplate() const {
 	return game->getTeam(teamID)->unitTemplates.at(unitTemplateID);
 }
 
-void Unit::tick()
-{
+void Unit::tick() {
+	this->hp--;
 	UnitTemplate*unitTemplate = getUnitTemplate();
 	
 	drawAnimationStep++;
@@ -134,14 +134,6 @@ void Unit::damage(const int quant, const DamageType::Enum dmgtype, Unit* attacke
 }
 
 Distance Unit::getAttackRange() {
-	/*
-	int r = 0;
-	for (auto it = weapons_.begin(); it!=weapons_.end(); it++) {
-		r = std::max(r, it->weaponTemplate.range());
-	}
-	return r;
-	*/
-
 	if (this->weapons_.size() == 0) {
 		return 0;
 	}
@@ -162,16 +154,13 @@ bool Unit::canAttack(Unit* u) const {
 }
 
 void Unit::moveTowards(const CoordinateOrUnit dest) {
-	if (this->getUnitTemplate()->speed() == 0)
-		return;
-
-	if (!dest.isValid())
+	if (this->getUnitTemplate()->speed() == 0
+		or !dest.isValid())
 		return;
 
 	Coordinate c = dest.getCoordinate();
 
-
-	// Speed-limited movement, with collision handling
+	// Speed-limited movement, with "collision handling"
 	if (animationState!=AnimationState::Dying) {
 		Coordinate dr = c-xy;
 		Distance spd = this->getUnitTemplate()->speed();
