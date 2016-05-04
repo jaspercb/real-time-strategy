@@ -318,8 +318,8 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 		const Unit* unit = game->getUnit(unitID);
 		const UnitTemplate* uTemplate = this->game->getTeam(this->teamID)->unitTemplates.at(unit->unitTemplateID);
 
-		const int renderX = 335 + (unitIndex%iconsPerRow)*48;
-		const int renderY = 770+(unitIndex/iconsPerRow)*48;
+		const int renderX = 326 + (unitIndex%iconsPerRow)*49;
+		const int renderY = 768+(unitIndex/iconsPerRow)*49;
 		const Uint8 colormod = 255*unit->hp/uTemplate->maxHP();
 
 		iconbox->render(gRenderer, 0, 0, renderX, renderY, 1);

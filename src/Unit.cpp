@@ -52,7 +52,6 @@ UnitTemplate* Unit::getUnitTemplate() const {
 }
 
 void Unit::tick() {
-	this->hp--;
 	UnitTemplate*unitTemplate = getUnitTemplate();
 	
 	drawAnimationStep++;

@@ -92,8 +92,8 @@ int main() {
 
 		game->createUnit(tID1, "../conf/units/arcology", Coordinate(2*32*PIXEL_WIDTH, 2*32*PIXEL_WIDTH));
 
-		for (int i=5; i<15; i++) {
-			for (int j=5; j<15; j++) {
+		for (int i=5; i<12; i++) {
+			for (int j=5; j<12; j++) {
 				game->createUnit(tID1, "../conf/units/bomber", Coordinate(2500*i, 2500*j));
 			}
 		}
