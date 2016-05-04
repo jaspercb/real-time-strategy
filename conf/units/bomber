@@ -6,6 +6,8 @@ dimension 0 0 0 1
 
 buildtime 100
 
+icon bomber-icon
+
 weapon {
 	name Bomber Bomb
 	damageType explosive

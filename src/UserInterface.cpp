@@ -310,40 +310,21 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 
 	this->game->terrain.renderMinimap(renderer, this);
 
-	int numSelectedUnits = this->selectedUnits.size();
-	if (numSelectedUnits == 1) {
-		Unit* selectedUnit = this->game->getUnit(*this->selectedUnits.begin());
-		std::stringstream infostream;
-		
-		infostream<<"HP: "<<std::to_string(selectedUnit->hp)<<"/"<<std::to_string(selectedUnit->getUnitTemplate()->maxHP())<<std::endl;
-		
-		if (selectedUnit->weapons_.size())
-			infostream << "WEAPON: "<< std::to_string(selectedUnit->weapons_[0].ticksUntilCanFire) << "/" << std::to_string(selectedUnit->weapons_[0].weaponTemplate->reloadTime()) << std::endl;
-		else
-			infostream << "NO WEAPON" << std::endl;
-		infostream<<std::endl;
-		
-		for (auto &i : selectedUnit->builder->building) {
-			if (Builder::ticksUntilDone(i)) {
-				infostream<<"BUILDING "<<i.front().unitTemplateID<<", "<<i.front().totalTicks-i.front().ticksUntilDone<<"/"<<i.front().totalTicks<<std::endl;
-			}
-			else{
-				infostream<<"EMPTY BUILDING SLOT"<<std::endl;
-			}
-		}
+	int unitIndex = 0;
 
-		gFontManager->renderMultipleLines(infostream.str(), {320, 750}, SDL_Colors::WHITE);
+	std::shared_ptr<Spritesheet> iconbox = gResourceManager->get("ui-iconbox");
+	const int iconsPerRow = 20;
+	for (const auto& unitID : selectedUnits) {
+		const Unit* unit = game->getUnit(unitID);
+		const UnitTemplate* uTemplate = this->game->getTeam(this->teamID)->unitTemplates.at(unit->unitTemplateID);
 
-		for (auto &i : selectedUnit->builder->building) {
-			if (Builder::ticksUntilDone(i)) {
-				this->game->getTeam(this->teamID)->unitTemplates.at(i.front().unitTemplateID)->drawer.drawWireframe(gRenderer, Coordinate{650, 800});
-			}
-		}
-	}
-	else if (numSelectedUnits > 1) {
-		int text = this->selectedUnits.size();
+		const int renderX = 335 + (unitIndex%iconsPerRow)*48;
+		const int renderY = 770+(unitIndex/iconsPerRow)*48;
+		const Uint8 colormod = 255*unit->hp/uTemplate->maxHP();
 
-		gFontManager->renderLine("UNITS SELECTED: "+std::to_string(text), {320, 750}, SDL_Colors::WHITE);
+		iconbox->render(gRenderer, 0, 0, renderX, renderY, 1);
+		uTemplate->renderIcon( renderX, renderY, colormod );
+		unitIndex++;
 	}
 
 	// Draw minimap

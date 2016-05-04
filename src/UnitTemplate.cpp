@@ -4,6 +4,8 @@
 #include "Logging.hpp"
 #include "Drawer.hpp"
 #include "WeaponTemplate.hpp"
+#include "ResourceManager.hpp"
+#include "Spritesheet.hpp"
 
 UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, Team* team):
 	unitTemplateID(id)
@@ -50,6 +52,10 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, Team* team):
 			int a, b, c, d;
 			is>>a>>b>>c>>d;
 			dimension = EnvironmentSpec(a, b, c, d);
+		}
+		else if (s == "icon") {
+			is>>s;
+			icon = gResourceManager->get(s);
 		}
 		else if (s=="drawer") {
 			is>>s; // to clean out the brace
@@ -119,4 +125,10 @@ float UnitTemplate::getDamageEffectivenessVsES(DamageType::Enum dmgtype) const {
 		default:
 			return 1.0;
 	}
+}
+
+void UnitTemplate::renderIcon(const int x, const int y, Uint8 colormod) const {
+	// Colormod ranges from 0 to 255. 0 = red, 255 = green
+	this->icon->setColorMod((255-colormod), colormod, 0);
+	this->icon->render(gRenderer, 0, 0, x, y, 1);
 }

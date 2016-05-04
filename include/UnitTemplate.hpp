@@ -3,14 +3,17 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <memory>
 
 #include "enums.hpp"
+#include "globals.hpp"
 
 #include "EnvironmentSpec.hpp"
 #include "Drawer.hpp"
 
 class Team;
 class WeaponTemplate;
+class Spritesheet;
 
 class UnitTemplate {
 public:
@@ -32,12 +35,15 @@ public:
 
 	inline bool isBuildable(const Team* const team) const {return true;} ; // This would be where unit prereqs go (ex. "Armory must be built")
 
+	void renderIcon(const int x, const int y, Uint8 colormod) const;
+
 	const UnitTemplateID unitTemplateID;
 	
 	std::string name;
 	std::vector<WeaponTemplate> weaponTemplates;
 	EnvironmentSpec dimension;
 	Drawer drawer;
+	std::shared_ptr<Spritesheet> icon;
 
 	std::vector<UnitTemplateID> spawnables; // units this unit can spawn
 	std::vector<UnitTemplateID> morphables; // units this unit can morph into
