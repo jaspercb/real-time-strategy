@@ -325,6 +325,9 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 		iconbox->render(gRenderer, 0, 0, renderX, renderY, 1);
 		uTemplate->renderIcon( renderX, renderY, colormod );
 		unitIndex++;
+		if (unitIndex==60) {
+			break;
+		}
 	}
 
 	// Draw minimap
