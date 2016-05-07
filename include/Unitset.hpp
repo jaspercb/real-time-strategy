@@ -17,6 +17,8 @@ public:
 	inline void clear() { set.clear(); };
 	inline void erase(UnitID u) { set.erase(u); };
 
+	void removeInvalidUnits() const;
+
 	void insert(const UnitID uID);
 	void insert(const Unitset& container);
 	template<typename T> void insert(const T& start, const T& end);
@@ -28,9 +30,9 @@ public:
 	typedef std::set<UnitID>::iterator iterator;
 	typedef std::set<UnitID>::const_iterator const_iterator;
 
-	iterator begin() { return set.begin(); }
+	iterator begin() { removeInvalidUnits(); return set.begin(); };
 
-	const_iterator begin() const { return set.begin(); }
+	const_iterator begin() const { removeInvalidUnits(); return set.cbegin(); };
 
 	iterator end() { return set.end(); }
 
@@ -39,5 +41,5 @@ public:
 	// UI stuff
 	const UnitTemplate* getWHATTOCALLIT();
 private:
-	std::set<UnitID> set;
+	mutable std::set<UnitID> set;
 };

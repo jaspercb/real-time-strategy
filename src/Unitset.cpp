@@ -1,6 +1,8 @@
 #include "Unitset.hpp"
 
 #include "Unit.hpp"
+#include "Game.hpp"
+#include "globals.hpp"
 
 Unitset::Unitset() {}
 
@@ -16,4 +18,14 @@ void Unitset::insert(const Unitset& container) {
 
 template<typename T> void Unitset::insert(const T& start, const T& end) {
 	set.insert(start, end);
+}
+
+void Unitset::removeInvalidUnits() const {
+	// Normally making "const" methods that modify mutable members is a symptom
+	// of bad design, but this is genuinely a useful abstraction. Honest.
+	for (auto &unitID : set) {
+		if (!game->existsUnit(unitID)) {
+			set.erase(unitID);
+		}
+	}
 }
