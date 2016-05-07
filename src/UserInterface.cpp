@@ -312,7 +312,7 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 
 	int unitIndex = 0;
 
-	std::shared_ptr<Spritesheet> iconbox = gResourceManager->get("ui-iconbox");
+	auto iconbox = gResourceManager->get("ui-iconbox");
 	const int iconsPerRow = 20;
 	for (const auto& unitID : selectedUnits) {
 		const Unit* unit = game->getUnit(unitID);

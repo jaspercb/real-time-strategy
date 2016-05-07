@@ -87,7 +87,7 @@ void Game::tick() {
 
 
 	this->resolveCollisions();
-	this->inhabitedGrid.tick();
+	this->inhabitedGrid.tick(); // visibility
 }
 
 void Game::handleCommand(Command& cmd){
@@ -116,7 +116,9 @@ void Game::resolveCollisions() {
 							( (other->unitID+other->xy.y) % 3 == 1) ?  0 :
 							                                          -5 ) );
 			}
-			else if (unit->animationState != AnimationState::Dying && (other->animationState == AnimationState::Idle || other->animationState == AnimationState::Attacking) ) { // 
+			else if (unit->animationState != AnimationState::Dying
+			&& (other->animationState == AnimationState::Idle || other->animationState == AnimationState::Attacking) ) {
+
 				Coordinate c = other->xy - unit->xy;
 				c.setLength(other->getUnitTemplate()->radius() + unit->getUnitTemplate()->radius() - c.length());
 				other->moveTowards( other->xy + c );

@@ -73,7 +73,7 @@ SDL_Surface* ResourceManager::getRawSurface(std::string resourcename) {
 }
 
 std::shared_ptr<Spritesheet> ResourceManager::load(std::string resourcename, TeamColor::Enum teamColor) {
-	return std::shared_ptr<Spritesheet>( new Spritesheet(gRenderer, this->resourceDataTable[resourcename], teamColor) );
+	return std::make_shared<Spritesheet>(gRenderer, this->resourceDataTable[resourcename], teamColor);
 }
 
 std::shared_ptr<Spritesheet> ResourceManager::get(std::string resourcename, TeamColor::Enum teamColor) {

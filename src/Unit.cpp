@@ -40,7 +40,7 @@ attackTargetID(0) {
 		this->weapons_.push_back(Weapon(&(*it), this));
 	}
 
-	this->idleState = std::shared_ptr<UnitState>( new StateIdle() );
+	this->idleState = std::make_shared<UnitState>();
 }
 
 Unit::~Unit() {
@@ -161,35 +161,33 @@ void Unit::moveTowards(const CoordinateOrUnit dest) {
 	Coordinate c = dest.getCoordinate();
 
 	// Speed-limited movement, with "collision handling"
-	if (animationState!=AnimationState::Dying) {
+	if (animationState != AnimationState::Dying) {
 		Coordinate dr = c-xy;
 		Distance spd = this->getUnitTemplate()->speed();
 
-		if (pythagoreanDistance(xy, c)<=spd) {
+		if (pythagoreanDistance(xy, c) <= spd) {
 			if (this->game->inhabitedGrid.unitOKToMoveTo(this, c)) {
 				this->move(c);
 			}
+			this->animationState = AnimationState::Idle;
 		}
 		else {
 			dr.setLength(spd);
 			Coordinate target = xy + dr;
-			for (int i=0; i<8; i++) {
-				if (this->game->inhabitedGrid.unitOKToMoveTo(this, target)) {
-					this->move(target);
-					this->animationState = AnimationState::Walking;
-					
-					int target_angle = (180/M_PI) * std::atan2(dr.y, dr.x);
-					int dTheta = target_angle-this->drawFacingAngle;
-					if (std::abs(dTheta)%360 < 10 || 120 < dTheta || -120 > dTheta ) {
-						this->drawFacingAngle = target_angle;
-					}
-					else if ( dTheta < 0) {
-						this->drawFacingAngle = (this->drawFacingAngle-12)%360;
-					}
-					else {
-						this->drawFacingAngle = (this->drawFacingAngle+12)%360;
-					}
-					break;
+			if (this->game->inhabitedGrid.unitOKToMoveTo(this, target)) {
+				this->move(target);
+				this->animationState = AnimationState::Walking;
+
+				int target_angle = (180/M_PI) * std::atan2(dr.y, dr.x);
+				int dTheta = target_angle-this->drawFacingAngle;
+				if (std::abs(dTheta)%360 < 10 || 120 < dTheta || -120 > dTheta ) {
+					this->drawFacingAngle = target_angle;
+				}
+				else if ( dTheta < 0) {
+					this->drawFacingAngle = (this->drawFacingAngle-12)%360;
+				}
+				else {
+					this->drawFacingAngle = (this->drawFacingAngle+12)%360;
 				}
 			}
 		}
