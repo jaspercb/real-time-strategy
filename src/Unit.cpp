@@ -52,8 +52,7 @@ UnitTemplate* Unit::getUnitTemplate() const {
 }
 
 void Unit::tick() {
-	UnitTemplate*unitTemplate = getUnitTemplate();
-	
+	UnitTemplate* unitTemplate = getUnitTemplate();
 	drawAnimationStep++;
 
 	if (!this->isDead()) {
@@ -77,6 +76,8 @@ void Unit::tick() {
 		this->animationState = AnimationState::Dying;
 		this->drawAnimationStep = 0;
 	}
+	this->hp = std::max(0, this->hp);
+	this->es = std::max(0, this->es);
 }
 
 void Unit::handleCommand(Command& command) {
