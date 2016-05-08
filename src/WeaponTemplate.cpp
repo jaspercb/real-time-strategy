@@ -101,50 +101,29 @@ bool WeaponTemplate::canAttack(const Unit* target) const{
 	return dimensions_.overlaps(target->dimension);
 } // returns whether the weapon is theoretically capable of hitting the target, IGNORING COOLDOWN
 
-void WeaponTemplate::fire(Weapon* weapon, Unit* target)
+void WeaponTemplate::fire(Weapon* weapon, const CoordinateOrUnit target)
 {
-	if (canFire(weapon) &&
-	pythagoreanDistance(weapon->owner->xy, target->xy)<=range() &&
-	this->canAttack(target) )
-	{
-		if (aoeRadius()){
-			Unitset unitsInRadius = target->game->inhabitedGrid.unitsInCircle(target->xy, aoeRadius());
-			for (const UnitID targetID : unitsInRadius){
-				Unit* potentialTarget = target->game->getUnit(targetID);
-				if (!target->game->teamsAreFriendly(weapon->owner->teamID, potentialTarget->teamID) &&
-				this->canAttack(potentialTarget) )
-				{
-					potentialTarget->damage(damage(), damageType_, weapon->owner);
-				}
-			}
-		}
-		else{
-			target->damage(damage(), damageType_, weapon->owner);
-		}
+	if (!target.isValid()) {
+		throw;
+	};
 
-		this->playHitAnimation(gUserInterface, target->xy);
-		weapon->ticksUntilCanFire = reloadTime();
-	}
-}
-
-void WeaponTemplate::fire(Weapon* weapon, const Coordinate& target)
-{
-	if (canFire(weapon) &&
-	(pythagoreanDistance(weapon->owner->xy, target)<=range()) &&
-	(aoeRadius() > 0) ) //only works for AOE weapons
-	{
+	if (canFire(weapon) && pythagoreanDistance(weapon->owner->xy, target.getCoordinate()) <= range()) {
 		if (aoeRadius()) {
-			Unitset unitsInRadius = weapon->owner->game->inhabitedGrid.unitsInCircle(target, aoeRadius());
+			Unitset unitsInRadius = game->inhabitedGrid.unitsInCircle(target.getCoordinate(), aoeRadius());
 			for (const UnitID targetID : unitsInRadius){
-				Unit* potentialTarget = weapon->owner->game->getUnit(targetID);
-				if (!weapon->owner->game->teamsAreFriendly(weapon->owner->teamID, potentialTarget->teamID) &&
+				Unit* potentialTarget = game->getUnit(targetID);
+				if (!game->teamsAreFriendly(weapon->owner->teamID, potentialTarget->teamID) &&
 				this->canAttack(potentialTarget) )
 				{
 					potentialTarget->damage(damage(), damageType_, weapon->owner);
 				}
 			}
 		}
-		this->playHitAnimation(gUserInterface, target);
+		else if (target.isUnit()) {
+			target.getUnit()->damage(damage(), damageType_, weapon->owner);
+		}
+
+		this->playHitAnimation(gUserInterface, target.getCoordinate());
 		weapon->ticksUntilCanFire = reloadTime();
 	}
 }

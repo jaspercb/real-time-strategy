@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include "EnvironmentSpec.hpp"
+#include "CoordinateOrUnit.hpp" // for UnitID->CoordinateOrUnit conversion
 
 #include "typedefs.hpp"
 #include "enums.hpp"
@@ -35,8 +36,7 @@ public:
 	virtual int weaponVelocity() const {return weaponVelocity_;};
 	virtual bool canFire(const Weapon* weapon) const;
 	virtual bool canAttack(const Unit* target) const; // returns whether the weapon is theoretically capable of hitting the target, IGNORING COOLDOWN
-	virtual void fire(Weapon* weapon, Unit* target);
-	virtual void fire(Weapon* weapon, const Coordinate& target);
+	virtual void fire(Weapon* weapon, const CoordinateOrUnit target);
 	virtual void playHitAnimation(UserInterface*, const Coordinate& target);
 protected:
 	std::string name_;
