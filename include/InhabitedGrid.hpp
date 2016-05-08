@@ -30,9 +30,9 @@ class InhabitedGrid {
 		~InhabitedGrid();
 
 		const std::shared_ptr<Unitset> &unitsInCell(Coordinate c) const;
-		std::vector<UnitID> unitsInRectangle(Coordinate a, Coordinate b) const;
-		std::vector<UnitID> unitsInCircle(Coordinate c, Distance radius) const;
-		std::vector<UnitID> unitsCollidingWith(Unit* u) const;
+		Unitset unitsInRectangle(Coordinate a, Coordinate b) const;
+		Unitset unitsInCircle(Coordinate c, Distance radius) const;
+		Unitset unitsCollidingWith(Unit* u) const;
 
 		bool unitOKToMoveTo(Unit*, const Coordinate);
 		

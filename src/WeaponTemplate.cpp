@@ -7,6 +7,7 @@
 #include "Game.hpp"
 #include "Animation.hpp"
 #include "UserInterface.hpp"
+#include "Unitset.hpp"
 
 #include "Logging.hpp"
 
@@ -107,8 +108,8 @@ void WeaponTemplate::fire(Weapon* weapon, Unit* target)
 	this->canAttack(target) )
 	{
 		if (aoeRadius()){
-			std::vector<UnitID> p = target->game->inhabitedGrid.unitsInCircle(target->xy, aoeRadius());
-			for (UnitID &targetID : p){
+			Unitset unitsInRadius = target->game->inhabitedGrid.unitsInCircle(target->xy, aoeRadius());
+			for (const UnitID targetID : unitsInRadius){
 				Unit* potentialTarget = target->game->getUnit(targetID);
 				if (!target->game->teamsAreFriendly(weapon->owner->teamID, potentialTarget->teamID) &&
 				this->canAttack(potentialTarget) )
@@ -133,8 +134,8 @@ void WeaponTemplate::fire(Weapon* weapon, const Coordinate& target)
 	(aoeRadius() > 0) ) //only works for AOE weapons
 	{
 		if (aoeRadius()) {
-			std::vector<UnitID> p = weapon->owner->game->inhabitedGrid.unitsInCircle(target, aoeRadius());
-			for (UnitID &targetID : p){
+			Unitset unitsInRadius = weapon->owner->game->inhabitedGrid.unitsInCircle(target, aoeRadius());
+			for (const UnitID targetID : unitsInRadius){
 				Unit* potentialTarget = weapon->owner->game->getUnit(targetID);
 				if (!weapon->owner->game->teamsAreFriendly(weapon->owner->teamID, potentialTarget->teamID) &&
 				this->canAttack(potentialTarget) )

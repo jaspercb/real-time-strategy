@@ -164,8 +164,8 @@ void InhabitedGrid::tick() {
 	}
 }
 
-std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) const {
-	std::vector<UnitID> ret;
+Unitset InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) const {
+	Unitset ret;
 
 	Coordinate ga = getCellCoords(a);
 	Coordinate gb = getCellCoords(b);
@@ -179,7 +179,7 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) 
 			const auto &unitSubset = unitsInCell(Coordinate(x,y));
 			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
 				if (unitInRectangle(game->getUnit(*it), a, b)) {
-					ret.push_back(*it);
+					ret.insert(*it);
 				}
 			}
 		}
@@ -187,9 +187,9 @@ std::vector<UnitID> InhabitedGrid::unitsInRectangle(Coordinate a, Coordinate b) 
 	return ret;
 }
 
-std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) const {
+Unitset InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) const {
 	// Returns units that clip the given circle, (center & radius provided)
-	std::vector<UnitID> ret;
+	Unitset ret;
 
 	Coordinate gc = getCellCoords(c);
 	int startX = gc.x - 1 - radius/cellWidth;
@@ -202,7 +202,7 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) 
 			const auto &unitSubset = unitsInCell(Coordinate(x,y));
 			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
 				if (unitInCircle(game->getUnit(*it), c, radius)){
-					ret.push_back(*it);
+					ret.insert(*it);
 				}
 			}
 		}
@@ -210,12 +210,12 @@ std::vector<UnitID> InhabitedGrid::unitsInCircle(Coordinate c, Distance radius) 
 	return ret;
 }
 
-std::vector<UnitID> InhabitedGrid::unitsCollidingWith(Unit* u) const {
-	std::vector<UnitID> ret;
+Unitset InhabitedGrid::unitsCollidingWith(Unit* u) const {
+	Unitset ret;
 	for (auto& unitID : this->unitsInCircle(u->xy, u->getUnitTemplate()->radius())) {
 		Unit* other = this->game->getUnit(unitID);
 		if (other->unitID != u->unitID && other->dimension.overlaps(u->dimension)) {
-			ret.push_back(unitID);
+			ret.insert(unitID);
 		}
 	}
 	return ret;
