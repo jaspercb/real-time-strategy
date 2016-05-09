@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoordinateOrUnit.hpp" // for auto-conversion
+
 class WeaponTemplate;
 class Unit;
 
@@ -8,7 +10,7 @@ public:
 	Weapon(WeaponTemplate *_weaponTemplate, Unit* _owner);
 	bool canFire() const;
 	bool canAttack(Unit* u) const;
-	void fire(Unit* target);
+	void fire(CoordinateOrUnit target);
 	virtual void update();
 	WeaponTemplate* weaponTemplate;
 	Unit* owner;

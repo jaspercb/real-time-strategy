@@ -21,7 +21,7 @@ bool Weapon::canAttack(Unit* u) const{
 	return weaponTemplate->canAttack(u);
 }
 
-void Weapon::fire(Unit* target){
+void Weapon::fire(CoordinateOrUnit target) {
 	//Logging::error("firing weapon");
 	weaponTemplate->fire(this, target);
 }
