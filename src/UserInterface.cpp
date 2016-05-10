@@ -310,23 +310,37 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 
 	this->game->terrain.renderMinimap(renderer, this);
 
-	int unitIndex = 0;
+	selectedUnits.removeInvalidUnits();
 
-	auto iconbox = gResourceManager->get("ui-iconbox");
-	const int iconsPerRow = 20;
-	for (const auto& unitID : selectedUnits) {
-		const Unit* unit = game->getUnit(unitID);
-		const UnitTemplate* uTemplate = this->game->getTeam(this->teamID)->unitTemplates.at(unit->unitTemplateID);
+	if (selectedUnits.size() == 1) {
+		const Unit* unit = game->getUnit(*selectedUnits.begin());
+		const UnitTemplate* uTemplate = unit->getUnitTemplate();
 
-		const int renderX = 326 + (unitIndex%iconsPerRow)*49;
-		const int renderY = 768+(unitIndex/iconsPerRow)*49;
+		const int renderX = 370;
+		const int renderY = 810;
 		const Uint8 colormod = 255*unit->hp/uTemplate->maxHP();
 
-		iconbox->render(gRenderer, 0, 0, renderX, renderY, 1);
 		uTemplate->renderIcon( renderX, renderY, colormod );
-		unitIndex++;
-		if (unitIndex==60) {
-			break;
+		gFontManager->renderLine( std::to_string(unit->hp)+"/"+std::to_string(uTemplate->maxHP()), Coordinate(renderX-24, renderY+24), SDL_Colors::GREEN);
+	} else {
+		int unitIndex = 0;
+
+		auto iconbox = gResourceManager->get("ui-iconbox");
+		const int iconsPerRow = 20;
+		for (const auto& unitID : selectedUnits) {
+			const Unit* unit = game->getUnit(unitID);
+			const UnitTemplate* uTemplate = unit->getUnitTemplate();
+
+			const int renderX = 326 + (unitIndex%iconsPerRow)*49;
+			const int renderY = 768+(unitIndex/iconsPerRow)*49;
+			const Uint8 colormod = 255*unit->hp/uTemplate->maxHP();
+
+			iconbox->render(gRenderer, 0, 0, renderX, renderY, 1);
+			uTemplate->renderIcon( renderX, renderY, colormod );
+			unitIndex++;
+			if (unitIndex==60) {
+				break;
+			}
 		}
 	}
 
