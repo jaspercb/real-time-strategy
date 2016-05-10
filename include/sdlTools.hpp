@@ -15,8 +15,8 @@ namespace SDL_Colors {
 	static const SDL_Color WHITE = {255, 255, 255, SDL_ALPHA_OPAQUE};
 
 	static const SDL_Color RED = {255, 0, 0, SDL_ALPHA_OPAQUE};
-	static const SDL_Color GREEN = {255, 0, 0, SDL_ALPHA_OPAQUE};
-	static const SDL_Color BLUE = {255, 0, 0, SDL_ALPHA_OPAQUE};
+	static const SDL_Color GREEN = {0, 255, 0, SDL_ALPHA_OPAQUE};
+	static const SDL_Color BLUE = {0, 0, 255, SDL_ALPHA_OPAQUE};
 	
 	static const SDL_Color YELLOW = {255, 204, 0, SDL_ALPHA_OPAQUE};
 	static const SDL_Color ORANGE = {255, 104, 0, SDL_ALPHA_OPAQUE};
