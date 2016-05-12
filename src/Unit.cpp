@@ -48,7 +48,7 @@ Unit::~Unit() {
 }
 
 UnitTemplate* Unit::getUnitTemplate() const {
-	return game->getTeam(teamID)->unitTemplates.at(unitTemplateID);
+	return game->getUnitTemplate(teamID, unitTemplateID);
 }
 
 void Unit::tick() {
@@ -247,7 +247,7 @@ void Unit::startBuilding(UnitTemplateID unitTemplateID) {
 	if (builder) {
 		for (auto& i : this->getUnitTemplate()->spawnables) {
 			if (i == unitTemplateID) {
-				builder->startBuilding(unitTemplateID, game->getTeam(this->teamID)->unitTemplates.at(unitTemplateID)->buildtime() );
+				builder->startBuilding(unitTemplateID, game->getUnitTemplate(this->teamID, unitTemplateID)->buildtime() );
 				return;
 			}
 		}

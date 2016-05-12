@@ -17,7 +17,7 @@ public:
 	// Creates and sets up a new unit, linked to the templateID from 
 
 	void loadUnitTemplate( std::string s );
-
+	UnitTemplate* getUnitTemplate(UnitTemplateID) const;
 	bool canBuild( UnitTemplateID unitTemplateID ) const;
 
 	void onUnitBirth( Unit* unit );
@@ -27,11 +27,10 @@ public:
 	Game& game;
 	const TeamID teamID;
 
-	std::map<UnitTemplateID, UnitTemplate*> unitTemplates;
-
 	const TeamColor::Enum teamColor;
 
 protected:
+	std::map<UnitTemplateID, UnitTemplate*> unitTemplates;
 	std::vector<int> resources;
 	std::map<UnitTemplateID, int> activeUnitTemplateCount;
 };

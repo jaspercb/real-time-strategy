@@ -57,9 +57,9 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 
 		if (event.button.button == SDL_BUTTON_RIGHT) {
 			for ( auto &id : game->inhabitedGrid.unitsInCircle(clickedCoord, (Distance)1000) ) { // hackish way of handling targeting selection
-				if (!game->teamsAreFriendly(this->teamID, this->game->getUnit(id)->teamID)
+				if (!game->teamsAreFriendly(this->teamID, game->getUnit(id)->teamID)
 				&& this->selectedUnits.size()
-				&& this->game->inhabitedGrid.unitIsVisibleToTeam(game->getUnit(id), this->teamID)) {
+				&& game->inhabitedGrid.unitIsVisibleToTeam(game->getUnit(id), this->teamID)) {
 					this->issueAttackCmd(id);
 					return;
 				}
@@ -204,8 +204,8 @@ void UserInterface::updateSelectedUnits() {
 		auto center = this->objectiveCoordinateFromScreen(this->selectionBoxCorner1);
 		Distance closestDistance = MAX_DISTANCE;
 		UnitID closestUnitID = 0;
-		for (auto &i : this->game->inhabitedGrid.unitsInCircle(center, 2000) ) {
-			const Unit* unit = this->game->getUnit(i);
+		for (auto &i : game->inhabitedGrid.unitsInCircle(center, 2000) ) {
+			const Unit* unit = game->getUnit(i);
 			if (unit->teamID == this->teamID
 				&& pythagoreanDistanceLessThan(unit->xy, center, min(closestDistance, (Distance)unit->getUnitTemplate()->radius()+500 ))
 				&& unit->getUnitTemplate()->isSelectable() ) {
@@ -216,11 +216,11 @@ void UserInterface::updateSelectedUnits() {
 		if (this->previousSelectedUnits.size() == 1 && *this->previousSelectedUnits.begin()==closestUnitID) {
 			// double-clicking a unit selects all visible units with the same type
 			UnitID prevUnitID = *this->previousSelectedUnits.begin();
-			UnitTemplateID prevUnitTemplateID = this->game->getUnit(prevUnitID)->getUnitTemplate()->name;
-			TeamID prevTeamID = this->game->getUnit(prevUnitID)->teamID;
+			UnitTemplateID prevUnitTemplateID = game->getUnit(prevUnitID)->getUnitTemplate()->name;
+			TeamID prevTeamID = game->getUnit(prevUnitID)->teamID;
 			this->previousSelectedUnits.clear();
 			this->selectedUnits.clear();
-			for (const auto &i : this->game->unitsByID) {
+			for (const auto &i : game->unitsByID) {
 				if (coordInRect(this->screenCoordinateFromObjective(i.second->xy), Coordinate(0, 0), Coordinate(SCREEN_WIDTH, SCREEN_HEIGHT))
 				&& i.second->teamID == prevTeamID
 				&& i.second->teamID == prevTeamID )
@@ -234,10 +234,10 @@ void UserInterface::updateSelectedUnits() {
 	}
 	else{
 		auto lambda = [this](Unit*u) {
-			return u->getUnitTemplate()->isSelectable() && coordInRect(this->screenCoordinateFromObjective(u->xy) , this->selectionBoxCorner1, this->selectionBoxCorner2) && this->game->teamsAreFriendly(this->teamID, u->teamID);
+			return u->getUnitTemplate()->isSelectable() && coordInRect(this->screenCoordinateFromObjective(u->xy) , this->selectionBoxCorner1, this->selectionBoxCorner2) && game->teamsAreFriendly(this->teamID, u->teamID);
 		};
 
-		for (auto& unitID_unit : this->game->unitsByID) {
+		for (auto& unitID_unit : game->unitsByID) {
 			if (lambda(unitID_unit.second))
 				this->selectedUnits.insert(unitID_unit.first);
 		}
@@ -252,7 +252,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 
 	// Draw paths
 	for (UnitID i : this->selectedUnits) {
-		Unit* u = this->game->getUnit(i);
+		Unit* u = game->getUnit(i);
 		std::vector<Coordinate> path = u->getStateWaypoints();
 		int numWaypoints = path.size() + 1;
 		if ( numWaypoints >= 2 ) {
@@ -274,7 +274,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 
 	// Draw a little individual green selection box for each selected unit
 	for (UnitID i : this->selectedUnits) {
-		Unit* u = this->game->getUnit(i);
+		Unit* u = game->getUnit(i);
 		UnitTemplate* uTemplate = u->getUnitTemplate();
 		
 		Coordinate drawCenter = this->screenCoordinateFromObjective(u->xy);
@@ -308,7 +308,7 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 
 	this->uiWireframe->render(gRenderer, 0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1.0);
 
-	this->game->terrain.renderMinimap(renderer, this);
+	game->terrain.renderMinimap(renderer, this);
 
 	selectedUnits.removeInvalidUnits();
 
@@ -331,6 +331,16 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 		std::stringstream hp_txt;
 		hp_txt << unit->hp << "/" << uTemplate->maxHP();
 		gFontManager->renderLine( hp_txt.str(), Coordinate(renderX-24, renderY+48), SDL_Colors::GREEN);
+
+		// BUILDING
+		if (unit->builder) {
+			const Builder* builder = unit->builder;
+			for (auto &buildQueue : builder->building) {
+				if (buildQueue.size()) {
+					const UnitTemplate* buildingTemplate = game->getUnitTemplate(unit->teamID, buildQueue[0].unitTemplateID);
+				}
+			}
+		}
 	} else {
 		int unitIndex = 0;
 
@@ -381,7 +391,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
 
-	this->game->terrain.render(renderer, this);
+	game->terrain.render(renderer, this);
 
 	this->renderSelection( renderer );
 
@@ -389,8 +399,8 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	Coordinate screenCorner2 = Coordinate(SCREEN_WIDTH+500, SCREEN_HEIGHT+500);
 
 	std::vector<Unit*> visibleUnitsInDrawOrder;
-	for (auto &i : this->game->unitsByID)
-		if (this->game->inhabitedGrid.getCoordVisibility(i.second->xy, this->teamID))
+	for (auto &i : game->unitsByID)
+		if (game->inhabitedGrid.getCoordVisibility(i.second->xy, this->teamID))
 			visibleUnitsInDrawOrder.push_back(i.second);
 
 	auto sortLambda = [this](Unit* a, Unit* b) {
@@ -507,7 +517,7 @@ void UserInterface::issueAttackCmd(UnitID targetID) {
 	cmd.queueSetting = this->shiftHeld() ? QueueSetting::Back : QueueSetting::Overwrite;
 	cmd.targetID = targetID;
 	
-	this->playAnimation("attackmove-animation", this->game->getUnit(targetID)->xy, 3);
+	this->playAnimation("attackmove-animation", game->getUnit(targetID)->xy, 3);
 
 	game->handleCommand(cmd);
 }

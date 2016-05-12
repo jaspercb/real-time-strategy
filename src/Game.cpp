@@ -72,7 +72,7 @@ void Game::deleteUnit(UnitID id) {
 }
 
 UnitTemplate* Game::getUnitTemplate(TeamID teamID, UnitTemplateID unitTemplateID) {
-	return this->getTeam(teamID)->unitTemplates.at(unitTemplateID);
+	return this->getTeam(teamID)->getUnitTemplate(unitTemplateID);
 }
 
 void Game::tick() {

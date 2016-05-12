@@ -24,10 +24,14 @@ Team::~Team() {
 void Team::loadUnitTemplate ( std::string filename ) { // filename doubles as unit template ID
 	unitTemplates.emplace( filename, new UnitTemplate(filename, std::ifstream(filename), this));
 	this->activeUnitTemplateCount[filename];
-};
+}
+
+UnitTemplate* Team::getUnitTemplate(UnitTemplateID unitTemplateID) const {
+	return unitTemplates.at(unitTemplateID);
+}
 
 bool Team::canBuild( UnitTemplateID unitTemplateID ) const {
-	return unitTemplates.at(unitTemplateID)->isBuildable(this);
+	return getUnitTemplate(unitTemplateID)->isBuildable(this);
 }
 
 void Team::onUnitBirth ( Unit* unit ) {
