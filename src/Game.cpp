@@ -71,6 +71,10 @@ void Game::deleteUnit(UnitID id) {
 	delete unitPtr;
 }
 
+UnitTemplate* Game::getUnitTemplate(TeamID teamID, UnitTemplateID unitTemplateID) {
+	return this->getTeam(teamID)->unitTemplates.at(unitTemplateID);
+}
+
 void Game::tick() {
 	std::vector<UnitID> toDelete;
 	for (auto &u : this->unitsByID)

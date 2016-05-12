@@ -13,6 +13,7 @@ class Team;
 class Unit;
 class InhabitedGrid;
 class Command;
+class UnitTemplate;
 
 class Game {
 public:
@@ -26,6 +27,8 @@ public:
 	bool existsUnit(UnitID id) const;
 	Unit* getUnit(UnitID id);
 	void deleteUnit(UnitID id);
+
+	UnitTemplate* getUnitTemplate(TeamID, UnitTemplateID);
 
 	void handleCommand(Command&);
 	void tick();
