@@ -23,6 +23,19 @@ void SetRenderDrawColor(SDL_Renderer* renderer, SDL_Color color) {
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
+void renderRectFilled(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color) {
+	SDL_Rect drawRect;
+	
+	drawRect.x = a.x;
+	drawRect.y = a.y;
+	drawRect.w = b.x-a.x;
+	drawRect.h = b.y-a.y;
+
+	SetRenderDrawColor(renderer, color);
+
+	SDL_RenderFillRect(renderer, &drawRect);	
+}
+
 void renderRectBorder(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color) {
 	SDL_Rect drawRect;
 	

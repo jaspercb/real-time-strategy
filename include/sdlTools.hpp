@@ -25,6 +25,7 @@ namespace SDL_Colors {
 	static const SDL_Color PURPLE = {255, 0, 0, SDL_ALPHA_OPAQUE};
 };
 
+void renderRectFilled(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
 void renderRectBorder(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
 void renderLine(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
 void renderEllipse(SDL_Renderer* renderer, Coordinate center, int a, int b, SDL_Color color);
