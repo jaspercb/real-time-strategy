@@ -321,7 +321,12 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 		const Uint8 colormod = 255*unit->hp/uTemplate->maxHP();
 
 		uTemplate->renderIcon( renderX, renderY, colormod );
-		gFontManager->renderLine( std::to_string(unit->hp)+"/"+std::to_string(uTemplate->maxHP()), Coordinate(renderX-24, renderY+24), SDL_Colors::GREEN);
+
+		// ES
+		gFontManager->renderLine( std::to_string(unit->es)+"/"+std::to_string(uTemplate->maxES()), Coordinate(renderX-24, renderY+24), SDL_Colors::LIGHTBLUE);
+
+		// HP
+		gFontManager->renderLine( std::to_string(unit->hp)+"/"+std::to_string(uTemplate->maxHP()), Coordinate(renderX-24, renderY+48), SDL_Colors::GREEN);
 	} else {
 		int unitIndex = 0;
 
