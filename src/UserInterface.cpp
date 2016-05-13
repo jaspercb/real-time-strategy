@@ -337,13 +337,16 @@ void UserInterface::renderHUD( SDL_Renderer* renderer ) {
 			const Builder* builder = unit->builder;
 			for (int index=0; index<builder->building.size(); index++) {
 				auto &buildQueue = builder->building[index];
-				if (buildQueue.size()) {
-					const Coordinate renderpos(500+48*index, 810);
-					const UnitTemplate* buildingTemplate = game->getUnitTemplate(unit->teamID, buildQueue[0].unitTemplateID);
-					float fractionComplete = 1-float(buildQueue[0].ticksUntilDone)/buildQueue[0].totalTicks;
+				int queuePosition = 0;
+				for (auto &buildData : buildQueue) {
+					const Coordinate renderpos(500+50*queuePosition, 810+48*index);
+					const UnitTemplate* buildingTemplate = game->getUnitTemplate(unit->teamID, buildData.unitTemplateID);
+					float fractionComplete = 1-float(buildData.ticksUntilDone)/buildData.totalTicks;
 					buildingTemplate->renderIcon(renderpos.x, renderpos.y, 255*fractionComplete);
 					renderRectFilled(gRenderer, renderpos+Coordinate(-24,24), renderpos+Coordinate(24,23), SDL_Colors::LIGHTGREY);
 					renderRectFilled(gRenderer, renderpos+Coordinate(-24,24), renderpos+Coordinate(-24+48*fractionComplete,23), SDL_Colors::GREEN);
+
+					queuePosition++;
 				}
 			}
 		}
