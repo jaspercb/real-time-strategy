@@ -241,7 +241,7 @@ void Unit::attack(Unit* target) {
 
 void Unit::startBuilding(UnitTemplateID unitTemplateID) {
 	if (!game->getTeam(teamID)->canBuild(unitTemplateID)) {
-		Logging::error("Error: Unit::tryToBuild called, but UnitTemplate::isBuildable=false. uTemplateID: "+unitTemplateID);
+		Logging::error("Unit::tryToBuild called, but UnitTemplate::isBuildable=false. uTemplateID: "+unitTemplateID);
 		return;
 	}
 	if (builder) {
@@ -251,9 +251,7 @@ void Unit::startBuilding(UnitTemplateID unitTemplateID) {
 				return;
 			}
 		}
-		Logging::error(("Error: Unit::tryToBuild called on invalid pair"));
-		Logging::error(("    Unit #" + std::to_string(this->unitID) + (", an instance of \"" + this->getUnitTemplate()->unitTemplateID) + "\""));
-		Logging::error(("    attempted to build an instance of \"" + unitTemplateID + "\""));
+		Logging::error(("Unit::tryToBuild called on invalid pair:\n\tUnit #" + std::to_string(this->unitID) + (", an instance of \"" + this->getUnitTemplate()->unitTemplateID) + "\"" + "attempted to build an instance of \"" + unitTemplateID + "\""));
 	}
 	else
 		Logging::error("Unit::tryToBuild called on unit with no building component!");
