@@ -72,3 +72,15 @@ namespace QueueSetting {
 		Back
 	};
 };
+
+
+namespace TerrainType {
+	enum Enum {
+		None,
+		Grass,
+		Water,
+		Road,
+		num
+	};
+};
+

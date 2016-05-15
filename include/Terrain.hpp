@@ -4,25 +4,24 @@
 #include <string>
 #include <memory>
 
+#include "enums.hpp"
+
 class SDL_Renderer;
 class UserInterface;
 class Spritesheet;
 
-enum TerrainType {
-	NONE,
-	GRASS,
-	WATER,
-	ROAD
-};
-
 struct TileData {
-	TerrainType terraintype;
+	// Type enum
+	TerrainType::Enum terraintype;
+	// Draw data
 	std::shared_ptr<Spritesheet> spritesheet;
 	int bottomX;
 	int bottomY;
 	int topX;
 	int topY;
 };
+
+// Handles drawing terrain, and also pathfinding for some reason
 
 class Terrain {
 	friend UserInterface;
@@ -31,7 +30,7 @@ class Terrain {
 		void render(SDL_Renderer* renderer, UserInterface* ui);
 		void renderMinimap(SDL_Renderer* renderer, UserInterface* ui);
 		void updateDrawTile(int x, int y);
-		TerrainType getTerrainAt(int x, int y);
+		TerrainType::Enum getTerrainAt(int x, int y);
 
 		std::vector< std::vector< TileData> > tiles;
 
