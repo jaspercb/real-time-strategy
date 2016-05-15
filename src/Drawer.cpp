@@ -15,8 +15,11 @@ int AIRBORNE_RENDER_HEIGHT = 40;
 const int PIXEL_WIDTH = 100;
 const int PIXEL_HEIGHT = 200;
 
+/*! 
+ * returns the unique integer 0<=r<b such that mb+r = a for some integer n
+ */
+
 int positiveRemainder(int a, int b) {
-	// returns the unique integer 0<=r<b such that mb+r = a for some integer n
 	return ((a%b)+b)%b;
 }
 
@@ -124,10 +127,11 @@ Drawer::Drawer(std::ifstream& is, TeamColor::Enum teamColor):
 Drawer::~Drawer() {
 }
 
-void Drawer::draw(SDL_Renderer* renderer, Unit* unit, UserInterface* ui, int alphaMulti /*, Coordinate cameraposition */) {
-	// Draws the unit to the given surface.
-	//spritesheet->render(renderer, 0, 0 , unit->xy.x, unit->xy.y);
-	
+/*! 
+ * Draws the unit to the given surface.
+ */
+
+void Drawer::draw(SDL_Renderer* renderer, Unit* unit, UserInterface* ui, int alphaMulti) {
 	this->spritesheet->setAlphaMod(alphaMulti);
 
 	int dy = unit->dimension.air ? -AIRBORNE_RENDER_HEIGHT : 0;
@@ -243,8 +247,9 @@ void Drawer::drawWireframe(SDL_Renderer* renderer, Coordinate drawPos) {
 
 int Drawer::spriteXFromAngle(int drawFacingAngle) {
 	// Why is this so complicated? Because spritesheets only give 180 degrees of imagery.
-	// Because of the above, instead of taking the angle and modding by (2*numFacingDirections), we want to take the
-	// angle, mod by (2*numFacingDirections - 2), then add an offset to avoid double-counting the 180 degree image
+	// So instead of just taking the angle and modding by (2*numFacingDirections), we want to take the
+	// angle, mod by (2*numFacingDirections - 2), then add an offset to avoid double-counting the 0 or 180
+	// degree images - which don't need to be flipped
 	if (this->numFacingDirections==1) {
 		return 0;
 	} else{
@@ -255,16 +260,15 @@ int Drawer::spriteXFromAngle(int drawFacingAngle) {
 	}
 }
 
+/*! 
+ * Draws an hp bar on the screen.
+ * the dy argument allows micro adjustment of the y-coordinate of the rendered HP bar
+ */
 void drawHPbar(SDL_Renderer* renderer, int HP, int maxHP, Coordinate renderLocation, const float magnification, int dy /* = 0 */) {
-	// Draws an HP bar centered at (renderX, renderY+dy)
 	const int hpPerSection = 50;
 	const int sectionWidth = 8;
 
 	renderLocation = renderLocation + Coordinate(0, dy*magnification);
-
-	//void renderRectFilled(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
-	//void renderRectBorder(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
-	//void renderLine(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
 
 	int barwidth = magnification*sectionWidth*maxHP/hpPerSection;
 	int barheight = magnification*10;
