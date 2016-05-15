@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 
+#include "sdlTools.hpp"
 #include "Drawer.hpp"
 #include "Spritesheet.hpp"
 #include "Logging.hpp"
@@ -256,34 +257,36 @@ int Drawer::spriteXFromAngle(int drawFacingAngle) {
 
 void drawHPbar(SDL_Renderer* renderer, int HP, int maxHP, const Coordinate renderLocation, const float magnification, int dy /* = 0 */) {
 	// Draws an HP bar centered at (renderX, renderY+dy)
-	const int granularity = 50;
+	const int hpPerSection = 50;
+	const int sectionWidth = 8;
 
-	SDL_Rect fullclip, emptyclip, tclip;
+	//void renderRectFilled(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
+	//void renderRectBorder(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
+	//void renderLine(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
 
-	int renderX = renderLocation.x;
-	int renderY = renderLocation.y;
 
-	int barlength = 5+6*maxHP/granularity;
+	int barwidth = sectionWidth*maxHP/hpPerSection;
+	int barheight = 10;
 
-	fullclip.w = 3 + 6*HP/granularity;
-	fullclip.h = 10;
-	fullclip.x = 0;
-	fullclip.y = 0;
+	int filledwidth = sectionWidth*HP/hpPerSection;
 
-	emptyclip.w = barlength-fullclip.w;
-	emptyclip.h = 10;
-	emptyclip.x = 107-emptyclip.w;
-	emptyclip.y = 0;
+	// red background
+	Coordinate bottomLeftCorner = renderLocation - Coordinate(barwidth/2, barheight/2);
+	Coordinate topRightCorner = bottomLeftCorner + Coordinate(barwidth, barheight);
+	renderRectFilled(renderer, bottomLeftCorner, topRightCorner, SDL_Colors::RED);
 
-	tclip.w = magnification*(3 + 6*HP/granularity);
-	tclip.h = magnification*10;
-	tclip.x=renderX-(magnification*barlength)/2;
-	tclip.y=renderY+ (dy - 25) * magnification;
-	
-	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-full", TeamColor::Enum::Null)->sheet, &fullclip, &tclip);
-	tclip.x += magnification*fullclip.w;
-	tclip.w = magnification*emptyclip.w;
-	SDL_RenderCopy(renderer, gResourceManager->get("hpbar-empty", TeamColor::Enum::Null)->sheet, &emptyclip, &tclip);
+	// green filled section
+	topRightCorner = bottomLeftCorner + Coordinate(filledwidth, barheight);
+	renderRectFilled(renderer, bottomLeftCorner, topRightCorner, SDL_Colors::GREEN);
+
+	// black border
+	topRightCorner = bottomLeftCorner + Coordinate(barwidth, barheight);
+	renderRectBorder(renderer, bottomLeftCorner, topRightCorner, SDL_Colors::BLACK);
+
+	// lines
+	for (int i=0; i<maxHP/hpPerSection; i++) {
+		renderLine(renderer, bottomLeftCorner+Coordinate(sectionWidth*i, 1), bottomLeftCorner+Coordinate(sectionWidth*i, barheight-1), SDL_Colors::BLACK);
+	}
 }
 
 void drawHPbar(SDL_Renderer* renderer, const Unit* unit, UserInterface* ui) {
