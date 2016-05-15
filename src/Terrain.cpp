@@ -11,6 +11,10 @@
 
 #include <SDL2/SDL.h>
 
+#define SAME_OR_ANY(a, b) ( (a==TerrainType::Any) or (a==TerrainType::NotWater and b!=TerrainType::Water) or (a==b) )
+
+#define MATCH_TERRAIN(a, b, c, d, e, f, g, h, i) ( SAME_OR_ANY(a, nw) and SAME_OR_ANY(b, n) and SAME_OR_ANY(c, ne) and  SAME_OR_ANY(d, w) and SAME_OR_ANY(e, center) and SAME_OR_ANY(f, e) and SAME_OR_ANY(g, sw) and SAME_OR_ANY(h, s) and SAME_OR_ANY(i, se))
+
 Terrain::Terrain(std::string mapName) {
 	SDL_Surface* image = gResourceManager->getRawSurface(mapName);
 	this->minimap = gResourceManager->get(mapName);
@@ -25,7 +29,7 @@ Terrain::Terrain(std::string mapName) {
 		this->tiles[i].resize(this->height);
 		for (int j=0; j<this->height; j++) {
 			
-			TerrainType::Enum tile = TerrainType::None;
+			TerrainType::Enum tile = TerrainType::Invalid;
 			switch (pixels[i*height + (height-j-1)]) {
 				case -65536:
 					tile = TerrainType::Water;
@@ -34,10 +38,10 @@ Terrain::Terrain(std::string mapName) {
 					tile = TerrainType::Grass;
 					break;
 				case -8355712:
-					tile = TerrainType::Grass; // tile = ROAD;
+					tile = TerrainType::Grass; // tile = TerrainType::Road;
 					break;
 				default:
-					tile = TerrainType::None;
+					tile = TerrainType::Invalid;
 					Logging::error("in Terrain::Terrain(), encountered weird pixel value: ");
 					Logging::error(pixels[i*height + (height-j-1)]);
 			}
@@ -56,17 +60,19 @@ Terrain::Terrain(std::string mapName) {
 
 TerrainType::Enum Terrain::getTerrainAt(int x, int y) {
 	if (x<0 || y < 0 || x >= this->width || y>= this->height)
-		return TerrainType::None;
+		return TerrainType::Invalid;
 	else
 		return this->tiles[x][y].terraintype;
 }
 
 void Terrain::updateDrawTile(int x, int y) {
+	using namespace TerrainType;
+
 	if (x<0 || y < 0 || x >= this->width || y>= this->height) {
 		throw;
 	}
 
-	TerrainType::Enum nw, n, ne, w, center, e, sw, s, se;
+	Enum nw, n, ne, w, center, e, sw, s, se;
 	nw = this->getTerrainAt(x-1, y+1);
 	n = this->getTerrainAt(x-1, y);
 	ne = this->getTerrainAt(x-1, y-1);
@@ -77,26 +83,26 @@ void Terrain::updateDrawTile(int x, int y) {
 	s = this->getTerrainAt(x+1, y);
 	se = this->getTerrainAt(x+1, y-1);
 
-	nw = (nw!=TerrainType::None) ? nw : center;
-	n = (n!=TerrainType::None) ? n : center;
-	ne = (ne!=TerrainType::None) ? ne : center;
-	w = (w!=TerrainType::None) ? w : center;
-	e = (e!=TerrainType::None) ? e : center;
-	sw = (sw!=TerrainType::None) ? sw : center;
-	s = (s!=TerrainType::None) ? s : center;
-	se = (se!=TerrainType::None) ? se : center;
+	nw = (nw!=Invalid) ? nw : center;
+	n = (n!=Invalid) ? n : center;
+	ne = (ne!=Invalid) ? ne : center;
+	w = (w!=Invalid) ? w : center;
+	e = (e!=Invalid) ? e : center;
+	sw = (sw!=Invalid) ? sw : center;
+	s = (s!=Invalid) ? s : center;
+	se = (se!=Invalid) ? se : center;
 
 	int bottomX, bottomY, topX, topY;
 	bottomX = -1; // if bottomX is still -1 by the end of this program, it shouldn't be drawn
 	bottomY = -1;
 	topX = -1; // same
 	topY = -1;
-	if (center == TerrainType::Grass) {
+	if (center == Grass) {
 		bottomX = 2+(x+y)%2, bottomY = 0;
 	}
 
-	else if (center == TerrainType::Water) {
-		int surroundingWaterCount = (int)(n==TerrainType::Water) + (int)(w==TerrainType::Water) + (int)(s==TerrainType::Water) + (int)(e==TerrainType::Water) + (int)(nw==TerrainType::Water) + (int)(ne==TerrainType::Water) + (int)(sw==TerrainType::Water) + (int)(se==TerrainType::Water);
+	else if (center == Water) {
+		int surroundingWaterCount = (int)(n==Water) + (int)(w==Water) + (int)(s==Water) + (int)(e==Water) + (int)(nw==Water) + (int)(ne==Water) + (int)(sw==Water) + (int)(se==Water);
 		
 		if (surroundingWaterCount == 8)
 			bottomX = 5, bottomY = 8;
@@ -104,53 +110,53 @@ void Terrain::updateDrawTile(int x, int y) {
 			bottomX = 0, bottomY = 2;
 
 			if (surroundingWaterCount == 7) {
-				if (ne != TerrainType::Water)
+				if (ne != Water)
 					topX = 6, topY = 9;
-				else if (se != TerrainType::Water)
+				else if (se != Water)
 					topX = 7, topY = 9;
-				else if (nw != TerrainType::Water)
+				else if (nw != Water)
 					topX = 8, topY = 9;
-				else if (sw != TerrainType::Water)
+				else if (sw != Water)
 					topX = 9, topY = 9;
 			}
 
-			else if (surroundingWaterCount == 4 && n != TerrainType::Water && w != TerrainType::Water && s != TerrainType::Water && e != TerrainType::Water) 
+			else if (surroundingWaterCount == 4 && n != Water && w != Water && s != Water && e != Water) 
 				topX=2, topY=10;
 
-			else if (n == TerrainType::Water && e == TerrainType::Water && w != TerrainType::Water && s != TerrainType::Water
-			&& ne != TerrainType::Water )
+			else if (n == Water && e == Water && w != Water && s != Water
+			&& ne != Water )
 				topX = 0, topY = 9;
-			else if (n == TerrainType::Water && e != TerrainType::Water && w == TerrainType::Water && s != TerrainType::Water
-			&& nw != TerrainType::Water )
+			else if (n == Water && e != Water && w == Water && s != Water
+			&& nw != Water )
 				topX=4, topY=9;
-			else if (n != TerrainType::Water && e == TerrainType::Water && w != TerrainType::Water && s == TerrainType::Water
-			&& se != TerrainType::Water )
+			else if (n != Water && e == Water && w != Water && s == Water
+			&& se != Water )
 				topX=3, topY=9;
-			else if (n != TerrainType::Water && e != TerrainType::Water && w == TerrainType::Water && s == TerrainType::Water
-			&& sw != TerrainType::Water )
+			else if (n != Water && e != Water && w == Water && s == Water
+			&& sw != Water )
 				topX=5, topY=9;
 
-			else if (n == TerrainType::Water && s == TerrainType::Water && e != TerrainType::Water && w != TerrainType::Water)
+			else if (n == Water && s == Water && e != Water && w != Water)
 				topX=1, topY=9;
-			else if (n != TerrainType::Water && s != TerrainType::Water && e == TerrainType::Water && w == TerrainType::Water)
+			else if (n != Water && s != Water && e == Water && w == Water)
 				topX=2, topY=9;
 
-			else if (n != TerrainType::Water && nw != TerrainType::Water && w != TerrainType::Water)
+			else if (n != Water && nw != Water && w != Water)
 				topX=3, topY=8; //resource = "tile-ocean-grass-NW";
-			else if (n != TerrainType::Water && ne != TerrainType::Water && e != TerrainType::Water)
+			else if (n != Water && ne != Water && e != Water)
 				topX=9, topY=8; //resource = "tile-ocean-grass-NE";
-			else if (s != TerrainType::Water && sw != TerrainType::Water && w != TerrainType::Water)
+			else if (s != Water && sw != Water && w != Water)
 				topX=0, topY=8; //resource = "tile-ocean-grass-SW";
-			else if (s != TerrainType::Water && se != TerrainType::Water && e != TerrainType::Water)
+			else if (s != Water && se != Water && e != Water)
 				topX=6, topY=8; //resource = "tile-ocean-grass-SE";
 
-			else if (n != TerrainType::Water)
+			else if (n != Water)
 				topX=7, topY=8;//resource = "tile-ocean-grass-N";
-			else if (e != TerrainType::Water)
+			else if (e != Water)
 				topX=8, topY=8;//resource = "tile-ocean-grass-E";
-			else if (s != TerrainType::Water)
+			else if (s != Water)
 				topX=2, topY=8;//resource = "tile-ocean-grass-S";
-			else if (w != TerrainType::Water)
+			else if (w != Water)
 				topX=1, topY=8;//resource = "tile-ocean-grass-W";
 
 		}
@@ -288,3 +294,6 @@ void Terrain::renderMinimap(SDL_Renderer* renderer, UserInterface* ui) {
 	target.y = 750-target.h/2;
 	SDL_RenderCopyEx(renderer, this->minimap->sheet, NULL, &target, -45, NULL, SDL_FLIP_NONE);
 }
+
+#undef SAME_OR_ANY
+#undef MATCH_TERRAIN

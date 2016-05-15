@@ -76,7 +76,9 @@ namespace QueueSetting {
 
 namespace TerrainType {
 	enum Enum {
-		None,
+		Invalid,
+		Any,
+		NotWater,
 		Grass,
 		Water,
 		Road,
