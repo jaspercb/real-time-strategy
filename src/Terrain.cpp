@@ -99,101 +99,93 @@ void Terrain::updateDrawTile(int x, int y) {
 	topY = -1;
 	if MATCH_TERRAIN(Any, Any,      Any,
 	                 Any, NotWater, Any,
-	                 Any, Any,      Any) { // (center == Grass)
+	                 Any, Any,      Any) // (center == Grass)
 		bottomX = 2+(x+y)%2, bottomY = 0;
-	}
+	else if MATCH_TERRAIN(Water, Water, Water,
+	                 Water, Water, Water,
+	                 Water, Water, Water)
+		bottomX = 5, bottomY = 8;
+	else if MATCH_TERRAIN(Water, Water, NotWater,
+	                 Water, Water, Water,
+	                 Water, Water, Water) //if (ne != Water)
+		topX = 6, topY = 9;
+	else if MATCH_TERRAIN(Water, Water, Water,
+	                      Water, Water, Water,
+	                      Water, Water, NotWater) // (se != Water)
+		topX = 7, topY = 9;
+	else if MATCH_TERRAIN(NotWater, Water, Water,
+	                      Water,    Water, Water,
+	                      Water,    Water, Water) // (nw != Water)
+		topX = 8, topY = 9;
+	else if MATCH_TERRAIN(Water,    Water, Water,
+	                      Water,    Water, Water,
+	                      NotWater, Water, Water) //(sw != Water)
+		topX = 9, topY = 9;
+	//else if MATCH_TERRAIN(Water, Water, NotWater,
+	//                       Water, NotWater, Water, NotWater, Water, NotWater))
+	//	topX=2, topY=10;
 
-	else if (center == Water) {
-		if MATCH_TERRAIN(Water, Water, Water,
-		                 Water, Water, Water,
-		                 Water, Water, Water)
-			bottomX = 5, bottomY = 8;
-		else {
-			bottomX = 0, bottomY = 2;
-
-			if MATCH_TERRAIN(Water, Water, NotWater,
-			                 Water, Water, Water,
-			                 Water, Water, Water) //if (ne != Water)
-				topX = 6, topY = 9;
-			else if MATCH_TERRAIN(Water, Water, Water,
-			                      Water, Water, Water,
-			                      Water, Water, NotWater) // (se != Water)
-				topX = 7, topY = 9;
-			else if MATCH_TERRAIN(NotWater, Water, Water,
-			                      Water,    Water, Water,
-			                      Water,    Water, Water) // (nw != Water)
-				topX = 8, topY = 9;
-			else if MATCH_TERRAIN(Water,    Water, Water,
-			                      Water,    Water, Water,
-			                      NotWater, Water, Water) //(sw != Water)
-				topX = 9, topY = 9;
-			//else if MATCH_TERRAIN(Water, Water, NotWater,
-			//                       Water, NotWater, Water, NotWater, Water, NotWater))
-			//	topX=2, topY=10;
-
-			else if MATCH_TERRAIN(Any,      Water,    NotWater,
-			                      NotWater, Water,    Water,
-			                      Any,      NotWater, Any)
-				topX = 0, topY = 9;
-			else if MATCH_TERRAIN(NotWater, Water,    Any,
-			                      Water,    Water,    NotWater,
-			                      Any,      NotWater, Any)
-				topX=4, topY=9;
-			else if MATCH_TERRAIN(Any,      NotWater, Any,
-			                      NotWater, Water,    Water,
-			                      Any,      Water,    NotWater)
-				topX=3, topY=9;
-			else if MATCH_TERRAIN(Any,      NotWater, Any,
-			                      Water,    Water,    NotWater,
-			                      NotWater, Water,    Any)
-				topX=5, topY=9;
+	else if MATCH_TERRAIN(Any,      Water,    NotWater,
+	                      NotWater, Water,    Water,
+	                      Any,      NotWater, Any)
+		topX = 0, topY = 9;
+	else if MATCH_TERRAIN(NotWater, Water,    Any,
+	                      Water,    Water,    NotWater,
+	                      Any,      NotWater, Any)
+		topX=4, topY=9;
+	else if MATCH_TERRAIN(Any,      NotWater, Any,
+	                      NotWater, Water,    Water,
+	                      Any,      Water,    NotWater)
+		topX=3, topY=9;
+	else if MATCH_TERRAIN(Any,      NotWater, Any,
+	                      Water,    Water,    NotWater,
+	                      NotWater, Water,    Any)
+		topX=5, topY=9;
 
 
-			else if MATCH_TERRAIN(Any,      Water, Any,
-			                      NotWater, Water, NotWater,
-			                      Any,      Water, Any)
-				topX=1, topY=9;
-			else if MATCH_TERRAIN(Any, NotWater, Any,
-			                      Water, Water, Water,
-			                      Any, NotWater, Any)
-				topX=2, topY=9;
+	else if MATCH_TERRAIN(Any,      Water, Any,
+	                      NotWater, Water, NotWater,
+	                      Any,      Water, Any)
+		topX=1, topY=9;
+	else if MATCH_TERRAIN(Any, NotWater, Any,
+	                      Water, Water, Water,
+	                      Any, NotWater, Any)
+		topX=2, topY=9;
 
-			else if MATCH_TERRAIN(NotWater, NotWater, Any,
-			                      NotWater, Water,    Any,
-			                      Any,      Any,      Any)
-				topX=3, topY=8; //resource = "tile-ocean-grass-NW";
-			else if MATCH_TERRAIN(Any, NotWater, NotWater,
-			                      Any, Water,    NotWater,
-			                      Any, Any,      Any)
-				topX=9, topY=8; //resource = "tile-ocean-grass-NE";
-			else if MATCH_TERRAIN(Any,      Any,      Any,
-			                      NotWater, Water,    Any,
-			                      NotWater, NotWater, Any)
-				topX=0, topY=8; //resource = "tile-ocean-grass-SW";
-			else if MATCH_TERRAIN(Any, Any,      Any,
-			                      Any, Water,    NotWater,
-			                      Any, NotWater, NotWater)
-				topX=6, topY=8; //resource = "tile-ocean-grass-SE";
+	else if MATCH_TERRAIN(NotWater, NotWater, Any,
+	                      NotWater, Water,    Any,
+	                      Any,      Any,      Any)
+		topX=3, topY=8; //resource = "tile-ocean-grass-NW";
+	else if MATCH_TERRAIN(Any, NotWater, NotWater,
+	                      Any, Water,    NotWater,
+	                      Any, Any,      Any)
+		topX=9, topY=8; //resource = "tile-ocean-grass-NE";
+	else if MATCH_TERRAIN(Any,      Any,      Any,
+	                      NotWater, Water,    Any,
+	                      NotWater, NotWater, Any)
+		topX=0, topY=8; //resource = "tile-ocean-grass-SW";
+	else if MATCH_TERRAIN(Any, Any,      Any,
+	                      Any, Water,    NotWater,
+	                      Any, NotWater, NotWater)
+		topX=6, topY=8; //resource = "tile-ocean-grass-SE";
 
-			else if MATCH_TERRAIN(Any, NotWater, Any,
-			                      Any, Water,    Any,
-			                      Any, Any,      Any)
-				topX=7, topY=8;//resource = "tile-ocean-grass-N";
-			else if MATCH_TERRAIN(Any, Any,   Any,
-			                      Any, Water, NotWater,
-			                      Any, Any,   Any)
-				topX=8, topY=8;//resource = "tile-ocean-grass-E";
-			else if MATCH_TERRAIN(Any, Any,      Any,
-			                      Any, Water,    Any,
-			                      Any, NotWater, Any)
-				topX=2, topY=8;//resource = "tile-ocean-grass-S";
-			else if MATCH_TERRAIN(Any,      Any,   Any,
-			                      NotWater, Water, Any,
-			                      Any,      Any,   Any)
-				topX=1, topY=8;//resource = "tile-ocean-grass-W";
-
-		}
-		/*
+	else if MATCH_TERRAIN(Any, NotWater, Any,
+	                      Any, Water,    Any,
+	                      Any, Any,      Any)
+		topX=7, topY=8;//resource = "tile-ocean-grass-N";
+	else if MATCH_TERRAIN(Any, Any,   Any,
+	                      Any, Water, NotWater,
+	                      Any, Any,   Any)
+		topX=8, topY=8;//resource = "tile-ocean-grass-E";
+	else if MATCH_TERRAIN(Any, Any,      Any,
+	                      Any, Water,    Any,
+	                      Any, NotWater, Any)
+		topX=2, topY=8;//resource = "tile-ocean-grass-S";
+	else if MATCH_TERRAIN(Any,      Any,   Any,
+	                      NotWater, Water, Any,
+	                      Any,      Any,   Any)
+		topX=1, topY=8;//resource = "tile-ocean-grass-W";
+/*
 	}
 
 	else if (center == ROAD) {
@@ -280,6 +272,10 @@ void Terrain::updateDrawTile(int x, int y) {
 		else
 			resource = "tile-road";
 	*/
+
+	if (bottomX==-1 && bottomY == -1) {
+		bottomX=1;
+		bottomY=0;
 	}
 
 	this->tiles[x][y].spritesheet = gResourceManager->get("new-landscape-tiles");
@@ -308,8 +304,8 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 				this->tiles[i][j].spritesheet->resetColorMod();			}
 		}
 	}
-	
-	
+
+
 	SDL_Color gridLineColor{0, 0, 0, (unsigned char) (186.0*std::min(ui->viewMagnification*2, 1.0f) )};
 	for (int i=0; i<=this->width; i++) {
 		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, -64*PIXEL_WIDTH)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*(this->width))), gridLineColor );
