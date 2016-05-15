@@ -13,8 +13,8 @@
 
 #define SAME_OR_ANY(a, b) ( (a==TerrainType::Any) or (a==TerrainType::NotWater and b!=TerrainType::Water) or (a==b) )
 
-#define MATCH_TERRAIN(a, b, c, d, e, f, g, h, i) ( SAME_OR_ANY(a, nw) and SAME_OR_ANY(b, n) and SAME_OR_ANY(c, ne) and  SAME_OR_ANY(d, w) and SAME_OR_ANY(e, center) and SAME_OR_ANY(f, e) and SAME_OR_ANY(g, sw) and SAME_OR_ANY(h, s) and SAME_OR_ANY(i, se))
-
+#define MATCH_TERRAIN(a, b, c, d, e_, f, g, h, i) ( SAME_OR_ANY(a, nw) and SAME_OR_ANY(b, n) and SAME_OR_ANY(c, ne) and  SAME_OR_ANY(d, w) and SAME_OR_ANY(e_, center) and SAME_OR_ANY(f, e) and SAME_OR_ANY(g, sw) and SAME_OR_ANY(h, s) and SAME_OR_ANY(i, se))
+// center, nw, n, ne, e, se, s, sw, w
 Terrain::Terrain(std::string mapName) {
 	SDL_Surface* image = gResourceManager->getRawSurface(mapName);
 	this->minimap = gResourceManager->get(mapName);
@@ -97,66 +97,99 @@ void Terrain::updateDrawTile(int x, int y) {
 	bottomY = -1;
 	topX = -1; // same
 	topY = -1;
-	if (center == Grass) {
+	if MATCH_TERRAIN(Any, Any,      Any,
+	                 Any, NotWater, Any,
+	                 Any, Any,      Any) { // (center == Grass)
 		bottomX = 2+(x+y)%2, bottomY = 0;
 	}
 
 	else if (center == Water) {
-		int surroundingWaterCount = (int)(n==Water) + (int)(w==Water) + (int)(s==Water) + (int)(e==Water) + (int)(nw==Water) + (int)(ne==Water) + (int)(sw==Water) + (int)(se==Water);
-		
-		if (surroundingWaterCount == 8)
+		if MATCH_TERRAIN(Water, Water, Water,
+		                 Water, Water, Water,
+		                 Water, Water, Water)
 			bottomX = 5, bottomY = 8;
 		else {
 			bottomX = 0, bottomY = 2;
 
-			if (surroundingWaterCount == 7) {
-				if (ne != Water)
-					topX = 6, topY = 9;
-				else if (se != Water)
-					topX = 7, topY = 9;
-				else if (nw != Water)
-					topX = 8, topY = 9;
-				else if (sw != Water)
-					topX = 9, topY = 9;
-			}
+			if MATCH_TERRAIN(Water, Water, NotWater,
+			                 Water, Water, Water,
+			                 Water, Water, Water) //if (ne != Water)
+				topX = 6, topY = 9;
+			else if MATCH_TERRAIN(Water, Water, Water,
+			                      Water, Water, Water,
+			                      Water, Water, NotWater) // (se != Water)
+				topX = 7, topY = 9;
+			else if MATCH_TERRAIN(NotWater, Water, Water,
+			                      Water,    Water, Water,
+			                      Water,    Water, Water) // (nw != Water)
+				topX = 8, topY = 9;
+			else if MATCH_TERRAIN(Water,    Water, Water,
+			                      Water,    Water, Water,
+			                      NotWater, Water, Water) //(sw != Water)
+				topX = 9, topY = 9;
+			//else if MATCH_TERRAIN(Water, Water, NotWater,
+			//                       Water, NotWater, Water, NotWater, Water, NotWater))
+			//	topX=2, topY=10;
 
-			else if (surroundingWaterCount == 4 && n != Water && w != Water && s != Water && e != Water) 
-				topX=2, topY=10;
-
-			else if (n == Water && e == Water && w != Water && s != Water
-			&& ne != Water )
+			else if MATCH_TERRAIN(Any,      Water,    NotWater,
+			                      NotWater, Water,    Water,
+			                      Any,      NotWater, Any)
 				topX = 0, topY = 9;
-			else if (n == Water && e != Water && w == Water && s != Water
-			&& nw != Water )
+			else if MATCH_TERRAIN(NotWater, Water,    Any,
+			                      Water,    Water,    NotWater,
+			                      Any,      NotWater, Any)
 				topX=4, topY=9;
-			else if (n != Water && e == Water && w != Water && s == Water
-			&& se != Water )
+			else if MATCH_TERRAIN(Any,      NotWater, Any,
+			                      NotWater, Water,    Water,
+			                      Any,      Water,    NotWater)
 				topX=3, topY=9;
-			else if (n != Water && e != Water && w == Water && s == Water
-			&& sw != Water )
+			else if MATCH_TERRAIN(Any,      NotWater, Any,
+			                      Water,    Water,    NotWater,
+			                      NotWater, Water,    Any)
 				topX=5, topY=9;
 
-			else if (n == Water && s == Water && e != Water && w != Water)
+
+			else if MATCH_TERRAIN(Any,      Water, Any,
+			                      NotWater, Water, NotWater,
+			                      Any,      Water, Any)
 				topX=1, topY=9;
-			else if (n != Water && s != Water && e == Water && w == Water)
+			else if MATCH_TERRAIN(Any, NotWater, Any,
+			                      Water, Water, Water,
+			                      Any, NotWater, Any)
 				topX=2, topY=9;
 
-			else if (n != Water && nw != Water && w != Water)
+			else if MATCH_TERRAIN(NotWater, NotWater, Any,
+			                      NotWater, Water,    Any,
+			                      Any,      Any,      Any)
 				topX=3, topY=8; //resource = "tile-ocean-grass-NW";
-			else if (n != Water && ne != Water && e != Water)
+			else if MATCH_TERRAIN(Any, NotWater, NotWater,
+			                      Any, Water,    NotWater,
+			                      Any, Any,      Any)
 				topX=9, topY=8; //resource = "tile-ocean-grass-NE";
-			else if (s != Water && sw != Water && w != Water)
+			else if MATCH_TERRAIN(Any,      Any,      Any,
+			                      NotWater, Water,    Any,
+			                      NotWater, NotWater, Any)
 				topX=0, topY=8; //resource = "tile-ocean-grass-SW";
-			else if (s != Water && se != Water && e != Water)
+			else if MATCH_TERRAIN(Any, Any,      Any,
+			                      Any, Water,    NotWater,
+			                      Any, NotWater, NotWater)
 				topX=6, topY=8; //resource = "tile-ocean-grass-SE";
 
-			else if (n != Water)
+			else if MATCH_TERRAIN(Any, NotWater, Any,
+			                      Any, Water,    Any,
+			                      Any, Any,      Any)
 				topX=7, topY=8;//resource = "tile-ocean-grass-N";
-			else if (e != Water)
+			else if MATCH_TERRAIN(Any, Any,   Any,
+			                      Any, Water, NotWater,
+			                      Any, Any,   Any)
 				topX=8, topY=8;//resource = "tile-ocean-grass-E";
-			else if (s != Water)
+			else if MATCH_TERRAIN(Any, Any,      Any,
+			                      Any, Water,    Any,
+			                      Any, NotWater, Any)
 				topX=2, topY=8;//resource = "tile-ocean-grass-S";
-			else if (w != Water)
+			else if MATCH_TERRAIN(Any,      Any,   Any,
+			                      NotWater, Water, Any,
+			                      Any,      Any,   Any)
 				topX=1, topY=8;//resource = "tile-ocean-grass-W";
 
 		}
