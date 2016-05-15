@@ -13,16 +13,16 @@
 std::shared_ptr<UnitState> UnitState::handleCommand(Unit* unit, Command command) {
 	switch (command.cmdtype){
 		case CommandType::Idle: {
-			return std::shared_ptr<UnitState>(new StateIdle());
+			return std::make_shared<StateIdle>();
 		}
 		case CommandType::Gotocoord: {
-			return std::shared_ptr<UnitState>(new StateGoto(command.targetCoord));
+			return std::make_shared<StateGoto>(command.targetCoord);
 		}
 		case CommandType::Attack: {
-			return std::shared_ptr<UnitState>(new StateAttack(command.targetID));
+			return std::make_shared<StateAttack>(command.targetID);
 		}
 		case CommandType::Attackmove: {
-			return std::shared_ptr<UnitState>(new StateAttackMove(command.targetCoord));
+			return std::make_shared<StateAttackMove>(command.targetCoord);
 		}
 		case CommandType::Build: {
 			unit->startBuilding(command.unitTemplateID);
