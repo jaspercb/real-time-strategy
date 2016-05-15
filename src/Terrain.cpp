@@ -301,7 +301,8 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 				if (this->tiles[i][j].topX != -1)
 					this->tiles[i][j].spritesheet->render(renderer, tiles[i][j].topX, tiles[i][j].topY, drawPos.x, drawPos.y +  (64-this->tiles[i][j].spritesheet->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
 
-				this->tiles[i][j].spritesheet->resetColorMod();			}
+				this->tiles[i][j].spritesheet->resetColorMod();
+			}
 		}
 	}
 
