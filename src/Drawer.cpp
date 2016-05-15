@@ -255,20 +255,21 @@ int Drawer::spriteXFromAngle(int drawFacingAngle) {
 	}
 }
 
-void drawHPbar(SDL_Renderer* renderer, int HP, int maxHP, const Coordinate renderLocation, const float magnification, int dy /* = 0 */) {
+void drawHPbar(SDL_Renderer* renderer, int HP, int maxHP, Coordinate renderLocation, const float magnification, int dy /* = 0 */) {
 	// Draws an HP bar centered at (renderX, renderY+dy)
 	const int hpPerSection = 50;
 	const int sectionWidth = 8;
+
+	renderLocation = renderLocation + Coordinate(0, dy*magnification);
 
 	//void renderRectFilled(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
 	//void renderRectBorder(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
 	//void renderLine(SDL_Renderer* renderer, Coordinate a, Coordinate b, SDL_Color color);
 
+	int barwidth = magnification*sectionWidth*maxHP/hpPerSection;
+	int barheight = magnification*10;
 
-	int barwidth = sectionWidth*maxHP/hpPerSection;
-	int barheight = 10;
-
-	int filledwidth = sectionWidth*HP/hpPerSection;
+	int filledwidth = magnification*sectionWidth*HP/hpPerSection;
 
 	// red background
 	Coordinate bottomLeftCorner = renderLocation - Coordinate(barwidth/2, barheight/2);
@@ -285,7 +286,7 @@ void drawHPbar(SDL_Renderer* renderer, int HP, int maxHP, const Coordinate rende
 
 	// lines
 	for (int i=0; i<maxHP/hpPerSection; i++) {
-		renderLine(renderer, bottomLeftCorner+Coordinate(sectionWidth*i, 1), bottomLeftCorner+Coordinate(sectionWidth*i, barheight-1), SDL_Colors::BLACK);
+		renderLine(renderer, bottomLeftCorner+Coordinate(magnification*sectionWidth*i, 1), bottomLeftCorner+Coordinate(magnification*sectionWidth*i, barheight-1), SDL_Colors::BLACK);
 	}
 }
 
