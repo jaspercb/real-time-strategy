@@ -257,7 +257,7 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 		for (int j=0; j<this->height; j++) {
 			Coordinate drawPos = ui->screenCoordinateFromObjective(Coordinate(32*PIXEL_WIDTH*i, 32*PIXEL_WIDTH*j ));
 			if (coordInRect(drawPos, screenCorner1, screenCorner2)) {
-				int tileColorMod = ui->game->inhabitedGrid.getTileVisibility(Coordinate(i, j), ui->teamID);
+				int tileColorMod = ui->game->visibilityManager.getTileVisibility(Coordinate(i, j), ui->teamID);
 				this->tiles[i][j].spritesheet->setColorMod(tileColorMod, tileColorMod, tileColorMod);
 
 				if (this->tiles[i][j].bottomX != -1)

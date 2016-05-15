@@ -9,7 +9,8 @@
 #include "Logging.hpp"
 
 Game::Game():
-	inhabitedGrid(InhabitedGrid(this, 64, 64, 10)),  // Currently hard coded
+	inhabitedGrid(InhabitedGrid(this)),  // Currently hard coded
+	visibilityManager(VisibilityManager(this, 64, 64, 10)),
 	smallestUnusedTeamID_(2),
 	smallestUnusedUnitID_(1)
 	{
@@ -50,7 +51,7 @@ UnitID Game::createUnit(TeamID teamID, UnitTemplateID unitTemplateID, Coordinate
 	Unit* unitPtr = new Unit(this, id, teamID, unitTemplateID, pos);
 	this->unitsByID.emplace(id, unitPtr);
 	this->inhabitedGrid.emplace(unitPtr);
-	this->inhabitedGrid.startTrackingVisibility(unitPtr);
+	this->visibilityManager.startTrackingVisibility(unitPtr);
 	this->getTeam(unitPtr->teamID)->onUnitDeath(unitPtr);
 	return id;
 }
@@ -91,13 +92,18 @@ void Game::tick() {
 
 
 	this->resolveCollisions();
-	this->inhabitedGrid.tick(); // visibility
+	this->visibilityManager.tick();
 }
 
 void Game::handleCommand(Command& cmd){
 	for (const UnitID &unitID : cmd.commanded){
 		this->getUnit(unitID)->handleCommand(cmd);
 	}
+}
+
+void Game::onMove(Unit* unit, Coordinate oldcoord) {
+	visibilityManager.updatePos(unit, oldcoord);
+	inhabitedGrid.updatePos(unit, oldcoord);
 }
 
 void Game::resolveCollisions() {

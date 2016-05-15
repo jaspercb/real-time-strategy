@@ -66,29 +66,13 @@ bool unitInRectangle(Unit* u, Coordinate b, Coordinate c) {
 	return coordInRect(u->xy, b, c);
 }
 
-InhabitedGrid::InhabitedGrid(Game* game, int w, int h, int numTeams):
+InhabitedGrid::InhabitedGrid(Game* game):
 	game(game),
-	w(w),
-	h(h),
-	numTeams(numTeams),
 	cellWidth(6 * PIXEL_WIDTH * 32),
-	tileWidth(PIXEL_WIDTH * 32),
 	emptyUnitIDset(std::make_shared<Unitset>())
-	{
-		visibilityGrid = new uint16_t[w*h*numTeams];
-		memset(visibilityGrid, 0, w*h*numTeams);
-		visibilityTimeGrid = new uint16_t[w*h*numTeams];
-		memset(visibilityTimeGrid, 0, w*h*numTeams);
-	}
+	{}
 
-InhabitedGrid::~InhabitedGrid() {
-	delete[] visibilityGrid;
-	delete[] visibilityTimeGrid;
-}
-
-Coordinate InhabitedGrid::getTileCoords(Coordinate c) const {
-	return Coordinate((c.x)/tileWidth, (c.y)/tileWidth); // hackish way to make rendered tiles line up with these internal cell coordinates. I know, I know.
-}
+InhabitedGrid::~InhabitedGrid() {}
 
 Coordinate InhabitedGrid::getCellCoords(Coordinate c) const { 
 	return Coordinate(c.x/cellWidth, c.y/cellWidth);
@@ -100,11 +84,6 @@ const std::shared_ptr<Unitset> &InhabitedGrid::unitsInCell(Coordinate c) const {
 		return found->second;
 	}
 	return this->emptyUnitIDset;
-}
-
-void InhabitedGrid::startTrackingVisibility(const Unit *unit) {
-	// must be called ONCE
-	this->incrementTileVisibility( this->getTileCoords(unit->xy), unit->teamID );
 }
 
 void InhabitedGrid::emplace(const Unit *unit) {
@@ -123,7 +102,7 @@ void InhabitedGrid::erase(const Unit *unit) {
 	if (grid[pos]->size()==0){
 		this->grid.erase(pos);
 	}
-	this->decrementTileVisibility(unit->xy, unit->teamID);
+	//this->decrementTileVisibility(unit->xy, unit->teamID);
 }
 
 void InhabitedGrid::eraseWithHint(const Unit *unit, const Coordinate oldcoord) {
@@ -132,7 +111,7 @@ void InhabitedGrid::eraseWithHint(const Unit *unit, const Coordinate oldcoord) {
 	if (grid[oldpos]->size()==0){
 		this->grid.erase(oldpos);
 	}
-	this->decrementTileVisibility(oldcoord, unit->teamID);
+	//->decrementTileVisibility(oldcoord, unit->teamID);
 }
 
 void InhabitedGrid::updatePos(const Unit *unit, Coordinate oldcoord) {
@@ -142,25 +121,6 @@ void InhabitedGrid::updatePos(const Unit *unit, Coordinate oldcoord) {
 	if (oldcell != newcell){
 		this->eraseWithHint(unit, oldcoord);
 		this->emplace(unit);
-	}
-
-	Coordinate oldtile = this->getTileCoords(oldcoord);
-	Coordinate newtile = this->getTileCoords(unit->xy);
-	
-	if (oldtile != newtile) {
-		this->decrementTileVisibility(oldtile, unit->teamID);
-		this->incrementTileVisibility(newtile, unit->teamID);
-	}
-}
-
-void InhabitedGrid::tick() {
-	for (int i=0; i<w*h*numTeams; i++) {
-		if (this->visibilityGrid[i]) {
-			this->visibilityTimeGrid[i] = std::min(this->visibilityTimeGrid[i]+1, 16);
-		}
-		else {
-			this->visibilityTimeGrid[i] -= this->visibilityTimeGrid[i] ? 1 : 0;
-		}
 	}
 }
 
@@ -221,63 +181,6 @@ Unitset InhabitedGrid::unitsCollidingWith(Unit* u) const {
 	return ret;
 }
 
-void InhabitedGrid::incrementTileVisibility(const Coordinate center, const TeamID team) {
-	for (int i = -visibilityRadius ; i<=visibilityRadius ; i++ ) {
-		for (int j = -visibilityRadius ; j<=visibilityRadius ; j++ ) {
-			Coordinate coord(center.x+i, center.y+j);
-			if (pythagoreanDistanceLessThan(center, coord, InhabitedGrid::visibilityRadius)) {
-				int k = getTileIndex(coord, team);
-				if (k>0) // if on board
-					this->visibilityGrid[k]++;
-			}
-		}
-	}
-}
-
-void InhabitedGrid::decrementTileVisibility(const Coordinate center, const TeamID team) {
-	for (int i = -visibilityRadius ; i<=visibilityRadius ; i++ ) {
-		for (int j = -visibilityRadius ; j<=visibilityRadius ; j++ ) {
-			Coordinate coord(center.x+i, center.y+j);
-			if (pythagoreanDistanceLessThan(center, coord, InhabitedGrid::visibilityRadius)) {
-				int k = getTileIndex(coord, team);
-				if (k>0) // if on board
-					this->visibilityGrid[k]--;
-			}
-		}
-	}
-}
-
-bool InhabitedGrid::coordIsVisibleToTeam(const Coordinate location, const TeamID team) const {
-	Coordinate tile = this->getTileCoords(location);
-	int k = getTileIndex(tile, team);
-	if (k<0) return false;
-	else return (bool)this->visibilityTimeGrid[k];
-}
-
-bool InhabitedGrid::tileIsVisibleToTeam(const Coordinate tile, const TeamID team) const {
-	int k = getTileIndex(tile, team);
-	if (k<0) return false;
-	else return (bool)this->visibilityTimeGrid[team*w*h + tile.x*h + tile.y];
-}
-
-bool InhabitedGrid::unitIsVisibleToTeam(const Unit* unit, const TeamID team) const {
-	return  unit->teamID == team || this->coordIsVisibleToTeam(unit->xy, team);
-}
-
-int InhabitedGrid::getTileVisibility(const Coordinate tile, const TeamID team) const {
-	int k = getTileIndex(tile, team);
-	int a = k<0 ? 0 : this->visibilityTimeGrid[team*w*h + tile.x*h + tile.y];
-	return std::min(255, 64+12*a);
-}
-
-int InhabitedGrid::getCoordVisibility(const Coordinate coord, const TeamID team) const {
-	Coordinate tile = this->getTileCoords(coord);
-	int k = getTileIndex(tile, team);
-	int a = k<0 ?  0 : this->visibilityTimeGrid[k];
-	return std::min(255, 16*a);
-	//return std::min(255, 16*this->visibilityTimeGrid.at(std::make_pair(this->getTileCoords(coord), team)) );
-}
-
 bool InhabitedGrid::unitOKToMoveTo(Unit*u, const Coordinate location) {
 	return true; // testing soft collisions
 	Coordinate gc = getCellCoords(location);
@@ -301,12 +204,4 @@ bool InhabitedGrid::unitOKToMoveTo(Unit*u, const Coordinate location) {
 		}
 	}
 	return true;
-}
-
-int InhabitedGrid::getTileIndex(Coordinate tile, int team) const {
-	int x = tile.x;
-	int y = tile.y;
-	if ( 0<= team && team<numTeams && 0<=x && x<w && 0<=y && y<h)
-		return team*h*w + x*h + y;
-	return -1;
 }

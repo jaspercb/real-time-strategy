@@ -25,7 +25,7 @@ class InhabitedGrid {
 	// Unit collision currently assumes all units have a diameter of less than 192 pixels.
 	public:
 		InhabitedGrid();
-		InhabitedGrid(Game* game, int w, int h, int numTeams);
+		InhabitedGrid(Game* game);
 		
 		~InhabitedGrid();
 
@@ -35,43 +35,19 @@ class InhabitedGrid {
 		Unitset unitsCollidingWith(Unit* u) const;
 
 		bool unitOKToMoveTo(Unit*, const Coordinate);
-		
-		void startTrackingVisibility(const Unit* unit);
-
-		void incrementTileVisibility(const Coordinate center, const TeamID team);
-		void decrementTileVisibility(const Coordinate center, const TeamID team);
-		
-		bool coordIsVisibleToTeam(const Coordinate location, const TeamID team) const;
-		bool tileIsVisibleToTeam(const Coordinate tile, const TeamID team) const;
-		bool unitIsVisibleToTeam(const Unit* unit, const TeamID team) const;
-		
-		int getCoordVisibility(const Coordinate tile, const TeamID team) const;
-		int getTileVisibility(const Coordinate tile, const TeamID team) const;
 
 		void emplace(const Unit *unit);
 		void erase(const Unit *unit);
 		void eraseWithHint(const Unit *unit, const Coordinate oldcoord);
 		void updatePos(const Unit *unit, Coordinate oldcoord);
 
-		void tick();
-
 		Game* game;
 	private:
-		static const int visibilityRadius = 5; // the visibility radius for units
-
-		int w, h, numTeams;
-
-		uint16_t* visibilityGrid;
-		uint16_t* visibilityTimeGrid;
-
-		Coordinate getTileCoords(Coordinate c) const; // tiles correspond to visibility
 		Coordinate getCellCoords(Coordinate c) const; // cells correspond to the collision grid
 		const int cellWidth;
-		const int tileWidth;
 		const std::shared_ptr<Unitset> emptyUnitIDset;
 		std::map<Coordinate, std::shared_ptr<Unitset> > grid;
 
-		int getTileIndex(Coordinate tile, int team) const;
 		//std::map<std::pair<Coordinate, TeamID>, int> visibilityGrid; // For each visible tile and team, contains a count of how many units on that team can see that tile
 		//std::map<std::pair<Coordinate, TeamID>, int> visibilityTimeGrid; // For each visible tile and team, contains a count of how long that tile has been visible to units on that team
 };

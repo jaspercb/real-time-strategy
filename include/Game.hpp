@@ -7,6 +7,7 @@
 #include "typedefs.hpp"
 
 #include "InhabitedGrid.hpp"
+#include "VisibilityManager.hpp"
 #include "Terrain.hpp"
 
 class Team;
@@ -31,12 +32,14 @@ public:
 	UnitTemplate* getUnitTemplate(TeamID, UnitTemplateID);
 
 	void handleCommand(Command&);
+	void onMove(Unit* unit, Coordinate oldcoord);
 	void tick();
 
 	bool teamsAreFriendly(TeamID, TeamID);
 	bool unitsAreFriendly(UnitID a, UnitID b);
 
 	InhabitedGrid inhabitedGrid;
+	VisibilityManager visibilityManager;
 	Terrain terrain;
 
 	std::map<TeamID, Team*> teamsByID;

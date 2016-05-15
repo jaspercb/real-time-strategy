@@ -59,7 +59,7 @@ void UserInterface::handleInputEvent(const SDL_Event& event) {
 			for ( auto &id : game->inhabitedGrid.unitsInCircle(clickedCoord, (Distance)1000) ) { // hackish way of handling targeting selection
 				if (!game->teamsAreFriendly(this->teamID, game->getUnit(id)->teamID)
 				&& this->selectedUnits.size()
-				&& game->inhabitedGrid.unitIsVisibleToTeam(game->getUnit(id), this->teamID)) {
+				&& game->visibilityManager.unitIsVisibleToTeam(game->getUnit(id), this->teamID)) {
 					this->issueAttackCmd(id);
 					return;
 				}
@@ -409,7 +409,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 
 	std::vector<Unit*> visibleUnitsInDrawOrder;
 	for (auto &i : game->unitsByID)
-		if (game->inhabitedGrid.getCoordVisibility(i.second->xy, this->teamID))
+		if (game->visibilityManager.getCoordVisibility(i.second->xy, this->teamID))
 			visibleUnitsInDrawOrder.push_back(i.second);
 
 	auto sortLambda = [this](Unit* a, Unit* b) {

@@ -117,7 +117,7 @@ void Unit::move(const Coordinate& c) {
 	// Unchecked, instant movement to a given point.
 	const Coordinate oldcoord = this->xy;
 	this->xy = c;
-	game->inhabitedGrid.updatePos(this, oldcoord);
+	game->onMove(this, oldcoord);
 }
 
 void Unit::damage(const int quant, const DamageType::Enum dmgtype, Unit* attackedBy) {
@@ -258,7 +258,7 @@ void Unit::startBuilding(UnitTemplateID unitTemplateID) {
 }
 
 void Unit::draw(SDL_Renderer* renderer, UserInterface* ui) {
-	int alpha = ui->game->inhabitedGrid.getCoordVisibility(this->xy, ui->teamID);
+	int alpha = ui->game->visibilityManager.getCoordVisibility(this->xy, ui->teamID);
 	this->getUnitTemplate()->drawer.draw(renderer, this, ui, alpha);
 }
 
