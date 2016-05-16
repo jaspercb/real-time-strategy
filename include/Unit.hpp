@@ -87,4 +87,6 @@ private:
 
 	Builder* builder;
 	std::deque<std::pair<UnitTemplateID, int> > buildingQueue;
+
+	int ticksSinceDamageTaken;
 };

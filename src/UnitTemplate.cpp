@@ -12,8 +12,10 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, Team* team):
 {
 	maxHP_ = 0;
 	regHP_ = 0;
+	cdnHP_ = 0;
 	maxES_ = 0;
 	regES_ = 0;
+	cdnES_ = 0;
 	armor_ = 0;
 	speed_ = 0;
 	radius_ = 0;
@@ -42,6 +44,8 @@ UnitTemplate::UnitTemplate(UnitTemplateID id, std::ifstream is, Team* team):
 			is>>maxES_;
 		else if (s=="regES")
 			is>>regES_;
+		else if (s=="cdnES_")
+			is>>cdnES_;
 		else if (s=="armor")
 			is>>armor_;
 		else if (s=="speed")

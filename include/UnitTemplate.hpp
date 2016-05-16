@@ -20,10 +20,12 @@ public:
 	UnitTemplate();
 	UnitTemplate(UnitTemplateID id, std::ifstream, Team* team);
 	UnitTemplate(std::string, Team* team);
-	inline int maxHP() const { return maxHP_;};
+	inline int maxHP() const {return maxHP_;};
 	inline int regHP() const {return regHP_;};
-	inline int maxES() const {return maxES_;} ;
+	inline int cdnHP() const {return cdnHP_;};
+	inline int maxES() const {return maxES_;};
 	inline int regES() const {return regES_;};
+	inline int cdnES() const {return cdnES_;};
 	inline int armor() const {return armor_;};
 	inline int speed() const {return speed_;};
 	inline int radius() const {return radius_;};
@@ -38,7 +40,7 @@ public:
 	void renderIcon(const int x, const int y, Uint8 colormod) const;
 
 	const UnitTemplateID unitTemplateID;
-	
+
 	std::string name;
 	std::vector<WeaponTemplate> weaponTemplates;
 	EnvironmentSpec dimension;
@@ -51,8 +53,10 @@ public:
 private:
 	int maxHP_;
 	int regHP_; // HP regen per game tick
+	int cdnHP_; // duration HP does not regenerate after taking damage
 	int maxES_;
 	int regES_; // ES regen per game tick
+	int cdnES_; // duration ES does not regenerate after taking damage
 
 	int armor_;
 	int speed_;

@@ -54,12 +54,15 @@ UnitTemplate* Unit::getUnitTemplate() const {
 void Unit::tick() {
 	UnitTemplate* unitTemplate = getUnitTemplate();
 	drawAnimationStep++;
+	ticksSinceDamageTaken++;
 
 	if (!this->isDead()) {
 		this->builder->tick();
 
-		this->hp = std::min(unitTemplate->maxHP(), hp+unitTemplate->regHP());
-		this->es = std::min(unitTemplate->maxES(), es+unitTemplate->regES());
+		if (ticksSinceDamageTaken >= unitTemplate->cdnHP())
+			this->hp = std::min(unitTemplate->maxHP(), hp+unitTemplate->regHP());
+		if (ticksSinceDamageTaken >= unitTemplate->cdnES())
+			this->es = std::min(unitTemplate->maxES(), es+unitTemplate->regES());
 
 		for (auto &weapon : this->weapons_) {
 			weapon.update();
@@ -131,6 +134,7 @@ void Unit::damage(const int quant, const DamageType::Enum dmgtype, Unit* attacke
 	}
 	lastAttackingTeamID = attackedBy->unitID;
 	lastAttackingUnitID = attackedBy->teamID;
+	ticksSinceDamageTaken = 0;
 }
 
 Distance Unit::getAttackRange() {
