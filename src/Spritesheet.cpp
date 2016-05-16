@@ -11,11 +11,6 @@ SDL_Surface* loadSurface( std::string path) {
 
 	if( loadedSurface == NULL )
 		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-	
-	//Logging::error("loading: "+path+". Bits per pixel:");
-	//Logging::error(loadedSurface->format->BytesPerPixel);
-	//Logging::error(loadedSurface->format->format);
-
 	return loadedSurface;
 }
 

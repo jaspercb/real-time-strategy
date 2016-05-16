@@ -39,9 +39,7 @@ Team* Game::getTeam(TeamID i) {
 		return teamsByID.at(i);
 	}
 	catch (std::out_of_range e){
-		Logging::error("Game::getTeam(TeamID) called with invalid TeamID: ");
-		Logging::error(i);
-		Logging::error(e.what());
+		Logging::error("Game::getTeam(TeamID) called with invalid TeamID: "+i);
 		throw;
 	}
 }

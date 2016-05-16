@@ -42,8 +42,7 @@ Terrain::Terrain(std::string mapName) {
 					break;
 				default:
 					tile = TerrainType::Invalid;
-					Logging::error("in Terrain::Terrain(), encountered weird pixel value: ");
-					Logging::error(pixels[i*height + (height-j-1)]);
+					Logging::error("in Terrain::Terrain(), encountered weird pixel value: "+pixels[i*height + (height-j-1)]);
 			}
 			this->tiles[i][j].terraintype = tile;
 		}
