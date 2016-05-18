@@ -5,14 +5,16 @@ enum Enum {
 	Idle,
 	Walking,
 	Attacking,
-	Dying
+	Dying,
+	num
 };
 };
 
 namespace UpdateStatus {
 enum Enum {
 	OK,
-	Remove
+	Remove,
+	num
 };
 };
 
@@ -61,7 +63,8 @@ enum Enum {
 	Attack,
 	Attackmove,
 	Halt,
-	Build
+	Build,
+	num
 };
 };
 
@@ -69,7 +72,8 @@ namespace QueueSetting {
 enum Enum {
 	Overwrite,
 	Front,
-	Back
+	Back,
+	num
 };
 };
 
