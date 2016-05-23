@@ -369,6 +369,7 @@ bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
 			for (auto &i : JPSpath) {
 				path.push_back(coordFromTile(Coordinate(i.x, i.y)));
 			}
+			path[path.size()-1] = endCoU.getCoordinate();
 			return true;
 		} else {
 			return false;
