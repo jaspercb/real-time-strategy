@@ -174,7 +174,7 @@ Unitset InhabitedGrid::unitsCollidingWith(Unit* u) const {
 	Unitset ret;
 	for (auto& unitID : this->unitsInCircle(u->xy, u->getUnitTemplate()->radius())) {
 		Unit* other = this->game->getUnit(unitID);
-		if (other->unitID != u->unitID && other->dimension.overlaps(u->dimension)) {
+		if (other->unitID != u->unitID && other->dimension&u->dimension) {
 			ret.insert(unitID);
 		}
 	}
@@ -197,7 +197,7 @@ bool InhabitedGrid::unitOKToMoveTo(Unit*u, const Coordinate location) {
 			const auto& unitSubset = unitsInCell(Coordinate(x,y));
 			for (auto it = unitSubset->begin(); it!=unitSubset->end(); it++){
 				Unit* other = game->getUnit(*it);
-				if (u->unitID != other->unitID && unitInCircle(other, location, radius) && u->dimension.overlaps(other->dimension)) {
+				if (u->unitID != other->unitID && unitInCircle(other, location, radius) && u->dimension&other->dimension) {
 					return false;
 				}
 			}

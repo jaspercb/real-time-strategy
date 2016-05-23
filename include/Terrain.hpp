@@ -24,16 +24,7 @@ struct TileData {
 	int topY;
 };
 
-EnvironmentSpec TerrainPassability[TerrainType::num] = {
-	// format is ground, sea, submerged, air
-	EnvironmentSpec(false,false,false,false), // Invalid,
-	EnvironmentSpec(false,false,false,false), // Any,
-	EnvironmentSpec(false,false,false,false), // NotWater,
-	EnvironmentSpec(true ,false,false,true ), // Grass,
-	EnvironmentSpec(false,true ,true ,true ), // Water,
-	EnvironmentSpec(true ,false,false,true ), // Road,
-};
-
+extern EnvironmentSpec TerrainPassability[TerrainType::num];
 // Handles drawing terrain, and also pathfinding for some reason
 
 class Terrain {

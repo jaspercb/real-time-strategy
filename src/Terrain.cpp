@@ -14,6 +14,18 @@
 #include <SDL2/SDL.h>
 #include "JPS.hpp"
 
+
+EnvironmentSpec TerrainPassability[TerrainType::num] = {
+	// format is ground, sea, submerged, air
+	EnvironmentSpec(false,false,false,false), // Invalid,
+	EnvironmentSpec(false,false,false,false), // Any,
+	EnvironmentSpec(false,false,false,false), // NotWater,
+	EnvironmentSpec(true ,false,false,true ), // Grass,
+	EnvironmentSpec(false,true ,true ,true ), // Water,
+	EnvironmentSpec(true ,false,false,true ), // Road,
+};
+
+
 #define SAME_OR_ANY(a, b) ( (a==TerrainType::Any) or (a==TerrainType::NotWater and b!=TerrainType::Water) or (a==b) )
 
 #define MATCH_TERRAIN(a, b, c, d, e_, f, g, h, i) ( SAME_OR_ANY(a, nw) and SAME_OR_ANY(b, n) and SAME_OR_ANY(c, ne) and  SAME_OR_ANY(d, w) and SAME_OR_ANY(e_, center) and SAME_OR_ANY(f, e) and SAME_OR_ANY(g, sw) and SAME_OR_ANY(h, s) and SAME_OR_ANY(i, se))
@@ -327,7 +339,6 @@ void Terrain::renderMinimap(SDL_Renderer* renderer, UserInterface* ui) {
 	SDL_RenderCopyEx(renderer, this->minimap->sheet, NULL, &target, -45, NULL, SDL_FLIP_NONE);
 }
 
-
 bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
                       Path& path, EnvironmentSpec passable) {
 	if (startCoU.isValid() && endCoU.isValid()) {
@@ -350,6 +361,7 @@ bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
 		}
 	} else {
 		Logging::error("Terrain::getPath() passed invalid start/end");
+		return false;
 	}
 }
 

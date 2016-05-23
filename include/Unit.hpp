@@ -89,4 +89,6 @@ private:
 	std::deque<std::pair<UnitTemplateID, int> > buildingQueue;
 
 	int ticksSinceDamageTaken;
+
+	Path cachedPath;
 };

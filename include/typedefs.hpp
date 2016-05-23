@@ -3,6 +3,7 @@
 #include <cmath>
 #include <array>
 #include <tuple>
+#include <deque>
 
 #include <stdint.h>
 
@@ -155,7 +156,7 @@ typedef vec2<float> vec2f;
 typedef vec2<double> vec2d;
 
 typedef vec2<Distance> Coordinate;
-typedef std::vector<Coordinate> Path;
+typedef std::deque<Coordinate> Path;
 
 template <class T> struct less {
 	bool operator() (const T& x, const T& y) const {return x<y;}

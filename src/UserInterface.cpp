@@ -421,7 +421,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	// draw non-air units
 	for (auto &u : visibleUnitsInDrawOrder) {
 		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2)
-		&& u->dimension.overlaps(GROUND_ONLY) ) {
+		&& u->dimension&GROUND_ONLY ) {
 			u->draw( renderer, this );
 			drawHPbar(gRenderer, u, gUserInterface);
 		}
@@ -435,7 +435,7 @@ void UserInterface::renderAll( SDL_Renderer* renderer ) {
 	// draw air units
 	for (auto &u : visibleUnitsInDrawOrder) {
 		if (coordInRect(this->screenCoordinateFromObjective(u->xy), screenCorner1, screenCorner2)
-		&& !u->dimension.overlaps(GROUND_ONLY) ) {
+		&& !(u->dimension&GROUND_ONLY) ) {
 			u->draw( renderer, this );
 			drawHPbar(gRenderer, u, gUserInterface);
 		}

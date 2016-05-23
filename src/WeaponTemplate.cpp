@@ -98,7 +98,7 @@ bool WeaponTemplate::canFire(const Weapon* weapon) const
 }
 
 bool WeaponTemplate::canAttack(const Unit* target) const{
-	return dimensions_.overlaps(target->dimension);
+	return dimensions_&(target->dimension);
 } // returns whether the weapon is theoretically capable of hitting the target, IGNORING COOLDOWN
 
 void WeaponTemplate::fire(Weapon* weapon, const CoordinateOrUnit target)
