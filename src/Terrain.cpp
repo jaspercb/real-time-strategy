@@ -30,6 +30,7 @@ EnvironmentSpec TerrainPassability[TerrainType::num] = {
 
 #define MATCH_TERRAIN(a, b, c, d, e_, f, g, h, i) ( SAME_OR_ANY(a, nw) and SAME_OR_ANY(b, n) and SAME_OR_ANY(c, ne) and  SAME_OR_ANY(d, w) and SAME_OR_ANY(e_, center) and SAME_OR_ANY(f, e) and SAME_OR_ANY(g, sw) and SAME_OR_ANY(h, s) and SAME_OR_ANY(i, se))
 // center, nw, n, ne, e, se, s, sw, w
+
 Terrain::Terrain(std::string mapName) {
 	SDL_Surface* image = gResourceManager->getRawSurface(mapName);
 	this->minimap = gResourceManager->get(mapName);
@@ -77,6 +78,15 @@ TerrainType::Enum Terrain::getTerrainAt(int x, int y) {
 		return TerrainType::Invalid;
 	else
 		return this->tiles[x][y].terraintype;
+}
+
+
+Coordinate Terrain::tileFromCoord(Coordinate c) {
+	return Coordinate(c.x/(PIXEL_WIDTH*32), c.y/(PIXEL_WIDTH*32));
+}
+
+Coordinate Terrain::coordFromTile(Coordinate c) {
+	return Coordinate(c.x*PIXEL_WIDTH*32, c.y*PIXEL_WIDTH*32);
 }
 
 void Terrain::updateDrawTile(int x, int y) {
@@ -343,17 +353,21 @@ bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
                       Path& path, EnvironmentSpec passable) {
 	if (startCoU.isValid() && endCoU.isValid()) {
 		Coordinate start, end;
-		start = startCoU.getCoordinate();
-		end = endCoU.getCoordinate();
+
+		start = tileFromCoord(startCoU.getCoordinate());
+		end = tileFromCoord(endCoU.getCoordinate());
+
 		unsigned step = 0;
 		JPS::PathVector JPSpath; // The resulting path will go here.
 		searchPassable_ = passable;
 		bool found = JPS::findPath(JPSpath, *this, start.x, start.y, end.x, end.y, step);
+
 		if (found) {
 			path.clear();
-			path.resize(JPSpath.size());
+
+			Coordinate p;
 			for (auto &i : JPSpath) {
-				path.push_back(Coordinate(i.x, i.y));
+				path.push_back(coordFromTile(Coordinate(i.x, i.y)));
 			}
 			return true;
 		} else {

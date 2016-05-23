@@ -12,11 +12,9 @@ public:
 	StateGoto(CoordinateOrUnit c);
 	StateGoto(Coordinate c);
 	StateGoto(const Unit& u);
+	virtual void enter(Unit* unit);
 	virtual StateExitCode update(Unit* unit);
-	std::vector<Coordinate> getStateWaypoints();
+	Path getStateWaypoints();
 protected:
 	CoordinateOrUnit target;
-	int last5distances[5];
-	Distance last5FramesDistance;
-	//std::deque<Coordinate> path;
 };

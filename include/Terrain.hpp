@@ -36,7 +36,8 @@ class Terrain {
 		void updateDrawTile(int x, int y);
 		TerrainType::Enum getTerrainAt(int x, int y);
 
-		std::vector< std::vector< TileData> > tiles;
+		Coordinate tileFromCoord(Coordinate);
+		Coordinate coordFromTile(Coordinate);
 
 		// Finds a set of passable tiles from start to end where all tiles in
 		// the path are passable by EnvironmentSpec
@@ -44,6 +45,8 @@ class Terrain {
 		             Path& path, EnvironmentSpec travel);
 
 		bool operator() (unsigned int x, unsigned int y) const;
+
+		std::vector< std::vector< TileData> > tiles;
 	private:
 		int height, width;
 		std::shared_ptr<Spritesheet> minimap;

@@ -60,7 +60,8 @@ public:
 	bool isDead() const;
 	bool shouldDelete() const;
 
-	std::vector<Coordinate> getStateWaypoints(); // returns an ordered list of the coordinate targets of the unit's state queue
+	// returns an ordered list of the coordinate targets of the unit's state queue
+	Path getStateWaypoints();
 
 	Game* game;
 	
@@ -78,6 +79,8 @@ public:
 	int drawAnimationStep, drawFacingAngle;
 	
 	UnitID attackTargetID;
+
+	Path cachedPath;
 private:
 	std::vector<Weapon> weapons_;
 	std::deque<std::shared_ptr<UnitState> > stateQueue_;
@@ -89,6 +92,4 @@ private:
 	std::deque<std::pair<UnitTemplateID, int> > buildingQueue;
 
 	int ticksSinceDamageTaken;
-
-	Path cachedPath;
 };

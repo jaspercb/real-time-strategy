@@ -37,7 +37,7 @@ StateExitCode StateAttack::update(Unit* unit) {
 }
 
 
-std::vector<Coordinate> StateAttack::getStateWaypoints() {
+Path StateAttack::getStateWaypoints() {
 	Unit* u = game->getUnit(this->targetID);
-	return std::vector<Coordinate>{u->xy};
+	return Path{u->xy};
 }

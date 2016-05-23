@@ -253,7 +253,7 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	// Draw paths
 	for (UnitID i : this->selectedUnits) {
 		Unit* u = game->getUnit(i);
-		std::vector<Coordinate> path = u->getStateWaypoints();
+		auto path = u->getStateWaypoints();
 		int numWaypoints = path.size() + 1;
 		if ( numWaypoints >= 2 ) {
 			renderLine(renderer, this->screenCoordinateFromObjective(u->xy), this->screenCoordinateFromObjective(path[0]), waypointColor);

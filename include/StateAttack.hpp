@@ -9,7 +9,7 @@ class StateAttack : public UnitState
 public:
 	StateAttack(UnitID);
 	StateExitCode update(Unit* unit);
-	std::vector<Coordinate> getStateWaypoints();
+	Path getStateWaypoints();
 private:
 	UnitID targetID;
 	//std::deque<Coordinate> path;

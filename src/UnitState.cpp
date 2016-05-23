@@ -14,20 +14,15 @@ std::shared_ptr<UnitState> UnitState::handleCommand(Unit* unit, Command command)
 	switch (command.cmdtype){
 		case CommandType::Idle: {
 			return std::make_shared<StateIdle>();
-		}
-		case CommandType::Gotocoord: {
+		} case CommandType::Gotocoord: {
 			return std::make_shared<StateGoto>(command.targetCoord);
-		}
-		case CommandType::Attack: {
+		} case CommandType::Attack: {
 			return std::make_shared<StateAttack>(command.targetID);
-		}
-		case CommandType::Attackmove: {
+		} case CommandType::Attackmove: {
 			return std::make_shared<StateAttackMove>(command.targetCoord);
-		}
-		case CommandType::Build: {
+		} case CommandType::Build: {
 			unit->startBuilding(command.unitTemplateID);
-		}
-		default: {
+		} default: {
 			return NULL;
 		}
 	}
@@ -41,6 +36,6 @@ StateExitCode UnitState::update(Unit* unit) {
 	return STATE_EXIT_INCOMPLETE;
 }
 
-std::vector<Coordinate> UnitState::getStateWaypoints() {
-	return std::vector<Coordinate>();
+Path UnitState::getStateWaypoints() {
+	return Path();
 }

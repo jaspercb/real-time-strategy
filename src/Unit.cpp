@@ -73,6 +73,8 @@ void Unit::tick() {
 
 		while (stateQueue_.size() && STATE_EXIT_COMPLETE == stateQueue_.front()->update(this)) {
 			stateQueue_.pop_front();
+			if (stateQueue_.size())
+				stateQueue_.front()->enter(this);
 		}
 	}
 	else if (this->animationState != AnimationState::Dying) {
@@ -102,6 +104,7 @@ void Unit::handleCommand(Command& command) {
 			case QueueSetting::Overwrite: { // delete state queue and replace with just this command
 				stateQueue_.clear();
 				stateQueue_.push_front(state);
+				state->enter(this);
 				break;
 			}
 			case QueueSetting::Back: { // append to queue, do after other states
@@ -110,6 +113,7 @@ void Unit::handleCommand(Command& command) {
 			}
 			case QueueSetting::Front: { // prepend to queue, but execute other states after
 				stateQueue_.push_front(state);
+				state->enter(this);
 				break;
 			}
 		}
@@ -274,8 +278,12 @@ bool Unit::shouldDelete() const {
 	return (this->animationState == AnimationState::Dying) && (this->drawAnimationStep > 20);
 }
 
-std::vector<Coordinate> Unit::getStateWaypoints() {
-	std::vector<Coordinate> ret;
+Path Unit::getStateWaypoints() {
+	return cachedPath;
+
+	// IGNORE EVERYTHINB BELOW LOL
+
+	Path ret;
 	for (auto &i : this->stateQueue_)
 		for (auto &j : i->getStateWaypoints() )
 			ret.push_back(j);

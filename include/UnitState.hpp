@@ -15,13 +15,12 @@ enum StateExitCode{
 	STATE_EXIT_COMPLETE // signals that the state is complete, and the unit should switch to the next queued state
 };
 
-class UnitState
-{
+class UnitState {
 public:
 	virtual ~UnitState() {}
 	virtual void enter(Unit* unit) {}
 	virtual std::shared_ptr<UnitState> handleCommand(Unit* unit, Command command);
 	virtual std::shared_ptr<UnitState> handleEvent(Unit* unit, Event event);
 	virtual StateExitCode update(Unit* unit); // returns STATE_EXIT_COMPLETE if should be removed, STATE_EXIT_INCOMPLETE otherwise
-	virtual std::vector<Coordinate> getStateWaypoints();
+	virtual Path getStateWaypoints();
 };

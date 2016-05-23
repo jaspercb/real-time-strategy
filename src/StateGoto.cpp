@@ -1,55 +1,45 @@
 #include "StateGoto.hpp"
 
-#include "Unit.hpp"
+#include "Game.hpp"
+#include "Terrain.hpp"
 #include "InhabitedGrid.hpp"
 #include "Logging.hpp"
+#include "Unit.hpp"
+
+#include "globals.hpp"
 
 StateGoto::StateGoto(CoordinateOrUnit targ):
-	target(targ),
-	last5FramesDistance(100000)
-	{
-		for (int i=0; i<5; i++){
-			this->last5distances[i] = 10000;
-		}
-	}
+	target(targ)
+	{}
 
 StateGoto::StateGoto(Coordinate c): StateGoto(CoordinateOrUnit(c)) {};
 StateGoto::StateGoto(const Unit& u): StateGoto(CoordinateOrUnit(u)) {};
 
+void StateGoto::enter(Unit* unit) {
+	game->terrain.getPath(unit->xy, target, unit->cachedPath, unit->dimension);
+}
+
 StateExitCode StateGoto::update(Unit* unit){
 	// if we're not at the target, move towards the target
 	// otherwise we're done
-	if (!target.isValid()) {
-		return STATE_EXIT_COMPLETE;
+	Coordinate targetCoord = unit->cachedPath.front();
+	if (pythagoreanDistanceLessThan(unit->xy, targetCoord, 600)) {
+		unit->cachedPath.pop_front();
+	} else {
+		unit->moveTowards(targetCoord);
 	}
 
-	Coordinate targetCoord = target.getCoordinate();
-	if (pythagoreanDistanceLessThan(unit->xy, targetCoord, 50)) {
+	if (unit->cachedPath.empty()) {
 		unit->animationState = AnimationState::Idle;
 		return STATE_EXIT_COMPLETE;
-	}
-	else{
-		Coordinate oldC = unit->xy;
-		unit->moveTowards(targetCoord);
-		last5FramesDistance -= last5distances[0];
-		for (int i=0; i<4; i++){
-			this->last5distances[i]=last5distances[i+1];
-		}
-		last5distances[4] = pythagoreanDistance(oldC, unit->xy);
-		last5FramesDistance += last5distances[4];
-
-		if (pythagoreanDistanceLessThan(unit->xy, targetCoord, 15000) && last5FramesDistance < 600){
-			unit->animationState = AnimationState::Idle;
-			return STATE_EXIT_COMPLETE;
-		}
-
+	} else {
 		return STATE_EXIT_INCOMPLETE;
 	}
 }
 
-std::vector<Coordinate> StateGoto::getStateWaypoints() {
+Path StateGoto::getStateWaypoints() {
 	if (target.isValid())
-		return std::vector<Coordinate>{this->target.getCoordinate()};
+		return Path{this->target.getCoordinate()};
 	else
-		return std::vector<Coordinate>();
+		return Path();
 }
