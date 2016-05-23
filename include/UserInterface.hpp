@@ -20,6 +20,7 @@ public:
 	int handleInputEvents(); // returns 1 if should quit
 	void handleInputEvent(const SDL_Event& event);
 	void updateSelectedUnits();
+	void renderWaypoints( SDL_Renderer* renderer, SDL_Color color, Path waypoints);
 	void renderSelection( SDL_Renderer* renderer );
 	void renderHUD( SDL_Renderer* renderer );
 	void renderAll( SDL_Renderer* renderer );

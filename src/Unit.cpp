@@ -279,10 +279,6 @@ bool Unit::shouldDelete() const {
 }
 
 Path Unit::getStateWaypoints() {
-	return cachedPath;
-
-	// IGNORE EVERYTHINB BELOW LOL
-
 	Path ret;
 	for (auto &i : this->stateQueue_)
 		for (auto &j : i->getStateWaypoints() )

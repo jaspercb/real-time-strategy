@@ -244,32 +244,42 @@ void UserInterface::updateSelectedUnits() {
 	}
 }
 
+void UserInterface::renderWaypoints( SDL_Renderer* renderer, SDL_Color color, Path path) {
+	color.a = (Uint8) (10*std::abs( (this->frame % 18) - 9) + 64);
+	int numWaypoints = path.size() + 1;
+	if ( numWaypoints >= 2 ) {
+		for (int i=0; i<numWaypoints-1; i++) {
+			int size = 800;
+			renderEllipse(renderer,
+						this->screenCoordinateFromObjective(path[i]),
+						size/PIXEL_WIDTH * this->viewMagnification,
+						size/PIXEL_HEIGHT * this->viewMagnification,
+						color);
+		}
+	}
+	if ( numWaypoints >= 3 ) {
+		for (int i=1; i<numWaypoints-1; i++)
+			renderLine(renderer, this->screenCoordinateFromObjective(path[i]), this->screenCoordinateFromObjective(path[i-1]), color);
+	}
+}
+
 void UserInterface::renderSelection( SDL_Renderer* renderer ) {
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-
-	SDL_Color selectionColor = {0, 255, 0, SDL_ALPHA_OPAQUE};
-	SDL_Color waypointColor = {255, 255, 255, (Uint8) (10*std::abs( (this->frame % 18) - 9) + 64) };
-
 	// Draw paths
+	SDL_Color selectionColor = SDL_Colors::GREEN;
+	
 	for (UnitID i : this->selectedUnits) {
 		Unit* u = game->getUnit(i);
-		auto path = u->getStateWaypoints();
-		int numWaypoints = path.size() + 1;
-		if ( numWaypoints >= 2 ) {
-			renderLine(renderer, this->screenCoordinateFromObjective(u->xy), this->screenCoordinateFromObjective(path[0]), waypointColor);
-			for (int i=0; i<numWaypoints-1; i++) {
-				int size = 800;
-				renderEllipse(renderer,
-							this->screenCoordinateFromObjective(path[i]),
-							size/PIXEL_WIDTH * this->viewMagnification,
-							size/PIXEL_HEIGHT * this->viewMagnification,
-							waypointColor);
-			}
-		}
-		if ( numWaypoints >= 3 ) {
-			for (int i=1; i<numWaypoints-1; i++)
-				renderLine(renderer, this->screenCoordinateFromObjective(path[i]), this->screenCoordinateFromObjective(path[i-1]), waypointColor);
-		}
+		Path path;
+		
+		// Cached path
+		path = u->cachedPath;
+		path.push_front(u->xy);
+		renderWaypoints(renderer, SDL_Colors::RED, path);
+
+		// Not-cached path
+		path = u->getStateWaypoints();
+		path.push_front(u->xy);
+		renderWaypoints(renderer, SDL_Colors::WHITE, path);
 	}
 
 	// Draw a little individual green selection box for each selected unit
