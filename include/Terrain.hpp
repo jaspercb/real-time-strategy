@@ -4,7 +4,10 @@
 #include <string>
 #include <memory>
 
+#include "typedefs.hpp"
 #include "enums.hpp"
+#include "CoordinateOrUnit.hpp"
+#include "EnvironmentSpec.hpp"
 
 class SDL_Renderer;
 class UserInterface;
@@ -21,6 +24,16 @@ struct TileData {
 	int topY;
 };
 
+EnvironmentSpec TerrainPassability[TerrainType::num] = {
+	// format is ground, sea, submerged, air
+	EnvironmentSpec(false,false,false,false), // Invalid,
+	EnvironmentSpec(false,false,false,false), // Any,
+	EnvironmentSpec(false,false,false,false), // NotWater,
+	EnvironmentSpec(true ,false,false,true ), // Grass,
+	EnvironmentSpec(false,true ,true ,true ), // Water,
+	EnvironmentSpec(true ,false,false,true ), // Road,
+};
+
 // Handles drawing terrain, and also pathfinding for some reason
 
 class Terrain {
@@ -34,7 +47,14 @@ class Terrain {
 
 		std::vector< std::vector< TileData> > tiles;
 
+		// Finds a set of passable tiles from start to end where all tiles in
+		// the path are passable by EnvironmentSpec
+		bool getPath(CoordinateOrUnit start, CoordinateOrUnit end,
+		             Path& path, EnvironmentSpec travel);
+
+		bool operator() (unsigned int x, unsigned int y) const;
 	private:
 		int height, width;
 		std::shared_ptr<Spritesheet> minimap;
+		EnvironmentSpec searchPassable_; // we pass the global Terrain instance to JPS
 };

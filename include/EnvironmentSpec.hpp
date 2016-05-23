@@ -1,7 +1,6 @@
 #pragma once
 
-class EnvironmentSpec
-{
+class EnvironmentSpec {
 public:
 	EnvironmentSpec():
 		ground(false),

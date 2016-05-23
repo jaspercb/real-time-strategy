@@ -1,15 +1,18 @@
 #include "Terrain.hpp"
+
+#include "Game.hpp"
+#include "InhabitedGrid.hpp"
+#include "Logging.hpp"
 #include "ResourceManager.hpp"
 #include "Spritesheet.hpp"
-#include "globals.hpp"
-#include "typedefs.hpp"
 #include "UserInterface.hpp"
-#include "Logging.hpp"
+
+#include "typedefs.hpp"
+#include "globals.hpp"
 #include "sdlTools.hpp"
-#include "InhabitedGrid.hpp"
-#include "Game.hpp"
 
 #include <SDL2/SDL.h>
+#include "JPS.hpp"
 
 #define SAME_OR_ANY(a, b) ( (a==TerrainType::Any) or (a==TerrainType::NotWater and b!=TerrainType::Water) or (a==b) )
 
@@ -184,7 +187,7 @@ void Terrain::updateDrawTile(int x, int y) {
 	                      NotWater, Water, Any,
 	                      Any,      Any,   Any)
 		topX=1, topY=8;//resource = "tile-ocean-grass-W";
-/*
+	/*
 	}
 
 	else if (center == ROAD) {
@@ -324,5 +327,34 @@ void Terrain::renderMinimap(SDL_Renderer* renderer, UserInterface* ui) {
 	SDL_RenderCopyEx(renderer, this->minimap->sheet, NULL, &target, -45, NULL, SDL_FLIP_NONE);
 }
 
-#undef SAME_OR_ANY
-#undef MATCH_TERRAIN
+
+bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
+                      Path& path, EnvironmentSpec passable) {
+	if (startCoU.isValid() && endCoU.isValid()) {
+		Coordinate start, end;
+		start = startCoU.getCoordinate();
+		end = endCoU.getCoordinate();
+		unsigned step = 0;
+		JPS::PathVector JPSpath; // The resulting path will go here.
+		searchPassable_ = passable;
+		bool found = JPS::findPath(JPSpath, *this, start.x, start.y, end.x, end.y, step);
+		if (found) {
+			path.clear();
+			path.resize(JPSpath.size());
+			for (auto &i : JPSpath) {
+				path.push_back(Coordinate(i.x, i.y));
+			}
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		Logging::error("Terrain::getPath() passed invalid start/end");
+	}
+}
+
+bool Terrain::operator() (unsigned int _x, unsigned int _y) const {
+	int x = _x;
+	int y = _y;
+	return 0<=x && 0<=y && x<width && y<width;
+}

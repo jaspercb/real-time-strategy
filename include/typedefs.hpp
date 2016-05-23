@@ -16,8 +16,6 @@ typedef std::string UnitTemplateID;
 typedef int UnitID;
 typedef int TeamID;
 
-
-
 template <class T>
 class vec2 {
 public:
@@ -155,7 +153,9 @@ public:
 
 typedef vec2<float> vec2f;
 typedef vec2<double> vec2d;
+
 typedef vec2<Distance> Coordinate;
+typedef std::vector<Coordinate> Path;
 
 template <class T> struct less {
 	bool operator() (const T& x, const T& y) const {return x<y;}
