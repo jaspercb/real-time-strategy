@@ -15,7 +15,7 @@
 #include "JPS.hpp"
 
 
-EnvironmentSpec TerrainPassability[TerrainType::num] = {
+EnvironmentSpec TerrainPassable[TerrainType::num] = {
 	// format is ground, sea, submerged, air
 	EnvironmentSpec(false,false,false,false), // Invalid,
 	EnvironmentSpec(false,false,false,false), // Any,
@@ -25,9 +25,11 @@ EnvironmentSpec TerrainPassability[TerrainType::num] = {
 	EnvironmentSpec(true ,false,false,true ), // Road,
 };
 
-
+// Used for wildcard matching on Any or NotWater
+// Returns whether b is an instance of a
 #define SAME_OR_ANY(a, b) ( (a==TerrainType::Any) or (a==TerrainType::NotWater and b!=TerrainType::Water) or (a==b) )
 
+// Used to make code waaaay shorter
 #define MATCH_TERRAIN(a, b, c, d, e_, f, g, h, i) ( SAME_OR_ANY(a, nw) and SAME_OR_ANY(b, n) and SAME_OR_ANY(c, ne) and  SAME_OR_ANY(d, w) and SAME_OR_ANY(e_, center) and SAME_OR_ANY(f, e) and SAME_OR_ANY(g, sw) and SAME_OR_ANY(h, s) and SAME_OR_ANY(i, se))
 // center, nw, n, ne, e, se, s, sw, w
 
@@ -320,10 +322,16 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 				this->tiles[i][j].spritesheet->setColorMod(tileColorMod, tileColorMod, tileColorMod);
 
 				if (this->tiles[i][j].bottomX != -1)
-					this->tiles[i][j].spritesheet->render(renderer, tiles[i][j].bottomX, tiles[i][j].bottomY, drawPos.x, drawPos.y +  (64-this->tiles[i][j].spritesheet->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
-				
+					this->tiles[i][j].spritesheet->render(renderer,
+					tiles[i][j].bottomX, tiles[i][j].bottomY, drawPos.x,
+					drawPos.y +  (64-this->tiles[i][j].spritesheet->spriteH)*ui->viewMagnification/2,
+					ui->viewMagnification);
+
 				if (this->tiles[i][j].topX != -1)
-					this->tiles[i][j].spritesheet->render(renderer, tiles[i][j].topX, tiles[i][j].topY, drawPos.x, drawPos.y +  (64-this->tiles[i][j].spritesheet->spriteH)*ui->viewMagnification/2, ui->viewMagnification);
+					this->tiles[i][j].spritesheet->render(renderer,
+					tiles[i][j].topX, tiles[i][j].topY, drawPos.x,
+					drawPos.y +  (64-this->tiles[i][j].spritesheet->spriteH)*ui->viewMagnification/2,
+					ui->viewMagnification);
 
 				this->tiles[i][j].spritesheet->resetColorMod();
 			}
@@ -333,10 +341,16 @@ void Terrain::render(SDL_Renderer* renderer, UserInterface* ui) {
 
 	SDL_Color gridLineColor{0, 0, 0, (unsigned char) (186.0*std::min(ui->viewMagnification*2, 1.0f) )};
 	for (int i=0; i<=this->width; i++) {
-		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, -64*PIXEL_WIDTH)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*(this->width))), gridLineColor );
+		renderLine(renderer,
+		ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, -64*PIXEL_WIDTH)),
+		ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*i, 64*PIXEL_WIDTH*(this->width))),
+		gridLineColor );
 	}
 	for (int j=0; j<=this->height; j++) {
-		renderLine(renderer, ui->screenCoordinateFromObjective(Coordinate(-64*PIXEL_WIDTH, 64*PIXEL_WIDTH*j)), ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*(this->width), 64*PIXEL_WIDTH*j)), gridLineColor );
+		renderLine(renderer,
+		ui->screenCoordinateFromObjective(Coordinate(-64*PIXEL_WIDTH, 64*PIXEL_WIDTH*j)),
+		ui->screenCoordinateFromObjective(Coordinate(64*PIXEL_WIDTH*(this->width), 64*PIXEL_WIDTH*j)),
+		gridLineColor );
 	}
 }
 
@@ -359,7 +373,7 @@ bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
 
 		unsigned step = 0;
 		JPS::PathVector JPSpath; // The resulting path will go here.
-		searchPassable_ = passable;
+		searchPassable = passable;
 		bool found = JPS::findPath(JPSpath, *this, start.x, start.y, end.x, end.y, step);
 
 		if (found) {
@@ -380,8 +394,13 @@ bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
 	}
 }
 
+/*!
+ * Functor used for compatibility with jump-point-search.
+ * Be sure to set searchPassable
+ */
 bool Terrain::operator() (unsigned int _x, unsigned int _y) const {
 	int x = _x;
-	int y = _y;
-	return 0<=x && 0<=y && x<width && y<width;
+	int y = _y; // to silence errors. yes, this is bad.
+	return 0<=x && 0<=y && x<width && y<width
+	&& bool(searchPassable&TerrainPassable[tiles[x][y].terraintype]);
 }

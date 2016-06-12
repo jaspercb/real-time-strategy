@@ -24,9 +24,9 @@ struct TileData {
 	int topY;
 };
 
-extern EnvironmentSpec TerrainPassability[TerrainType::num];
-// Handles drawing terrain, and also pathfinding for some reason
+extern EnvironmentSpec TerrainPassable[TerrainType::num];
 
+// Handles drawing terrain, and also pathfinding for some reason
 class Terrain {
 	friend UserInterface;
 	public:
@@ -50,5 +50,5 @@ class Terrain {
 	private:
 		int height, width;
 		std::shared_ptr<Spritesheet> minimap;
-		EnvironmentSpec searchPassable_; // we pass the global Terrain instance to JPS
+		EnvironmentSpec searchPassable; // we pass the global Terrain instance to JPS
 };
