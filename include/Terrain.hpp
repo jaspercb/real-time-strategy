@@ -34,10 +34,14 @@ class Terrain {
 		void render(SDL_Renderer* renderer, UserInterface* ui);
 		void renderMinimap(SDL_Renderer* renderer, UserInterface* ui);
 		void updateDrawTile(int x, int y);
-		TerrainType::Enum getTerrainAt(int x, int y);
+		TerrainType::Enum getTerrainAt(int x, int y) const;
 
-		Coordinate tileFromCoord(Coordinate);
-		Coordinate coordFromTile(Coordinate);
+		Coordinate tileFromCoord(Coordinate) const;
+		Coordinate coordFromTile(Coordinate) const;
+
+		bool linePassable(Coordinate a, Coordinate b, EnvironmentSpec passable) const;
+
+		void compressPath(Path& path, EnvironmentSpec passable) const;
 
 		// Finds a set of passable tiles from start to end where all tiles in
 		// the path are passable by EnvironmentSpec
@@ -50,5 +54,5 @@ class Terrain {
 	private:
 		int height, width;
 		std::shared_ptr<Spritesheet> minimap;
-		EnvironmentSpec searchPassable; // we pass the global Terrain instance to JPS
+		mutable EnvironmentSpec searchPassable; // we pass the global Terrain instance to JPS
 };

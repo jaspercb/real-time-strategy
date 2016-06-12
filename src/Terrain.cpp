@@ -75,7 +75,7 @@ Terrain::Terrain(std::string mapName) {
 	SDL_FreeSurface(image);
 }
 
-TerrainType::Enum Terrain::getTerrainAt(int x, int y) {
+TerrainType::Enum Terrain::getTerrainAt(int x, int y) const {
 	if (x<0 || y < 0 || x >= this->width || y>= this->height)
 		return TerrainType::Invalid;
 	else
@@ -83,11 +83,11 @@ TerrainType::Enum Terrain::getTerrainAt(int x, int y) {
 }
 
 
-Coordinate Terrain::tileFromCoord(Coordinate c) {
+Coordinate Terrain::tileFromCoord(Coordinate c) const {
 	return Coordinate(c.x/(PIXEL_WIDTH*32), c.y/(PIXEL_WIDTH*32));
 }
 
-Coordinate Terrain::coordFromTile(Coordinate c) {
+Coordinate Terrain::coordFromTile(Coordinate c) const {
 	return Coordinate(c.x*PIXEL_WIDTH*32, c.y*PIXEL_WIDTH*32);
 }
 
@@ -363,6 +363,29 @@ void Terrain::renderMinimap(SDL_Renderer* renderer, UserInterface* ui) {
 	SDL_RenderCopyEx(renderer, this->minimap->sheet, NULL, &target, -45, NULL, SDL_FLIP_NONE);
 }
 
+
+bool Terrain::linePassable(Coordinate a, Coordinate b, EnvironmentSpec passable) const {
+	const double ITERATIONS = 3.0;
+	searchPassable = passable;
+	Coordinate direction = b-a;
+
+	float factor;
+	Coordinate samplingCoordinate;
+	for (int i=0; i<ITERATIONS*direction.length(); i++) {
+		factor = i/ITERATIONS*direction.length();
+		samplingCoordinate = a + direction*factor;
+		
+		// if terrain is not passable
+		if (!this->operator()(samplingCoordinate.x, samplingCoordinate.y)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void Terrain::compressPath(Path& path, EnvironmentSpec passable) const {
+}
+
 bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
                       Path& path, EnvironmentSpec passable) {
 	if (startCoU.isValid() && endCoU.isValid()) {
@@ -383,7 +406,7 @@ bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
 			for (auto &i : JPSpath) {
 				path.push_back(coordFromTile(Coordinate(i.x, i.y)));
 			}
-			path[path.size()-1] = endCoU.getCoordinate();
+			path.back() = endCoU.getCoordinate();
 			return true;
 		} else {
 			return false;
@@ -402,5 +425,5 @@ bool Terrain::operator() (unsigned int _x, unsigned int _y) const {
 	int x = _x;
 	int y = _y; // to silence errors. yes, this is bad.
 	return 0<=x && 0<=y && x<width && y<width
-	&& bool(searchPassable&TerrainPassable[tiles[x][y].terraintype]);
+	&& bool(searchPassable&TerrainPassable[getTerrainAt(x,y)]);
 }
