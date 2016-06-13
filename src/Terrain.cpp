@@ -367,12 +367,14 @@ void Terrain::renderMinimap(SDL_Renderer* renderer, UserInterface* ui) {
 bool Terrain::linePassable(Coordinate a, Coordinate b, EnvironmentSpec passable) const {
 	const double ITERATIONS = 3.0;
 	searchPassable = passable;
+	a = tileFromCoord(a);
+	b = tileFromCoord(b);
 	Coordinate direction = b-a;
 
 	float factor;
 	Coordinate samplingCoordinate;
 	for (int i=0; i<ITERATIONS*direction.length(); i++) {
-		factor = i/ITERATIONS*direction.length();
+		factor = i/(ITERATIONS*direction.length());
 		samplingCoordinate = a + direction*factor;
 		
 		// if terrain is not passable
@@ -384,6 +386,33 @@ bool Terrain::linePassable(Coordinate a, Coordinate b, EnvironmentSpec passable)
 }
 
 void Terrain::compressPath(Path& path, EnvironmentSpec passable) const {
+	searchPassable = passable;
+
+	std::vector<int> waypointIndexes;
+	waypointIndexes.push_back(0);
+
+	int pathsize = path.size()-1;
+
+	while (waypointIndexes.back() != pathsize) {
+		for (int end=path.size()-1; end>=waypointIndexes.back(); end--) {
+			if (end==waypointIndexes.back()) {
+				waypointIndexes.push_back(end+1);
+				break;
+			}
+			else if ( linePassable(path[waypointIndexes.back()], path[end], passable) ) {
+				waypointIndexes.push_back(end);
+				break;
+			}
+		}
+	}
+
+	Path newPath;
+	for (int i : waypointIndexes) {
+		if (i<=pathsize)
+			newPath.push_back(path[i]);
+	}
+
+	path = newPath;
 }
 
 bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
@@ -407,6 +436,9 @@ bool Terrain::getPath(CoordinateOrUnit startCoU, CoordinateOrUnit endCoU,
 				path.push_back(coordFromTile(Coordinate(i.x, i.y)));
 			}
 			path.back() = endCoU.getCoordinate();
+			path.push_front(startCoU.getCoordinate());
+			compressPath(path, passable);
+			path.pop_front();
 			return true;
 		} else {
 			return false;
