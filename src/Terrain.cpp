@@ -363,7 +363,8 @@ void Terrain::renderMinimap(SDL_Renderer* renderer, UserInterface* ui) {
 	SDL_RenderCopyEx(renderer, this->minimap->sheet, NULL, &target, -45, NULL, SDL_FLIP_NONE);
 }
 
-
+/// Returns if the straightline from a to be is passable to an EnvironmentSpec
+///
 bool Terrain::linePassable(Coordinate a, Coordinate b, EnvironmentSpec passable) const {
 	const double ITERATIONS = 3.0;
 	searchPassable = passable;
@@ -385,6 +386,8 @@ bool Terrain::linePassable(Coordinate a, Coordinate b, EnvironmentSpec passable)
 	return true;
 }
 
+/// Greedily removes intermediate waypoints of a path, making the path smoother
+/// and simpler.
 void Terrain::compressPath(Path& path, EnvironmentSpec passable) const {
 	searchPassable = passable;
 

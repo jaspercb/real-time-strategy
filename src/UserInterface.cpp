@@ -302,24 +302,25 @@ void UserInterface::renderSelection( SDL_Renderer* renderer ) {
 	}
 }
 
+/// Renders everything that goes on top of the terrain, units, and animations
+/// \todo Simplify the logic here
+/// \todo Figure out how to make the minimap viewport correctly align with
 void UserInterface::renderHUD( SDL_Renderer* renderer ) {
+	// Draw non-empty control group tabs
 	int cx = 0;
 	for (auto &i : this->controlGroups) {
-		cx += 55;
+		cx += 55; // horizontal pixel spacing
 		if (i.size()) {
 			this->uiControlGroupTab->render(gRenderer, 0, 0, 290+cx, 720, 1.0);
 			gFontManager->renderLine(std::to_string(i.size()), {280+cx, 700}, SDL_Colors::WHITE);
 		}
 	}
 
-	if (this->drawSelectionBox) {
+	if (this->drawSelectionBox)
 		renderRectBorder(renderer, selectionBoxCorner1, selectionBoxCorner2, SDL_Color{0, 255, 0, SDL_ALPHA_OPAQUE});
-	}
 
 	this->uiWireframe->render(gRenderer, 0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1.0);
-
 	game->terrain.renderMinimap(renderer, this);
-
 	selectedUnits.removeInvalidUnits();
 
 	if (selectedUnits.size() == 1) {
